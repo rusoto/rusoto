@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -36,17 +37,17 @@ use xml::EventReader;
 
 /// <p>Represents the input of an AddTagsToResource operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddTagsToResourceMessage {
+pub struct AddTagsToResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource to which the tags are to be added, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>. ElastiCache resources are <i>cluster</i> and <i>snapshot</i>.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     pub resource_name: String,
     /// <p>A list of cost allocation tags to be added to this resource. A tag is a key-value pair. A tag key must be accompanied by a tag value.</p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `AddTagsToResourceMessage` contents to a `SignedRequest`.
-struct AddTagsToResourceMessageSerializer;
-impl AddTagsToResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceMessage) {
+/// Serialize `AddTagsToResourceRequest` contents to a `SignedRequest`.
+struct AddTagsToResourceRequestSerializer;
+impl AddTagsToResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -57,6 +58,37 @@ impl AddTagsToResourceMessageSerializer {
     }
 }
 
+/// <p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsForResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddTagsToResourceResponse {
+    /// <p>A list of cost allocation tags as key-value pairs.</p>
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+struct AddTagsToResourceResponseDeserializer;
+impl AddTagsToResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddTagsToResourceResponse, XmlParseError> {
+        deserialize_elements::<_, AddTagsToResourceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TagList" => {
+                        obj.tag_list
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("TagList", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct AllowedNodeGroupIdDeserializer;
 impl AllowedNodeGroupIdDeserializer {
     #[allow(unused_variables)]
@@ -68,40 +100,9 @@ impl AllowedNodeGroupIdDeserializer {
         Ok(obj)
     }
 }
-/// <p>Represents the allowed node types you can use to modify your cluster or replication group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AllowedNodeTypeModificationsMessage {
-    /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
-    pub scale_up_modifications: Option<Vec<String>>,
-}
-
-struct AllowedNodeTypeModificationsMessageDeserializer;
-impl AllowedNodeTypeModificationsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<AllowedNodeTypeModificationsMessage, XmlParseError> {
-        deserialize_elements::<_, AllowedNodeTypeModificationsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ScaleUpModifications" => {
-                        obj.scale_up_modifications.get_or_insert(vec![]).extend(
-                            NodeTypeListDeserializer::deserialize("ScaleUpModifications", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Represents the input of an AuthorizeCacheSecurityGroupIngress operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeCacheSecurityGroupIngressMessage {
+pub struct AuthorizeCacheSecurityGroupIngressRequest {
     /// <p>The cache security group that allows network ingress.</p>
     pub cache_security_group_name: String,
     /// <p>The Amazon EC2 security group to be authorized for ingress to the cache security group.</p>
@@ -110,10 +111,10 @@ pub struct AuthorizeCacheSecurityGroupIngressMessage {
     pub ec2_security_group_owner_id: String,
 }
 
-/// Serialize `AuthorizeCacheSecurityGroupIngressMessage` contents to a `SignedRequest`.
-struct AuthorizeCacheSecurityGroupIngressMessageSerializer;
-impl AuthorizeCacheSecurityGroupIngressMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AuthorizeCacheSecurityGroupIngressMessage) {
+/// Serialize `AuthorizeCacheSecurityGroupIngressRequest` contents to a `SignedRequest`.
+struct AuthorizeCacheSecurityGroupIngressRequestSerializer;
+impl AuthorizeCacheSecurityGroupIngressRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AuthorizeCacheSecurityGroupIngressRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -135,18 +136,18 @@ impl AuthorizeCacheSecurityGroupIngressMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AuthorizeCacheSecurityGroupIngressResult {
+pub struct AuthorizeCacheSecurityGroupIngressResponse {
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
-struct AuthorizeCacheSecurityGroupIngressResultDeserializer;
-impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
+struct AuthorizeCacheSecurityGroupIngressResponseDeserializer;
+impl AuthorizeCacheSecurityGroupIngressResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AuthorizeCacheSecurityGroupIngressResult, XmlParseError> {
-        deserialize_elements::<_, AuthorizeCacheSecurityGroupIngressResult, _>(
+    ) -> Result<AuthorizeCacheSecurityGroupIngressResponse, XmlParseError> {
+        deserialize_elements::<_, AuthorizeCacheSecurityGroupIngressResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -486,38 +487,6 @@ impl CacheClusterListDeserializer {
         })
     }
 }
-/// <p>Represents the output of a <code>DescribeCacheClusters</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheClusterMessage {
-    /// <p>A list of clusters. Each item in the list contains detailed information about one cluster.</p>
-    pub cache_clusters: Option<Vec<CacheCluster>>,
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-}
-
-struct CacheClusterMessageDeserializer;
-impl CacheClusterMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheClusterMessage, XmlParseError> {
-        deserialize_elements::<_, CacheClusterMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "CacheClusters" => {
-                    obj.cache_clusters.get_or_insert(vec![]).extend(
-                        CacheClusterListDeserializer::deserialize("CacheClusters", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Provides all of the details about a particular cache engine version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheEngineVersion {
@@ -591,45 +560,6 @@ impl CacheEngineVersionListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Represents the output of a <a>DescribeCacheEngineVersions</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheEngineVersionMessage {
-    /// <p>A list of cache engine version details. Each element in the list contains detailed information about one cache engine version.</p>
-    pub cache_engine_versions: Option<Vec<CacheEngineVersion>>,
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-}
-
-struct CacheEngineVersionMessageDeserializer;
-impl CacheEngineVersionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheEngineVersionMessage, XmlParseError> {
-        deserialize_elements::<_, CacheEngineVersionMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CacheEngineVersions" => {
-                        obj.cache_engine_versions.get_or_insert(vec![]).extend(
-                            CacheEngineVersionListDeserializer::deserialize(
-                                "CacheEngineVersions",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p><p>Represents an individual cache node within a cluster. Each cache node runs its own instance of the cluster&#39;s protocol-compliant caching software - either Memcached or Redis.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> <p> <b>R4 node types;</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis (cluster mode disabled): Redis backup/restore is not supported on T1 and T2 instances. </p> </li> <li> <p>Redis (cluster mode enabled): Backup/restore is not supported on T1 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see:</p> <ul> <li> <p> <a href="http://aws.amazon.com/elasticache/details">Amazon ElastiCache Product Features and Details</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/ParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific">Cache Node Type-Specific Parameters for Memcached</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific">Cache Node Type-Specific Parameters for Redis</a> </p> </li> </ul></p>
@@ -943,54 +873,6 @@ impl CacheParameterGroupDeserializer {
         })
     }
 }
-/// <p>Represents the output of a <code>DescribeCacheParameters</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheParameterGroupDetails {
-    /// <p>A list of parameters specific to a particular cache node type. Each element in the list contains detailed information about one parameter.</p>
-    pub cache_node_type_specific_parameters: Option<Vec<CacheNodeTypeSpecificParameter>>,
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-    /// <p>A list of <a>Parameter</a> instances.</p>
-    pub parameters: Option<Vec<Parameter>>,
-}
-
-struct CacheParameterGroupDetailsDeserializer;
-impl CacheParameterGroupDetailsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheParameterGroupDetails, XmlParseError> {
-        deserialize_elements::<_, CacheParameterGroupDetails, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CacheNodeTypeSpecificParameters" => {
-                        obj.cache_node_type_specific_parameters
-                            .get_or_insert(vec![])
-                            .extend(
-                                CacheNodeTypeSpecificParametersListDeserializer::deserialize(
-                                    "CacheNodeTypeSpecificParameters",
-                                    stack,
-                                )?,
-                            );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Parameters" => {
-                        obj.parameters.get_or_insert(vec![]).extend(
-                            ParametersListDeserializer::deserialize("Parameters", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct CacheParameterGroupListDeserializer;
 impl CacheParameterGroupListDeserializer {
     #[allow(unused_variables)]
@@ -1009,38 +891,6 @@ impl CacheParameterGroupListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p><p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>ModifyCacheParameterGroup</code> </p> </li> <li> <p> <code>ResetCacheParameterGroup</code> </p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheParameterGroupNameMessage {
-    /// <p>The name of the cache parameter group.</p>
-    pub cache_parameter_group_name: Option<String>,
-}
-
-struct CacheParameterGroupNameMessageDeserializer;
-impl CacheParameterGroupNameMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheParameterGroupNameMessage, XmlParseError> {
-        deserialize_elements::<_, CacheParameterGroupNameMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CacheParameterGroupName" => {
-                        obj.cache_parameter_group_name = Some(StringDeserializer::deserialize(
-                            "CacheParameterGroupName",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Status of the cache parameter group.</p>
@@ -1085,45 +935,6 @@ impl CacheParameterGroupStatusDeserializer {
                             "ParameterApplyStatus",
                             stack,
                         )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Represents the output of a <code>DescribeCacheParameterGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheParameterGroupsMessage {
-    /// <p>A list of cache parameter groups. Each element in the list contains detailed information about one cache parameter group.</p>
-    pub cache_parameter_groups: Option<Vec<CacheParameterGroup>>,
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-}
-
-struct CacheParameterGroupsMessageDeserializer;
-impl CacheParameterGroupsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheParameterGroupsMessage, XmlParseError> {
-        deserialize_elements::<_, CacheParameterGroupsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CacheParameterGroups" => {
-                        obj.cache_parameter_groups.get_or_insert(vec![]).extend(
-                            CacheParameterGroupListDeserializer::deserialize(
-                                "CacheParameterGroups",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -1234,45 +1045,6 @@ impl CacheSecurityGroupMembershipListDeserializer {
         })
     }
 }
-/// <p>Represents the output of a <code>DescribeCacheSecurityGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheSecurityGroupMessage {
-    /// <p>A list of cache security groups. Each element in the list contains detailed information about one group.</p>
-    pub cache_security_groups: Option<Vec<CacheSecurityGroup>>,
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-}
-
-struct CacheSecurityGroupMessageDeserializer;
-impl CacheSecurityGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheSecurityGroupMessage, XmlParseError> {
-        deserialize_elements::<_, CacheSecurityGroupMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CacheSecurityGroups" => {
-                        obj.cache_security_groups.get_or_insert(vec![]).extend(
-                            CacheSecurityGroupsDeserializer::deserialize(
-                                "CacheSecurityGroups",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 
 /// Serialize `CacheSecurityGroupNameList` contents to a `SignedRequest`.
 struct CacheSecurityGroupNameListSerializer;
@@ -1351,42 +1123,6 @@ impl CacheSubnetGroupDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Represents the output of a <code>DescribeCacheSubnetGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CacheSubnetGroupMessage {
-    /// <p>A list of cache subnet groups. Each element in the list contains detailed information about one group.</p>
-    pub cache_subnet_groups: Option<Vec<CacheSubnetGroup>>,
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-}
-
-struct CacheSubnetGroupMessageDeserializer;
-impl CacheSubnetGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CacheSubnetGroupMessage, XmlParseError> {
-        deserialize_elements::<_, CacheSubnetGroupMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "CacheSubnetGroups" => {
-                        obj.cache_subnet_groups.get_or_insert(vec![]).extend(
-                            CacheSubnetGroupsDeserializer::deserialize("CacheSubnetGroups", stack)?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 struct CacheSubnetGroupsDeserializer;
@@ -1474,7 +1210,7 @@ impl ConfigureShardSerializer {
 
 /// <p>Represents the input of a <code>CopySnapshotMessage</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopySnapshotMessage {
+pub struct CopySnapshotRequest {
     /// <p>The name of an existing snapshot from which to make a copy.</p>
     pub source_snapshot_name: String,
     /// <p>The Amazon S3 bucket to which the snapshot is exported. This parameter is used only when exporting a snapshot for external access.</p> <p>When using this parameter to export a snapshot, be sure Amazon ElastiCache has the needed permissions to this S3 bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the <i>Amazon ElastiCache User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html">Exporting a Snapshot</a> in the <i>Amazon ElastiCache User Guide</i>.</p>
@@ -1483,10 +1219,10 @@ pub struct CopySnapshotMessage {
     pub target_snapshot_name: String,
 }
 
-/// Serialize `CopySnapshotMessage` contents to a `SignedRequest`.
-struct CopySnapshotMessageSerializer;
-impl CopySnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopySnapshotMessage) {
+/// Serialize `CopySnapshotRequest` contents to a `SignedRequest`.
+struct CopySnapshotRequestSerializer;
+impl CopySnapshotRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CopySnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1507,18 +1243,18 @@ impl CopySnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopySnapshotResult {
+pub struct CopySnapshotResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct CopySnapshotResultDeserializer;
-impl CopySnapshotResultDeserializer {
+struct CopySnapshotResponseDeserializer;
+impl CopySnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopySnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CopySnapshotResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CopySnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CopySnapshotResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Snapshot" => {
                     obj.snapshot = Some(SnapshotDeserializer::deserialize("Snapshot", stack)?);
@@ -1531,7 +1267,7 @@ impl CopySnapshotResultDeserializer {
 }
 /// <p>Represents the input of a CreateCacheCluster operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheClusterMessage {
+pub struct CreateCacheClusterRequest {
     /// <p>Specifies whether the nodes in this Memcached cluster are created in a single Availability Zone or created across multiple Availability Zones in the cluster's region.</p> <p>This parameter is only supported for Memcached clusters.</p> <p>If the <code>AZMode</code> and <code>PreferredAvailabilityZones</code> are not specified, ElastiCache assumes <code>single-az</code> mode.</p>
     pub az_mode: Option<String>,
     /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@'. </p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
@@ -1580,10 +1316,10 @@ pub struct CreateCacheClusterMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateCacheClusterMessage` contents to a `SignedRequest`.
-struct CreateCacheClusterMessageSerializer;
-impl CreateCacheClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheClusterMessage) {
+/// Serialize `CreateCacheClusterRequest` contents to a `SignedRequest`.
+struct CreateCacheClusterRequestSerializer;
+impl CreateCacheClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1700,18 +1436,18 @@ impl CreateCacheClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheClusterResult {
+pub struct CreateCacheClusterResponse {
     pub cache_cluster: Option<CacheCluster>,
 }
 
-struct CreateCacheClusterResultDeserializer;
-impl CreateCacheClusterResultDeserializer {
+struct CreateCacheClusterResponseDeserializer;
+impl CreateCacheClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateCacheClusterResult, XmlParseError> {
-        deserialize_elements::<_, CreateCacheClusterResult, _>(
+    ) -> Result<CreateCacheClusterResponse, XmlParseError> {
+        deserialize_elements::<_, CreateCacheClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1731,7 +1467,7 @@ impl CreateCacheClusterResultDeserializer {
 }
 /// <p>Represents the input of a <code>CreateCacheParameterGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheParameterGroupMessage {
+pub struct CreateCacheParameterGroupRequest {
     /// <p>The name of the cache parameter group family that the cache parameter group can be used with.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> | <code>redis4.0</code> </p>
     pub cache_parameter_group_family: String,
     /// <p>A user-specified name for the cache parameter group.</p>
@@ -1740,10 +1476,10 @@ pub struct CreateCacheParameterGroupMessage {
     pub description: String,
 }
 
-/// Serialize `CreateCacheParameterGroupMessage` contents to a `SignedRequest`.
-struct CreateCacheParameterGroupMessageSerializer;
-impl CreateCacheParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheParameterGroupMessage) {
+/// Serialize `CreateCacheParameterGroupRequest` contents to a `SignedRequest`.
+struct CreateCacheParameterGroupRequestSerializer;
+impl CreateCacheParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1762,18 +1498,18 @@ impl CreateCacheParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheParameterGroupResult {
+pub struct CreateCacheParameterGroupResponse {
     pub cache_parameter_group: Option<CacheParameterGroup>,
 }
 
-struct CreateCacheParameterGroupResultDeserializer;
-impl CreateCacheParameterGroupResultDeserializer {
+struct CreateCacheParameterGroupResponseDeserializer;
+impl CreateCacheParameterGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateCacheParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateCacheParameterGroupResult, _>(
+    ) -> Result<CreateCacheParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateCacheParameterGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1794,17 +1530,17 @@ impl CreateCacheParameterGroupResultDeserializer {
 }
 /// <p>Represents the input of a <code>CreateCacheSecurityGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheSecurityGroupMessage {
+pub struct CreateCacheSecurityGroupRequest {
     /// <p>A name for the cache security group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters. Cannot be the word "Default".</p> <p>Example: <code>mysecuritygroup</code> </p>
     pub cache_security_group_name: String,
     /// <p>A description for the cache security group.</p>
     pub description: String,
 }
 
-/// Serialize `CreateCacheSecurityGroupMessage` contents to a `SignedRequest`.
-struct CreateCacheSecurityGroupMessageSerializer;
-impl CreateCacheSecurityGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheSecurityGroupMessage) {
+/// Serialize `CreateCacheSecurityGroupRequest` contents to a `SignedRequest`.
+struct CreateCacheSecurityGroupRequestSerializer;
+impl CreateCacheSecurityGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheSecurityGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1819,18 +1555,18 @@ impl CreateCacheSecurityGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheSecurityGroupResult {
+pub struct CreateCacheSecurityGroupResponse {
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
-struct CreateCacheSecurityGroupResultDeserializer;
-impl CreateCacheSecurityGroupResultDeserializer {
+struct CreateCacheSecurityGroupResponseDeserializer;
+impl CreateCacheSecurityGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateCacheSecurityGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateCacheSecurityGroupResult, _>(
+    ) -> Result<CreateCacheSecurityGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateCacheSecurityGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1851,7 +1587,7 @@ impl CreateCacheSecurityGroupResultDeserializer {
 }
 /// <p>Represents the input of a <code>CreateCacheSubnetGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheSubnetGroupMessage {
+pub struct CreateCacheSubnetGroupRequest {
     /// <p>A description for the cache subnet group.</p>
     pub cache_subnet_group_description: String,
     /// <p>A name for the cache subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p> <p>Example: <code>mysubnetgroup</code> </p>
@@ -1860,10 +1596,10 @@ pub struct CreateCacheSubnetGroupMessage {
     pub subnet_ids: Vec<String>,
 }
 
-/// Serialize `CreateCacheSubnetGroupMessage` contents to a `SignedRequest`.
-struct CreateCacheSubnetGroupMessageSerializer;
-impl CreateCacheSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheSubnetGroupMessage) {
+/// Serialize `CreateCacheSubnetGroupRequest` contents to a `SignedRequest`.
+struct CreateCacheSubnetGroupRequestSerializer;
+impl CreateCacheSubnetGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateCacheSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1886,18 +1622,18 @@ impl CreateCacheSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCacheSubnetGroupResult {
+pub struct CreateCacheSubnetGroupResponse {
     pub cache_subnet_group: Option<CacheSubnetGroup>,
 }
 
-struct CreateCacheSubnetGroupResultDeserializer;
-impl CreateCacheSubnetGroupResultDeserializer {
+struct CreateCacheSubnetGroupResponseDeserializer;
+impl CreateCacheSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateCacheSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateCacheSubnetGroupResult, _>(
+    ) -> Result<CreateCacheSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateCacheSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1917,7 +1653,7 @@ impl CreateCacheSubnetGroupResultDeserializer {
 }
 /// <p>Represents the input of a <code>CreateReplicationGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateReplicationGroupMessage {
+pub struct CreateReplicationGroupRequest {
     /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p> <code>AuthToken</code> can be specified only on replication groups where <code>TransitEncryptionEnabled</code> is <code>true</code>.</p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@'. </p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
@@ -1976,10 +1712,10 @@ pub struct CreateReplicationGroupMessage {
     pub transit_encryption_enabled: Option<bool>,
 }
 
-/// Serialize `CreateReplicationGroupMessage` contents to a `SignedRequest`.
-struct CreateReplicationGroupMessageSerializer;
-impl CreateReplicationGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateReplicationGroupMessage) {
+/// Serialize `CreateReplicationGroupRequest` contents to a `SignedRequest`.
+struct CreateReplicationGroupRequestSerializer;
+impl CreateReplicationGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateReplicationGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2125,18 +1861,18 @@ impl CreateReplicationGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateReplicationGroupResult {
+pub struct CreateReplicationGroupResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
-struct CreateReplicationGroupResultDeserializer;
-impl CreateReplicationGroupResultDeserializer {
+struct CreateReplicationGroupResponseDeserializer;
+impl CreateReplicationGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateReplicationGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateReplicationGroupResult, _>(
+    ) -> Result<CreateReplicationGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateReplicationGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2156,7 +1892,7 @@ impl CreateReplicationGroupResultDeserializer {
 }
 /// <p>Represents the input of a <code>CreateSnapshot</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateSnapshotMessage {
+pub struct CreateSnapshotRequest {
     /// <p>The identifier of an existing cluster. The snapshot is created from this cluster.</p>
     pub cache_cluster_id: Option<String>,
     /// <p>The identifier of an existing replication group. The snapshot is created from this replication group.</p>
@@ -2165,10 +1901,10 @@ pub struct CreateSnapshotMessage {
     pub snapshot_name: String,
 }
 
-/// Serialize `CreateSnapshotMessage` contents to a `SignedRequest`.
-struct CreateSnapshotMessageSerializer;
-impl CreateSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateSnapshotMessage) {
+/// Serialize `CreateSnapshotRequest` contents to a `SignedRequest`.
+struct CreateSnapshotRequestSerializer;
+impl CreateSnapshotRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2185,18 +1921,18 @@ impl CreateSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateSnapshotResult {
+pub struct CreateSnapshotResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct CreateSnapshotResultDeserializer;
-impl CreateSnapshotResultDeserializer {
+struct CreateSnapshotResponseDeserializer;
+impl CreateSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CreateSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<CreateSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CreateSnapshotResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Snapshot" => {
                     obj.snapshot = Some(SnapshotDeserializer::deserialize("Snapshot", stack)?);
@@ -2208,7 +1944,7 @@ impl CreateSnapshotResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DecreaseReplicaCountMessage {
+pub struct DecreaseReplicaCountRequest {
     /// <p>If <code>True</code>, the number of replica nodes is decreased immediately. If <code>False</code>, the number of replica nodes is decreased during the next maintenance window.</p>
     pub apply_immediately: bool,
     /// <p><p>The number of read replica nodes you want at the completion of this operation. For Redis (cluster mode disabled) replication groups, this is the number of replica nodes in the replication group. For Redis (cluster mode enabled) replication groups, this is the number of replica nodes in each of the replication group&#39;s node groups.</p> <p>The minimum number of replicas in a shard or replication group is:</p> <ul> <li> <p>Redis (cluster mode disabled)</p> <ul> <li> <p>If Multi-AZ with Automatic Failover is enabled: 1</p> </li> <li> <p>If Multi-AZ with Automatic Failover is not enabled: 0</p> </li> </ul> </li> <li> <p>Redis (cluster mode enabled): 0 (though you will not be able to failover to a replica if your primary node fails)</p> </li> </ul></p>
@@ -2221,10 +1957,10 @@ pub struct DecreaseReplicaCountMessage {
     pub replication_group_id: String,
 }
 
-/// Serialize `DecreaseReplicaCountMessage` contents to a `SignedRequest`.
-struct DecreaseReplicaCountMessageSerializer;
-impl DecreaseReplicaCountMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DecreaseReplicaCountMessage) {
+/// Serialize `DecreaseReplicaCountRequest` contents to a `SignedRequest`.
+struct DecreaseReplicaCountRequestSerializer;
+impl DecreaseReplicaCountRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DecreaseReplicaCountRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2259,18 +1995,18 @@ impl DecreaseReplicaCountMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DecreaseReplicaCountResult {
+pub struct DecreaseReplicaCountResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
-struct DecreaseReplicaCountResultDeserializer;
-impl DecreaseReplicaCountResultDeserializer {
+struct DecreaseReplicaCountResponseDeserializer;
+impl DecreaseReplicaCountResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DecreaseReplicaCountResult, XmlParseError> {
-        deserialize_elements::<_, DecreaseReplicaCountResult, _>(
+    ) -> Result<DecreaseReplicaCountResponse, XmlParseError> {
+        deserialize_elements::<_, DecreaseReplicaCountResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2290,17 +2026,17 @@ impl DecreaseReplicaCountResultDeserializer {
 }
 /// <p>Represents the input of a <code>DeleteCacheCluster</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteCacheClusterMessage {
+pub struct DeleteCacheClusterRequest {
     /// <p>The cluster identifier for the cluster to be deleted. This parameter is not case sensitive.</p>
     pub cache_cluster_id: String,
     /// <p>The user-supplied name of a final cluster snapshot. This is the unique name that identifies the snapshot. ElastiCache creates the snapshot, and then deletes the cluster immediately afterward.</p>
     pub final_snapshot_identifier: Option<String>,
 }
 
-/// Serialize `DeleteCacheClusterMessage` contents to a `SignedRequest`.
-struct DeleteCacheClusterMessageSerializer;
-impl DeleteCacheClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheClusterMessage) {
+/// Serialize `DeleteCacheClusterRequest` contents to a `SignedRequest`.
+struct DeleteCacheClusterRequestSerializer;
+impl DeleteCacheClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2320,18 +2056,18 @@ impl DeleteCacheClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteCacheClusterResult {
+pub struct DeleteCacheClusterResponse {
     pub cache_cluster: Option<CacheCluster>,
 }
 
-struct DeleteCacheClusterResultDeserializer;
-impl DeleteCacheClusterResultDeserializer {
+struct DeleteCacheClusterResponseDeserializer;
+impl DeleteCacheClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteCacheClusterResult, XmlParseError> {
-        deserialize_elements::<_, DeleteCacheClusterResult, _>(
+    ) -> Result<DeleteCacheClusterResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteCacheClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2351,15 +2087,15 @@ impl DeleteCacheClusterResultDeserializer {
 }
 /// <p>Represents the input of a <code>DeleteCacheParameterGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteCacheParameterGroupMessage {
+pub struct DeleteCacheParameterGroupRequest {
     /// <p><p>The name of the cache parameter group to delete.</p> <note> <p>The specified cache security group must not be associated with any clusters.</p> </note></p>
     pub cache_parameter_group_name: String,
 }
 
-/// Serialize `DeleteCacheParameterGroupMessage` contents to a `SignedRequest`.
-struct DeleteCacheParameterGroupMessageSerializer;
-impl DeleteCacheParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheParameterGroupMessage) {
+/// Serialize `DeleteCacheParameterGroupRequest` contents to a `SignedRequest`.
+struct DeleteCacheParameterGroupRequestSerializer;
+impl DeleteCacheParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2372,17 +2108,30 @@ impl DeleteCacheParameterGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteCacheParameterGroupResponse {}
+
+struct DeleteCacheParameterGroupResponseDeserializer;
+impl DeleteCacheParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteCacheParameterGroupResponse, XmlParseError> {
+        Ok(DeleteCacheParameterGroupResponse::default())
+    }
+}
 /// <p>Represents the input of a <code>DeleteCacheSecurityGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteCacheSecurityGroupMessage {
+pub struct DeleteCacheSecurityGroupRequest {
     /// <p><p>The name of the cache security group to delete.</p> <note> <p>You cannot delete the default security group.</p> </note></p>
     pub cache_security_group_name: String,
 }
 
-/// Serialize `DeleteCacheSecurityGroupMessage` contents to a `SignedRequest`.
-struct DeleteCacheSecurityGroupMessageSerializer;
-impl DeleteCacheSecurityGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheSecurityGroupMessage) {
+/// Serialize `DeleteCacheSecurityGroupRequest` contents to a `SignedRequest`.
+struct DeleteCacheSecurityGroupRequestSerializer;
+impl DeleteCacheSecurityGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheSecurityGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2395,17 +2144,30 @@ impl DeleteCacheSecurityGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteCacheSecurityGroupResponse {}
+
+struct DeleteCacheSecurityGroupResponseDeserializer;
+impl DeleteCacheSecurityGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteCacheSecurityGroupResponse, XmlParseError> {
+        Ok(DeleteCacheSecurityGroupResponse::default())
+    }
+}
 /// <p>Represents the input of a <code>DeleteCacheSubnetGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteCacheSubnetGroupMessage {
+pub struct DeleteCacheSubnetGroupRequest {
     /// <p>The name of the cache subnet group to delete.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p>
     pub cache_subnet_group_name: String,
 }
 
-/// Serialize `DeleteCacheSubnetGroupMessage` contents to a `SignedRequest`.
-struct DeleteCacheSubnetGroupMessageSerializer;
-impl DeleteCacheSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheSubnetGroupMessage) {
+/// Serialize `DeleteCacheSubnetGroupRequest` contents to a `SignedRequest`.
+struct DeleteCacheSubnetGroupRequestSerializer;
+impl DeleteCacheSubnetGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteCacheSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2418,9 +2180,22 @@ impl DeleteCacheSubnetGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteCacheSubnetGroupResponse {}
+
+struct DeleteCacheSubnetGroupResponseDeserializer;
+impl DeleteCacheSubnetGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteCacheSubnetGroupResponse, XmlParseError> {
+        Ok(DeleteCacheSubnetGroupResponse::default())
+    }
+}
 /// <p>Represents the input of a <code>DeleteReplicationGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteReplicationGroupMessage {
+pub struct DeleteReplicationGroupRequest {
     /// <p>The name of a final node group (shard) snapshot. ElastiCache creates the snapshot from the primary node in the cluster, rather than one of the replicas; this is to ensure that it captures the freshest data. After the final snapshot is taken, the replication group is immediately deleted.</p>
     pub final_snapshot_identifier: Option<String>,
     /// <p>The identifier for the cluster to be deleted. This parameter is not case sensitive.</p>
@@ -2429,10 +2204,10 @@ pub struct DeleteReplicationGroupMessage {
     pub retain_primary_cluster: Option<bool>,
 }
 
-/// Serialize `DeleteReplicationGroupMessage` contents to a `SignedRequest`.
-struct DeleteReplicationGroupMessageSerializer;
-impl DeleteReplicationGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteReplicationGroupMessage) {
+/// Serialize `DeleteReplicationGroupRequest` contents to a `SignedRequest`.
+struct DeleteReplicationGroupRequestSerializer;
+impl DeleteReplicationGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteReplicationGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2458,18 +2233,18 @@ impl DeleteReplicationGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteReplicationGroupResult {
+pub struct DeleteReplicationGroupResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
-struct DeleteReplicationGroupResultDeserializer;
-impl DeleteReplicationGroupResultDeserializer {
+struct DeleteReplicationGroupResponseDeserializer;
+impl DeleteReplicationGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteReplicationGroupResult, XmlParseError> {
-        deserialize_elements::<_, DeleteReplicationGroupResult, _>(
+    ) -> Result<DeleteReplicationGroupResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteReplicationGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2489,15 +2264,15 @@ impl DeleteReplicationGroupResultDeserializer {
 }
 /// <p>Represents the input of a <code>DeleteSnapshot</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteSnapshotMessage {
+pub struct DeleteSnapshotRequest {
     /// <p>The name of the snapshot to be deleted.</p>
     pub snapshot_name: String,
 }
 
-/// Serialize `DeleteSnapshotMessage` contents to a `SignedRequest`.
-struct DeleteSnapshotMessageSerializer;
-impl DeleteSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteSnapshotMessage) {
+/// Serialize `DeleteSnapshotRequest` contents to a `SignedRequest`.
+struct DeleteSnapshotRequestSerializer;
+impl DeleteSnapshotRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2508,18 +2283,18 @@ impl DeleteSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteSnapshotResult {
+pub struct DeleteSnapshotResponse {
     pub snapshot: Option<Snapshot>,
 }
 
-struct DeleteSnapshotResultDeserializer;
-impl DeleteSnapshotResultDeserializer {
+struct DeleteSnapshotResponseDeserializer;
+impl DeleteSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, DeleteSnapshotResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DeleteSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteSnapshotResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Snapshot" => {
                     obj.snapshot = Some(SnapshotDeserializer::deserialize("Snapshot", stack)?);
@@ -2532,7 +2307,7 @@ impl DeleteSnapshotResultDeserializer {
 }
 /// <p>Represents the input of a <code>DescribeCacheClusters</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeCacheClustersMessage {
+pub struct DescribeCacheClustersRequest {
     /// <p>The user-supplied cluster identifier. If this parameter is specified, only information about that specific cluster is returned. This parameter isn't case sensitive.</p>
     pub cache_cluster_id: Option<String>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -2545,10 +2320,10 @@ pub struct DescribeCacheClustersMessage {
     pub show_cache_node_info: Option<bool>,
 }
 
-/// Serialize `DescribeCacheClustersMessage` contents to a `SignedRequest`.
-struct DescribeCacheClustersMessageSerializer;
-impl DescribeCacheClustersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheClustersMessage) {
+/// Serialize `DescribeCacheClustersRequest` contents to a `SignedRequest`.
+struct DescribeCacheClustersRequestSerializer;
+impl DescribeCacheClustersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheClustersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2575,9 +2350,45 @@ impl DescribeCacheClustersMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeCacheClusters</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCacheClustersResponse {
+    /// <p>A list of clusters. Each item in the list contains detailed information about one cluster.</p>
+    pub cache_clusters: Option<Vec<CacheCluster>>,
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeCacheClustersResponseDeserializer;
+impl DescribeCacheClustersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeCacheClustersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeCacheClustersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheClusters" => {
+                        obj.cache_clusters.get_or_insert(vec![]).extend(
+                            CacheClusterListDeserializer::deserialize("CacheClusters", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeCacheEngineVersions</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeCacheEngineVersionsMessage {
+pub struct DescribeCacheEngineVersionsRequest {
     /// <p><p>The name of a specific cache parameter group family to return details for.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> | <code>redis4.0</code> </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub cache_parameter_group_family: Option<String>,
     /// <p>If <code>true</code>, specifies that only the default version of the specified engine or engine and major version combination is to be returned.</p>
@@ -2592,10 +2403,10 @@ pub struct DescribeCacheEngineVersionsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeCacheEngineVersionsMessage` contents to a `SignedRequest`.
-struct DescribeCacheEngineVersionsMessageSerializer;
-impl DescribeCacheEngineVersionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheEngineVersionsMessage) {
+/// Serialize `DescribeCacheEngineVersionsRequest` contents to a `SignedRequest`.
+struct DescribeCacheEngineVersionsRequestSerializer;
+impl DescribeCacheEngineVersionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheEngineVersionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2625,9 +2436,48 @@ impl DescribeCacheEngineVersionsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <a>DescribeCacheEngineVersions</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCacheEngineVersionsResponse {
+    /// <p>A list of cache engine version details. Each element in the list contains detailed information about one cache engine version.</p>
+    pub cache_engine_versions: Option<Vec<CacheEngineVersion>>,
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeCacheEngineVersionsResponseDeserializer;
+impl DescribeCacheEngineVersionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeCacheEngineVersionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeCacheEngineVersionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheEngineVersions" => {
+                        obj.cache_engine_versions.get_or_insert(vec![]).extend(
+                            CacheEngineVersionListDeserializer::deserialize(
+                                "CacheEngineVersions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeCacheParameterGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeCacheParameterGroupsMessage {
+pub struct DescribeCacheParameterGroupsRequest {
     /// <p>The name of a specific cache parameter group to return details for.</p>
     pub cache_parameter_group_name: Option<String>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -2636,10 +2486,10 @@ pub struct DescribeCacheParameterGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeCacheParameterGroupsMessage` contents to a `SignedRequest`.
-struct DescribeCacheParameterGroupsMessageSerializer;
-impl DescribeCacheParameterGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheParameterGroupsMessage) {
+/// Serialize `DescribeCacheParameterGroupsRequest` contents to a `SignedRequest`.
+struct DescribeCacheParameterGroupsRequestSerializer;
+impl DescribeCacheParameterGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheParameterGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2660,9 +2510,48 @@ impl DescribeCacheParameterGroupsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeCacheParameterGroups</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCacheParameterGroupsResponse {
+    /// <p>A list of cache parameter groups. Each element in the list contains detailed information about one cache parameter group.</p>
+    pub cache_parameter_groups: Option<Vec<CacheParameterGroup>>,
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeCacheParameterGroupsResponseDeserializer;
+impl DescribeCacheParameterGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeCacheParameterGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeCacheParameterGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheParameterGroups" => {
+                        obj.cache_parameter_groups.get_or_insert(vec![]).extend(
+                            CacheParameterGroupListDeserializer::deserialize(
+                                "CacheParameterGroups",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeCacheParameters</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeCacheParametersMessage {
+pub struct DescribeCacheParametersRequest {
     /// <p>The name of a specific cache parameter group to return details for.</p>
     pub cache_parameter_group_name: String,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -2673,10 +2562,10 @@ pub struct DescribeCacheParametersMessage {
     pub source: Option<String>,
 }
 
-/// Serialize `DescribeCacheParametersMessage` contents to a `SignedRequest`.
-struct DescribeCacheParametersMessageSerializer;
-impl DescribeCacheParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheParametersMessage) {
+/// Serialize `DescribeCacheParametersRequest` contents to a `SignedRequest`.
+struct DescribeCacheParametersRequestSerializer;
+impl DescribeCacheParametersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheParametersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2698,9 +2587,57 @@ impl DescribeCacheParametersMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeCacheParameters</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCacheParametersResponse {
+    /// <p>A list of parameters specific to a particular cache node type. Each element in the list contains detailed information about one parameter.</p>
+    pub cache_node_type_specific_parameters: Option<Vec<CacheNodeTypeSpecificParameter>>,
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+    /// <p>A list of <a>Parameter</a> instances.</p>
+    pub parameters: Option<Vec<Parameter>>,
+}
+
+struct DescribeCacheParametersResponseDeserializer;
+impl DescribeCacheParametersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeCacheParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeCacheParametersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheNodeTypeSpecificParameters" => {
+                        obj.cache_node_type_specific_parameters
+                            .get_or_insert(vec![])
+                            .extend(
+                                CacheNodeTypeSpecificParametersListDeserializer::deserialize(
+                                    "CacheNodeTypeSpecificParameters",
+                                    stack,
+                                )?,
+                            );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Parameters" => {
+                        obj.parameters.get_or_insert(vec![]).extend(
+                            ParametersListDeserializer::deserialize("Parameters", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeCacheSecurityGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeCacheSecurityGroupsMessage {
+pub struct DescribeCacheSecurityGroupsRequest {
     /// <p>The name of the cache security group to return details for.</p>
     pub cache_security_group_name: Option<String>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -2709,10 +2646,10 @@ pub struct DescribeCacheSecurityGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeCacheSecurityGroupsMessage` contents to a `SignedRequest`.
-struct DescribeCacheSecurityGroupsMessageSerializer;
-impl DescribeCacheSecurityGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheSecurityGroupsMessage) {
+/// Serialize `DescribeCacheSecurityGroupsRequest` contents to a `SignedRequest`.
+struct DescribeCacheSecurityGroupsRequestSerializer;
+impl DescribeCacheSecurityGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheSecurityGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2733,9 +2670,48 @@ impl DescribeCacheSecurityGroupsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeCacheSecurityGroups</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCacheSecurityGroupsResponse {
+    /// <p>A list of cache security groups. Each element in the list contains detailed information about one group.</p>
+    pub cache_security_groups: Option<Vec<CacheSecurityGroup>>,
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeCacheSecurityGroupsResponseDeserializer;
+impl DescribeCacheSecurityGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeCacheSecurityGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeCacheSecurityGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheSecurityGroups" => {
+                        obj.cache_security_groups.get_or_insert(vec![]).extend(
+                            CacheSecurityGroupsDeserializer::deserialize(
+                                "CacheSecurityGroups",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeCacheSubnetGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeCacheSubnetGroupsMessage {
+pub struct DescribeCacheSubnetGroupsRequest {
     /// <p>The name of the cache subnet group to return details for.</p>
     pub cache_subnet_group_name: Option<String>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -2744,10 +2720,10 @@ pub struct DescribeCacheSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeCacheSubnetGroupsMessage` contents to a `SignedRequest`.
-struct DescribeCacheSubnetGroupsMessageSerializer;
-impl DescribeCacheSubnetGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheSubnetGroupsMessage) {
+/// Serialize `DescribeCacheSubnetGroupsRequest` contents to a `SignedRequest`.
+struct DescribeCacheSubnetGroupsRequestSerializer;
+impl DescribeCacheSubnetGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeCacheSubnetGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2768,9 +2744,45 @@ impl DescribeCacheSubnetGroupsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeCacheSubnetGroups</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeCacheSubnetGroupsResponse {
+    /// <p>A list of cache subnet groups. Each element in the list contains detailed information about one group.</p>
+    pub cache_subnet_groups: Option<Vec<CacheSubnetGroup>>,
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeCacheSubnetGroupsResponseDeserializer;
+impl DescribeCacheSubnetGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeCacheSubnetGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeCacheSubnetGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheSubnetGroups" => {
+                        obj.cache_subnet_groups.get_or_insert(vec![]).extend(
+                            CacheSubnetGroupsDeserializer::deserialize("CacheSubnetGroups", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeEngineDefaultParameters</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultParametersMessage {
+pub struct DescribeEngineDefaultParametersRequest {
     /// <p>The name of the cache parameter group family.</p> <p>Valid values are: <code>memcached1.4</code> | <code>redis2.6</code> | <code>redis2.8</code> | <code>redis3.2</code> | <code>redis4.0</code> </p>
     pub cache_parameter_group_family: String,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -2779,10 +2791,10 @@ pub struct DescribeEngineDefaultParametersMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeEngineDefaultParametersMessage` contents to a `SignedRequest`.
-struct DescribeEngineDefaultParametersMessageSerializer;
-impl DescribeEngineDefaultParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEngineDefaultParametersMessage) {
+/// Serialize `DescribeEngineDefaultParametersRequest` contents to a `SignedRequest`.
+struct DescribeEngineDefaultParametersRequestSerializer;
+impl DescribeEngineDefaultParametersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEngineDefaultParametersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2802,18 +2814,18 @@ impl DescribeEngineDefaultParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultParametersResult {
+pub struct DescribeEngineDefaultParametersResponse {
     pub engine_defaults: Option<EngineDefaults>,
 }
 
-struct DescribeEngineDefaultParametersResultDeserializer;
-impl DescribeEngineDefaultParametersResultDeserializer {
+struct DescribeEngineDefaultParametersResponseDeserializer;
+impl DescribeEngineDefaultParametersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeEngineDefaultParametersResult, XmlParseError> {
-        deserialize_elements::<_, DescribeEngineDefaultParametersResult, _>(
+    ) -> Result<DescribeEngineDefaultParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEngineDefaultParametersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2833,7 +2845,7 @@ impl DescribeEngineDefaultParametersResultDeserializer {
 }
 /// <p>Represents the input of a <code>DescribeEvents</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventsMessage {
+pub struct DescribeEventsRequest {
     /// <p>The number of minutes worth of events to retrieve.</p>
     pub duration: Option<i64>,
     /// <p>The end of the time interval for which to retrieve events, specified in ISO 8601 format.</p> <p> <b>Example:</b> 2017-03-30T07:03:49.555Z</p>
@@ -2850,10 +2862,10 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<String>,
 }
 
-/// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
-struct DescribeEventsMessageSerializer;
-impl DescribeEventsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
+/// Serialize `DescribeEventsRequest` contents to a `SignedRequest`.
+struct DescribeEventsRequestSerializer;
+impl DescribeEventsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2883,9 +2895,41 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeEvents</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventsResponse {
+    /// <p>A list of events. Each element in the list contains detailed information about one event.</p>
+    pub events: Option<Vec<Event>>,
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeEventsResponseDeserializer;
+impl DescribeEventsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Events" => {
+                    obj.events
+                        .get_or_insert(vec![])
+                        .extend(EventListDeserializer::deserialize("Events", stack)?);
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Represents the input of a <code>DescribeReplicationGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeReplicationGroupsMessage {
+pub struct DescribeReplicationGroupsRequest {
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
     /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
@@ -2894,10 +2938,10 @@ pub struct DescribeReplicationGroupsMessage {
     pub replication_group_id: Option<String>,
 }
 
-/// Serialize `DescribeReplicationGroupsMessage` contents to a `SignedRequest`.
-struct DescribeReplicationGroupsMessageSerializer;
-impl DescribeReplicationGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeReplicationGroupsMessage) {
+/// Serialize `DescribeReplicationGroupsRequest` contents to a `SignedRequest`.
+struct DescribeReplicationGroupsRequestSerializer;
+impl DescribeReplicationGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeReplicationGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2915,9 +2959,146 @@ impl DescribeReplicationGroupsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeReplicationGroups</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeReplicationGroupsResponse {
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+    /// <p>A list of replication groups. Each item in the list contains detailed information about one replication group.</p>
+    pub replication_groups: Option<Vec<ReplicationGroup>>,
+}
+
+struct DescribeReplicationGroupsResponseDeserializer;
+impl DescribeReplicationGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeReplicationGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeReplicationGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ReplicationGroups" => {
+                        obj.replication_groups.get_or_insert(vec![]).extend(
+                            ReplicationGroupListDeserializer::deserialize(
+                                "ReplicationGroups",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Represents the input of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeReservedCacheNodesOfferingsRequest {
+    /// <p><p>The cache node type filter value. Use this parameter to show only the available offerings matching the specified cache node type.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> <p> <b>R4 node types;</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis (cluster mode disabled): Redis backup/restore is not supported on T1 and T2 instances. </p> </li> <li> <p>Redis (cluster mode enabled): Backup/restore is not supported on T1 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see:</p> <ul> <li> <p> <a href="http://aws.amazon.com/elasticache/details">Amazon ElastiCache Product Features and Details</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/ParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific">Cache Node Type-Specific Parameters for Memcached</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific">Cache Node Type-Specific Parameters for Redis</a> </p> </li> </ul></p>
+    pub cache_node_type: Option<String>,
+    /// <p>Duration filter value, specified in years or seconds. Use this parameter to show only reservations for a given duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
+    pub duration: Option<String>,
+    /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
+    pub max_records: Option<i64>,
+    /// <p>The offering type filter value. Use this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>"Light Utilization"|"Medium Utilization"|"Heavy Utilization"</code> </p>
+    pub offering_type: Option<String>,
+    /// <p>The product description filter value. Use this parameter to show only the available offerings matching the specified product description.</p>
+    pub product_description: Option<String>,
+    /// <p>The offering identifier filter value. Use this parameter to show only the available offering that matches the specified reservation identifier.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>
+    pub reserved_cache_nodes_offering_id: Option<String>,
+}
+
+/// Serialize `DescribeReservedCacheNodesOfferingsRequest` contents to a `SignedRequest`.
+struct DescribeReservedCacheNodesOfferingsRequestSerializer;
+impl DescribeReservedCacheNodesOfferingsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DescribeReservedCacheNodesOfferingsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cache_node_type {
+            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.duration {
+            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.offering_type {
+            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.product_description {
+            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
+        }
+        if let Some(ref field_value) = obj.reserved_cache_nodes_offering_id {
+            params.put(
+                &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
+                &field_value,
+            );
+        }
+    }
+}
+
+/// <p>Represents the output of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeReservedCacheNodesOfferingsResponse {
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
+    pub marker: Option<String>,
+    /// <p>A list of reserved cache node offerings. Each element in the list contains detailed information about one offering.</p>
+    pub reserved_cache_nodes_offerings: Option<Vec<ReservedCacheNodesOffering>>,
+}
+
+struct DescribeReservedCacheNodesOfferingsResponseDeserializer;
+impl DescribeReservedCacheNodesOfferingsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeReservedCacheNodesOfferingsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeReservedCacheNodesOfferingsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ReservedCacheNodesOfferings" => {
+                        obj.reserved_cache_nodes_offerings
+                            .get_or_insert(vec![])
+                            .extend(ReservedCacheNodesOfferingListDeserializer::deserialize(
+                                "ReservedCacheNodesOfferings",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>DescribeReservedCacheNodes</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeReservedCacheNodesMessage {
+pub struct DescribeReservedCacheNodesRequest {
     /// <p><p>The cache node type filter value. Use this parameter to show only those reservations matching the specified cache node type.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> <p> <b>R4 node types;</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis (cluster mode disabled): Redis backup/restore is not supported on T1 and T2 instances. </p> </li> <li> <p>Redis (cluster mode enabled): Backup/restore is not supported on T1 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see:</p> <ul> <li> <p> <a href="http://aws.amazon.com/elasticache/details">Amazon ElastiCache Product Features and Details</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/ParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific">Cache Node Type-Specific Parameters for Memcached</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific">Cache Node Type-Specific Parameters for Redis</a> </p> </li> </ul></p>
     pub cache_node_type: Option<String>,
     /// <p>The duration filter value, specified in years or seconds. Use this parameter to show only reservations for this duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
@@ -2936,10 +3117,10 @@ pub struct DescribeReservedCacheNodesMessage {
     pub reserved_cache_nodes_offering_id: Option<String>,
 }
 
-/// Serialize `DescribeReservedCacheNodesMessage` contents to a `SignedRequest`.
-struct DescribeReservedCacheNodesMessageSerializer;
-impl DescribeReservedCacheNodesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedCacheNodesMessage) {
+/// Serialize `DescribeReservedCacheNodesRequest` contents to a `SignedRequest`.
+struct DescribeReservedCacheNodesRequestSerializer;
+impl DescribeReservedCacheNodesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeReservedCacheNodesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2978,82 +3159,23 @@ impl DescribeReservedCacheNodesMessageSerializer {
     }
 }
 
-/// <p>Represents the input of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>
+/// <p>Represents the output of a <code>DescribeReservedCacheNodes</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeReservedCacheNodesOfferingsMessage {
-    /// <p><p>The cache node type filter value. Use this parameter to show only the available offerings matching the specified cache node type.</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> <p> <b>R4 node types;</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Notes:</b> </p> <ul> <li> <p>All T2 instances are created in an Amazon Virtual Private Cloud (Amazon VPC).</p> </li> <li> <p>Redis (cluster mode disabled): Redis backup/restore is not supported on T1 and T2 instances. </p> </li> <li> <p>Redis (cluster mode enabled): Backup/restore is not supported on T1 instances.</p> </li> <li> <p>Redis Append-only files (AOF) functionality is not supported for T1 or T2 instances.</p> </li> </ul> <p>For a complete listing of node types and specifications, see:</p> <ul> <li> <p> <a href="http://aws.amazon.com/elasticache/details">Amazon ElastiCache Product Features and Details</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/ParameterGroups.Memcached.html#ParameterGroups.Memcached.NodeSpecific">Cache Node Type-Specific Parameters for Memcached</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.Redis.html#ParameterGroups.Redis.NodeSpecific">Cache Node Type-Specific Parameters for Redis</a> </p> </li> </ul></p>
-    pub cache_node_type: Option<String>,
-    /// <p>Duration filter value, specified in years or seconds. Use this parameter to show only reservations for a given duration.</p> <p>Valid Values: <code>1 | 3 | 31536000 | 94608000</code> </p>
-    pub duration: Option<String>,
-    /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+pub struct DescribeReservedCacheNodesResponse {
+    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
     pub marker: Option<String>,
-    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: minimum 20; maximum 100.</p>
-    pub max_records: Option<i64>,
-    /// <p>The offering type filter value. Use this parameter to show only the available offerings matching the specified offering type.</p> <p>Valid Values: <code>"Light Utilization"|"Medium Utilization"|"Heavy Utilization"</code> </p>
-    pub offering_type: Option<String>,
-    /// <p>The product description filter value. Use this parameter to show only the available offerings matching the specified product description.</p>
-    pub product_description: Option<String>,
-    /// <p>The offering identifier filter value. Use this parameter to show only the available offering that matches the specified reservation identifier.</p> <p>Example: <code>438012d3-4052-4cc7-b2e3-8d3372e0e706</code> </p>
-    pub reserved_cache_nodes_offering_id: Option<String>,
+    /// <p>A list of reserved cache nodes. Each element in the list contains detailed information about one node.</p>
+    pub reserved_cache_nodes: Option<Vec<ReservedCacheNode>>,
 }
 
-/// Serialize `DescribeReservedCacheNodesOfferingsMessage` contents to a `SignedRequest`.
-struct DescribeReservedCacheNodesOfferingsMessageSerializer;
-impl DescribeReservedCacheNodesOfferingsMessageSerializer {
-    fn serialize(
-        params: &mut Params,
-        name: &str,
-        obj: &DescribeReservedCacheNodesOfferingsMessage,
-    ) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.cache_node_type {
-            params.put(&format!("{}{}", prefix, "CacheNodeType"), &field_value);
-        }
-        if let Some(ref field_value) = obj.duration {
-            params.put(&format!("{}{}", prefix, "Duration"), &field_value);
-        }
-        if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
-        }
-        if let Some(ref field_value) = obj.max_records {
-            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
-        }
-        if let Some(ref field_value) = obj.offering_type {
-            params.put(&format!("{}{}", prefix, "OfferingType"), &field_value);
-        }
-        if let Some(ref field_value) = obj.product_description {
-            params.put(&format!("{}{}", prefix, "ProductDescription"), &field_value);
-        }
-        if let Some(ref field_value) = obj.reserved_cache_nodes_offering_id {
-            params.put(
-                &format!("{}{}", prefix, "ReservedCacheNodesOfferingId"),
-                &field_value,
-            );
-        }
-    }
-}
-
-/// <p>Represents the output of a <code>DescribeSnapshots</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSnapshotsListMessage {
-    /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-    /// <p>A list of snapshots. Each item in the list contains detailed information about one snapshot.</p>
-    pub snapshots: Option<Vec<Snapshot>>,
-}
-
-struct DescribeSnapshotsListMessageDeserializer;
-impl DescribeSnapshotsListMessageDeserializer {
+struct DescribeReservedCacheNodesResponseDeserializer;
+impl DescribeReservedCacheNodesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeSnapshotsListMessage, XmlParseError> {
-        deserialize_elements::<_, DescribeSnapshotsListMessage, _>(
+    ) -> Result<DescribeReservedCacheNodesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeReservedCacheNodesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3061,10 +3183,13 @@ impl DescribeSnapshotsListMessageDeserializer {
                     "Marker" => {
                         obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
                     }
-                    "Snapshots" => {
-                        obj.snapshots
-                            .get_or_insert(vec![])
-                            .extend(SnapshotListDeserializer::deserialize("Snapshots", stack)?);
+                    "ReservedCacheNodes" => {
+                        obj.reserved_cache_nodes.get_or_insert(vec![]).extend(
+                            ReservedCacheNodeListDeserializer::deserialize(
+                                "ReservedCacheNodes",
+                                stack,
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
                 }
@@ -3075,7 +3200,7 @@ impl DescribeSnapshotsListMessageDeserializer {
 }
 /// <p>Represents the input of a <code>DescribeSnapshotsMessage</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeSnapshotsMessage {
+pub struct DescribeSnapshotsRequest {
     /// <p>A user-supplied cluster identifier. If this parameter is specified, only snapshots associated with that specific cluster are described.</p>
     pub cache_cluster_id: Option<String>,
     /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -3092,10 +3217,10 @@ pub struct DescribeSnapshotsMessage {
     pub snapshot_source: Option<String>,
 }
 
-/// Serialize `DescribeSnapshotsMessage` contents to a `SignedRequest`.
-struct DescribeSnapshotsMessageSerializer;
-impl DescribeSnapshotsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeSnapshotsMessage) {
+/// Serialize `DescribeSnapshotsRequest` contents to a `SignedRequest`.
+struct DescribeSnapshotsRequestSerializer;
+impl DescribeSnapshotsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeSnapshotsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3128,6 +3253,42 @@ impl DescribeSnapshotsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of a <code>DescribeSnapshots</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeSnapshotsResponse {
+    /// <p>An optional marker returned from a prior request. Use this marker for pagination of results from this operation. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p>A list of snapshots. Each item in the list contains detailed information about one snapshot.</p>
+    pub snapshots: Option<Vec<Snapshot>>,
+}
+
+struct DescribeSnapshotsResponseDeserializer;
+impl DescribeSnapshotsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeSnapshotsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeSnapshotsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Snapshots" => {
+                        obj.snapshots
+                            .get_or_insert(vec![])
+                            .extend(SnapshotListDeserializer::deserialize("Snapshots", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
@@ -3338,40 +3499,8 @@ impl EventListDeserializer {
         })
     }
 }
-/// <p>Represents the output of a <code>DescribeEvents</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventsMessage {
-    /// <p>A list of events. Each element in the list contains detailed information about one event.</p>
-    pub events: Option<Vec<Event>>,
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-}
-
-struct EventsMessageDeserializer;
-impl EventsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventsMessage, XmlParseError> {
-        deserialize_elements::<_, EventsMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Events" => {
-                    obj.events
-                        .get_or_insert(vec![])
-                        .extend(EventListDeserializer::deserialize("Events", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct IncreaseReplicaCountMessage {
+pub struct IncreaseReplicaCountRequest {
     /// <p>If <code>True</code>, the number of replica nodes is increased immediately. If <code>False</code>, the number of replica nodes is increased during the next maintenance window.</p>
     pub apply_immediately: bool,
     /// <p>The number of read replica nodes you want at the completion of this operation. For Redis (cluster mode disabled) replication groups, this is the number of replica nodes in the replication group. For Redis (cluster mode enabled) replication groups, this is the number of replica nodes in each of the replication group's node groups.</p>
@@ -3382,10 +3511,10 @@ pub struct IncreaseReplicaCountMessage {
     pub replication_group_id: String,
 }
 
-/// Serialize `IncreaseReplicaCountMessage` contents to a `SignedRequest`.
-struct IncreaseReplicaCountMessageSerializer;
-impl IncreaseReplicaCountMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &IncreaseReplicaCountMessage) {
+/// Serialize `IncreaseReplicaCountRequest` contents to a `SignedRequest`.
+struct IncreaseReplicaCountRequestSerializer;
+impl IncreaseReplicaCountRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &IncreaseReplicaCountRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3413,18 +3542,18 @@ impl IncreaseReplicaCountMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct IncreaseReplicaCountResult {
+pub struct IncreaseReplicaCountResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
-struct IncreaseReplicaCountResultDeserializer;
-impl IncreaseReplicaCountResultDeserializer {
+struct IncreaseReplicaCountResponseDeserializer;
+impl IncreaseReplicaCountResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<IncreaseReplicaCountResult, XmlParseError> {
-        deserialize_elements::<_, IncreaseReplicaCountResult, _>(
+    ) -> Result<IncreaseReplicaCountResponse, XmlParseError> {
+        deserialize_elements::<_, IncreaseReplicaCountResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3478,17 +3607,17 @@ impl KeyListSerializer {
 
 /// <p>The input parameters for the <code>ListAllowedNodeTypeModifications</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListAllowedNodeTypeModificationsMessage {
+pub struct ListAllowedNodeTypeModificationsRequest {
     /// <p><p>The name of the cluster you want to scale up to a larger node instanced type. ElastiCache uses the cluster id to identify the current node type of this cluster and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important></p>
     pub cache_cluster_id: Option<String>,
     /// <p><p>The name of the replication group want to scale up to a larger node type. ElastiCache uses the replication group id to identify the current node type being used by this replication group, and from that to create a list of node types you can scale up to.</p> <important> <p>You must provide a value for either the <code>CacheClusterId</code> or the <code>ReplicationGroupId</code>.</p> </important></p>
     pub replication_group_id: Option<String>,
 }
 
-/// Serialize `ListAllowedNodeTypeModificationsMessage` contents to a `SignedRequest`.
-struct ListAllowedNodeTypeModificationsMessageSerializer;
-impl ListAllowedNodeTypeModificationsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListAllowedNodeTypeModificationsMessage) {
+/// Serialize `ListAllowedNodeTypeModificationsRequest` contents to a `SignedRequest`.
+struct ListAllowedNodeTypeModificationsRequestSerializer;
+impl ListAllowedNodeTypeModificationsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListAllowedNodeTypeModificationsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3503,17 +3632,48 @@ impl ListAllowedNodeTypeModificationsMessageSerializer {
     }
 }
 
+/// <p>Represents the allowed node types you can use to modify your cluster or replication group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListAllowedNodeTypeModificationsResponse {
+    /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
+    pub scale_up_modifications: Option<Vec<String>>,
+}
+
+struct ListAllowedNodeTypeModificationsResponseDeserializer;
+impl ListAllowedNodeTypeModificationsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListAllowedNodeTypeModificationsResponse, XmlParseError> {
+        deserialize_elements::<_, ListAllowedNodeTypeModificationsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ScaleUpModifications" => {
+                        obj.scale_up_modifications.get_or_insert(vec![]).extend(
+                            NodeTypeListDeserializer::deserialize("ScaleUpModifications", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>The input parameters for the <code>ListTagsForResource</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTagsForResourceMessage {
+pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource for which you want the list of tags, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     pub resource_name: String,
 }
 
-/// Serialize `ListTagsForResourceMessage` contents to a `SignedRequest`.
-struct ListTagsForResourceMessageSerializer;
-impl ListTagsForResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
+/// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
+struct ListTagsForResourceRequestSerializer;
+impl ListTagsForResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3523,9 +3683,40 @@ impl ListTagsForResourceMessageSerializer {
     }
 }
 
+/// <p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsForResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListTagsForResourceResponse {
+    /// <p>A list of cost allocation tags as key-value pairs.</p>
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+struct ListTagsForResourceResponseDeserializer;
+impl ListTagsForResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        deserialize_elements::<_, ListTagsForResourceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TagList" => {
+                        obj.tag_list
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("TagList", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>ModifyCacheCluster</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyCacheClusterMessage {
+pub struct ModifyCacheClusterRequest {
     /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> </note></p>
     pub az_mode: Option<String>,
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cluster.</p> <p>If <code>false</code>, changes to the cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
@@ -3562,10 +3753,10 @@ pub struct ModifyCacheClusterMessage {
     pub snapshot_window: Option<String>,
 }
 
-/// Serialize `ModifyCacheClusterMessage` contents to a `SignedRequest`.
-struct ModifyCacheClusterMessageSerializer;
-impl ModifyCacheClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheClusterMessage) {
+/// Serialize `ModifyCacheClusterRequest` contents to a `SignedRequest`.
+struct ModifyCacheClusterRequestSerializer;
+impl ModifyCacheClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3661,18 +3852,18 @@ impl ModifyCacheClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyCacheClusterResult {
+pub struct ModifyCacheClusterResponse {
     pub cache_cluster: Option<CacheCluster>,
 }
 
-struct ModifyCacheClusterResultDeserializer;
-impl ModifyCacheClusterResultDeserializer {
+struct ModifyCacheClusterResponseDeserializer;
+impl ModifyCacheClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyCacheClusterResult, XmlParseError> {
-        deserialize_elements::<_, ModifyCacheClusterResult, _>(
+    ) -> Result<ModifyCacheClusterResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyCacheClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3692,17 +3883,17 @@ impl ModifyCacheClusterResultDeserializer {
 }
 /// <p>Represents the input of a <code>ModifyCacheParameterGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyCacheParameterGroupMessage {
+pub struct ModifyCacheParameterGroupRequest {
     /// <p>The name of the cache parameter group to modify.</p>
     pub cache_parameter_group_name: String,
     /// <p>An array of parameter names and values for the parameter update. You must supply at least one parameter name and value; subsequent arguments are optional. A maximum of 20 parameters may be modified per request.</p>
     pub parameter_name_values: Vec<ParameterNameValue>,
 }
 
-/// Serialize `ModifyCacheParameterGroupMessage` contents to a `SignedRequest`.
-struct ModifyCacheParameterGroupMessageSerializer;
-impl ModifyCacheParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheParameterGroupMessage) {
+/// Serialize `ModifyCacheParameterGroupRequest` contents to a `SignedRequest`.
+struct ModifyCacheParameterGroupRequestSerializer;
+impl ModifyCacheParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3720,9 +3911,41 @@ impl ModifyCacheParameterGroupMessageSerializer {
     }
 }
 
+/// <p><p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>ModifyCacheParameterGroup</code> </p> </li> <li> <p> <code>ResetCacheParameterGroup</code> </p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyCacheParameterGroupResponse {
+    /// <p>The name of the cache parameter group.</p>
+    pub cache_parameter_group_name: Option<String>,
+}
+
+struct ModifyCacheParameterGroupResponseDeserializer;
+impl ModifyCacheParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyCacheParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyCacheParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheParameterGroupName" => {
+                        obj.cache_parameter_group_name = Some(StringDeserializer::deserialize(
+                            "CacheParameterGroupName",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input of a <code>ModifyCacheSubnetGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyCacheSubnetGroupMessage {
+pub struct ModifyCacheSubnetGroupRequest {
     /// <p>A description of the cache subnet group.</p>
     pub cache_subnet_group_description: Option<String>,
     /// <p>The name for the cache subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters or hyphens.</p> <p>Example: <code>mysubnetgroup</code> </p>
@@ -3731,10 +3954,10 @@ pub struct ModifyCacheSubnetGroupMessage {
     pub subnet_ids: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyCacheSubnetGroupMessage` contents to a `SignedRequest`.
-struct ModifyCacheSubnetGroupMessageSerializer;
-impl ModifyCacheSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheSubnetGroupMessage) {
+/// Serialize `ModifyCacheSubnetGroupRequest` contents to a `SignedRequest`.
+struct ModifyCacheSubnetGroupRequestSerializer;
+impl ModifyCacheSubnetGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyCacheSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3761,18 +3984,18 @@ impl ModifyCacheSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyCacheSubnetGroupResult {
+pub struct ModifyCacheSubnetGroupResponse {
     pub cache_subnet_group: Option<CacheSubnetGroup>,
 }
 
-struct ModifyCacheSubnetGroupResultDeserializer;
-impl ModifyCacheSubnetGroupResultDeserializer {
+struct ModifyCacheSubnetGroupResponseDeserializer;
+impl ModifyCacheSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyCacheSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, ModifyCacheSubnetGroupResult, _>(
+    ) -> Result<ModifyCacheSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyCacheSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3792,7 +4015,7 @@ impl ModifyCacheSubnetGroupResultDeserializer {
 }
 /// <p>Represents the input of a <code>ModifyReplicationGroups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyReplicationGroupMessage {
+pub struct ModifyReplicationGroupRequest {
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the replication group.</p> <p>If <code>false</code>, changes to the nodes in the replication group are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
     /// <p>This parameter is currently disabled.</p>
@@ -3829,10 +4052,10 @@ pub struct ModifyReplicationGroupMessage {
     pub snapshotting_cluster_id: Option<String>,
 }
 
-/// Serialize `ModifyReplicationGroupMessage` contents to a `SignedRequest`.
-struct ModifyReplicationGroupMessageSerializer;
-impl ModifyReplicationGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyReplicationGroupMessage) {
+/// Serialize `ModifyReplicationGroupRequest` contents to a `SignedRequest`.
+struct ModifyReplicationGroupRequestSerializer;
+impl ModifyReplicationGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyReplicationGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3930,18 +4153,18 @@ impl ModifyReplicationGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyReplicationGroupResult {
+pub struct ModifyReplicationGroupResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
-struct ModifyReplicationGroupResultDeserializer;
-impl ModifyReplicationGroupResultDeserializer {
+struct ModifyReplicationGroupResponseDeserializer;
+impl ModifyReplicationGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyReplicationGroupResult, XmlParseError> {
-        deserialize_elements::<_, ModifyReplicationGroupResult, _>(
+    ) -> Result<ModifyReplicationGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyReplicationGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3961,7 +4184,7 @@ impl ModifyReplicationGroupResultDeserializer {
 }
 /// <p>Represents the input for a <code>ModifyReplicationGroupShardConfiguration</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyReplicationGroupShardConfigurationMessage {
+pub struct ModifyReplicationGroupShardConfigurationRequest {
     /// <p>Indicates that the shard reconfiguration process begins immediately. At present, the only permitted value for this parameter is <code>true</code>.</p> <p>Value: true</p>
     pub apply_immediately: bool,
     /// <p>The number of node groups (shards) that results from the modification of the shard configuration.</p>
@@ -3976,13 +4199,13 @@ pub struct ModifyReplicationGroupShardConfigurationMessage {
     pub resharding_configuration: Option<Vec<ReshardingConfiguration>>,
 }
 
-/// Serialize `ModifyReplicationGroupShardConfigurationMessage` contents to a `SignedRequest`.
-struct ModifyReplicationGroupShardConfigurationMessageSerializer;
-impl ModifyReplicationGroupShardConfigurationMessageSerializer {
+/// Serialize `ModifyReplicationGroupShardConfigurationRequest` contents to a `SignedRequest`.
+struct ModifyReplicationGroupShardConfigurationRequestSerializer;
+impl ModifyReplicationGroupShardConfigurationRequestSerializer {
     fn serialize(
         params: &mut Params,
         name: &str,
-        obj: &ModifyReplicationGroupShardConfigurationMessage,
+        obj: &ModifyReplicationGroupShardConfigurationRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -4026,18 +4249,18 @@ impl ModifyReplicationGroupShardConfigurationMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyReplicationGroupShardConfigurationResult {
+pub struct ModifyReplicationGroupShardConfigurationResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
-struct ModifyReplicationGroupShardConfigurationResultDeserializer;
-impl ModifyReplicationGroupShardConfigurationResultDeserializer {
+struct ModifyReplicationGroupShardConfigurationResponseDeserializer;
+impl ModifyReplicationGroupShardConfigurationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyReplicationGroupShardConfigurationResult, XmlParseError> {
-        deserialize_elements::<_, ModifyReplicationGroupShardConfigurationResult, _>(
+    ) -> Result<ModifyReplicationGroupShardConfigurationResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyReplicationGroupShardConfigurationResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4660,7 +4883,7 @@ impl PreferredAvailabilityZoneListSerializer {
 
 /// <p>Represents the input of a <code>PurchaseReservedCacheNodesOffering</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseReservedCacheNodesOfferingMessage {
+pub struct PurchaseReservedCacheNodesOfferingRequest {
     /// <p>The number of cache node instances to reserve.</p> <p>Default: <code>1</code> </p>
     pub cache_node_count: Option<i64>,
     /// <p>A customer-specified identifier to track this reservation.</p> <note> <p>The Reserved Cache Node ID is an unique customer-specified identifier to track this reservation. If this parameter is not specified, ElastiCache automatically generates an identifier for the reservation.</p> </note> <p>Example: myreservationID</p>
@@ -4669,10 +4892,10 @@ pub struct PurchaseReservedCacheNodesOfferingMessage {
     pub reserved_cache_nodes_offering_id: String,
 }
 
-/// Serialize `PurchaseReservedCacheNodesOfferingMessage` contents to a `SignedRequest`.
-struct PurchaseReservedCacheNodesOfferingMessageSerializer;
-impl PurchaseReservedCacheNodesOfferingMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PurchaseReservedCacheNodesOfferingMessage) {
+/// Serialize `PurchaseReservedCacheNodesOfferingRequest` contents to a `SignedRequest`.
+struct PurchaseReservedCacheNodesOfferingRequestSerializer;
+impl PurchaseReservedCacheNodesOfferingRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PurchaseReservedCacheNodesOfferingRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4695,18 +4918,18 @@ impl PurchaseReservedCacheNodesOfferingMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseReservedCacheNodesOfferingResult {
+pub struct PurchaseReservedCacheNodesOfferingResponse {
     pub reserved_cache_node: Option<ReservedCacheNode>,
 }
 
-struct PurchaseReservedCacheNodesOfferingResultDeserializer;
-impl PurchaseReservedCacheNodesOfferingResultDeserializer {
+struct PurchaseReservedCacheNodesOfferingResponseDeserializer;
+impl PurchaseReservedCacheNodesOfferingResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PurchaseReservedCacheNodesOfferingResult, XmlParseError> {
-        deserialize_elements::<_, PurchaseReservedCacheNodesOfferingResult, _>(
+    ) -> Result<PurchaseReservedCacheNodesOfferingResponse, XmlParseError> {
+        deserialize_elements::<_, PurchaseReservedCacheNodesOfferingResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4726,17 +4949,17 @@ impl PurchaseReservedCacheNodesOfferingResultDeserializer {
 }
 /// <p>Represents the input of a <code>RebootCacheCluster</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootCacheClusterMessage {
+pub struct RebootCacheClusterRequest {
     /// <p>The cluster identifier. This parameter is stored as a lowercase string.</p>
     pub cache_cluster_id: String,
     /// <p>A list of cache node IDs to reboot. A node ID is a numeric identifier (0001, 0002, etc.). To reboot an entire cluster, specify all of the cache node IDs.</p>
     pub cache_node_ids_to_reboot: Vec<String>,
 }
 
-/// Serialize `RebootCacheClusterMessage` contents to a `SignedRequest`.
-struct RebootCacheClusterMessageSerializer;
-impl RebootCacheClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RebootCacheClusterMessage) {
+/// Serialize `RebootCacheClusterRequest` contents to a `SignedRequest`.
+struct RebootCacheClusterRequestSerializer;
+impl RebootCacheClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RebootCacheClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4755,18 +4978,18 @@ impl RebootCacheClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootCacheClusterResult {
+pub struct RebootCacheClusterResponse {
     pub cache_cluster: Option<CacheCluster>,
 }
 
-struct RebootCacheClusterResultDeserializer;
-impl RebootCacheClusterResultDeserializer {
+struct RebootCacheClusterResponseDeserializer;
+impl RebootCacheClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RebootCacheClusterResult, XmlParseError> {
-        deserialize_elements::<_, RebootCacheClusterResult, _>(
+    ) -> Result<RebootCacheClusterResponse, XmlParseError> {
+        deserialize_elements::<_, RebootCacheClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4854,17 +5077,17 @@ impl RemoveReplicasListSerializer {
 
 /// <p>Represents the input of a <code>RemoveTagsFromResource</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveTagsFromResourceMessage {
+pub struct RemoveTagsFromResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource from which you want the tags removed, for example <code>arn:aws:elasticache:us-west-2:0123456789:cluster:myCluster</code> or <code>arn:aws:elasticache:us-west-2:0123456789:snapshot:mySnapshot</code>.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
     pub resource_name: String,
     /// <p>A list of <code>TagKeys</code> identifying the tags you want removed from the named resource.</p>
     pub tag_keys: Vec<String>,
 }
 
-/// Serialize `RemoveTagsFromResourceMessage` contents to a `SignedRequest`.
-struct RemoveTagsFromResourceMessageSerializer;
-impl RemoveTagsFromResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceMessage) {
+/// Serialize `RemoveTagsFromResourceRequest` contents to a `SignedRequest`.
+struct RemoveTagsFromResourceRequestSerializer;
+impl RemoveTagsFromResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4872,6 +5095,38 @@ impl RemoveTagsFromResourceMessageSerializer {
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
         KeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKeys"), &obj.tag_keys);
+    }
+}
+
+/// <p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsForResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveTagsFromResourceResponse {
+    /// <p>A list of cost allocation tags as key-value pairs.</p>
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+struct RemoveTagsFromResourceResponseDeserializer;
+impl RemoveTagsFromResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveTagsFromResourceResponse, XmlParseError> {
+        deserialize_elements::<_, RemoveTagsFromResourceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TagList" => {
+                        obj.tag_list
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("TagList", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 
@@ -5045,45 +5300,6 @@ impl ReplicationGroupListDeserializer {
         })
     }
 }
-/// <p>Represents the output of a <code>DescribeReplicationGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ReplicationGroupMessage {
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-    /// <p>A list of replication groups. Each item in the list contains detailed information about one replication group.</p>
-    pub replication_groups: Option<Vec<ReplicationGroup>>,
-}
-
-struct ReplicationGroupMessageDeserializer;
-impl ReplicationGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ReplicationGroupMessage, XmlParseError> {
-        deserialize_elements::<_, ReplicationGroupMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "ReplicationGroups" => {
-                        obj.replication_groups.get_or_insert(vec![]).extend(
-                            ReplicationGroupListDeserializer::deserialize(
-                                "ReplicationGroups",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>The settings to be applied to the Redis replication group, either immediately or during the next maintenance window.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationGroupPendingModifiedValues {
@@ -5251,45 +5467,6 @@ impl ReservedCacheNodeListDeserializer {
         })
     }
 }
-/// <p>Represents the output of a <code>DescribeReservedCacheNodes</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ReservedCacheNodeMessage {
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-    /// <p>A list of reserved cache nodes. Each element in the list contains detailed information about one node.</p>
-    pub reserved_cache_nodes: Option<Vec<ReservedCacheNode>>,
-}
-
-struct ReservedCacheNodeMessageDeserializer;
-impl ReservedCacheNodeMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ReservedCacheNodeMessage, XmlParseError> {
-        deserialize_elements::<_, ReservedCacheNodeMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "ReservedCacheNodes" => {
-                        obj.reserved_cache_nodes.get_or_insert(vec![]).extend(
-                            ReservedCacheNodeListDeserializer::deserialize(
-                                "ReservedCacheNodes",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Describes all of the attributes of a reserved cache node offering.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReservedCacheNodesOffering {
@@ -5388,48 +5565,9 @@ impl ReservedCacheNodesOfferingListDeserializer {
         })
     }
 }
-/// <p>Represents the output of a <code>DescribeReservedCacheNodesOfferings</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ReservedCacheNodesOfferingMessage {
-    /// <p>Provides an identifier to allow retrieval of paginated results.</p>
-    pub marker: Option<String>,
-    /// <p>A list of reserved cache node offerings. Each element in the list contains detailed information about one offering.</p>
-    pub reserved_cache_nodes_offerings: Option<Vec<ReservedCacheNodesOffering>>,
-}
-
-struct ReservedCacheNodesOfferingMessageDeserializer;
-impl ReservedCacheNodesOfferingMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ReservedCacheNodesOfferingMessage, XmlParseError> {
-        deserialize_elements::<_, ReservedCacheNodesOfferingMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "ReservedCacheNodesOfferings" => {
-                        obj.reserved_cache_nodes_offerings
-                            .get_or_insert(vec![])
-                            .extend(ReservedCacheNodesOfferingListDeserializer::deserialize(
-                                "ReservedCacheNodesOfferings",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Represents the input of a <code>ResetCacheParameterGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResetCacheParameterGroupMessage {
+pub struct ResetCacheParameterGroupRequest {
     /// <p>The name of the cache parameter group to reset.</p>
     pub cache_parameter_group_name: String,
     /// <p>An array of parameter names to reset to their default values. If <code>ResetAllParameters</code> is <code>true</code>, do not use <code>ParameterNameValues</code>. If <code>ResetAllParameters</code> is <code>false</code>, you must specify the name of at least one parameter to reset.</p>
@@ -5438,10 +5576,10 @@ pub struct ResetCacheParameterGroupMessage {
     pub reset_all_parameters: Option<bool>,
 }
 
-/// Serialize `ResetCacheParameterGroupMessage` contents to a `SignedRequest`.
-struct ResetCacheParameterGroupMessageSerializer;
-impl ResetCacheParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResetCacheParameterGroupMessage) {
+/// Serialize `ResetCacheParameterGroupRequest` contents to a `SignedRequest`.
+struct ResetCacheParameterGroupRequestSerializer;
+impl ResetCacheParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ResetCacheParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5464,6 +5602,38 @@ impl ResetCacheParameterGroupMessageSerializer {
     }
 }
 
+/// <p><p>Represents the output of one of the following operations:</p> <ul> <li> <p> <code>ModifyCacheParameterGroup</code> </p> </li> <li> <p> <code>ResetCacheParameterGroup</code> </p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResetCacheParameterGroupResponse {
+    /// <p>The name of the cache parameter group.</p>
+    pub cache_parameter_group_name: Option<String>,
+}
+
+struct ResetCacheParameterGroupResponseDeserializer;
+impl ResetCacheParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResetCacheParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ResetCacheParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CacheParameterGroupName" => {
+                        obj.cache_parameter_group_name = Some(StringDeserializer::deserialize(
+                            "CacheParameterGroupName",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>A list of <code>PreferredAvailabilityZones</code> objects that specifies the configuration of a node group in the resharded cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReshardingConfiguration {
@@ -5536,7 +5706,7 @@ impl ReshardingStatusDeserializer {
 }
 /// <p>Represents the input of a <code>RevokeCacheSecurityGroupIngress</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeCacheSecurityGroupIngressMessage {
+pub struct RevokeCacheSecurityGroupIngressRequest {
     /// <p>The name of the cache security group to revoke ingress from.</p>
     pub cache_security_group_name: String,
     /// <p>The name of the Amazon EC2 security group to revoke access from.</p>
@@ -5545,10 +5715,10 @@ pub struct RevokeCacheSecurityGroupIngressMessage {
     pub ec2_security_group_owner_id: String,
 }
 
-/// Serialize `RevokeCacheSecurityGroupIngressMessage` contents to a `SignedRequest`.
-struct RevokeCacheSecurityGroupIngressMessageSerializer;
-impl RevokeCacheSecurityGroupIngressMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RevokeCacheSecurityGroupIngressMessage) {
+/// Serialize `RevokeCacheSecurityGroupIngressRequest` contents to a `SignedRequest`.
+struct RevokeCacheSecurityGroupIngressRequestSerializer;
+impl RevokeCacheSecurityGroupIngressRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RevokeCacheSecurityGroupIngressRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5570,18 +5740,18 @@ impl RevokeCacheSecurityGroupIngressMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RevokeCacheSecurityGroupIngressResult {
+pub struct RevokeCacheSecurityGroupIngressResponse {
     pub cache_security_group: Option<CacheSecurityGroup>,
 }
 
-struct RevokeCacheSecurityGroupIngressResultDeserializer;
-impl RevokeCacheSecurityGroupIngressResultDeserializer {
+struct RevokeCacheSecurityGroupIngressResponseDeserializer;
+impl RevokeCacheSecurityGroupIngressResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RevokeCacheSecurityGroupIngressResult, XmlParseError> {
-        deserialize_elements::<_, RevokeCacheSecurityGroupIngressResult, _>(
+    ) -> Result<RevokeCacheSecurityGroupIngressResponse, XmlParseError> {
+        deserialize_elements::<_, RevokeCacheSecurityGroupIngressResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6077,45 +6247,18 @@ impl TagListSerializer {
     }
 }
 
-/// <p>Represents the output from the <code>AddTagsToResource</code>, <code>ListTagsForResource</code>, and <code>RemoveTagsFromResource</code> operations.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagListMessage {
-    /// <p>A list of cost allocation tags as key-value pairs.</p>
-    pub tag_list: Option<Vec<Tag>>,
-}
-
-struct TagListMessageDeserializer;
-impl TagListMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TagListMessage, XmlParseError> {
-        deserialize_elements::<_, TagListMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TagList" => {
-                    obj.tag_list
-                        .get_or_insert(vec![])
-                        .extend(TagListDeserializer::deserialize("TagList", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TestFailoverMessage {
+pub struct TestFailoverRequest {
     /// <p>The name of the node group (called shard in the console) in this replication group on which automatic failover is to be tested. You may test automatic failover on up to 5 node groups in any rolling 24-hour period.</p>
     pub node_group_id: String,
     /// <p>The name of the replication group (console: cluster) whose automatic failover is being tested by this operation.</p>
     pub replication_group_id: String,
 }
 
-/// Serialize `TestFailoverMessage` contents to a `SignedRequest`.
-struct TestFailoverMessageSerializer;
-impl TestFailoverMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TestFailoverMessage) {
+/// Serialize `TestFailoverRequest` contents to a `SignedRequest`.
+struct TestFailoverRequestSerializer;
+impl TestFailoverRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TestFailoverRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6130,18 +6273,18 @@ impl TestFailoverMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct TestFailoverResult {
+pub struct TestFailoverResponse {
     pub replication_group: Option<ReplicationGroup>,
 }
 
-struct TestFailoverResultDeserializer;
-impl TestFailoverResultDeserializer {
+struct TestFailoverResponseDeserializer;
+impl TestFailoverResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<TestFailoverResult, XmlParseError> {
-        deserialize_elements::<_, TestFailoverResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<TestFailoverResponse, XmlParseError> {
+        deserialize_elements::<_, TestFailoverResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ReplicationGroup" => {
                     obj.replication_group = Some(ReplicationGroupDeserializer::deserialize(
@@ -9737,263 +9880,239 @@ pub trait ElastiCache {
     /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<TagListMessage, AddTagsToResourceError>;
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest>;
 
     /// <p><p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note></p>
     fn authorize_cache_security_group_ingress(
         &self,
-        input: AuthorizeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<
-        AuthorizeCacheSecurityGroupIngressResult,
-        AuthorizeCacheSecurityGroupIngressError,
-    >;
+        input: AuthorizeCacheSecurityGroupIngressRequest,
+    ) -> Request<AuthorizeCacheSecurityGroupIngressRequest>;
 
     /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html">Exporting Snapshots</a> and <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
-    fn copy_snapshot(
-        &self,
-        input: CopySnapshotMessage,
-    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError>;
+    fn copy_snapshot(&self, input: CopySnapshotRequest) -> Request<CopySnapshotRequest>;
 
     /// <p>Creates a cluster. All nodes in the cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <p>This operation is not supported for Redis (cluster mode enabled) clusters.</p>
     fn create_cache_cluster(
         &self,
-        input: CreateCacheClusterMessage,
-    ) -> RusotoFuture<CreateCacheClusterResult, CreateCacheClusterError>;
+        input: CreateCacheClusterRequest,
+    ) -> Request<CreateCacheClusterRequest>;
 
     /// <p><p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.html">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn create_cache_parameter_group(
         &self,
-        input: CreateCacheParameterGroupMessage,
-    ) -> RusotoFuture<CreateCacheParameterGroupResult, CreateCacheParameterGroupError>;
+        input: CreateCacheParameterGroupRequest,
+    ) -> Request<CreateCacheParameterGroupRequest>;
 
     /// <p>Creates a new cache security group. Use a cache security group to control access to one or more clusters.</p> <p>Cache security groups are only used when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html">CreateCacheSubnetGroup</a>.</p>
     fn create_cache_security_group(
         &self,
-        input: CreateCacheSecurityGroupMessage,
-    ) -> RusotoFuture<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError>;
+        input: CreateCacheSecurityGroupRequest,
+    ) -> Request<CreateCacheSecurityGroupRequest>;
 
     /// <p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     fn create_cache_subnet_group(
         &self,
-        input: CreateCacheSubnetGroupMessage,
-    ) -> RusotoFuture<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError>;
+        input: CreateCacheSubnetGroupRequest,
+    ) -> Request<CreateCacheSubnetGroupRequest>;
 
     /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn create_replication_group(
         &self,
-        input: CreateReplicationGroupMessage,
-    ) -> RusotoFuture<CreateReplicationGroupResult, CreateReplicationGroupError>;
+        input: CreateReplicationGroupRequest,
+    ) -> Request<CreateReplicationGroupRequest>;
 
     /// <p><p>Creates a copy of an entire cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn create_snapshot(
-        &self,
-        input: CreateSnapshotMessage,
-    ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError>;
+    fn create_snapshot(&self, input: CreateSnapshotRequest) -> Request<CreateSnapshotRequest>;
 
     /// <p>Dynamically decreases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
     fn decrease_replica_count(
         &self,
-        input: DecreaseReplicaCountMessage,
-    ) -> RusotoFuture<DecreaseReplicaCountResult, DecreaseReplicaCountError>;
+        input: DecreaseReplicaCountRequest,
+    ) -> Request<DecreaseReplicaCountRequest>;
 
     /// <p>Deletes a previously provisioned cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cluster from a Redis (cluster mode enabled) replication group.</p> <p>This operation is not valid for Redis (cluster mode enabled) clusters.</p>
     fn delete_cache_cluster(
         &self,
-        input: DeleteCacheClusterMessage,
-    ) -> RusotoFuture<DeleteCacheClusterResult, DeleteCacheClusterError>;
+        input: DeleteCacheClusterRequest,
+    ) -> Request<DeleteCacheClusterRequest>;
 
     /// <p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>
     fn delete_cache_parameter_group(
         &self,
-        input: DeleteCacheParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheParameterGroupError>;
+        input: DeleteCacheParameterGroupRequest,
+    ) -> Request<DeleteCacheParameterGroupRequest>;
 
     /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any clusters.</p> </note></p>
     fn delete_cache_security_group(
         &self,
-        input: DeleteCacheSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSecurityGroupError>;
+        input: DeleteCacheSecurityGroupRequest,
+    ) -> Request<DeleteCacheSecurityGroupRequest>;
 
     /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any clusters.</p> </note></p>
     fn delete_cache_subnet_group(
         &self,
-        input: DeleteCacheSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSubnetGroupError>;
+        input: DeleteCacheSubnetGroupRequest,
+    ) -> Request<DeleteCacheSubnetGroupRequest>;
 
     /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn delete_replication_group(
         &self,
-        input: DeleteReplicationGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationGroupResult, DeleteReplicationGroupError>;
+        input: DeleteReplicationGroupRequest,
+    ) -> Request<DeleteReplicationGroupRequest>;
 
     /// <p><p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn delete_snapshot(
-        &self,
-        input: DeleteSnapshotMessage,
-    ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError>;
+    fn delete_snapshot(&self, input: DeleteSnapshotRequest) -> Request<DeleteSnapshotRequest>;
 
     /// <p>Returns information about all provisioned clusters if no cluster identifier is specified, or about a specific cache cluster if a cluster identifier is supplied.</p> <p>By default, abbreviated information about the clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cluster, no endpoint information for the removed nodes is displayed.</p>
     fn describe_cache_clusters(
         &self,
-        input: DescribeCacheClustersMessage,
-    ) -> RusotoFuture<CacheClusterMessage, DescribeCacheClustersError>;
+        input: DescribeCacheClustersRequest,
+    ) -> Request<DescribeCacheClustersRequest>;
 
     /// <p>Returns a list of the available cache engines and their versions.</p>
     fn describe_cache_engine_versions(
         &self,
-        input: DescribeCacheEngineVersionsMessage,
-    ) -> RusotoFuture<CacheEngineVersionMessage, DescribeCacheEngineVersionsError>;
+        input: DescribeCacheEngineVersionsRequest,
+    ) -> Request<DescribeCacheEngineVersionsRequest>;
 
     /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
     fn describe_cache_parameter_groups(
         &self,
-        input: DescribeCacheParameterGroupsMessage,
-    ) -> RusotoFuture<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError>;
+        input: DescribeCacheParameterGroupsRequest,
+    ) -> Request<DescribeCacheParameterGroupsRequest>;
 
     /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
     fn describe_cache_parameters(
         &self,
-        input: DescribeCacheParametersMessage,
-    ) -> RusotoFuture<CacheParameterGroupDetails, DescribeCacheParametersError>;
+        input: DescribeCacheParametersRequest,
+    ) -> Request<DescribeCacheParametersRequest>;
 
     /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>
     fn describe_cache_security_groups(
         &self,
-        input: DescribeCacheSecurityGroupsMessage,
-    ) -> RusotoFuture<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError>;
+        input: DescribeCacheSecurityGroupsRequest,
+    ) -> Request<DescribeCacheSecurityGroupsRequest>;
 
     /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>
     fn describe_cache_subnet_groups(
         &self,
-        input: DescribeCacheSubnetGroupsMessage,
-    ) -> RusotoFuture<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError>;
+        input: DescribeCacheSubnetGroupsRequest,
+    ) -> Request<DescribeCacheSubnetGroupsRequest>;
 
     /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
     fn describe_engine_default_parameters(
         &self,
-        input: DescribeEngineDefaultParametersMessage,
-    ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
+        input: DescribeEngineDefaultParametersRequest,
+    ) -> Request<DescribeEngineDefaultParametersRequest>;
 
     /// <p>Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 
     /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn describe_replication_groups(
         &self,
-        input: DescribeReplicationGroupsMessage,
-    ) -> RusotoFuture<ReplicationGroupMessage, DescribeReplicationGroupsError>;
+        input: DescribeReplicationGroupsRequest,
+    ) -> Request<DescribeReplicationGroupsRequest>;
 
     /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
     fn describe_reserved_cache_nodes(
         &self,
-        input: DescribeReservedCacheNodesMessage,
-    ) -> RusotoFuture<ReservedCacheNodeMessage, DescribeReservedCacheNodesError>;
+        input: DescribeReservedCacheNodesRequest,
+    ) -> Request<DescribeReservedCacheNodesRequest>;
 
     /// <p>Lists available reserved cache node offerings.</p>
     fn describe_reserved_cache_nodes_offerings(
         &self,
-        input: DescribeReservedCacheNodesOfferingsMessage,
-    ) -> RusotoFuture<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError>;
+        input: DescribeReservedCacheNodesOfferingsRequest,
+    ) -> Request<DescribeReservedCacheNodesOfferingsRequest>;
 
     /// <p><p>Returns information about cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn describe_snapshots(
         &self,
-        input: DescribeSnapshotsMessage,
-    ) -> RusotoFuture<DescribeSnapshotsListMessage, DescribeSnapshotsError>;
+        input: DescribeSnapshotsRequest,
+    ) -> Request<DescribeSnapshotsRequest>;
 
     /// <p>Dynamically increases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
     fn increase_replica_count(
         &self,
-        input: IncreaseReplicaCountMessage,
-    ) -> RusotoFuture<IncreaseReplicaCountResult, IncreaseReplicaCountError>;
+        input: IncreaseReplicaCountRequest,
+    ) -> Request<IncreaseReplicaCountRequest>;
 
     /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
     fn list_allowed_node_type_modifications(
         &self,
-        input: ListAllowedNodeTypeModificationsMessage,
-    ) -> RusotoFuture<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError>;
+        input: ListAllowedNodeTypeModificationsRequest,
+    ) -> Request<ListAllowedNodeTypeModificationsRequest>;
 
     /// <p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>If the cluster is not in the <i>available</i> state, <code>ListTagsForResource</code> returns an error.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Monitoring Costs with Tags</a>.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Modifies the settings for a cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
     fn modify_cache_cluster(
         &self,
-        input: ModifyCacheClusterMessage,
-    ) -> RusotoFuture<ModifyCacheClusterResult, ModifyCacheClusterError>;
+        input: ModifyCacheClusterRequest,
+    ) -> Request<ModifyCacheClusterRequest>;
 
     /// <p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
     fn modify_cache_parameter_group(
         &self,
-        input: ModifyCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError>;
+        input: ModifyCacheParameterGroupRequest,
+    ) -> Request<ModifyCacheParameterGroupRequest>;
 
     /// <p>Modifies an existing cache subnet group.</p>
     fn modify_cache_subnet_group(
         &self,
-        input: ModifyCacheSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError>;
+        input: ModifyCacheSubnetGroupRequest,
+    ) -> Request<ModifyCacheSubnetGroupRequest>;
 
     /// <p><p>Modifies the settings for a replication group.</p> <p>For Redis (cluster mode enabled) clusters, this operation cannot be used to change a cluster&#39;s node type or engine version. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis—Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn modify_replication_group(
         &self,
-        input: ModifyReplicationGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationGroupResult, ModifyReplicationGroupError>;
+        input: ModifyReplicationGroupRequest,
+    ) -> Request<ModifyReplicationGroupRequest>;
 
     /// <p>Modifies a replication group's shards (node groups) by allowing you to add shards, remove shards, or rebalance the keyspaces among exisiting shards.</p>
     fn modify_replication_group_shard_configuration(
         &self,
-        input: ModifyReplicationGroupShardConfigurationMessage,
-    ) -> RusotoFuture<
-        ModifyReplicationGroupShardConfigurationResult,
-        ModifyReplicationGroupShardConfigurationError,
-    >;
+        input: ModifyReplicationGroupShardConfigurationRequest,
+    ) -> Request<ModifyReplicationGroupShardConfigurationRequest>;
 
     /// <p>Allows you to purchase a reserved cache node offering.</p>
     fn purchase_reserved_cache_nodes_offering(
         &self,
-        input: PurchaseReservedCacheNodesOfferingMessage,
-    ) -> RusotoFuture<
-        PurchaseReservedCacheNodesOfferingResult,
-        PurchaseReservedCacheNodesOfferingError,
-    >;
+        input: PurchaseReservedCacheNodesOfferingRequest,
+    ) -> Request<PurchaseReservedCacheNodesOfferingRequest>;
 
     /// <p>Reboots some, or all, of the cache nodes within a provisioned cluster. This operation applies any modified cache parameter groups to the cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cluster. During the reboot, the cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cluster event is created.</p> <p>Rebooting a cluster is currently supported on Memcached and Redis (cluster mode disabled) clusters. Rebooting is not supported on Redis (cluster mode enabled) clusters.</p> <p>If you make changes to parameters that require a Redis (cluster mode enabled) cluster reboot for the changes to be applied, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a> for an alternate process.</p>
     fn reboot_cache_cluster(
         &self,
-        input: RebootCacheClusterMessage,
-    ) -> RusotoFuture<RebootCacheClusterResult, RebootCacheClusterError>;
+        input: RebootCacheClusterRequest,
+    ) -> Request<RebootCacheClusterRequest>;
 
     /// <p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>
     fn remove_tags_from_resource(
         &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<TagListMessage, RemoveTagsFromResourceError>;
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest>;
 
     /// <p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>
     fn reset_cache_parameter_group(
         &self,
-        input: ResetCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ResetCacheParameterGroupError>;
+        input: ResetCacheParameterGroupRequest,
+    ) -> Request<ResetCacheParameterGroupRequest>;
 
     /// <p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>
     fn revoke_cache_security_group_ingress(
         &self,
-        input: RevokeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>;
+        input: RevokeCacheSecurityGroupIngressRequest,
+    ) -> Request<RevokeCacheSecurityGroupIngressRequest>;
 
     /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
-    fn test_failover(
-        &self,
-        input: TestFailoverMessage,
-    ) -> RusotoFuture<TestFailoverResult, TestFailoverError>;
+    fn test_failover(&self, input: TestFailoverRequest) -> Request<TestFailoverRequest>;
 }
 /// A client for the Amazon ElastiCache API.
 #[derive(Clone)]
@@ -10035,18 +10154,344 @@ impl ElastiCache for ElastiCacheClient {
     /// <p>Adds up to 50 cost allocation tags to the named resource. A cost allocation tag is a key-value pair where the key and value are case-sensitive. You can use cost allocation tags to categorize and track your AWS costs.</p> <p> When you apply tags to your ElastiCache resources, AWS generates a cost allocation report as a comma-separated value (CSV) file with your usage and costs aggregated by your tags. You can apply tags that represent business categories (such as cost centers, application names, or owners) to organize your costs across multiple services. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Using Cost Allocation Tags in Amazon ElastiCache</a> in the <i>ElastiCache User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<TagListMessage, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note></p>
+    fn authorize_cache_security_group_ingress(
+        &self,
+        input: AuthorizeCacheSecurityGroupIngressRequest,
+    ) -> Request<AuthorizeCacheSecurityGroupIngressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html">Exporting Snapshots</a> and <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
+    fn copy_snapshot(&self, input: CopySnapshotRequest) -> Request<CopySnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a cluster. All nodes in the cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <p>This operation is not supported for Redis (cluster mode enabled) clusters.</p>
+    fn create_cache_cluster(
+        &self,
+        input: CreateCacheClusterRequest,
+    ) -> Request<CreateCacheClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.html">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul></p>
+    fn create_cache_parameter_group(
+        &self,
+        input: CreateCacheParameterGroupRequest,
+    ) -> Request<CreateCacheParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new cache security group. Use a cache security group to control access to one or more clusters.</p> <p>Cache security groups are only used when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html">CreateCacheSubnetGroup</a>.</p>
+    fn create_cache_security_group(
+        &self,
+        input: CreateCacheSecurityGroupRequest,
+    ) -> Request<CreateCacheSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
+    fn create_cache_subnet_group(
+        &self,
+        input: CreateCacheSubnetGroupRequest,
+    ) -> Request<CreateCacheSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    fn create_replication_group(
+        &self,
+        input: CreateReplicationGroupRequest,
+    ) -> Request<CreateReplicationGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a copy of an entire cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    fn create_snapshot(&self, input: CreateSnapshotRequest) -> Request<CreateSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Dynamically decreases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
+    fn decrease_replica_count(
+        &self,
+        input: DecreaseReplicaCountRequest,
+    ) -> Request<DecreaseReplicaCountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a previously provisioned cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cluster from a Redis (cluster mode enabled) replication group.</p> <p>This operation is not valid for Redis (cluster mode enabled) clusters.</p>
+    fn delete_cache_cluster(
+        &self,
+        input: DeleteCacheClusterRequest,
+    ) -> Request<DeleteCacheClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>
+    fn delete_cache_parameter_group(
+        &self,
+        input: DeleteCacheParameterGroupRequest,
+    ) -> Request<DeleteCacheParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any clusters.</p> </note></p>
+    fn delete_cache_security_group(
+        &self,
+        input: DeleteCacheSecurityGroupRequest,
+    ) -> Request<DeleteCacheSecurityGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any clusters.</p> </note></p>
+    fn delete_cache_subnet_group(
+        &self,
+        input: DeleteCacheSubnetGroupRequest,
+    ) -> Request<DeleteCacheSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    fn delete_replication_group(
+        &self,
+        input: DeleteReplicationGroupRequest,
+    ) -> Request<DeleteReplicationGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    fn delete_snapshot(&self, input: DeleteSnapshotRequest) -> Request<DeleteSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all provisioned clusters if no cluster identifier is specified, or about a specific cache cluster if a cluster identifier is supplied.</p> <p>By default, abbreviated information about the clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cluster, no endpoint information for the removed nodes is displayed.</p>
+    fn describe_cache_clusters(
+        &self,
+        input: DescribeCacheClustersRequest,
+    ) -> Request<DescribeCacheClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the available cache engines and their versions.</p>
+    fn describe_cache_engine_versions(
+        &self,
+        input: DescribeCacheEngineVersionsRequest,
+    ) -> Request<DescribeCacheEngineVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
+    fn describe_cache_parameter_groups(
+        &self,
+        input: DescribeCacheParameterGroupsRequest,
+    ) -> Request<DescribeCacheParameterGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
+    fn describe_cache_parameters(
+        &self,
+        input: DescribeCacheParametersRequest,
+    ) -> Request<DescribeCacheParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>
+    fn describe_cache_security_groups(
+        &self,
+        input: DescribeCacheSecurityGroupsRequest,
+    ) -> Request<DescribeCacheSecurityGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>
+    fn describe_cache_subnet_groups(
+        &self,
+        input: DescribeCacheSubnetGroupsRequest,
+    ) -> Request<DescribeCacheSubnetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
+    fn describe_engine_default_parameters(
+        &self,
+        input: DescribeEngineDefaultParametersRequest,
+    ) -> Request<DescribeEngineDefaultParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    fn describe_replication_groups(
+        &self,
+        input: DescribeReplicationGroupsRequest,
+    ) -> Request<DescribeReplicationGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
+    fn describe_reserved_cache_nodes(
+        &self,
+        input: DescribeReservedCacheNodesRequest,
+    ) -> Request<DescribeReservedCacheNodesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists available reserved cache node offerings.</p>
+    fn describe_reserved_cache_nodes_offerings(
+        &self,
+        input: DescribeReservedCacheNodesOfferingsRequest,
+    ) -> Request<DescribeReservedCacheNodesOfferingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    fn describe_snapshots(
+        &self,
+        input: DescribeSnapshotsRequest,
+    ) -> Request<DescribeSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Dynamically increases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
+    fn increase_replica_count(
+        &self,
+        input: IncreaseReplicaCountRequest,
+    ) -> Request<IncreaseReplicaCountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
+    fn list_allowed_node_type_modifications(
+        &self,
+        input: ListAllowedNodeTypeModificationsRequest,
+    ) -> Request<ListAllowedNodeTypeModificationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>If the cluster is not in the <i>available</i> state, <code>ListTagsForResource</code> returns an error.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Monitoring Costs with Tags</a>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the settings for a cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
+    fn modify_cache_cluster(
+        &self,
+        input: ModifyCacheClusterRequest,
+    ) -> Request<ModifyCacheClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
+    fn modify_cache_parameter_group(
+        &self,
+        input: ModifyCacheParameterGroupRequest,
+    ) -> Request<ModifyCacheParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing cache subnet group.</p>
+    fn modify_cache_subnet_group(
+        &self,
+        input: ModifyCacheSubnetGroupRequest,
+    ) -> Request<ModifyCacheSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Modifies the settings for a replication group.</p> <p>For Redis (cluster mode enabled) clusters, this operation cannot be used to change a cluster&#39;s node type or engine version. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis—Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    fn modify_replication_group(
+        &self,
+        input: ModifyReplicationGroupRequest,
+    ) -> Request<ModifyReplicationGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies a replication group's shards (node groups) by allowing you to add shards, remove shards, or rebalance the keyspaces among exisiting shards.</p>
+    fn modify_replication_group_shard_configuration(
+        &self,
+        input: ModifyReplicationGroupShardConfigurationRequest,
+    ) -> Request<ModifyReplicationGroupShardConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows you to purchase a reserved cache node offering.</p>
+    fn purchase_reserved_cache_nodes_offering(
+        &self,
+        input: PurchaseReservedCacheNodesOfferingRequest,
+    ) -> Request<PurchaseReservedCacheNodesOfferingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Reboots some, or all, of the cache nodes within a provisioned cluster. This operation applies any modified cache parameter groups to the cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cluster. During the reboot, the cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cluster event is created.</p> <p>Rebooting a cluster is currently supported on Memcached and Redis (cluster mode disabled) clusters. Rebooting is not supported on Redis (cluster mode enabled) clusters.</p> <p>If you make changes to parameters that require a Redis (cluster mode enabled) cluster reboot for the changes to be applied, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a> for an alternate process.</p>
+    fn reboot_cache_cluster(
+        &self,
+        input: RebootCacheClusterRequest,
+    ) -> Request<RebootCacheClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>
+    fn remove_tags_from_resource(
+        &self,
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>
+    fn reset_cache_parameter_group(
+        &self,
+        input: ResetCacheParameterGroupRequest,
+    ) -> Request<ResetCacheParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>
+    fn revoke_cache_security_group_ingress(
+        &self,
+        input: RevokeCacheSecurityGroupIngressRequest,
+    ) -> Request<RevokeCacheSecurityGroupIngressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
+    fn test_failover(&self, input: TestFailoverRequest) -> Request<TestFailoverRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsToResourceRequest {
+    type Output = AddTagsToResourceResponse;
+    type Error = AddTagsToResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2015-02-02");
-        AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
+        AddTagsToResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10060,7 +10505,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TagListMessage::default();
+                    result = AddTagsToResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10070,7 +10515,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
+                    result = AddTagsToResourceResponseDeserializer::deserialize(
                         "AddTagsToResourceResult",
                         &mut stack,
                     )?;
@@ -10082,25 +10527,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Allows network ingress to a cache security group. Applications using ElastiCache must be running on Amazon EC2, and Amazon EC2 security groups are used as the authorization mechanism.</p> <note> <p>You cannot authorize ingress from an Amazon EC2 security group in one region to an ElastiCache cluster in another region.</p> </note></p>
-    fn authorize_cache_security_group_ingress(
-        &self,
-        input: AuthorizeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<
-        AuthorizeCacheSecurityGroupIngressResult,
-        AuthorizeCacheSecurityGroupIngressError,
-    > {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for AuthorizeCacheSecurityGroupIngressRequest {
+    type Output = AuthorizeCacheSecurityGroupIngressResponse;
+    type Error = AuthorizeCacheSecurityGroupIngressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AuthorizeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
-        AuthorizeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
+        AuthorizeCacheSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AuthorizeCacheSecurityGroupIngressError::from_response(
@@ -10113,7 +10560,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AuthorizeCacheSecurityGroupIngressResult::default();
+                    result = AuthorizeCacheSecurityGroupIngressResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10123,7 +10570,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeCacheSecurityGroupIngressResultDeserializer::deserialize(
+                    result = AuthorizeCacheSecurityGroupIngressResponseDeserializer::deserialize(
                         "AuthorizeCacheSecurityGroupIngressResult",
                         &mut stack,
                     )?;
@@ -10135,22 +10582,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html">Exporting Snapshots</a> and <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.CreateBucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html#Snapshots.Exporting.GrantAccess">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
-    fn copy_snapshot(
-        &self,
-        input: CopySnapshotMessage,
-    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for CopySnapshotRequest {
+    type Output = CopySnapshotResponse;
+    type Error = CopySnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopySnapshot");
         params.put("Version", "2015-02-02");
-        CopySnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CopySnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10164,7 +10616,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopySnapshotResult::default();
+                    result = CopySnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10174,7 +10626,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopySnapshotResultDeserializer::deserialize(
+                    result = CopySnapshotResponseDeserializer::deserialize(
                         "CopySnapshotResult",
                         &mut stack,
                     )?;
@@ -10186,22 +10638,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a cluster. All nodes in the cluster run the same protocol-compliant cache engine software, either Memcached or Redis.</p> <p>This operation is not supported for Redis (cluster mode enabled) clusters.</p>
-    fn create_cache_cluster(
-        &self,
-        input: CreateCacheClusterMessage,
-    ) -> RusotoFuture<CreateCacheClusterResult, CreateCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for CreateCacheClusterRequest {
+    type Output = CreateCacheClusterResponse;
+    type Error = CreateCacheClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheCluster");
         params.put("Version", "2015-02-02");
-        CreateCacheClusterMessageSerializer::serialize(&mut params, "", &input);
+        CreateCacheClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10215,7 +10672,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateCacheClusterResult::default();
+                    result = CreateCacheClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10225,7 +10682,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheClusterResultDeserializer::deserialize(
+                    result = CreateCacheClusterResponseDeserializer::deserialize(
                         "CreateCacheClusterResult",
                         &mut stack,
                     )?;
@@ -10237,22 +10694,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new Amazon ElastiCache cache parameter group. An ElastiCache cache parameter group is a collection of parameters and their values that are applied to all of the nodes in any cluster or replication group using the CacheParameterGroup.</p> <p>A newly created CacheParameterGroup is an exact duplicate of the default parameter group for the CacheParameterGroupFamily. To customize the newly created CacheParameterGroup you can change the values of specific parameters. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyCacheParameterGroup.html">ModifyCacheParameterGroup</a> in the ElastiCache API Reference.</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ParameterGroups.html">Parameters and Parameter Groups</a> in the ElastiCache User Guide.</p> </li> </ul></p>
-    fn create_cache_parameter_group(
-        &self,
-        input: CreateCacheParameterGroupMessage,
-    ) -> RusotoFuture<CreateCacheParameterGroupResult, CreateCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for CreateCacheParameterGroupRequest {
+    type Output = CreateCacheParameterGroupResponse;
+    type Error = CreateCacheParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheParameterGroup");
         params.put("Version", "2015-02-02");
-        CreateCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateCacheParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCacheParameterGroupError::from_response(response))
@@ -10263,7 +10725,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateCacheParameterGroupResult::default();
+                    result = CreateCacheParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10273,7 +10735,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheParameterGroupResultDeserializer::deserialize(
+                    result = CreateCacheParameterGroupResponseDeserializer::deserialize(
                         "CreateCacheParameterGroupResult",
                         &mut stack,
                     )?;
@@ -10285,22 +10747,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new cache security group. Use a cache security group to control access to one or more clusters.</p> <p>Cache security groups are only used when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC). If you are creating a cluster inside of a VPC, use a cache subnet group instead. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_CreateCacheSubnetGroup.html">CreateCacheSubnetGroup</a>.</p>
-    fn create_cache_security_group(
-        &self,
-        input: CreateCacheSecurityGroupMessage,
-    ) -> RusotoFuture<CreateCacheSecurityGroupResult, CreateCacheSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for CreateCacheSecurityGroupRequest {
+    type Output = CreateCacheSecurityGroupResponse;
+    type Error = CreateCacheSecurityGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheSecurityGroup");
         params.put("Version", "2015-02-02");
-        CreateCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateCacheSecurityGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCacheSecurityGroupError::from_response(response))
@@ -10311,7 +10778,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateCacheSecurityGroupResult::default();
+                    result = CreateCacheSecurityGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10321,7 +10788,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheSecurityGroupResultDeserializer::deserialize(
+                    result = CreateCacheSecurityGroupResponseDeserializer::deserialize(
                         "CreateCacheSecurityGroupResult",
                         &mut stack,
                     )?;
@@ -10333,22 +10800,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new cache subnet group.</p> <p>Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC).</p>
-    fn create_cache_subnet_group(
-        &self,
-        input: CreateCacheSubnetGroupMessage,
-    ) -> RusotoFuture<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for CreateCacheSubnetGroupRequest {
+    type Output = CreateCacheSubnetGroupResponse;
+    type Error = CreateCacheSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateCacheSubnetGroup");
         params.put("Version", "2015-02-02");
-        CreateCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateCacheSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCacheSubnetGroupError::from_response(response))
@@ -10359,7 +10831,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateCacheSubnetGroupResult::default();
+                    result = CreateCacheSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10369,7 +10841,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateCacheSubnetGroupResultDeserializer::deserialize(
+                    result = CreateCacheSubnetGroupResponseDeserializer::deserialize(
                         "CreateCacheSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -10381,22 +10853,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn create_replication_group(
-        &self,
-        input: CreateReplicationGroupMessage,
-    ) -> RusotoFuture<CreateReplicationGroupResult, CreateReplicationGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for CreateReplicationGroupRequest {
+    type Output = CreateReplicationGroupResponse;
+    type Error = CreateReplicationGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateReplicationGroup");
         params.put("Version", "2015-02-02");
-        CreateReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateReplicationGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateReplicationGroupError::from_response(response))
@@ -10407,7 +10884,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateReplicationGroupResult::default();
+                    result = CreateReplicationGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10417,7 +10894,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateReplicationGroupResultDeserializer::deserialize(
+                    result = CreateReplicationGroupResponseDeserializer::deserialize(
                         "CreateReplicationGroupResult",
                         &mut stack,
                     )?;
@@ -10429,22 +10906,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a copy of an entire cluster or replication group at a specific moment in time.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn create_snapshot(
-        &self,
-        input: CreateSnapshotMessage,
-    ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for CreateSnapshotRequest {
+    type Output = CreateSnapshotResponse;
+    type Error = CreateSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateSnapshot");
         params.put("Version", "2015-02-02");
-        CreateSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CreateSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10458,7 +10940,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateSnapshotResult::default();
+                    result = CreateSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10468,7 +10950,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateSnapshotResultDeserializer::deserialize(
+                    result = CreateSnapshotResponseDeserializer::deserialize(
                         "CreateSnapshotResult",
                         &mut stack,
                     )?;
@@ -10480,22 +10962,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Dynamically decreases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
-    fn decrease_replica_count(
-        &self,
-        input: DecreaseReplicaCountMessage,
-    ) -> RusotoFuture<DecreaseReplicaCountResult, DecreaseReplicaCountError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DecreaseReplicaCountRequest {
+    type Output = DecreaseReplicaCountResponse;
+    type Error = DecreaseReplicaCountError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DecreaseReplicaCount");
         params.put("Version", "2015-02-02");
-        DecreaseReplicaCountMessageSerializer::serialize(&mut params, "", &input);
+        DecreaseReplicaCountRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10508,7 +10995,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DecreaseReplicaCountResult::default();
+                    result = DecreaseReplicaCountResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10518,7 +11005,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DecreaseReplicaCountResultDeserializer::deserialize(
+                    result = DecreaseReplicaCountResponseDeserializer::deserialize(
                         "DecreaseReplicaCountResult",
                         &mut stack,
                     )?;
@@ -10530,22 +11017,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a previously provisioned cluster. <code>DeleteCacheCluster</code> deletes all associated cache nodes, node endpoints and the cluster itself. When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the cluster; you cannot cancel or revert this operation.</p> <p>This operation cannot be used to delete a cluster that is the last read replica of a replication group or node group (shard) that has Multi-AZ mode enabled or a cluster from a Redis (cluster mode enabled) replication group.</p> <p>This operation is not valid for Redis (cluster mode enabled) clusters.</p>
-    fn delete_cache_cluster(
-        &self,
-        input: DeleteCacheClusterMessage,
-    ) -> RusotoFuture<DeleteCacheClusterResult, DeleteCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DeleteCacheClusterRequest {
+    type Output = DeleteCacheClusterResponse;
+    type Error = DeleteCacheClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheCluster");
         params.put("Version", "2015-02-02");
-        DeleteCacheClusterMessageSerializer::serialize(&mut params, "", &input);
+        DeleteCacheClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10559,7 +11051,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteCacheClusterResult::default();
+                    result = DeleteCacheClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10569,7 +11061,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteCacheClusterResultDeserializer::deserialize(
+                    result = DeleteCacheClusterResponseDeserializer::deserialize(
                         "DeleteCacheClusterResult",
                         &mut stack,
                     )?;
@@ -10581,97 +11073,177 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified cache parameter group. You cannot delete a cache parameter group if it is associated with any cache clusters.</p>
-    fn delete_cache_parameter_group(
-        &self,
-        input: DeleteCacheParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DeleteCacheParameterGroupRequest {
+    type Output = DeleteCacheParameterGroupResponse;
+    type Error = DeleteCacheParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheParameterGroup");
         params.put("Version", "2015-02-02");
-        DeleteCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteCacheParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCacheParameterGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteCacheParameterGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteCacheParameterGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a cache security group.</p> <note> <p>You cannot delete a cache security group if it is associated with any clusters.</p> </note></p>
-    fn delete_cache_security_group(
-        &self,
-        input: DeleteCacheSecurityGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSecurityGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DeleteCacheSecurityGroupRequest {
+    type Output = DeleteCacheSecurityGroupResponse;
+    type Error = DeleteCacheSecurityGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheSecurityGroup");
         params.put("Version", "2015-02-02");
-        DeleteCacheSecurityGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteCacheSecurityGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCacheSecurityGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteCacheSecurityGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteCacheSecurityGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a cache subnet group.</p> <note> <p>You cannot delete a cache subnet group if it is associated with any clusters.</p> </note></p>
-    fn delete_cache_subnet_group(
-        &self,
-        input: DeleteCacheSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteCacheSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DeleteCacheSubnetGroupRequest {
+    type Output = DeleteCacheSubnetGroupResponse;
+    type Error = DeleteCacheSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteCacheSubnetGroup");
         params.put("Version", "2015-02-02");
-        DeleteCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteCacheSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCacheSubnetGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteCacheSubnetGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteCacheSubnetGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes an existing replication group. By default, this operation deletes the entire replication group, including the primary/primaries and all of the read replicas. If the replication group has only one primary, you can optionally delete only the read replicas, while retaining the primary by setting <code>RetainPrimaryCluster=true</code>.</p> <p>When you receive a successful response from this operation, Amazon ElastiCache immediately begins deleting the selected resources; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn delete_replication_group(
-        &self,
-        input: DeleteReplicationGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationGroupResult, DeleteReplicationGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DeleteReplicationGroupRequest {
+    type Output = DeleteReplicationGroupResponse;
+    type Error = DeleteReplicationGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteReplicationGroup");
         params.put("Version", "2015-02-02");
-        DeleteReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteReplicationGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteReplicationGroupError::from_response(response))
@@ -10682,7 +11254,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteReplicationGroupResult::default();
+                    result = DeleteReplicationGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10692,7 +11264,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteReplicationGroupResultDeserializer::deserialize(
+                    result = DeleteReplicationGroupResponseDeserializer::deserialize(
                         "DeleteReplicationGroupResult",
                         &mut stack,
                     )?;
@@ -10704,22 +11276,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes an existing snapshot. When you receive a successful response from this operation, ElastiCache immediately begins deleting the snapshot; you cannot cancel or revert this operation.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn delete_snapshot(
-        &self,
-        input: DeleteSnapshotMessage,
-    ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DeleteSnapshotRequest {
+    type Output = DeleteSnapshotResponse;
+    type Error = DeleteSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSnapshot");
         params.put("Version", "2015-02-02");
-        DeleteSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        DeleteSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10733,7 +11310,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteSnapshotResult::default();
+                    result = DeleteSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10743,7 +11320,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteSnapshotResultDeserializer::deserialize(
+                    result = DeleteSnapshotResponseDeserializer::deserialize(
                         "DeleteSnapshotResult",
                         &mut stack,
                     )?;
@@ -10755,22 +11332,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about all provisioned clusters if no cluster identifier is specified, or about a specific cache cluster if a cluster identifier is supplied.</p> <p>By default, abbreviated information about the clusters is returned. You can use the optional <i>ShowCacheNodeInfo</i> flag to retrieve detailed information about the cache nodes associated with the clusters. These details include the DNS address and port for the cache node endpoint.</p> <p>If the cluster is in the <i>creating</i> state, only cluster-level information is displayed until all of the nodes are successfully provisioned.</p> <p>If the cluster is in the <i>deleting</i> state, only cluster-level information is displayed.</p> <p>If cache nodes are currently being added to the cluster, node endpoint information and creation time for the additional nodes are not displayed until they are completely provisioned. When the cluster state is <i>available</i>, the cluster is ready for use.</p> <p>If cache nodes are currently being removed from the cluster, no endpoint information for the removed nodes is displayed.</p>
-    fn describe_cache_clusters(
-        &self,
-        input: DescribeCacheClustersMessage,
-    ) -> RusotoFuture<CacheClusterMessage, DescribeCacheClustersError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeCacheClustersRequest {
+    type Output = DescribeCacheClustersResponse;
+    type Error = DescribeCacheClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheClusters");
         params.put("Version", "2015-02-02");
-        DescribeCacheClustersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeCacheClustersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheClustersError::from_response(response))
@@ -10781,7 +11363,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheClusterMessage::default();
+                    result = DescribeCacheClustersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10791,7 +11373,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheClusterMessageDeserializer::deserialize(
+                    result = DescribeCacheClustersResponseDeserializer::deserialize(
                         "DescribeCacheClustersResult",
                         &mut stack,
                     )?;
@@ -10803,22 +11385,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the available cache engines and their versions.</p>
-    fn describe_cache_engine_versions(
-        &self,
-        input: DescribeCacheEngineVersionsMessage,
-    ) -> RusotoFuture<CacheEngineVersionMessage, DescribeCacheEngineVersionsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeCacheEngineVersionsRequest {
+    type Output = DescribeCacheEngineVersionsResponse;
+    type Error = DescribeCacheEngineVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheEngineVersions");
         params.put("Version", "2015-02-02");
-        DescribeCacheEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeCacheEngineVersionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheEngineVersionsError::from_response(response))
@@ -10829,7 +11416,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheEngineVersionMessage::default();
+                    result = DescribeCacheEngineVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10839,7 +11426,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheEngineVersionMessageDeserializer::deserialize(
+                    result = DescribeCacheEngineVersionsResponseDeserializer::deserialize(
                         "DescribeCacheEngineVersionsResult",
                         &mut stack,
                     )?;
@@ -10851,22 +11438,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of cache parameter group descriptions. If a cache parameter group name is specified, the list contains only the descriptions for that group.</p>
-    fn describe_cache_parameter_groups(
-        &self,
-        input: DescribeCacheParameterGroupsMessage,
-    ) -> RusotoFuture<CacheParameterGroupsMessage, DescribeCacheParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeCacheParameterGroupsRequest {
+    type Output = DescribeCacheParameterGroupsResponse;
+    type Error = DescribeCacheParameterGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheParameterGroups");
         params.put("Version", "2015-02-02");
-        DescribeCacheParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeCacheParameterGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheParameterGroupsError::from_response(response))
@@ -10877,7 +11469,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheParameterGroupsMessage::default();
+                    result = DescribeCacheParameterGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10887,7 +11479,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupsMessageDeserializer::deserialize(
+                    result = DescribeCacheParameterGroupsResponseDeserializer::deserialize(
                         "DescribeCacheParameterGroupsResult",
                         &mut stack,
                     )?;
@@ -10899,22 +11491,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the detailed parameter list for a particular cache parameter group.</p>
-    fn describe_cache_parameters(
-        &self,
-        input: DescribeCacheParametersMessage,
-    ) -> RusotoFuture<CacheParameterGroupDetails, DescribeCacheParametersError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeCacheParametersRequest {
+    type Output = DescribeCacheParametersResponse;
+    type Error = DescribeCacheParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheParameters");
         params.put("Version", "2015-02-02");
-        DescribeCacheParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeCacheParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheParametersError::from_response(response))
@@ -10925,7 +11522,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheParameterGroupDetails::default();
+                    result = DescribeCacheParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10935,7 +11532,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupDetailsDeserializer::deserialize(
+                    result = DescribeCacheParametersResponseDeserializer::deserialize(
                         "DescribeCacheParametersResult",
                         &mut stack,
                     )?;
@@ -10947,22 +11544,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of cache security group descriptions. If a cache security group name is specified, the list contains only the description of that group.</p>
-    fn describe_cache_security_groups(
-        &self,
-        input: DescribeCacheSecurityGroupsMessage,
-    ) -> RusotoFuture<CacheSecurityGroupMessage, DescribeCacheSecurityGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeCacheSecurityGroupsRequest {
+    type Output = DescribeCacheSecurityGroupsResponse;
+    type Error = DescribeCacheSecurityGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheSecurityGroups");
         params.put("Version", "2015-02-02");
-        DescribeCacheSecurityGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeCacheSecurityGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheSecurityGroupsError::from_response(response))
@@ -10973,7 +11575,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheSecurityGroupMessage::default();
+                    result = DescribeCacheSecurityGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10983,7 +11585,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheSecurityGroupMessageDeserializer::deserialize(
+                    result = DescribeCacheSecurityGroupsResponseDeserializer::deserialize(
                         "DescribeCacheSecurityGroupsResult",
                         &mut stack,
                     )?;
@@ -10995,22 +11597,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of cache subnet group descriptions. If a subnet group name is specified, the list contains only the description of that group.</p>
-    fn describe_cache_subnet_groups(
-        &self,
-        input: DescribeCacheSubnetGroupsMessage,
-    ) -> RusotoFuture<CacheSubnetGroupMessage, DescribeCacheSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeCacheSubnetGroupsRequest {
+    type Output = DescribeCacheSubnetGroupsResponse;
+    type Error = DescribeCacheSubnetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeCacheSubnetGroups");
         params.put("Version", "2015-02-02");
-        DescribeCacheSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeCacheSubnetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeCacheSubnetGroupsError::from_response(response))
@@ -11021,7 +11628,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheSubnetGroupMessage::default();
+                    result = DescribeCacheSubnetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11031,7 +11638,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheSubnetGroupMessageDeserializer::deserialize(
+                    result = DescribeCacheSubnetGroupsResponseDeserializer::deserialize(
                         "DescribeCacheSubnetGroupsResult",
                         &mut stack,
                     )?;
@@ -11043,23 +11650,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the default engine and system parameter information for the specified cache engine.</p>
-    fn describe_engine_default_parameters(
-        &self,
-        input: DescribeEngineDefaultParametersMessage,
-    ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeEngineDefaultParametersRequest {
+    type Output = DescribeEngineDefaultParametersResponse;
+    type Error = DescribeEngineDefaultParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEngineDefaultParameters");
         params.put("Version", "2015-02-02");
-        DescribeEngineDefaultParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEngineDefaultParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEngineDefaultParametersError::from_response(
@@ -11072,7 +11683,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEngineDefaultParametersResult::default();
+                    result = DescribeEngineDefaultParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11082,7 +11693,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+                    result = DescribeEngineDefaultParametersResponseDeserializer::deserialize(
                         "DescribeEngineDefaultParametersResult",
                         &mut stack,
                     )?;
@@ -11094,22 +11705,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns events related to clusters, cache security groups, and cache parameter groups. You can obtain events specific to a particular cluster, cache security group, or cache parameter group by providing the name as a parameter.</p> <p>By default, only the events occurring within the last hour are returned; however, you can retrieve up to 14 days' worth of events if necessary.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
         params.put("Version", "2015-02-02");
-        DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11123,7 +11739,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventsMessage::default();
+                    result = DescribeEventsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11133,8 +11749,10 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
+                    result = DescribeEventsResponseDeserializer::deserialize(
+                        "DescribeEventsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -11143,22 +11761,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns information about a particular replication group. If no identifier is specified, <code>DescribeReplicationGroups</code> returns information about all replication groups.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn describe_replication_groups(
-        &self,
-        input: DescribeReplicationGroupsMessage,
-    ) -> RusotoFuture<ReplicationGroupMessage, DescribeReplicationGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeReplicationGroupsRequest {
+    type Output = DescribeReplicationGroupsResponse;
+    type Error = DescribeReplicationGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReplicationGroups");
         params.put("Version", "2015-02-02");
-        DescribeReplicationGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeReplicationGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReplicationGroupsError::from_response(response))
@@ -11169,7 +11792,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ReplicationGroupMessage::default();
+                    result = DescribeReplicationGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11179,7 +11802,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ReplicationGroupMessageDeserializer::deserialize(
+                    result = DescribeReplicationGroupsResponseDeserializer::deserialize(
                         "DescribeReplicationGroupsResult",
                         &mut stack,
                     )?;
@@ -11191,22 +11814,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about reserved cache nodes for this account, or about a specified reserved cache node.</p>
-    fn describe_reserved_cache_nodes(
-        &self,
-        input: DescribeReservedCacheNodesMessage,
-    ) -> RusotoFuture<ReservedCacheNodeMessage, DescribeReservedCacheNodesError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeReservedCacheNodesRequest {
+    type Output = DescribeReservedCacheNodesResponse;
+    type Error = DescribeReservedCacheNodesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedCacheNodes");
         params.put("Version", "2015-02-02");
-        DescribeReservedCacheNodesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeReservedCacheNodesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedCacheNodesError::from_response(response))
@@ -11217,7 +11845,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ReservedCacheNodeMessage::default();
+                    result = DescribeReservedCacheNodesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11227,7 +11855,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedCacheNodeMessageDeserializer::deserialize(
+                    result = DescribeReservedCacheNodesResponseDeserializer::deserialize(
                         "DescribeReservedCacheNodesResult",
                         &mut stack,
                     )?;
@@ -11239,23 +11867,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Lists available reserved cache node offerings.</p>
-    fn describe_reserved_cache_nodes_offerings(
-        &self,
-        input: DescribeReservedCacheNodesOfferingsMessage,
-    ) -> RusotoFuture<ReservedCacheNodesOfferingMessage, DescribeReservedCacheNodesOfferingsError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeReservedCacheNodesOfferingsRequest {
+    type Output = DescribeReservedCacheNodesOfferingsResponse;
+    type Error = DescribeReservedCacheNodesOfferingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeReservedCacheNodesOfferings");
         params.put("Version", "2015-02-02");
-        DescribeReservedCacheNodesOfferingsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeReservedCacheNodesOfferingsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeReservedCacheNodesOfferingsError::from_response(
@@ -11268,7 +11900,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ReservedCacheNodesOfferingMessage::default();
+                    result = DescribeReservedCacheNodesOfferingsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11278,7 +11910,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedCacheNodesOfferingMessageDeserializer::deserialize(
+                    result = DescribeReservedCacheNodesOfferingsResponseDeserializer::deserialize(
                         "DescribeReservedCacheNodesOfferingsResult",
                         &mut stack,
                     )?;
@@ -11290,22 +11922,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns information about cluster or replication group snapshots. By default, <code>DescribeSnapshots</code> lists all of your snapshots; it can optionally describe a single snapshot, or just the snapshots associated with a particular cache cluster.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn describe_snapshots(
-        &self,
-        input: DescribeSnapshotsMessage,
-    ) -> RusotoFuture<DescribeSnapshotsListMessage, DescribeSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for DescribeSnapshotsRequest {
+    type Output = DescribeSnapshotsResponse;
+    type Error = DescribeSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSnapshots");
         params.put("Version", "2015-02-02");
-        DescribeSnapshotsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeSnapshotsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11319,7 +11956,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeSnapshotsListMessage::default();
+                    result = DescribeSnapshotsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11329,7 +11966,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeSnapshotsListMessageDeserializer::deserialize(
+                    result = DescribeSnapshotsResponseDeserializer::deserialize(
                         "DescribeSnapshotsResult",
                         &mut stack,
                     )?;
@@ -11341,22 +11978,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Dynamically increases the number of replics in a Redis (cluster mode disabled) replication group or the number of replica nodes in one or more node groups (shards) of a Redis (cluster mode enabled) replication group. This operation is performed with no cluster down time.</p>
-    fn increase_replica_count(
-        &self,
-        input: IncreaseReplicaCountMessage,
-    ) -> RusotoFuture<IncreaseReplicaCountResult, IncreaseReplicaCountError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for IncreaseReplicaCountRequest {
+    type Output = IncreaseReplicaCountResponse;
+    type Error = IncreaseReplicaCountError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "IncreaseReplicaCount");
         params.put("Version", "2015-02-02");
-        IncreaseReplicaCountMessageSerializer::serialize(&mut params, "", &input);
+        IncreaseReplicaCountRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11369,7 +12011,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = IncreaseReplicaCountResult::default();
+                    result = IncreaseReplicaCountResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11379,7 +12021,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = IncreaseReplicaCountResultDeserializer::deserialize(
+                    result = IncreaseReplicaCountResponseDeserializer::deserialize(
                         "IncreaseReplicaCountResult",
                         &mut stack,
                     )?;
@@ -11391,23 +12033,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
-    fn list_allowed_node_type_modifications(
-        &self,
-        input: ListAllowedNodeTypeModificationsMessage,
-    ) -> RusotoFuture<AllowedNodeTypeModificationsMessage, ListAllowedNodeTypeModificationsError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ListAllowedNodeTypeModificationsRequest {
+    type Output = ListAllowedNodeTypeModificationsResponse;
+    type Error = ListAllowedNodeTypeModificationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAllowedNodeTypeModifications");
         params.put("Version", "2015-02-02");
-        ListAllowedNodeTypeModificationsMessageSerializer::serialize(&mut params, "", &input);
+        ListAllowedNodeTypeModificationsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAllowedNodeTypeModificationsError::from_response(
@@ -11420,7 +12066,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AllowedNodeTypeModificationsMessage::default();
+                    result = ListAllowedNodeTypeModificationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11430,7 +12076,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AllowedNodeTypeModificationsMessageDeserializer::deserialize(
+                    result = ListAllowedNodeTypeModificationsResponseDeserializer::deserialize(
                         "ListAllowedNodeTypeModificationsResult",
                         &mut stack,
                     )?;
@@ -11442,22 +12088,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all cost allocation tags currently on the named resource. A <code>cost allocation tag</code> is a key-value pair where the key is case-sensitive and the value is optional. You can use cost allocation tags to categorize and track your AWS costs.</p> <p>If the cluster is not in the <i>available</i> state, <code>ListTagsForResource</code> returns an error.</p> <p>You can have a maximum of 50 cost allocation tags on an ElastiCache resource. For more information, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Tagging.html">Monitoring Costs with Tags</a>.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2015-02-02");
-        ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
+        ListTagsForResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11470,7 +12121,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TagListMessage::default();
+                    result = ListTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11480,7 +12131,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
+                    result = ListTagsForResourceResponseDeserializer::deserialize(
                         "ListTagsForResourceResult",
                         &mut stack,
                     )?;
@@ -11492,22 +12143,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the settings for a cluster. You can use this operation to change one or more cluster configuration parameters by specifying the parameters and the new values.</p>
-    fn modify_cache_cluster(
-        &self,
-        input: ModifyCacheClusterMessage,
-    ) -> RusotoFuture<ModifyCacheClusterResult, ModifyCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ModifyCacheClusterRequest {
+    type Output = ModifyCacheClusterResponse;
+    type Error = ModifyCacheClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCacheCluster");
         params.put("Version", "2015-02-02");
-        ModifyCacheClusterMessageSerializer::serialize(&mut params, "", &input);
+        ModifyCacheClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11521,7 +12177,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyCacheClusterResult::default();
+                    result = ModifyCacheClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11531,7 +12187,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyCacheClusterResultDeserializer::deserialize(
+                    result = ModifyCacheClusterResponseDeserializer::deserialize(
                         "ModifyCacheClusterResult",
                         &mut stack,
                     )?;
@@ -11543,22 +12199,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the parameters of a cache parameter group. You can modify up to 20 parameters in a single request by submitting a list parameter name and value pairs.</p>
-    fn modify_cache_parameter_group(
-        &self,
-        input: ModifyCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ModifyCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ModifyCacheParameterGroupRequest {
+    type Output = ModifyCacheParameterGroupResponse;
+    type Error = ModifyCacheParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCacheParameterGroup");
         params.put("Version", "2015-02-02");
-        ModifyCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyCacheParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyCacheParameterGroupError::from_response(response))
@@ -11569,7 +12230,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheParameterGroupNameMessage::default();
+                    result = ModifyCacheParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11579,7 +12240,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupNameMessageDeserializer::deserialize(
+                    result = ModifyCacheParameterGroupResponseDeserializer::deserialize(
                         "ModifyCacheParameterGroupResult",
                         &mut stack,
                     )?;
@@ -11591,22 +12252,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies an existing cache subnet group.</p>
-    fn modify_cache_subnet_group(
-        &self,
-        input: ModifyCacheSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyCacheSubnetGroupResult, ModifyCacheSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ModifyCacheSubnetGroupRequest {
+    type Output = ModifyCacheSubnetGroupResponse;
+    type Error = ModifyCacheSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyCacheSubnetGroup");
         params.put("Version", "2015-02-02");
-        ModifyCacheSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyCacheSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyCacheSubnetGroupError::from_response(response))
@@ -11617,7 +12283,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyCacheSubnetGroupResult::default();
+                    result = ModifyCacheSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11627,7 +12293,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyCacheSubnetGroupResultDeserializer::deserialize(
+                    result = ModifyCacheSubnetGroupResponseDeserializer::deserialize(
                         "ModifyCacheSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -11639,22 +12305,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p><p>Modifies the settings for a replication group.</p> <p>For Redis (cluster mode enabled) clusters, this operation cannot be used to change a cluster&#39;s node type or engine version. For more information, see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/scaling-redis-cluster-mode-enabled.html">Scaling for Amazon ElastiCache for Redis—Redis (cluster mode enabled)</a> in the ElastiCache User Guide</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_ModifyReplicationGroupShardConfiguration.html">ModifyReplicationGroupShardConfiguration</a> in the ElastiCache API Reference</p> </li> </ul> <note> <p>This operation is valid for Redis only.</p> </note></p>
-    fn modify_replication_group(
-        &self,
-        input: ModifyReplicationGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationGroupResult, ModifyReplicationGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ModifyReplicationGroupRequest {
+    type Output = ModifyReplicationGroupResponse;
+    type Error = ModifyReplicationGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyReplicationGroup");
         params.put("Version", "2015-02-02");
-        ModifyReplicationGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyReplicationGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyReplicationGroupError::from_response(response))
@@ -11665,7 +12336,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyReplicationGroupResult::default();
+                    result = ModifyReplicationGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11675,7 +12346,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyReplicationGroupResultDeserializer::deserialize(
+                    result = ModifyReplicationGroupResponseDeserializer::deserialize(
                         "ModifyReplicationGroupResult",
                         &mut stack,
                     )?;
@@ -11687,29 +12358,31 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies a replication group's shards (node groups) by allowing you to add shards, remove shards, or rebalance the keyspaces among exisiting shards.</p>
-    fn modify_replication_group_shard_configuration(
-        &self,
-        input: ModifyReplicationGroupShardConfigurationMessage,
-    ) -> RusotoFuture<
-        ModifyReplicationGroupShardConfigurationResult,
-        ModifyReplicationGroupShardConfigurationError,
-    > {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ModifyReplicationGroupShardConfigurationRequest {
+    type Output = ModifyReplicationGroupShardConfigurationResponse;
+    type Error = ModifyReplicationGroupShardConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyReplicationGroupShardConfiguration");
         params.put("Version", "2015-02-02");
-        ModifyReplicationGroupShardConfigurationMessageSerializer::serialize(
+        ModifyReplicationGroupShardConfigurationRequestSerializer::serialize(
             &mut params,
             "",
-            &input,
+            &self,
         );
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyReplicationGroupShardConfigurationError::from_response(response))
@@ -11720,7 +12393,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyReplicationGroupShardConfigurationResult::default();
+                    result = ModifyReplicationGroupShardConfigurationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11731,7 +12404,7 @@ impl ElastiCache for ElastiCacheClient {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
                     result =
-                        ModifyReplicationGroupShardConfigurationResultDeserializer::deserialize(
+                        ModifyReplicationGroupShardConfigurationResponseDeserializer::deserialize(
                             "ModifyReplicationGroupShardConfigurationResult",
                             &mut stack,
                         )?;
@@ -11743,25 +12416,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Allows you to purchase a reserved cache node offering.</p>
-    fn purchase_reserved_cache_nodes_offering(
-        &self,
-        input: PurchaseReservedCacheNodesOfferingMessage,
-    ) -> RusotoFuture<
-        PurchaseReservedCacheNodesOfferingResult,
-        PurchaseReservedCacheNodesOfferingError,
-    > {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for PurchaseReservedCacheNodesOfferingRequest {
+    type Output = PurchaseReservedCacheNodesOfferingResponse;
+    type Error = PurchaseReservedCacheNodesOfferingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PurchaseReservedCacheNodesOffering");
         params.put("Version", "2015-02-02");
-        PurchaseReservedCacheNodesOfferingMessageSerializer::serialize(&mut params, "", &input);
+        PurchaseReservedCacheNodesOfferingRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PurchaseReservedCacheNodesOfferingError::from_response(
@@ -11774,7 +12449,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PurchaseReservedCacheNodesOfferingResult::default();
+                    result = PurchaseReservedCacheNodesOfferingResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11784,7 +12459,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PurchaseReservedCacheNodesOfferingResultDeserializer::deserialize(
+                    result = PurchaseReservedCacheNodesOfferingResponseDeserializer::deserialize(
                         "PurchaseReservedCacheNodesOfferingResult",
                         &mut stack,
                     )?;
@@ -11796,22 +12471,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Reboots some, or all, of the cache nodes within a provisioned cluster. This operation applies any modified cache parameter groups to the cluster. The reboot operation takes place as soon as possible, and results in a momentary outage to the cluster. During the reboot, the cluster status is set to REBOOTING.</p> <p>The reboot causes the contents of the cache (for each cache node being rebooted) to be lost.</p> <p>When the reboot is complete, a cluster event is created.</p> <p>Rebooting a cluster is currently supported on Memcached and Redis (cluster mode disabled) clusters. Rebooting is not supported on Redis (cluster mode enabled) clusters.</p> <p>If you make changes to parameters that require a Redis (cluster mode enabled) cluster reboot for the changes to be applied, see <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Clusters.Rebooting.html">Rebooting a Cluster</a> for an alternate process.</p>
-    fn reboot_cache_cluster(
-        &self,
-        input: RebootCacheClusterMessage,
-    ) -> RusotoFuture<RebootCacheClusterResult, RebootCacheClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for RebootCacheClusterRequest {
+    type Output = RebootCacheClusterResponse;
+    type Error = RebootCacheClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebootCacheCluster");
         params.put("Version", "2015-02-02");
-        RebootCacheClusterMessageSerializer::serialize(&mut params, "", &input);
+        RebootCacheClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11825,7 +12505,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RebootCacheClusterResult::default();
+                    result = RebootCacheClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11835,7 +12515,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootCacheClusterResultDeserializer::deserialize(
+                    result = RebootCacheClusterResponseDeserializer::deserialize(
                         "RebootCacheClusterResult",
                         &mut stack,
                     )?;
@@ -11847,22 +12527,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Removes the tags identified by the <code>TagKeys</code> list from the named resource.</p>
-    fn remove_tags_from_resource(
-        &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<TagListMessage, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for RemoveTagsFromResourceRequest {
+    type Output = RemoveTagsFromResourceResponse;
+    type Error = RemoveTagsFromResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2015-02-02");
-        RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
+        RemoveTagsFromResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsFromResourceError::from_response(response))
@@ -11873,7 +12558,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TagListMessage::default();
+                    result = RemoveTagsFromResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11883,7 +12568,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
+                    result = RemoveTagsFromResourceResponseDeserializer::deserialize(
                         "RemoveTagsFromResourceResult",
                         &mut stack,
                     )?;
@@ -11895,22 +12580,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies the parameters of a cache parameter group to the engine or system default value. You can reset specific parameters by submitting a list of parameter names. To reset the entire cache parameter group, specify the <code>ResetAllParameters</code> and <code>CacheParameterGroupName</code> parameters.</p>
-    fn reset_cache_parameter_group(
-        &self,
-        input: ResetCacheParameterGroupMessage,
-    ) -> RusotoFuture<CacheParameterGroupNameMessage, ResetCacheParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for ResetCacheParameterGroupRequest {
+    type Output = ResetCacheParameterGroupResponse;
+    type Error = ResetCacheParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetCacheParameterGroup");
         params.put("Version", "2015-02-02");
-        ResetCacheParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ResetCacheParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResetCacheParameterGroupError::from_response(response))
@@ -11921,7 +12611,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CacheParameterGroupNameMessage::default();
+                    result = ResetCacheParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11931,7 +12621,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CacheParameterGroupNameMessageDeserializer::deserialize(
+                    result = ResetCacheParameterGroupResponseDeserializer::deserialize(
                         "ResetCacheParameterGroupResult",
                         &mut stack,
                     )?;
@@ -11943,23 +12633,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Revokes ingress from a cache security group. Use this operation to disallow access from an Amazon EC2 security group that had been previously authorized.</p>
-    fn revoke_cache_security_group_ingress(
-        &self,
-        input: RevokeCacheSecurityGroupIngressMessage,
-    ) -> RusotoFuture<RevokeCacheSecurityGroupIngressResult, RevokeCacheSecurityGroupIngressError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for RevokeCacheSecurityGroupIngressRequest {
+    type Output = RevokeCacheSecurityGroupIngressResponse;
+    type Error = RevokeCacheSecurityGroupIngressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RevokeCacheSecurityGroupIngress");
         params.put("Version", "2015-02-02");
-        RevokeCacheSecurityGroupIngressMessageSerializer::serialize(&mut params, "", &input);
+        RevokeCacheSecurityGroupIngressRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RevokeCacheSecurityGroupIngressError::from_response(
@@ -11972,7 +12666,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RevokeCacheSecurityGroupIngressResult::default();
+                    result = RevokeCacheSecurityGroupIngressResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11982,7 +12676,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeCacheSecurityGroupIngressResultDeserializer::deserialize(
+                    result = RevokeCacheSecurityGroupIngressResponseDeserializer::deserialize(
                         "RevokeCacheSecurityGroupIngressResult",
                         &mut stack,
                     )?;
@@ -11994,22 +12688,27 @@ impl ElastiCache for ElastiCacheClient {
             }))
         })
     }
+}
 
-    /// <p>Represents the input of a <code>TestFailover</code> operation which test automatic failover on a specified node group (called shard in the console) in a replication group (called cluster in the console).</p> <p class="title"> <b>Note the following</b> </p> <ul> <li> <p>A customer can use this operation to test automatic failover on up to 5 shards (called node groups in the ElastiCache API and AWS CLI) in any rolling 24-hour period.</p> </li> <li> <p>If calling this operation on shards in different clusters (called replication groups in the API and CLI), the calls can be made concurrently.</p> <p> </p> </li> <li> <p>If calling this operation multiple times on different shards in the same Redis (cluster mode enabled) replication group, the first node replacement must complete before a subsequent call can be made.</p> </li> <li> <p>To determine whether the node replacement is complete you can check Events using the Amazon ElastiCache console, the AWS CLI, or the ElastiCache API. Look for the following automatic failover related events, listed here in order of occurrance:</p> <ol> <li> <p>Replication group message: <code>Test Failover API called for node group &lt;node-group-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Replication group message: <code>Failover from master node &lt;primary-node-id&gt; to replica node &lt;node-id&gt; completed</code> </p> </li> <li> <p>Cache cluster message: <code>Recovering cache nodes &lt;node-id&gt;</code> </p> </li> <li> <p>Cache cluster message: <code>Finished recovery for cache nodes &lt;node-id&gt;</code> </p> </li> </ol> <p>For more information see:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ECEvents.Viewing.html">Viewing ElastiCache Events</a> in the <i>ElastiCache User Guide</i> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/APIReference/API_DescribeEvents.html">DescribeEvents</a> in the ElastiCache API Reference</p> </li> </ul> </li> </ul> <p>Also see, <a href="http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html#auto-failover-test">Testing Multi-AZ with Automatic Failover</a> in the <i>ElastiCache User Guide</i>.</p>
-    fn test_failover(
-        &self,
-        input: TestFailoverMessage,
-    ) -> RusotoFuture<TestFailoverResult, TestFailoverError> {
-        let mut request = SignedRequest::new("POST", "elasticache", &self.region, "/");
+impl ServiceRequest for TestFailoverRequest {
+    type Output = TestFailoverResponse;
+    type Error = TestFailoverError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticache", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TestFailover");
         params.put("Version", "2015-02-02");
-        TestFailoverMessageSerializer::serialize(&mut params, "", &input);
+        TestFailoverRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12023,7 +12722,7 @@ impl ElastiCache for ElastiCacheClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TestFailoverResult::default();
+                    result = TestFailoverResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -12033,7 +12732,7 @@ impl ElastiCache for ElastiCacheClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TestFailoverResultDeserializer::deserialize(
+                    result = TestFailoverResponseDeserializer::deserialize(
                         "TestFailoverResult",
                         &mut stack,
                     )?;

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -38,6 +39,10 @@ pub struct AbortDocumentVersionUploadRequest {
     #[serde(rename = "VersionId")]
     pub version_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AbortDocumentVersionUploadResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ActivateUserRequest {
@@ -382,6 +387,10 @@ pub struct DeactivateUserRequest {
     pub user_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeactivateUserResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCommentRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -398,6 +407,10 @@ pub struct DeleteCommentRequest {
     #[serde(rename = "VersionId")]
     pub version_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteCommentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCustomMetadataRequest {
@@ -437,6 +450,10 @@ pub struct DeleteDocumentRequest {
     pub document_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDocumentResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFolderContentsRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -448,6 +465,10 @@ pub struct DeleteFolderContentsRequest {
     pub folder_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteFolderContentsResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFolderRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -458,6 +479,10 @@ pub struct DeleteFolderRequest {
     #[serde(rename = "FolderId")]
     pub folder_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteFolderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLabelsRequest {
@@ -492,6 +517,10 @@ pub struct DeleteNotificationSubscriptionRequest {
     pub subscription_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteNotificationSubscriptionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -502,6 +531,10 @@ pub struct DeleteUserRequest {
     #[serde(rename = "UserId")]
     pub user_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeActivitiesRequest {
@@ -1362,6 +1395,10 @@ pub struct RemoveAllResourcePermissionsRequest {
     pub resource_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RemoveAllResourcePermissionsResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveResourcePermissionRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -1379,6 +1416,10 @@ pub struct RemoveResourcePermissionRequest {
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RemoveResourcePermissionResponse {}
 
 /// <p>Describes the metadata of a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1536,6 +1577,10 @@ pub struct UpdateDocumentRequest {
     pub resource_state: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDocumentResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDocumentVersionRequest {
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
@@ -1553,6 +1598,10 @@ pub struct UpdateDocumentVersionRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_status: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDocumentVersionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFolderRequest {
@@ -1576,6 +1625,10 @@ pub struct UpdateFolderRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_state: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateFolderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserRequest {
@@ -4640,238 +4693,179 @@ pub trait Workdocs {
     fn abort_document_version_upload(
         &self,
         input: AbortDocumentVersionUploadRequest,
-    ) -> RusotoFuture<(), AbortDocumentVersionUploadError>;
+    ) -> Request<AbortDocumentVersionUploadRequest>;
 
     /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
-    fn activate_user(
-        &self,
-        input: ActivateUserRequest,
-    ) -> RusotoFuture<ActivateUserResponse, ActivateUserError>;
+    fn activate_user(&self, input: ActivateUserRequest) -> Request<ActivateUserRequest>;
 
     /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
     fn add_resource_permissions(
         &self,
         input: AddResourcePermissionsRequest,
-    ) -> RusotoFuture<AddResourcePermissionsResponse, AddResourcePermissionsError>;
+    ) -> Request<AddResourcePermissionsRequest>;
 
     /// <p>Adds a new comment to the specified document version.</p>
-    fn create_comment(
-        &self,
-        input: CreateCommentRequest,
-    ) -> RusotoFuture<CreateCommentResponse, CreateCommentError>;
+    fn create_comment(&self, input: CreateCommentRequest) -> Request<CreateCommentRequest>;
 
     /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
     fn create_custom_metadata(
         &self,
         input: CreateCustomMetadataRequest,
-    ) -> RusotoFuture<CreateCustomMetadataResponse, CreateCustomMetadataError>;
+    ) -> Request<CreateCustomMetadataRequest>;
 
     /// <p>Creates a folder with the specified name and parent folder.</p>
-    fn create_folder(
-        &self,
-        input: CreateFolderRequest,
-    ) -> RusotoFuture<CreateFolderResponse, CreateFolderError>;
+    fn create_folder(&self, input: CreateFolderRequest) -> Request<CreateFolderRequest>;
 
     /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
-    fn create_labels(
-        &self,
-        input: CreateLabelsRequest,
-    ) -> RusotoFuture<CreateLabelsResponse, CreateLabelsError>;
+    fn create_labels(&self, input: CreateLabelsRequest) -> Request<CreateLabelsRequest>;
 
     /// <p>Configure Amazon WorkDocs to use Amazon SNS notifications. The endpoint receives a confirmation message, and must confirm the subscription.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/subscribe-notifications.html">Subscribe to Notifications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     fn create_notification_subscription(
         &self,
         input: CreateNotificationSubscriptionRequest,
-    ) -> RusotoFuture<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError>;
+    ) -> Request<CreateNotificationSubscriptionRequest>;
 
     /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest>;
 
     /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
-    fn deactivate_user(
-        &self,
-        input: DeactivateUserRequest,
-    ) -> RusotoFuture<(), DeactivateUserError>;
+    fn deactivate_user(&self, input: DeactivateUserRequest) -> Request<DeactivateUserRequest>;
 
     /// <p>Deletes the specified comment from the document version.</p>
-    fn delete_comment(&self, input: DeleteCommentRequest) -> RusotoFuture<(), DeleteCommentError>;
+    fn delete_comment(&self, input: DeleteCommentRequest) -> Request<DeleteCommentRequest>;
 
     /// <p>Deletes custom metadata from the specified resource.</p>
     fn delete_custom_metadata(
         &self,
         input: DeleteCustomMetadataRequest,
-    ) -> RusotoFuture<DeleteCustomMetadataResponse, DeleteCustomMetadataError>;
+    ) -> Request<DeleteCustomMetadataRequest>;
 
     /// <p>Permanently deletes the specified document and its associated metadata.</p>
-    fn delete_document(
-        &self,
-        input: DeleteDocumentRequest,
-    ) -> RusotoFuture<(), DeleteDocumentError>;
+    fn delete_document(&self, input: DeleteDocumentRequest) -> Request<DeleteDocumentRequest>;
 
     /// <p>Permanently deletes the specified folder and its contents.</p>
-    fn delete_folder(&self, input: DeleteFolderRequest) -> RusotoFuture<(), DeleteFolderError>;
+    fn delete_folder(&self, input: DeleteFolderRequest) -> Request<DeleteFolderRequest>;
 
     /// <p>Deletes the contents of the specified folder.</p>
     fn delete_folder_contents(
         &self,
         input: DeleteFolderContentsRequest,
-    ) -> RusotoFuture<(), DeleteFolderContentsError>;
+    ) -> Request<DeleteFolderContentsRequest>;
 
     /// <p>Deletes the specified list of labels from a resource.</p>
-    fn delete_labels(
-        &self,
-        input: DeleteLabelsRequest,
-    ) -> RusotoFuture<DeleteLabelsResponse, DeleteLabelsError>;
+    fn delete_labels(&self, input: DeleteLabelsRequest) -> Request<DeleteLabelsRequest>;
 
     /// <p>Deletes the specified subscription from the specified organization.</p>
     fn delete_notification_subscription(
         &self,
         input: DeleteNotificationSubscriptionRequest,
-    ) -> RusotoFuture<(), DeleteNotificationSubscriptionError>;
+    ) -> Request<DeleteNotificationSubscriptionRequest>;
 
     /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest>;
 
     /// <p>Describes the user activities in a specified time period.</p>
     fn describe_activities(
         &self,
         input: DescribeActivitiesRequest,
-    ) -> RusotoFuture<DescribeActivitiesResponse, DescribeActivitiesError>;
+    ) -> Request<DescribeActivitiesRequest>;
 
     /// <p>List all the comments for the specified document version.</p>
-    fn describe_comments(
-        &self,
-        input: DescribeCommentsRequest,
-    ) -> RusotoFuture<DescribeCommentsResponse, DescribeCommentsError>;
+    fn describe_comments(&self, input: DescribeCommentsRequest)
+        -> Request<DescribeCommentsRequest>;
 
     /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
     fn describe_document_versions(
         &self,
         input: DescribeDocumentVersionsRequest,
-    ) -> RusotoFuture<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError>;
+    ) -> Request<DescribeDocumentVersionsRequest>;
 
     /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
     fn describe_folder_contents(
         &self,
         input: DescribeFolderContentsRequest,
-    ) -> RusotoFuture<DescribeFolderContentsResponse, DescribeFolderContentsError>;
+    ) -> Request<DescribeFolderContentsRequest>;
 
     /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
-    fn describe_groups(
-        &self,
-        input: DescribeGroupsRequest,
-    ) -> RusotoFuture<DescribeGroupsResponse, DescribeGroupsError>;
+    fn describe_groups(&self, input: DescribeGroupsRequest) -> Request<DescribeGroupsRequest>;
 
     /// <p>Lists the specified notification subscriptions.</p>
     fn describe_notification_subscriptions(
         &self,
         input: DescribeNotificationSubscriptionsRequest,
-    ) -> RusotoFuture<
-        DescribeNotificationSubscriptionsResponse,
-        DescribeNotificationSubscriptionsError,
-    >;
+    ) -> Request<DescribeNotificationSubscriptionsRequest>;
 
     /// <p>Describes the permissions of a specified resource.</p>
     fn describe_resource_permissions(
         &self,
         input: DescribeResourcePermissionsRequest,
-    ) -> RusotoFuture<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
+    ) -> Request<DescribeResourcePermissionsRequest>;
 
     /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     fn describe_root_folders(
         &self,
         input: DescribeRootFoldersRequest,
-    ) -> RusotoFuture<DescribeRootFoldersResponse, DescribeRootFoldersError>;
+    ) -> Request<DescribeRootFoldersRequest>;
 
     /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
-    fn describe_users(
-        &self,
-        input: DescribeUsersRequest,
-    ) -> RusotoFuture<DescribeUsersResponse, DescribeUsersError>;
+    fn describe_users(&self, input: DescribeUsersRequest) -> Request<DescribeUsersRequest>;
 
     /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
-    fn get_current_user(
-        &self,
-        input: GetCurrentUserRequest,
-    ) -> RusotoFuture<GetCurrentUserResponse, GetCurrentUserError>;
+    fn get_current_user(&self, input: GetCurrentUserRequest) -> Request<GetCurrentUserRequest>;
 
     /// <p>Retrieves details of a document.</p>
-    fn get_document(
-        &self,
-        input: GetDocumentRequest,
-    ) -> RusotoFuture<GetDocumentResponse, GetDocumentError>;
+    fn get_document(&self, input: GetDocumentRequest) -> Request<GetDocumentRequest>;
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
-    fn get_document_path(
-        &self,
-        input: GetDocumentPathRequest,
-    ) -> RusotoFuture<GetDocumentPathResponse, GetDocumentPathError>;
+    fn get_document_path(&self, input: GetDocumentPathRequest) -> Request<GetDocumentPathRequest>;
 
     /// <p>Retrieves version metadata for the specified document.</p>
     fn get_document_version(
         &self,
         input: GetDocumentVersionRequest,
-    ) -> RusotoFuture<GetDocumentVersionResponse, GetDocumentVersionError>;
+    ) -> Request<GetDocumentVersionRequest>;
 
     /// <p>Retrieves the metadata of the specified folder.</p>
-    fn get_folder(
-        &self,
-        input: GetFolderRequest,
-    ) -> RusotoFuture<GetFolderResponse, GetFolderError>;
+    fn get_folder(&self, input: GetFolderRequest) -> Request<GetFolderRequest>;
 
     /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
-    fn get_folder_path(
-        &self,
-        input: GetFolderPathRequest,
-    ) -> RusotoFuture<GetFolderPathResponse, GetFolderPathError>;
+    fn get_folder_path(&self, input: GetFolderPathRequest) -> Request<GetFolderPathRequest>;
 
     /// <p>Retrieves a collection of resources, including folders and documents. The only <code>CollectionType</code> supported is <code>SHARED_WITH_ME</code>.</p>
-    fn get_resources(
-        &self,
-        input: GetResourcesRequest,
-    ) -> RusotoFuture<GetResourcesResponse, GetResourcesError>;
+    fn get_resources(&self, input: GetResourcesRequest) -> Request<GetResourcesRequest>;
 
     /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
     fn initiate_document_version_upload(
         &self,
         input: InitiateDocumentVersionUploadRequest,
-    ) -> RusotoFuture<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>;
+    ) -> Request<InitiateDocumentVersionUploadRequest>;
 
     /// <p>Removes all the permissions from the specified resource.</p>
     fn remove_all_resource_permissions(
         &self,
         input: RemoveAllResourcePermissionsRequest,
-    ) -> RusotoFuture<(), RemoveAllResourcePermissionsError>;
+    ) -> Request<RemoveAllResourcePermissionsRequest>;
 
     /// <p>Removes the permission for the specified principal from the specified resource.</p>
     fn remove_resource_permission(
         &self,
         input: RemoveResourcePermissionRequest,
-    ) -> RusotoFuture<(), RemoveResourcePermissionError>;
+    ) -> Request<RemoveResourcePermissionRequest>;
 
     /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
-    fn update_document(
-        &self,
-        input: UpdateDocumentRequest,
-    ) -> RusotoFuture<(), UpdateDocumentError>;
+    fn update_document(&self, input: UpdateDocumentRequest) -> Request<UpdateDocumentRequest>;
 
     /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
     fn update_document_version(
         &self,
         input: UpdateDocumentVersionRequest,
-    ) -> RusotoFuture<(), UpdateDocumentVersionError>;
+    ) -> Request<UpdateDocumentVersionRequest>;
 
     /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
-    fn update_folder(&self, input: UpdateFolderRequest) -> RusotoFuture<(), UpdateFolderError>;
+    fn update_folder(&self, input: UpdateFolderRequest) -> Request<UpdateFolderRequest>;
 
     /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
-    fn update_user(
-        &self,
-        input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError>;
+    fn update_user(&self, input: UpdateUserRequest) -> Request<UpdateUserRequest>;
 }
 /// A client for the Amazon WorkDocs API.
 #[derive(Clone)]
@@ -4914,24 +4908,292 @@ impl Workdocs for WorkdocsClient {
     fn abort_document_version_upload(
         &self,
         input: AbortDocumentVersionUploadRequest,
-    ) -> RusotoFuture<(), AbortDocumentVersionUploadError> {
+    ) -> Request<AbortDocumentVersionUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
+    fn activate_user(&self, input: ActivateUserRequest) -> Request<ActivateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
+    fn add_resource_permissions(
+        &self,
+        input: AddResourcePermissionsRequest,
+    ) -> Request<AddResourcePermissionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a new comment to the specified document version.</p>
+    fn create_comment(&self, input: CreateCommentRequest) -> Request<CreateCommentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
+    fn create_custom_metadata(
+        &self,
+        input: CreateCustomMetadataRequest,
+    ) -> Request<CreateCustomMetadataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a folder with the specified name and parent folder.</p>
+    fn create_folder(&self, input: CreateFolderRequest) -> Request<CreateFolderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
+    fn create_labels(&self, input: CreateLabelsRequest) -> Request<CreateLabelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configure Amazon WorkDocs to use Amazon SNS notifications. The endpoint receives a confirmation message, and must confirm the subscription.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/subscribe-notifications.html">Subscribe to Notifications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
+    fn create_notification_subscription(
+        &self,
+        input: CreateNotificationSubscriptionRequest,
+    ) -> Request<CreateNotificationSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
+    fn deactivate_user(&self, input: DeactivateUserRequest) -> Request<DeactivateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified comment from the document version.</p>
+    fn delete_comment(&self, input: DeleteCommentRequest) -> Request<DeleteCommentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes custom metadata from the specified resource.</p>
+    fn delete_custom_metadata(
+        &self,
+        input: DeleteCustomMetadataRequest,
+    ) -> Request<DeleteCustomMetadataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Permanently deletes the specified document and its associated metadata.</p>
+    fn delete_document(&self, input: DeleteDocumentRequest) -> Request<DeleteDocumentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Permanently deletes the specified folder and its contents.</p>
+    fn delete_folder(&self, input: DeleteFolderRequest) -> Request<DeleteFolderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the contents of the specified folder.</p>
+    fn delete_folder_contents(
+        &self,
+        input: DeleteFolderContentsRequest,
+    ) -> Request<DeleteFolderContentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified list of labels from a resource.</p>
+    fn delete_labels(&self, input: DeleteLabelsRequest) -> Request<DeleteLabelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified subscription from the specified organization.</p>
+    fn delete_notification_subscription(
+        &self,
+        input: DeleteNotificationSubscriptionRequest,
+    ) -> Request<DeleteNotificationSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the user activities in a specified time period.</p>
+    fn describe_activities(
+        &self,
+        input: DescribeActivitiesRequest,
+    ) -> Request<DescribeActivitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List all the comments for the specified document version.</p>
+    fn describe_comments(
+        &self,
+        input: DescribeCommentsRequest,
+    ) -> Request<DescribeCommentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
+    fn describe_document_versions(
+        &self,
+        input: DescribeDocumentVersionsRequest,
+    ) -> Request<DescribeDocumentVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
+    fn describe_folder_contents(
+        &self,
+        input: DescribeFolderContentsRequest,
+    ) -> Request<DescribeFolderContentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
+    fn describe_groups(&self, input: DescribeGroupsRequest) -> Request<DescribeGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the specified notification subscriptions.</p>
+    fn describe_notification_subscriptions(
+        &self,
+        input: DescribeNotificationSubscriptionsRequest,
+    ) -> Request<DescribeNotificationSubscriptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the permissions of a specified resource.</p>
+    fn describe_resource_permissions(
+        &self,
+        input: DescribeResourcePermissionsRequest,
+    ) -> Request<DescribeResourcePermissionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
+    fn describe_root_folders(
+        &self,
+        input: DescribeRootFoldersRequest,
+    ) -> Request<DescribeRootFoldersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
+    fn describe_users(&self, input: DescribeUsersRequest) -> Request<DescribeUsersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
+    fn get_current_user(&self, input: GetCurrentUserRequest) -> Request<GetCurrentUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves details of a document.</p>
+    fn get_document(&self, input: GetDocumentRequest) -> Request<GetDocumentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
+    fn get_document_path(&self, input: GetDocumentPathRequest) -> Request<GetDocumentPathRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves version metadata for the specified document.</p>
+    fn get_document_version(
+        &self,
+        input: GetDocumentVersionRequest,
+    ) -> Request<GetDocumentVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the metadata of the specified folder.</p>
+    fn get_folder(&self, input: GetFolderRequest) -> Request<GetFolderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
+    fn get_folder_path(&self, input: GetFolderPathRequest) -> Request<GetFolderPathRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a collection of resources, including folders and documents. The only <code>CollectionType</code> supported is <code>SHARED_WITH_ME</code>.</p>
+    fn get_resources(&self, input: GetResourcesRequest) -> Request<GetResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
+    fn initiate_document_version_upload(
+        &self,
+        input: InitiateDocumentVersionUploadRequest,
+    ) -> Request<InitiateDocumentVersionUploadRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes all the permissions from the specified resource.</p>
+    fn remove_all_resource_permissions(
+        &self,
+        input: RemoveAllResourcePermissionsRequest,
+    ) -> Request<RemoveAllResourcePermissionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the permission for the specified principal from the specified resource.</p>
+    fn remove_resource_permission(
+        &self,
+        input: RemoveResourcePermissionRequest,
+    ) -> Request<RemoveResourcePermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
+    fn update_document(&self, input: UpdateDocumentRequest) -> Request<UpdateDocumentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
+    fn update_document_version(
+        &self,
+        input: UpdateDocumentVersionRequest,
+    ) -> Request<UpdateDocumentVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
+    fn update_folder(&self, input: UpdateFolderRequest) -> Request<UpdateFolderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
+    fn update_user(&self, input: UpdateUserRequest) -> Request<UpdateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AbortDocumentVersionUploadRequest {
+    type Output = AbortDocumentVersionUploadResponse;
+    type Error = AbortDocumentVersionUploadError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
-            document_id = input.document_id,
-            version_id = input.version_id
+            document_id = self.document_id,
+            version_id = self.version_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = AbortDocumentVersionUploadResponse {};
 
                     Ok(result)
                 }))
@@ -4942,25 +5204,28 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Activates the specified user. Only active users can access Amazon WorkDocs.</p>
-    fn activate_user(
-        &self,
-        input: ActivateUserRequest,
-    ) -> RusotoFuture<ActivateUserResponse, ActivateUserError> {
-        let request_uri = format!(
-            "/api/v1/users/{user_id}/activation",
-            user_id = input.user_id
-        );
+impl ServiceRequest for ActivateUserRequest {
+    type Output = ActivateUserResponse;
+    type Error = ActivateUserError;
 
-        let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/api/v1/users/{user_id}/activation", user_id = self.user_id);
+
+        let mut request = SignedRequest::new("POST", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4978,28 +5243,34 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a set of permissions for the specified folder or document. The resource permissions are overwritten if the principals already have different permissions.</p>
-    fn add_resource_permissions(
-        &self,
-        input: AddResourcePermissionsRequest,
-    ) -> RusotoFuture<AddResourcePermissionsResponse, AddResourcePermissionsError> {
+impl ServiceRequest for AddResourcePermissionsRequest {
+    type Output = AddResourcePermissionsResponse;
+    type Error = AddResourcePermissionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
-            resource_id = input.resource_id
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5016,29 +5287,35 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Adds a new comment to the specified document version.</p>
-    fn create_comment(
-        &self,
-        input: CreateCommentRequest,
-    ) -> RusotoFuture<CreateCommentResponse, CreateCommentError> {
+impl ServiceRequest for CreateCommentRequest {
+    type Output = CreateCommentResponse;
+    type Error = CreateCommentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comment",
-            document_id = input.document_id,
-            version_id = input.version_id
+            document_id = self.document_id,
+            version_id = self.version_id
         );
 
-        let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5056,33 +5333,39 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Adds one or more custom properties to the specified resource (a folder, document, or version).</p>
-    fn create_custom_metadata(
-        &self,
-        input: CreateCustomMetadataRequest,
-    ) -> RusotoFuture<CreateCustomMetadataResponse, CreateCustomMetadataError> {
+impl ServiceRequest for CreateCustomMetadataRequest {
+    type Output = CreateCustomMetadataResponse;
+    type Error = CreateCustomMetadataError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/customMetadata",
-            resource_id = input.resource_id
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("PUT", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionid", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5099,25 +5382,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a folder with the specified name and parent folder.</p>
-    fn create_folder(
-        &self,
-        input: CreateFolderRequest,
-    ) -> RusotoFuture<CreateFolderResponse, CreateFolderError> {
+impl ServiceRequest for CreateFolderRequest {
+    type Output = CreateFolderResponse;
+    type Error = CreateFolderError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/folders";
 
-        let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5135,28 +5424,34 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Adds the specified list of labels to the given resource (a document or folder)</p>
-    fn create_labels(
-        &self,
-        input: CreateLabelsRequest,
-    ) -> RusotoFuture<CreateLabelsResponse, CreateLabelsError> {
+impl ServiceRequest for CreateLabelsRequest {
+    type Output = CreateLabelsResponse;
+    type Error = CreateLabelsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/labels",
-            resource_id = input.resource_id
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("PUT", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5174,25 +5469,30 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Configure Amazon WorkDocs to use Amazon SNS notifications. The endpoint receives a confirmation message, and must confirm the subscription.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/subscribe-notifications.html">Subscribe to Notifications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
-    fn create_notification_subscription(
-        &self,
-        input: CreateNotificationSubscriptionRequest,
-    ) -> RusotoFuture<CreateNotificationSubscriptionResponse, CreateNotificationSubscriptionError>
-    {
+impl ServiceRequest for CreateNotificationSubscriptionRequest {
+    type Output = CreateNotificationSubscriptionResponse;
+    type Error = CreateNotificationSubscriptionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions",
-            organization_id = input.organization_id
+            organization_id = self.organization_id
         );
 
-        let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5207,25 +5507,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a user in a Simple AD or Microsoft AD directory. The status of a newly created user is "ACTIVE". New users can access Amazon WorkDocs.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
+impl ServiceRequest for CreateUserRequest {
+    type Output = CreateUserResponse;
+    type Error = CreateUserError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/users";
 
-        let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5243,28 +5549,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Deactivates the specified user, which revokes the user's access to Amazon WorkDocs.</p>
-    fn deactivate_user(
-        &self,
-        input: DeactivateUserRequest,
-    ) -> RusotoFuture<(), DeactivateUserError> {
-        let request_uri = format!(
-            "/api/v1/users/{user_id}/activation",
-            user_id = input.user_id
-        );
+impl ServiceRequest for DeactivateUserRequest {
+    type Output = DeactivateUserResponse;
+    type Error = DeactivateUserError;
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/api/v1/users/{user_id}/activation", user_id = self.user_id);
+
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeactivateUserResponse {};
 
                     Ok(result)
                 }))
@@ -5278,27 +5587,36 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified comment from the document version.</p>
-    fn delete_comment(&self, input: DeleteCommentRequest) -> RusotoFuture<(), DeleteCommentError> {
+impl ServiceRequest for DeleteCommentRequest {
+    type Output = DeleteCommentResponse;
+    type Error = DeleteCommentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comment/{comment_id}",
-            comment_id = input.comment_id,
-            document_id = input.document_id,
-            version_id = input.version_id
+            comment_id = self.comment_id,
+            document_id = self.document_id,
+            version_id = self.version_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteCommentResponse {};
 
                     Ok(result)
                 }))
@@ -5312,38 +5630,44 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes custom metadata from the specified resource.</p>
-    fn delete_custom_metadata(
-        &self,
-        input: DeleteCustomMetadataRequest,
-    ) -> RusotoFuture<DeleteCustomMetadataResponse, DeleteCustomMetadataError> {
+impl ServiceRequest for DeleteCustomMetadataRequest {
+    type Output = DeleteCustomMetadataResponse;
+    type Error = DeleteCustomMetadataError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/customMetadata",
-            resource_id = input.resource_id
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.delete_all {
+        if let Some(ref x) = self.delete_all {
             params.put("deleteAll", x);
         }
-        if let Some(ref x) = input.keys {
+        if let Some(ref x) = self.keys {
             for item in x.iter() {
                 params.put("keys", item);
             }
         }
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5360,28 +5684,34 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Permanently deletes the specified document and its associated metadata.</p>
-    fn delete_document(
-        &self,
-        input: DeleteDocumentRequest,
-    ) -> RusotoFuture<(), DeleteDocumentError> {
+impl ServiceRequest for DeleteDocumentRequest {
+    type Output = DeleteDocumentResponse;
+    type Error = DeleteDocumentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
-            document_id = input.document_id
+            document_id = self.document_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDocumentResponse {};
 
                     Ok(result)
                 }))
@@ -5395,22 +5725,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Permanently deletes the specified folder and its contents.</p>
-    fn delete_folder(&self, input: DeleteFolderRequest) -> RusotoFuture<(), DeleteFolderError> {
-        let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
+impl ServiceRequest for DeleteFolderRequest {
+    type Output = DeleteFolderResponse;
+    type Error = DeleteFolderError;
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = self.folder_id);
+
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteFolderResponse {};
 
                     Ok(result)
                 }))
@@ -5424,28 +5763,34 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the contents of the specified folder.</p>
-    fn delete_folder_contents(
-        &self,
-        input: DeleteFolderContentsRequest,
-    ) -> RusotoFuture<(), DeleteFolderContentsError> {
+impl ServiceRequest for DeleteFolderContentsRequest {
+    type Output = DeleteFolderContentsResponse;
+    type Error = DeleteFolderContentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/contents",
-            folder_id = input.folder_id
+            folder_id = self.folder_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteFolderContentsResponse {};
 
                     Ok(result)
                 }))
@@ -5458,35 +5803,41 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified list of labels from a resource.</p>
-    fn delete_labels(
-        &self,
-        input: DeleteLabelsRequest,
-    ) -> RusotoFuture<DeleteLabelsResponse, DeleteLabelsError> {
+impl ServiceRequest for DeleteLabelsRequest {
+    type Output = DeleteLabelsResponse;
+    type Error = DeleteLabelsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/labels",
-            resource_id = input.resource_id
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.delete_all {
+        if let Some(ref x) = self.delete_all {
             params.put("deleteAll", x);
         }
-        if let Some(ref x) = input.labels {
+        if let Some(ref x) = self.labels {
             for item in x.iter() {
                 params.put("labels", item);
             }
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5504,25 +5855,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified subscription from the specified organization.</p>
-    fn delete_notification_subscription(
-        &self,
-        input: DeleteNotificationSubscriptionRequest,
-    ) -> RusotoFuture<(), DeleteNotificationSubscriptionError> {
+impl ServiceRequest for DeleteNotificationSubscriptionRequest {
+    type Output = DeleteNotificationSubscriptionResponse;
+    type Error = DeleteNotificationSubscriptionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions/{subscription_id}",
-            organization_id = input.organization_id,
-            subscription_id = input.subscription_id
+            organization_id = self.organization_id,
+            subscription_id = self.subscription_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteNotificationSubscriptionResponse {};
 
                     Ok(result)
                 }))
@@ -5533,22 +5890,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified user from a Simple AD or Microsoft AD directory.</p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
-        let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
+impl ServiceRequest for DeleteUserRequest {
+    type Output = DeleteUserResponse;
+    type Error = DeleteUserError;
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/api/v1/users/{user_id}", user_id = self.user_id);
+
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteUserResponse {};
 
                     Ok(result)
                 }))
@@ -5562,51 +5928,57 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Describes the user activities in a specified time period.</p>
-    fn describe_activities(
-        &self,
-        input: DescribeActivitiesRequest,
-    ) -> RusotoFuture<DescribeActivitiesResponse, DescribeActivitiesError> {
+impl ServiceRequest for DescribeActivitiesRequest {
+    type Output = DescribeActivitiesResponse;
+    type Error = DescribeActivitiesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/activities";
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.activity_types {
+        if let Some(ref x) = self.activity_types {
             params.put("activityTypes", x);
         }
-        if let Some(ref x) = input.end_time {
+        if let Some(ref x) = self.end_time {
             params.put("endTime", x);
         }
-        if let Some(ref x) = input.include_indirect_activities {
+        if let Some(ref x) = self.include_indirect_activities {
             params.put("includeIndirectActivities", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.organization_id {
+        if let Some(ref x) = self.organization_id {
             params.put("organizationId", x);
         }
-        if let Some(ref x) = input.resource_id {
+        if let Some(ref x) = self.resource_id {
             params.put("resourceId", x);
         }
-        if let Some(ref x) = input.start_time {
+        if let Some(ref x) = self.start_time {
             params.put("startTime", x);
         }
-        if let Some(ref x) = input.user_id {
+        if let Some(ref x) = self.user_id {
             params.put("userId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5624,34 +5996,40 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>List all the comments for the specified document version.</p>
-    fn describe_comments(
-        &self,
-        input: DescribeCommentsRequest,
-    ) -> RusotoFuture<DescribeCommentsResponse, DescribeCommentsError> {
+impl ServiceRequest for DescribeCommentsRequest {
+    type Output = DescribeCommentsResponse;
+    type Error = DescribeCommentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}/comments",
-            document_id = input.document_id,
-            version_id = input.version_id
+            document_id = self.document_id,
+            version_id = self.version_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5669,39 +6047,45 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the document versions for the specified document.</p> <p>By default, only active versions are returned.</p>
-    fn describe_document_versions(
-        &self,
-        input: DescribeDocumentVersionsRequest,
-    ) -> RusotoFuture<DescribeDocumentVersionsResponse, DescribeDocumentVersionsError> {
+impl ServiceRequest for DescribeDocumentVersionsRequest {
+    type Output = DescribeDocumentVersionsResponse;
+    type Error = DescribeDocumentVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions",
-            document_id = input.document_id
+            document_id = self.document_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.fields {
+        if let Some(ref x) = self.fields {
             params.put("fields", x);
         }
-        if let Some(ref x) = input.include {
+        if let Some(ref x) = self.include {
             params.put("include", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5716,45 +6100,51 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Describes the contents of the specified folder, including its documents and subfolders.</p> <p>By default, Amazon WorkDocs returns the first 100 active document and folder metadata items. If there are more results, the response includes a marker that you can use to request the next set of results. You can also request initialized documents.</p>
-    fn describe_folder_contents(
-        &self,
-        input: DescribeFolderContentsRequest,
-    ) -> RusotoFuture<DescribeFolderContentsResponse, DescribeFolderContentsError> {
+impl ServiceRequest for DescribeFolderContentsRequest {
+    type Output = DescribeFolderContentsResponse;
+    type Error = DescribeFolderContentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/contents",
-            folder_id = input.folder_id
+            folder_id = self.folder_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.include {
+        if let Some(ref x) = self.include {
             params.put("include", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.order {
+        if let Some(ref x) = self.order {
             params.put("order", x);
         }
-        if let Some(ref x) = input.sort {
+        if let Some(ref x) = self.sort {
             params.put("sort", x);
         }
-        if let Some(ref x) = input.type_ {
+        if let Some(ref x) = self.type_ {
             params.put("type", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5771,34 +6161,40 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
-    fn describe_groups(
-        &self,
-        input: DescribeGroupsRequest,
-    ) -> RusotoFuture<DescribeGroupsResponse, DescribeGroupsError> {
+impl ServiceRequest for DescribeGroupsRequest {
+    type Output = DescribeGroupsResponse;
+    type Error = DescribeGroupsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/groups";
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.organization_id {
+        if let Some(ref x) = self.organization_id {
             params.put("organizationId", x);
         }
-        params.put("searchQuery", &input.search_query);
+        params.put("searchQuery", &self.search_query);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5816,33 +6212,36 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the specified notification subscriptions.</p>
-    fn describe_notification_subscriptions(
-        &self,
-        input: DescribeNotificationSubscriptionsRequest,
-    ) -> RusotoFuture<
-        DescribeNotificationSubscriptionsResponse,
-        DescribeNotificationSubscriptionsError,
-    > {
+impl ServiceRequest for DescribeNotificationSubscriptionsRequest {
+    type Output = DescribeNotificationSubscriptionsResponse;
+    type Error = DescribeNotificationSubscriptionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/organizations/{organization_id}/subscriptions",
-            organization_id = input.organization_id
+            organization_id = self.organization_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5859,36 +6258,42 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Describes the permissions of a specified resource.</p>
-    fn describe_resource_permissions(
-        &self,
-        input: DescribeResourcePermissionsRequest,
-    ) -> RusotoFuture<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError> {
+impl ServiceRequest for DescribeResourcePermissionsRequest {
+    type Output = DescribeResourcePermissionsResponse;
+    type Error = DescribeResourcePermissionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
-            resource_id = input.resource_id
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.principal_id {
+        if let Some(ref x) = self.principal_id {
             params.put("principalId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5903,28 +6308,34 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
-    fn describe_root_folders(
-        &self,
-        input: DescribeRootFoldersRequest,
-    ) -> RusotoFuture<DescribeRootFoldersResponse, DescribeRootFoldersError> {
+impl ServiceRequest for DescribeRootFoldersRequest {
+    type Output = DescribeRootFoldersResponse;
+    type Error = DescribeRootFoldersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/me/root";
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("Authentication", &input.authentication_token);
+        request.add_header("Authentication", &self.authentication_token);
         let mut params = Params::new();
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5941,51 +6352,57 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Describes the specified users. You can describe all users or filter the results (for example, by status or organization).</p> <p>By default, Amazon WorkDocs returns the first 24 active or pending users. If there are more results, the response includes a marker that you can use to request the next set of results.</p>
-    fn describe_users(
-        &self,
-        input: DescribeUsersRequest,
-    ) -> RusotoFuture<DescribeUsersResponse, DescribeUsersError> {
+impl ServiceRequest for DescribeUsersRequest {
+    type Output = DescribeUsersResponse;
+    type Error = DescribeUsersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/users";
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.fields {
+        if let Some(ref x) = self.fields {
             params.put("fields", x);
         }
-        if let Some(ref x) = input.include {
+        if let Some(ref x) = self.include {
             params.put("include", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.order {
+        if let Some(ref x) = self.order {
             params.put("order", x);
         }
-        if let Some(ref x) = input.organization_id {
+        if let Some(ref x) = self.organization_id {
             params.put("organizationId", x);
         }
-        if let Some(ref x) = input.query {
+        if let Some(ref x) = self.query {
             params.put("query", x);
         }
-        if let Some(ref x) = input.sort {
+        if let Some(ref x) = self.sort {
             params.put("sort", x);
         }
-        if let Some(ref x) = input.user_ids {
+        if let Some(ref x) = self.user_ids {
             params.put("userIds", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6003,20 +6420,26 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves details of the current user for whom the authentication token was generated. This is not a valid action for SigV4 (administrative API) clients.</p>
-    fn get_current_user(
-        &self,
-        input: GetCurrentUserRequest,
-    ) -> RusotoFuture<GetCurrentUserResponse, GetCurrentUserError> {
+impl ServiceRequest for GetCurrentUserRequest {
+    type Output = GetCurrentUserResponse;
+    type Error = GetCurrentUserError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/me";
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("Authentication", &input.authentication_token);
+        request.add_header("Authentication", &self.authentication_token);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6034,30 +6457,36 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves details of a document.</p>
-    fn get_document(
-        &self,
-        input: GetDocumentRequest,
-    ) -> RusotoFuture<GetDocumentResponse, GetDocumentError> {
+impl ServiceRequest for GetDocumentRequest {
+    type Output = GetDocumentResponse;
+    type Error = GetDocumentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
-            document_id = input.document_id
+            document_id = self.document_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.include_custom_metadata {
+        if let Some(ref x) = self.include_custom_metadata {
             params.put("includeCustomMetadata", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6075,36 +6504,42 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the path information (the hierarchy from the root folder) for the requested document.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested document and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the names of the parent folders.</p>
-    fn get_document_path(
-        &self,
-        input: GetDocumentPathRequest,
-    ) -> RusotoFuture<GetDocumentPathResponse, GetDocumentPathError> {
+impl ServiceRequest for GetDocumentPathRequest {
+    type Output = GetDocumentPathResponse;
+    type Error = GetDocumentPathError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/path",
-            document_id = input.document_id
+            document_id = self.document_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.fields {
+        if let Some(ref x) = self.fields {
             params.put("fields", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6122,34 +6557,40 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves version metadata for the specified document.</p>
-    fn get_document_version(
-        &self,
-        input: GetDocumentVersionRequest,
-    ) -> RusotoFuture<GetDocumentVersionResponse, GetDocumentVersionError> {
+impl ServiceRequest for GetDocumentVersionRequest {
+    type Output = GetDocumentVersionResponse;
+    type Error = GetDocumentVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
-            document_id = input.document_id,
-            version_id = input.version_id
+            document_id = self.document_id,
+            version_id = self.version_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.fields {
+        if let Some(ref x) = self.fields {
             params.put("fields", x);
         }
-        if let Some(ref x) = input.include_custom_metadata {
+        if let Some(ref x) = self.include_custom_metadata {
             params.put("includeCustomMetadata", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6167,27 +6608,33 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the metadata of the specified folder.</p>
-    fn get_folder(
-        &self,
-        input: GetFolderRequest,
-    ) -> RusotoFuture<GetFolderResponse, GetFolderError> {
-        let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
+impl ServiceRequest for GetFolderRequest {
+    type Output = GetFolderResponse;
+    type Error = GetFolderError;
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = self.folder_id);
+
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.include_custom_metadata {
+        if let Some(ref x) = self.include_custom_metadata {
             params.put("includeCustomMetadata", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6205,36 +6652,42 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the path information (the hierarchy from the root folder) for the specified folder.</p> <p>By default, Amazon WorkDocs returns a maximum of 100 levels upwards from the requested folder and only includes the IDs of the parent folders in the path. You can limit the maximum number of levels. You can also request the parent folder names.</p>
-    fn get_folder_path(
-        &self,
-        input: GetFolderPathRequest,
-    ) -> RusotoFuture<GetFolderPathResponse, GetFolderPathError> {
+impl ServiceRequest for GetFolderPathRequest {
+    type Output = GetFolderPathResponse;
+    type Error = GetFolderPathError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/folders/{folder_id}/path",
-            folder_id = input.folder_id
+            folder_id = self.folder_id
         );
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.fields {
+        if let Some(ref x) = self.fields {
             params.put("fields", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6252,36 +6705,42 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a collection of resources, including folders and documents. The only <code>CollectionType</code> supported is <code>SHARED_WITH_ME</code>.</p>
-    fn get_resources(
-        &self,
-        input: GetResourcesRequest,
-    ) -> RusotoFuture<GetResourcesResponse, GetResourcesError> {
+impl ServiceRequest for GetResourcesRequest {
+    type Output = GetResourcesResponse;
+    type Error = GetResourcesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/resources";
 
-        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.collection_type {
+        if let Some(ref x) = self.collection_type {
             params.put("collectionType", x);
         }
-        if let Some(ref x) = input.limit {
+        if let Some(ref x) = self.limit {
             params.put("limit", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.user_id {
+        if let Some(ref x) = self.user_id {
             params.put("userId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6299,26 +6758,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
-    fn initiate_document_version_upload(
-        &self,
-        input: InitiateDocumentVersionUploadRequest,
-    ) -> RusotoFuture<InitiateDocumentVersionUploadResponse, InitiateDocumentVersionUploadError>
-    {
+impl ServiceRequest for InitiateDocumentVersionUploadRequest {
+    type Output = InitiateDocumentVersionUploadResponse;
+    type Error = InitiateDocumentVersionUploadError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/api/v1/documents";
 
-        let mut request = SignedRequest::new("POST", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6333,28 +6797,34 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Removes all the permissions from the specified resource.</p>
-    fn remove_all_resource_permissions(
-        &self,
-        input: RemoveAllResourcePermissionsRequest,
-    ) -> RusotoFuture<(), RemoveAllResourcePermissionsError> {
+impl ServiceRequest for RemoveAllResourcePermissionsRequest {
+    type Output = RemoveAllResourcePermissionsResponse;
+    type Error = RemoveAllResourcePermissionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions",
-            resource_id = input.resource_id
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = RemoveAllResourcePermissionsResponse {};
 
                     Ok(result)
                 }))
@@ -6365,34 +6835,40 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Removes the permission for the specified principal from the specified resource.</p>
-    fn remove_resource_permission(
-        &self,
-        input: RemoveResourcePermissionRequest,
-    ) -> RusotoFuture<(), RemoveResourcePermissionError> {
+impl ServiceRequest for RemoveResourcePermissionRequest {
+    type Output = RemoveResourcePermissionResponse;
+    type Error = RemoveResourcePermissionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/resources/{resource_id}/permissions/{principal_id}",
-            principal_id = input.principal_id,
-            resource_id = input.resource_id
+            principal_id = self.principal_id,
+            resource_id = self.resource_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
-        if let Some(ref x) = input.principal_type {
+        if let Some(ref x) = self.principal_type {
             params.put("type", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = RemoveResourcePermissionResponse {};
 
                     Ok(result)
                 }))
@@ -6403,31 +6879,37 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified attributes of a document. The user must have access to both the document and its parent folder, if applicable.</p>
-    fn update_document(
-        &self,
-        input: UpdateDocumentRequest,
-    ) -> RusotoFuture<(), UpdateDocumentError> {
+impl ServiceRequest for UpdateDocumentRequest {
+    type Output = UpdateDocumentResponse;
+    type Error = UpdateDocumentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}",
-            document_id = input.document_id
+            document_id = self.document_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateDocumentResponse {};
 
                     Ok(result)
                 }))
@@ -6441,32 +6923,38 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Changes the status of the document version to ACTIVE. </p> <p>Amazon WorkDocs also sets its document container to ACTIVE. This is the last step in a document upload, after the client uploads the document to an S3-presigned URL returned by <a>InitiateDocumentVersionUpload</a>. </p>
-    fn update_document_version(
-        &self,
-        input: UpdateDocumentVersionRequest,
-    ) -> RusotoFuture<(), UpdateDocumentVersionError> {
+impl ServiceRequest for UpdateDocumentVersionRequest {
+    type Output = UpdateDocumentVersionResponse;
+    type Error = UpdateDocumentVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/api/v1/documents/{document_id}/versions/{version_id}",
-            document_id = input.document_id,
-            version_id = input.version_id
+            document_id = self.document_id,
+            version_id = self.version_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateDocumentVersionResponse {};
 
                     Ok(result)
                 }))
@@ -6479,25 +6967,34 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified attributes of the specified folder. The user must have access to both the folder and its parent folder, if applicable.</p>
-    fn update_folder(&self, input: UpdateFolderRequest) -> RusotoFuture<(), UpdateFolderError> {
-        let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = input.folder_id);
+impl ServiceRequest for UpdateFolderRequest {
+    type Output = UpdateFolderResponse;
+    type Error = UpdateFolderError;
 
-        let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/api/v1/folders/{folder_id}", folder_id = self.folder_id);
+
+        let mut request = SignedRequest::new("PATCH", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateFolderResponse {};
 
                     Ok(result)
                 }))
@@ -6511,25 +7008,31 @@ impl Workdocs for WorkdocsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified attributes of the specified user, and grants or revokes administrative privileges to the Amazon WorkDocs site.</p>
-    fn update_user(
-        &self,
-        input: UpdateUserRequest,
-    ) -> RusotoFuture<UpdateUserResponse, UpdateUserError> {
-        let request_uri = format!("/api/v1/users/{user_id}", user_id = input.user_id);
+impl ServiceRequest for UpdateUserRequest {
+    type Output = UpdateUserResponse;
+    type Error = UpdateUserError;
 
-        let mut request = SignedRequest::new("PATCH", "workdocs", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/api/v1/users/{user_id}", user_id = self.user_id);
+
+        let mut request = SignedRequest::new("PATCH", "workdocs", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref authentication_token) = input.authentication_token {
+        if let Some(ref authentication_token) = self.authentication_token {
             request.add_header("Authentication", &authentication_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

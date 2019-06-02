@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -3163,6 +3164,10 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -3172,6 +3177,10 @@ pub struct UntagResourceRequest {
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 /// <p>Connectivity information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -6514,545 +6523,506 @@ pub trait GreenGrass {
     fn associate_role_to_group(
         &self,
         input: AssociateRoleToGroupRequest,
-    ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
+    ) -> Request<AssociateRoleToGroupRequest>;
 
     /// <p>Associates a role with your account. AWS IoT Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
     fn associate_service_role_to_account(
         &self,
         input: AssociateServiceRoleToAccountRequest,
-    ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
+    ) -> Request<AssociateServiceRoleToAccountRequest>;
 
     /// <p>Creates a connector definition. You may provide the initial version of the connector definition now or use &#39;&#39;CreateConnectorDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_connector_definition(
         &self,
         input: CreateConnectorDefinitionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionResponse, CreateConnectorDefinitionError>;
+    ) -> Request<CreateConnectorDefinitionRequest>;
 
     /// <p>Creates a version of a connector definition which has already been defined.</p>
     fn create_connector_definition_version(
         &self,
         input: CreateConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionVersionResponse, CreateConnectorDefinitionVersionError>;
+    ) -> Request<CreateConnectorDefinitionVersionRequest>;
 
     /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. Greengrass groups must each contain exactly one Greengrass core.</p>
     fn create_core_definition(
         &self,
         input: CreateCoreDefinitionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
+    ) -> Request<CreateCoreDefinitionRequest>;
 
     /// <p>Creates a version of a core definition that has already been defined. Greengrass groups must each contain exactly one Greengrass core.</p>
     fn create_core_definition_version(
         &self,
         input: CreateCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
+    ) -> Request<CreateCoreDefinitionVersionRequest>;
 
     /// <p>Creates a deployment. &#39;&#39;CreateDeployment&#39;&#39; requests are idempotent with respect to the &#39;&#39;X-Amzn-Client-Token&#39;&#39; token and the request parameters.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError>;
+    fn create_deployment(&self, input: CreateDeploymentRequest)
+        -> Request<CreateDeploymentRequest>;
 
     /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_device_definition(
         &self,
         input: CreateDeviceDefinitionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError>;
+    ) -> Request<CreateDeviceDefinitionRequest>;
 
     /// <p>Creates a version of a device definition that has already been defined.</p>
     fn create_device_definition_version(
         &self,
         input: CreateDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>;
+    ) -> Request<CreateDeviceDefinitionVersionRequest>;
 
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
     fn create_function_definition(
         &self,
         input: CreateFunctionDefinitionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError>;
+    ) -> Request<CreateFunctionDefinitionRequest>;
 
     /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
     fn create_function_definition_version(
         &self,
         input: CreateFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
+    ) -> Request<CreateFunctionDefinitionVersionRequest>;
 
     /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time. Tip: You can use the &#39;&#39;gg<em>group</em>setup&#39;&#39; package (https://github.com/awslabs/aws-greengrass-group-setup) as a library or command-line application to create and deploy Greengrass groups.</p>
-    fn create_group(
-        &self,
-        input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest>;
 
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
     fn create_group_certificate_authority(
         &self,
         input: CreateGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>;
+    ) -> Request<CreateGroupCertificateAuthorityRequest>;
 
     /// <p>Creates a version of a group which has already been defined.</p>
     fn create_group_version(
         &self,
         input: CreateGroupVersionRequest,
-    ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError>;
+    ) -> Request<CreateGroupVersionRequest>;
 
     /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_logger_definition(
         &self,
         input: CreateLoggerDefinitionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError>;
+    ) -> Request<CreateLoggerDefinitionRequest>;
 
     /// <p>Creates a version of a logger definition that has already been defined.</p>
     fn create_logger_definition_version(
         &self,
         input: CreateLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>;
+    ) -> Request<CreateLoggerDefinitionVersionRequest>;
 
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
     fn create_resource_definition(
         &self,
         input: CreateResourceDefinitionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError>;
+    ) -> Request<CreateResourceDefinitionRequest>;
 
     /// <p>Creates a version of a resource definition that has already been defined.</p>
     fn create_resource_definition_version(
         &self,
         input: CreateResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>;
+    ) -> Request<CreateResourceDefinitionVersionRequest>;
 
     /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
     fn create_software_update_job(
         &self,
         input: CreateSoftwareUpdateJobRequest,
-    ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError>;
+    ) -> Request<CreateSoftwareUpdateJobRequest>;
 
     /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
     fn create_subscription_definition(
         &self,
         input: CreateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError>;
+    ) -> Request<CreateSubscriptionDefinitionRequest>;
 
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
     fn create_subscription_definition_version(
         &self,
         input: CreateSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<
-        CreateSubscriptionDefinitionVersionResponse,
-        CreateSubscriptionDefinitionVersionError,
-    >;
+    ) -> Request<CreateSubscriptionDefinitionVersionRequest>;
 
     /// <p>Deletes a connector definition.</p>
     fn delete_connector_definition(
         &self,
         input: DeleteConnectorDefinitionRequest,
-    ) -> RusotoFuture<DeleteConnectorDefinitionResponse, DeleteConnectorDefinitionError>;
+    ) -> Request<DeleteConnectorDefinitionRequest>;
 
     /// <p>Deletes a core definition.</p>
     fn delete_core_definition(
         &self,
         input: DeleteCoreDefinitionRequest,
-    ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError>;
+    ) -> Request<DeleteCoreDefinitionRequest>;
 
     /// <p>Deletes a device definition.</p>
     fn delete_device_definition(
         &self,
         input: DeleteDeviceDefinitionRequest,
-    ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError>;
+    ) -> Request<DeleteDeviceDefinitionRequest>;
 
     /// <p>Deletes a Lambda function definition.</p>
     fn delete_function_definition(
         &self,
         input: DeleteFunctionDefinitionRequest,
-    ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError>;
+    ) -> Request<DeleteFunctionDefinitionRequest>;
 
     /// <p>Deletes a group.</p>
-    fn delete_group(
-        &self,
-        input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError>;
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest>;
 
     /// <p>Deletes a logger definition.</p>
     fn delete_logger_definition(
         &self,
         input: DeleteLoggerDefinitionRequest,
-    ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError>;
+    ) -> Request<DeleteLoggerDefinitionRequest>;
 
     /// <p>Deletes a resource definition.</p>
     fn delete_resource_definition(
         &self,
         input: DeleteResourceDefinitionRequest,
-    ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError>;
+    ) -> Request<DeleteResourceDefinitionRequest>;
 
     /// <p>Deletes a subscription definition.</p>
     fn delete_subscription_definition(
         &self,
         input: DeleteSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError>;
+    ) -> Request<DeleteSubscriptionDefinitionRequest>;
 
     /// <p>Disassociates the role from a group.</p>
     fn disassociate_role_from_group(
         &self,
         input: DisassociateRoleFromGroupRequest,
-    ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError>;
+    ) -> Request<DisassociateRoleFromGroupRequest>;
 
     /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
     fn disassociate_service_role_from_account(
         &self,
-    ) -> RusotoFuture<
-        DisassociateServiceRoleFromAccountResponse,
-        DisassociateServiceRoleFromAccountError,
-    >;
+    ) -> Request<DisassociateServiceRoleFromAccountRequest>;
 
     /// <p>Retrieves the role associated with a particular group.</p>
     fn get_associated_role(
         &self,
         input: GetAssociatedRoleRequest,
-    ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError>;
+    ) -> Request<GetAssociatedRoleRequest>;
 
     /// <p>Returns the status of a bulk deployment.</p>
     fn get_bulk_deployment_status(
         &self,
         input: GetBulkDeploymentStatusRequest,
-    ) -> RusotoFuture<GetBulkDeploymentStatusResponse, GetBulkDeploymentStatusError>;
+    ) -> Request<GetBulkDeploymentStatusRequest>;
 
     /// <p>Retrieves the connectivity information for a core.</p>
     fn get_connectivity_info(
         &self,
         input: GetConnectivityInfoRequest,
-    ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError>;
+    ) -> Request<GetConnectivityInfoRequest>;
 
     /// <p>Retrieves information about a connector definition.</p>
     fn get_connector_definition(
         &self,
         input: GetConnectorDefinitionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionResponse, GetConnectorDefinitionError>;
+    ) -> Request<GetConnectorDefinitionRequest>;
 
     /// <p>Retrieves information about a connector definition version, including the connectors that the version contains. Connectors are prebuilt modules that interact with local infrastructure, device protocols, AWS, and other cloud services.</p>
     fn get_connector_definition_version(
         &self,
         input: GetConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionVersionResponse, GetConnectorDefinitionVersionError>;
+    ) -> Request<GetConnectorDefinitionVersionRequest>;
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition(
         &self,
         input: GetCoreDefinitionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError>;
+    ) -> Request<GetCoreDefinitionRequest>;
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition_version(
         &self,
         input: GetCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError>;
+    ) -> Request<GetCoreDefinitionVersionRequest>;
 
     /// <p>Returns the status of a deployment.</p>
     fn get_deployment_status(
         &self,
         input: GetDeploymentStatusRequest,
-    ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError>;
+    ) -> Request<GetDeploymentStatusRequest>;
 
     /// <p>Retrieves information about a device definition.</p>
     fn get_device_definition(
         &self,
         input: GetDeviceDefinitionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError>;
+    ) -> Request<GetDeviceDefinitionRequest>;
 
     /// <p>Retrieves information about a device definition version.</p>
     fn get_device_definition_version(
         &self,
         input: GetDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError>;
+    ) -> Request<GetDeviceDefinitionVersionRequest>;
 
     /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
     fn get_function_definition(
         &self,
         input: GetFunctionDefinitionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError>;
+    ) -> Request<GetFunctionDefinitionRequest>;
 
     /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
     fn get_function_definition_version(
         &self,
         input: GetFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError>;
+    ) -> Request<GetFunctionDefinitionVersionRequest>;
 
     /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest>;
 
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
     fn get_group_certificate_authority(
         &self,
         input: GetGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError>;
+    ) -> Request<GetGroupCertificateAuthorityRequest>;
 
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
     fn get_group_certificate_configuration(
         &self,
         input: GetGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>;
+    ) -> Request<GetGroupCertificateConfigurationRequest>;
 
     /// <p>Retrieves information about a group version.</p>
-    fn get_group_version(
-        &self,
-        input: GetGroupVersionRequest,
-    ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError>;
+    fn get_group_version(&self, input: GetGroupVersionRequest) -> Request<GetGroupVersionRequest>;
 
     /// <p>Retrieves information about a logger definition.</p>
     fn get_logger_definition(
         &self,
         input: GetLoggerDefinitionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError>;
+    ) -> Request<GetLoggerDefinitionRequest>;
 
     /// <p>Retrieves information about a logger definition version.</p>
     fn get_logger_definition_version(
         &self,
         input: GetLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError>;
+    ) -> Request<GetLoggerDefinitionVersionRequest>;
 
     /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
     fn get_resource_definition(
         &self,
         input: GetResourceDefinitionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError>;
+    ) -> Request<GetResourceDefinitionRequest>;
 
     /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
     fn get_resource_definition_version(
         &self,
         input: GetResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError>;
+    ) -> Request<GetResourceDefinitionVersionRequest>;
 
     /// <p>Retrieves the service role that is attached to your account.</p>
-    fn get_service_role_for_account(
-        &self,
-    ) -> RusotoFuture<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError>;
+    fn get_service_role_for_account(&self) -> Request<GetServiceRoleForAccountRequest>;
 
     /// <p>Retrieves information about a subscription definition.</p>
     fn get_subscription_definition(
         &self,
         input: GetSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError>;
+    ) -> Request<GetSubscriptionDefinitionRequest>;
 
     /// <p>Retrieves information about a subscription definition version.</p>
     fn get_subscription_definition_version(
         &self,
         input: GetSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
+    ) -> Request<GetSubscriptionDefinitionVersionRequest>;
 
     /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
     fn list_bulk_deployment_detailed_reports(
         &self,
         input: ListBulkDeploymentDetailedReportsRequest,
-    ) -> RusotoFuture<
-        ListBulkDeploymentDetailedReportsResponse,
-        ListBulkDeploymentDetailedReportsError,
-    >;
+    ) -> Request<ListBulkDeploymentDetailedReportsRequest>;
 
     /// <p>Returns a list of bulk deployments.</p>
     fn list_bulk_deployments(
         &self,
         input: ListBulkDeploymentsRequest,
-    ) -> RusotoFuture<ListBulkDeploymentsResponse, ListBulkDeploymentsError>;
+    ) -> Request<ListBulkDeploymentsRequest>;
 
     /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
     fn list_connector_definition_versions(
         &self,
         input: ListConnectorDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionVersionsResponse, ListConnectorDefinitionVersionsError>;
+    ) -> Request<ListConnectorDefinitionVersionsRequest>;
 
     /// <p>Retrieves a list of connector definitions.</p>
     fn list_connector_definitions(
         &self,
         input: ListConnectorDefinitionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionsResponse, ListConnectorDefinitionsError>;
+    ) -> Request<ListConnectorDefinitionsRequest>;
 
     /// <p>Lists the versions of a core definition.</p>
     fn list_core_definition_versions(
         &self,
         input: ListCoreDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError>;
+    ) -> Request<ListCoreDefinitionVersionsRequest>;
 
     /// <p>Retrieves a list of core definitions.</p>
     fn list_core_definitions(
         &self,
         input: ListCoreDefinitionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError>;
+    ) -> Request<ListCoreDefinitionsRequest>;
 
     /// <p>Returns a history of deployments for the group.</p>
-    fn list_deployments(
-        &self,
-        input: ListDeploymentsRequest,
-    ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError>;
+    fn list_deployments(&self, input: ListDeploymentsRequest) -> Request<ListDeploymentsRequest>;
 
     /// <p>Lists the versions of a device definition.</p>
     fn list_device_definition_versions(
         &self,
         input: ListDeviceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError>;
+    ) -> Request<ListDeviceDefinitionVersionsRequest>;
 
     /// <p>Retrieves a list of device definitions.</p>
     fn list_device_definitions(
         &self,
         input: ListDeviceDefinitionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError>;
+    ) -> Request<ListDeviceDefinitionsRequest>;
 
     /// <p>Lists the versions of a Lambda function definition.</p>
     fn list_function_definition_versions(
         &self,
         input: ListFunctionDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>;
+    ) -> Request<ListFunctionDefinitionVersionsRequest>;
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
     fn list_function_definitions(
         &self,
         input: ListFunctionDefinitionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError>;
+    ) -> Request<ListFunctionDefinitionsRequest>;
 
     /// <p>Retrieves the current CAs for a group.</p>
     fn list_group_certificate_authorities(
         &self,
         input: ListGroupCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>;
+    ) -> Request<ListGroupCertificateAuthoritiesRequest>;
 
     /// <p>Lists the versions of a group.</p>
     fn list_group_versions(
         &self,
         input: ListGroupVersionsRequest,
-    ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError>;
+    ) -> Request<ListGroupVersionsRequest>;
 
     /// <p>Retrieves a list of groups.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest>;
 
     /// <p>Lists the versions of a logger definition.</p>
     fn list_logger_definition_versions(
         &self,
         input: ListLoggerDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError>;
+    ) -> Request<ListLoggerDefinitionVersionsRequest>;
 
     /// <p>Retrieves a list of logger definitions.</p>
     fn list_logger_definitions(
         &self,
         input: ListLoggerDefinitionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError>;
+    ) -> Request<ListLoggerDefinitionsRequest>;
 
     /// <p>Lists the versions of a resource definition.</p>
     fn list_resource_definition_versions(
         &self,
         input: ListResourceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>;
+    ) -> Request<ListResourceDefinitionVersionsRequest>;
 
     /// <p>Retrieves a list of resource definitions.</p>
     fn list_resource_definitions(
         &self,
         input: ListResourceDefinitionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError>;
+    ) -> Request<ListResourceDefinitionsRequest>;
 
     /// <p>Lists the versions of a subscription definition.</p>
     fn list_subscription_definition_versions(
         &self,
         input: ListSubscriptionDefinitionVersionsRequest,
-    ) -> RusotoFuture<
-        ListSubscriptionDefinitionVersionsResponse,
-        ListSubscriptionDefinitionVersionsError,
-    >;
+    ) -> Request<ListSubscriptionDefinitionVersionsRequest>;
 
     /// <p>Retrieves a list of subscription definitions.</p>
     fn list_subscription_definitions(
         &self,
         input: ListSubscriptionDefinitionsRequest,
-    ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
+    ) -> Request<ListSubscriptionDefinitionsRequest>;
 
     /// <p>Retrieves the tags for a resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Resets a group&#39;s deployments.</p>
-    fn reset_deployments(
-        &self,
-        input: ResetDeploymentsRequest,
-    ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError>;
+    fn reset_deployments(&self, input: ResetDeploymentsRequest)
+        -> Request<ResetDeploymentsRequest>;
 
     /// <p>Deploys multiple groups in one operation. This action starts the bulk deployment of a specified set of group versions. Each group version deployment will be triggered with an adaptive rate that has a fixed upper limit. We recommend that you include an &#39;&#39;X-Amzn-Client-Token&#39;&#39; token in every &#39;&#39;StartBulkDeployment&#39;&#39; request. These requests are idempotent with respect to the token and the request parameters.</p>
     fn start_bulk_deployment(
         &self,
         input: StartBulkDeploymentRequest,
-    ) -> RusotoFuture<StartBulkDeploymentResponse, StartBulkDeploymentError>;
+    ) -> Request<StartBulkDeploymentRequest>;
 
     /// <p>Stops the execution of a bulk deployment. This action returns a status of &#39;&#39;Stopping&#39;&#39; until the deployment is stopped. You cannot start a new bulk deployment while a previous deployment is in the &#39;&#39;Stopping&#39;&#39; state. This action doesn&#39;t rollback completed deployments or cancel pending deployments.</p>
     fn stop_bulk_deployment(
         &self,
         input: StopBulkDeploymentRequest,
-    ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError>;
+    ) -> Request<StopBulkDeploymentRequest>;
 
     /// <p>Add tags to a resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Remove tags with specified keys from a resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
         &self,
         input: UpdateConnectivityInfoRequest,
-    ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
+    ) -> Request<UpdateConnectivityInfoRequest>;
 
     /// <p>Updates a connector definition.</p>
     fn update_connector_definition(
         &self,
         input: UpdateConnectorDefinitionRequest,
-    ) -> RusotoFuture<UpdateConnectorDefinitionResponse, UpdateConnectorDefinitionError>;
+    ) -> Request<UpdateConnectorDefinitionRequest>;
 
     /// <p>Updates a core definition.</p>
     fn update_core_definition(
         &self,
         input: UpdateCoreDefinitionRequest,
-    ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError>;
+    ) -> Request<UpdateCoreDefinitionRequest>;
 
     /// <p>Updates a device definition.</p>
     fn update_device_definition(
         &self,
         input: UpdateDeviceDefinitionRequest,
-    ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError>;
+    ) -> Request<UpdateDeviceDefinitionRequest>;
 
     /// <p>Updates a Lambda function definition.</p>
     fn update_function_definition(
         &self,
         input: UpdateFunctionDefinitionRequest,
-    ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError>;
+    ) -> Request<UpdateFunctionDefinitionRequest>;
 
     /// <p>Updates a group.</p>
-    fn update_group(
-        &self,
-        input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError>;
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest>;
 
     /// <p>Updates the Certificate expiry time for a group.</p>
     fn update_group_certificate_configuration(
         &self,
         input: UpdateGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<
-        UpdateGroupCertificateConfigurationResponse,
-        UpdateGroupCertificateConfigurationError,
-    >;
+    ) -> Request<UpdateGroupCertificateConfigurationRequest>;
 
     /// <p>Updates a logger definition.</p>
     fn update_logger_definition(
         &self,
         input: UpdateLoggerDefinitionRequest,
-    ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError>;
+    ) -> Request<UpdateLoggerDefinitionRequest>;
 
     /// <p>Updates a resource definition.</p>
     fn update_resource_definition(
         &self,
         input: UpdateResourceDefinitionRequest,
-    ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError>;
+    ) -> Request<UpdateResourceDefinitionRequest>;
 
     /// <p>Updates a subscription definition.</p>
     fn update_subscription_definition(
         &self,
         input: UpdateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
+    ) -> Request<UpdateSubscriptionDefinitionRequest>;
 }
 /// A client for the AWS Greengrass API.
 #[derive(Clone)]
@@ -7095,19 +7065,722 @@ impl GreenGrass for GreenGrassClient {
     fn associate_role_to_group(
         &self,
         input: AssociateRoleToGroupRequest,
-    ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
+    ) -> Request<AssociateRoleToGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates a role with your account. AWS IoT Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
+    fn associate_service_role_to_account(
+        &self,
+        input: AssociateServiceRoleToAccountRequest,
+    ) -> Request<AssociateServiceRoleToAccountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a connector definition. You may provide the initial version of the connector definition now or use &#39;&#39;CreateConnectorDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_connector_definition(
+        &self,
+        input: CreateConnectorDefinitionRequest,
+    ) -> Request<CreateConnectorDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a connector definition which has already been defined.</p>
+    fn create_connector_definition_version(
+        &self,
+        input: CreateConnectorDefinitionVersionRequest,
+    ) -> Request<CreateConnectorDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. Greengrass groups must each contain exactly one Greengrass core.</p>
+    fn create_core_definition(
+        &self,
+        input: CreateCoreDefinitionRequest,
+    ) -> Request<CreateCoreDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a core definition that has already been defined. Greengrass groups must each contain exactly one Greengrass core.</p>
+    fn create_core_definition_version(
+        &self,
+        input: CreateCoreDefinitionVersionRequest,
+    ) -> Request<CreateCoreDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a deployment. &#39;&#39;CreateDeployment&#39;&#39; requests are idempotent with respect to the &#39;&#39;X-Amzn-Client-Token&#39;&#39; token and the request parameters.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> Request<CreateDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_device_definition(
+        &self,
+        input: CreateDeviceDefinitionRequest,
+    ) -> Request<CreateDeviceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a device definition that has already been defined.</p>
+    fn create_device_definition_version(
+        &self,
+        input: CreateDeviceDefinitionVersionRequest,
+    ) -> Request<CreateDeviceDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
+    fn create_function_definition(
+        &self,
+        input: CreateFunctionDefinitionRequest,
+    ) -> Request<CreateFunctionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
+    fn create_function_definition_version(
+        &self,
+        input: CreateFunctionDefinitionVersionRequest,
+    ) -> Request<CreateFunctionDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time. Tip: You can use the &#39;&#39;gg<em>group</em>setup&#39;&#39; package (https://github.com/awslabs/aws-greengrass-group-setup) as a library or command-line application to create and deploy Greengrass groups.</p>
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
+    fn create_group_certificate_authority(
+        &self,
+        input: CreateGroupCertificateAuthorityRequest,
+    ) -> Request<CreateGroupCertificateAuthorityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a group which has already been defined.</p>
+    fn create_group_version(
+        &self,
+        input: CreateGroupVersionRequest,
+    ) -> Request<CreateGroupVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_logger_definition(
+        &self,
+        input: CreateLoggerDefinitionRequest,
+    ) -> Request<CreateLoggerDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a logger definition that has already been defined.</p>
+    fn create_logger_definition_version(
+        &self,
+        input: CreateLoggerDefinitionVersionRequest,
+    ) -> Request<CreateLoggerDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
+    fn create_resource_definition(
+        &self,
+        input: CreateResourceDefinitionRequest,
+    ) -> Request<CreateResourceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a resource definition that has already been defined.</p>
+    fn create_resource_definition_version(
+        &self,
+        input: CreateResourceDefinitionVersionRequest,
+    ) -> Request<CreateResourceDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
+    fn create_software_update_job(
+        &self,
+        input: CreateSoftwareUpdateJobRequest,
+    ) -> Request<CreateSoftwareUpdateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_subscription_definition(
+        &self,
+        input: CreateSubscriptionDefinitionRequest,
+    ) -> Request<CreateSubscriptionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a version of a subscription definition which has already been defined.</p>
+    fn create_subscription_definition_version(
+        &self,
+        input: CreateSubscriptionDefinitionVersionRequest,
+    ) -> Request<CreateSubscriptionDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a connector definition.</p>
+    fn delete_connector_definition(
+        &self,
+        input: DeleteConnectorDefinitionRequest,
+    ) -> Request<DeleteConnectorDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a core definition.</p>
+    fn delete_core_definition(
+        &self,
+        input: DeleteCoreDefinitionRequest,
+    ) -> Request<DeleteCoreDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a device definition.</p>
+    fn delete_device_definition(
+        &self,
+        input: DeleteDeviceDefinitionRequest,
+    ) -> Request<DeleteDeviceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Lambda function definition.</p>
+    fn delete_function_definition(
+        &self,
+        input: DeleteFunctionDefinitionRequest,
+    ) -> Request<DeleteFunctionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a group.</p>
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a logger definition.</p>
+    fn delete_logger_definition(
+        &self,
+        input: DeleteLoggerDefinitionRequest,
+    ) -> Request<DeleteLoggerDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a resource definition.</p>
+    fn delete_resource_definition(
+        &self,
+        input: DeleteResourceDefinitionRequest,
+    ) -> Request<DeleteResourceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a subscription definition.</p>
+    fn delete_subscription_definition(
+        &self,
+        input: DeleteSubscriptionDefinitionRequest,
+    ) -> Request<DeleteSubscriptionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the role from a group.</p>
+    fn disassociate_role_from_group(
+        &self,
+        input: DisassociateRoleFromGroupRequest,
+    ) -> Request<DisassociateRoleFromGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
+    fn disassociate_service_role_from_account(
+        &self,
+    ) -> Request<DisassociateServiceRoleFromAccountRequest> {
+        Request::new(
+            DisassociateServiceRoleFromAccountRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieves the role associated with a particular group.</p>
+    fn get_associated_role(
+        &self,
+        input: GetAssociatedRoleRequest,
+    ) -> Request<GetAssociatedRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the status of a bulk deployment.</p>
+    fn get_bulk_deployment_status(
+        &self,
+        input: GetBulkDeploymentStatusRequest,
+    ) -> Request<GetBulkDeploymentStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the connectivity information for a core.</p>
+    fn get_connectivity_info(
+        &self,
+        input: GetConnectivityInfoRequest,
+    ) -> Request<GetConnectivityInfoRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a connector definition.</p>
+    fn get_connector_definition(
+        &self,
+        input: GetConnectorDefinitionRequest,
+    ) -> Request<GetConnectorDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a connector definition version, including the connectors that the version contains. Connectors are prebuilt modules that interact with local infrastructure, device protocols, AWS, and other cloud services.</p>
+    fn get_connector_definition_version(
+        &self,
+        input: GetConnectorDefinitionVersionRequest,
+    ) -> Request<GetConnectorDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a core definition version.</p>
+    fn get_core_definition(
+        &self,
+        input: GetCoreDefinitionRequest,
+    ) -> Request<GetCoreDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a core definition version.</p>
+    fn get_core_definition_version(
+        &self,
+        input: GetCoreDefinitionVersionRequest,
+    ) -> Request<GetCoreDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the status of a deployment.</p>
+    fn get_deployment_status(
+        &self,
+        input: GetDeploymentStatusRequest,
+    ) -> Request<GetDeploymentStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a device definition.</p>
+    fn get_device_definition(
+        &self,
+        input: GetDeviceDefinitionRequest,
+    ) -> Request<GetDeviceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a device definition version.</p>
+    fn get_device_definition_version(
+        &self,
+        input: GetDeviceDefinitionVersionRequest,
+    ) -> Request<GetDeviceDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
+    fn get_function_definition(
+        &self,
+        input: GetFunctionDefinitionRequest,
+    ) -> Request<GetFunctionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
+    fn get_function_definition_version(
+        &self,
+        input: GetFunctionDefinitionVersionRequest,
+    ) -> Request<GetFunctionDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a group.</p>
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
+    fn get_group_certificate_authority(
+        &self,
+        input: GetGroupCertificateAuthorityRequest,
+    ) -> Request<GetGroupCertificateAuthorityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the current configuration for the CA used by the group.</p>
+    fn get_group_certificate_configuration(
+        &self,
+        input: GetGroupCertificateConfigurationRequest,
+    ) -> Request<GetGroupCertificateConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a group version.</p>
+    fn get_group_version(&self, input: GetGroupVersionRequest) -> Request<GetGroupVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a logger definition.</p>
+    fn get_logger_definition(
+        &self,
+        input: GetLoggerDefinitionRequest,
+    ) -> Request<GetLoggerDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a logger definition version.</p>
+    fn get_logger_definition_version(
+        &self,
+        input: GetLoggerDefinitionVersionRequest,
+    ) -> Request<GetLoggerDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
+    fn get_resource_definition(
+        &self,
+        input: GetResourceDefinitionRequest,
+    ) -> Request<GetResourceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
+    fn get_resource_definition_version(
+        &self,
+        input: GetResourceDefinitionVersionRequest,
+    ) -> Request<GetResourceDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the service role that is attached to your account.</p>
+    fn get_service_role_for_account(&self) -> Request<GetServiceRoleForAccountRequest> {
+        Request::new(
+            GetServiceRoleForAccountRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieves information about a subscription definition.</p>
+    fn get_subscription_definition(
+        &self,
+        input: GetSubscriptionDefinitionRequest,
+    ) -> Request<GetSubscriptionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a subscription definition version.</p>
+    fn get_subscription_definition_version(
+        &self,
+        input: GetSubscriptionDefinitionVersionRequest,
+    ) -> Request<GetSubscriptionDefinitionVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
+    fn list_bulk_deployment_detailed_reports(
+        &self,
+        input: ListBulkDeploymentDetailedReportsRequest,
+    ) -> Request<ListBulkDeploymentDetailedReportsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of bulk deployments.</p>
+    fn list_bulk_deployments(
+        &self,
+        input: ListBulkDeploymentsRequest,
+    ) -> Request<ListBulkDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
+    fn list_connector_definition_versions(
+        &self,
+        input: ListConnectorDefinitionVersionsRequest,
+    ) -> Request<ListConnectorDefinitionVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of connector definitions.</p>
+    fn list_connector_definitions(
+        &self,
+        input: ListConnectorDefinitionsRequest,
+    ) -> Request<ListConnectorDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a core definition.</p>
+    fn list_core_definition_versions(
+        &self,
+        input: ListCoreDefinitionVersionsRequest,
+    ) -> Request<ListCoreDefinitionVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of core definitions.</p>
+    fn list_core_definitions(
+        &self,
+        input: ListCoreDefinitionsRequest,
+    ) -> Request<ListCoreDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a history of deployments for the group.</p>
+    fn list_deployments(&self, input: ListDeploymentsRequest) -> Request<ListDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a device definition.</p>
+    fn list_device_definition_versions(
+        &self,
+        input: ListDeviceDefinitionVersionsRequest,
+    ) -> Request<ListDeviceDefinitionVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of device definitions.</p>
+    fn list_device_definitions(
+        &self,
+        input: ListDeviceDefinitionsRequest,
+    ) -> Request<ListDeviceDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a Lambda function definition.</p>
+    fn list_function_definition_versions(
+        &self,
+        input: ListFunctionDefinitionVersionsRequest,
+    ) -> Request<ListFunctionDefinitionVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of Lambda function definitions.</p>
+    fn list_function_definitions(
+        &self,
+        input: ListFunctionDefinitionsRequest,
+    ) -> Request<ListFunctionDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the current CAs for a group.</p>
+    fn list_group_certificate_authorities(
+        &self,
+        input: ListGroupCertificateAuthoritiesRequest,
+    ) -> Request<ListGroupCertificateAuthoritiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a group.</p>
+    fn list_group_versions(
+        &self,
+        input: ListGroupVersionsRequest,
+    ) -> Request<ListGroupVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of groups.</p>
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a logger definition.</p>
+    fn list_logger_definition_versions(
+        &self,
+        input: ListLoggerDefinitionVersionsRequest,
+    ) -> Request<ListLoggerDefinitionVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of logger definitions.</p>
+    fn list_logger_definitions(
+        &self,
+        input: ListLoggerDefinitionsRequest,
+    ) -> Request<ListLoggerDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a resource definition.</p>
+    fn list_resource_definition_versions(
+        &self,
+        input: ListResourceDefinitionVersionsRequest,
+    ) -> Request<ListResourceDefinitionVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of resource definitions.</p>
+    fn list_resource_definitions(
+        &self,
+        input: ListResourceDefinitionsRequest,
+    ) -> Request<ListResourceDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of a subscription definition.</p>
+    fn list_subscription_definition_versions(
+        &self,
+        input: ListSubscriptionDefinitionVersionsRequest,
+    ) -> Request<ListSubscriptionDefinitionVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of subscription definitions.</p>
+    fn list_subscription_definitions(
+        &self,
+        input: ListSubscriptionDefinitionsRequest,
+    ) -> Request<ListSubscriptionDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the tags for a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Resets a group&#39;s deployments.</p>
+    fn reset_deployments(
+        &self,
+        input: ResetDeploymentsRequest,
+    ) -> Request<ResetDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deploys multiple groups in one operation. This action starts the bulk deployment of a specified set of group versions. Each group version deployment will be triggered with an adaptive rate that has a fixed upper limit. We recommend that you include an &#39;&#39;X-Amzn-Client-Token&#39;&#39; token in every &#39;&#39;StartBulkDeployment&#39;&#39; request. These requests are idempotent with respect to the token and the request parameters.</p>
+    fn start_bulk_deployment(
+        &self,
+        input: StartBulkDeploymentRequest,
+    ) -> Request<StartBulkDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops the execution of a bulk deployment. This action returns a status of &#39;&#39;Stopping&#39;&#39; until the deployment is stopped. You cannot start a new bulk deployment while a previous deployment is in the &#39;&#39;Stopping&#39;&#39; state. This action doesn&#39;t rollback completed deployments or cancel pending deployments.</p>
+    fn stop_bulk_deployment(
+        &self,
+        input: StopBulkDeploymentRequest,
+    ) -> Request<StopBulkDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Add tags to a resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Remove tags with specified keys from a resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
+    fn update_connectivity_info(
+        &self,
+        input: UpdateConnectivityInfoRequest,
+    ) -> Request<UpdateConnectivityInfoRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a connector definition.</p>
+    fn update_connector_definition(
+        &self,
+        input: UpdateConnectorDefinitionRequest,
+    ) -> Request<UpdateConnectorDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a core definition.</p>
+    fn update_core_definition(
+        &self,
+        input: UpdateCoreDefinitionRequest,
+    ) -> Request<UpdateCoreDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a device definition.</p>
+    fn update_device_definition(
+        &self,
+        input: UpdateDeviceDefinitionRequest,
+    ) -> Request<UpdateDeviceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a Lambda function definition.</p>
+    fn update_function_definition(
+        &self,
+        input: UpdateFunctionDefinitionRequest,
+    ) -> Request<UpdateFunctionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a group.</p>
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the Certificate expiry time for a group.</p>
+    fn update_group_certificate_configuration(
+        &self,
+        input: UpdateGroupCertificateConfigurationRequest,
+    ) -> Request<UpdateGroupCertificateConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a logger definition.</p>
+    fn update_logger_definition(
+        &self,
+        input: UpdateLoggerDefinitionRequest,
+    ) -> Request<UpdateLoggerDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a resource definition.</p>
+    fn update_resource_definition(
+        &self,
+        input: UpdateResourceDefinitionRequest,
+    ) -> Request<UpdateResourceDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a subscription definition.</p>
+    fn update_subscription_definition(
+        &self,
+        input: UpdateSubscriptionDefinitionRequest,
+    ) -> Request<UpdateSubscriptionDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssociateRoleToGroupRequest {
+    type Output = AssociateRoleToGroupResponse;
+    type Error = AssociateRoleToGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7124,22 +7797,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Associates a role with your account. AWS IoT Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
-    fn associate_service_role_to_account(
-        &self,
-        input: AssociateServiceRoleToAccountRequest,
-    ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>
-    {
+impl ServiceRequest for AssociateServiceRoleToAccountRequest {
+    type Output = AssociateServiceRoleToAccountResponse;
+    type Error = AssociateServiceRoleToAccountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/servicerole";
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7154,25 +7832,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a connector definition. You may provide the initial version of the connector definition now or use &#39;&#39;CreateConnectorDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_connector_definition(
-        &self,
-        input: CreateConnectorDefinitionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionResponse, CreateConnectorDefinitionError> {
+impl ServiceRequest for CreateConnectorDefinitionRequest {
+    type Output = CreateConnectorDefinitionResponse;
+    type Error = CreateConnectorDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/connectors";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7187,29 +7871,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a connector definition which has already been defined.</p>
-    fn create_connector_definition_version(
-        &self,
-        input: CreateConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateConnectorDefinitionVersionResponse, CreateConnectorDefinitionVersionError>
-    {
+impl ServiceRequest for CreateConnectorDefinitionVersionRequest {
+    type Output = CreateConnectorDefinitionVersionResponse;
+    type Error = CreateConnectorDefinitionVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}/versions",
-            connector_definition_id = input.connector_definition_id
+            connector_definition_id = self.connector_definition_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7226,25 +7915,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. Greengrass groups must each contain exactly one Greengrass core.</p>
-    fn create_core_definition(
-        &self,
-        input: CreateCoreDefinitionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
+impl ServiceRequest for CreateCoreDefinitionRequest {
+    type Output = CreateCoreDefinitionResponse;
+    type Error = CreateCoreDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/cores";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7261,28 +7956,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a core definition that has already been defined. Greengrass groups must each contain exactly one Greengrass core.</p>
-    fn create_core_definition_version(
-        &self,
-        input: CreateCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
+impl ServiceRequest for CreateCoreDefinitionVersionRequest {
+    type Output = CreateCoreDefinitionVersionResponse;
+    type Error = CreateCoreDefinitionVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
-            core_definition_id = input.core_definition_id
+            core_definition_id = self.core_definition_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7297,28 +7998,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a deployment. &#39;&#39;CreateDeployment&#39;&#39; requests are idempotent with respect to the &#39;&#39;X-Amzn-Client-Token&#39;&#39; token and the request parameters.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError> {
+impl ServiceRequest for CreateDeploymentRequest {
+    type Output = CreateDeploymentResponse;
+    type Error = CreateDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7336,25 +8043,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a device definition. You may provide the initial version of the device definition now or use &#39;&#39;CreateDeviceDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_device_definition(
-        &self,
-        input: CreateDeviceDefinitionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
+impl ServiceRequest for CreateDeviceDefinitionRequest {
+    type Output = CreateDeviceDefinitionResponse;
+    type Error = CreateDeviceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/devices";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7371,29 +8084,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a device definition that has already been defined.</p>
-    fn create_device_definition_version(
-        &self,
-        input: CreateDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>
-    {
+impl ServiceRequest for CreateDeviceDefinitionVersionRequest {
+    type Output = CreateDeviceDefinitionVersionResponse;
+    type Error = CreateDeviceDefinitionVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
-            device_definition_id = input.device_definition_id
+            device_definition_id = self.device_definition_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7408,25 +8126,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use &#39;&#39;CreateFunctionDefinitionVersion&#39;&#39; later.</p>
-    fn create_function_definition(
-        &self,
-        input: CreateFunctionDefinitionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
+impl ServiceRequest for CreateFunctionDefinitionRequest {
+    type Output = CreateFunctionDefinitionResponse;
+    type Error = CreateFunctionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/functions";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7441,29 +8165,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a Lambda function definition that has already been defined.</p>
-    fn create_function_definition_version(
-        &self,
-        input: CreateFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>
-    {
+impl ServiceRequest for CreateFunctionDefinitionVersionRequest {
+    type Output = CreateFunctionDefinitionVersionResponse;
+    type Error = CreateFunctionDefinitionVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
-            function_definition_id = input.function_definition_id
+            function_definition_id = self.function_definition_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7480,25 +8209,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time. Tip: You can use the &#39;&#39;gg<em>group</em>setup&#39;&#39; package (https://github.com/awslabs/aws-greengrass-group-setup) as a library or command-line application to create and deploy Greengrass groups.</p>
-    fn create_group(
-        &self,
-        input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
+impl ServiceRequest for CreateGroupRequest {
+    type Output = CreateGroupResponse;
+    type Error = CreateGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/groups";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7516,26 +8251,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
-    fn create_group_certificate_authority(
-        &self,
-        input: CreateGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>
-    {
+impl ServiceRequest for CreateGroupCertificateAuthorityRequest {
+    type Output = CreateGroupCertificateAuthorityResponse;
+    type Error = CreateGroupCertificateAuthorityError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7552,28 +8292,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a group which has already been defined.</p>
-    fn create_group_version(
-        &self,
-        input: CreateGroupVersionRequest,
-    ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError> {
+impl ServiceRequest for CreateGroupVersionRequest {
+    type Output = CreateGroupVersionResponse;
+    type Error = CreateGroupVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7591,25 +8337,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a logger definition. You may provide the initial version of the logger definition now or use &#39;&#39;CreateLoggerDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_logger_definition(
-        &self,
-        input: CreateLoggerDefinitionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
+impl ServiceRequest for CreateLoggerDefinitionRequest {
+    type Output = CreateLoggerDefinitionResponse;
+    type Error = CreateLoggerDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/loggers";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7626,29 +8378,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a logger definition that has already been defined.</p>
-    fn create_logger_definition_version(
-        &self,
-        input: CreateLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>
-    {
+impl ServiceRequest for CreateLoggerDefinitionVersionRequest {
+    type Output = CreateLoggerDefinitionVersionResponse;
+    type Error = CreateLoggerDefinitionVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
-            logger_definition_id = input.logger_definition_id
+            logger_definition_id = self.logger_definition_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7663,25 +8420,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use &#39;&#39;CreateResourceDefinitionVersion&#39;&#39; later.</p>
-    fn create_resource_definition(
-        &self,
-        input: CreateResourceDefinitionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError> {
+impl ServiceRequest for CreateResourceDefinitionRequest {
+    type Output = CreateResourceDefinitionResponse;
+    type Error = CreateResourceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/resources";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7696,29 +8459,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a resource definition that has already been defined.</p>
-    fn create_resource_definition_version(
-        &self,
-        input: CreateResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>
-    {
+impl ServiceRequest for CreateResourceDefinitionVersionRequest {
+    type Output = CreateResourceDefinitionVersionResponse;
+    type Error = CreateResourceDefinitionVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
-            resource_definition_id = input.resource_definition_id
+            resource_definition_id = self.resource_definition_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7735,25 +8503,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a software update for a core or group of cores (specified as an IoT thing group.) Use this to update the OTA Agent as well as the Greengrass core software. It makes use of the IoT Jobs feature which provides additional commands to manage a Greengrass core software update job.</p>
-    fn create_software_update_job(
-        &self,
-        input: CreateSoftwareUpdateJobRequest,
-    ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError> {
+impl ServiceRequest for CreateSoftwareUpdateJobRequest {
+    type Output = CreateSoftwareUpdateJobResponse;
+    type Error = CreateSoftwareUpdateJobError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/updates";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7768,25 +8542,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a subscription definition. You may provide the initial version of the subscription definition now or use &#39;&#39;CreateSubscriptionDefinitionVersion&#39;&#39; at a later time.</p>
-    fn create_subscription_definition(
-        &self,
-        input: CreateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
+impl ServiceRequest for CreateSubscriptionDefinitionRequest {
+    type Output = CreateSubscriptionDefinitionResponse;
+    type Error = CreateSubscriptionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/subscriptions";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7801,31 +8581,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Creates a version of a subscription definition which has already been defined.</p>
-    fn create_subscription_definition_version(
-        &self,
-        input: CreateSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<
-        CreateSubscriptionDefinitionVersionResponse,
-        CreateSubscriptionDefinitionVersionError,
-    > {
+impl ServiceRequest for CreateSubscriptionDefinitionVersionRequest {
+    type Output = CreateSubscriptionDefinitionVersionResponse;
+    type Error = CreateSubscriptionDefinitionVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
-            subscription_definition_id = input.subscription_definition_id
+            subscription_definition_id = self.subscription_definition_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7842,21 +8625,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a connector definition.</p>
-    fn delete_connector_definition(
-        &self,
-        input: DeleteConnectorDefinitionRequest,
-    ) -> RusotoFuture<DeleteConnectorDefinitionResponse, DeleteConnectorDefinitionError> {
+impl ServiceRequest for DeleteConnectorDefinitionRequest {
+    type Output = DeleteConnectorDefinitionResponse;
+    type Error = DeleteConnectorDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
-            connector_definition_id = input.connector_definition_id
+            connector_definition_id = self.connector_definition_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7871,21 +8660,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a core definition.</p>
-    fn delete_core_definition(
-        &self,
-        input: DeleteCoreDefinitionRequest,
-    ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
+impl ServiceRequest for DeleteCoreDefinitionRequest {
+    type Output = DeleteCoreDefinitionResponse;
+    type Error = DeleteCoreDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
-            core_definition_id = input.core_definition_id
+            core_definition_id = self.core_definition_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7902,21 +8697,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a device definition.</p>
-    fn delete_device_definition(
-        &self,
-        input: DeleteDeviceDefinitionRequest,
-    ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
+impl ServiceRequest for DeleteDeviceDefinitionRequest {
+    type Output = DeleteDeviceDefinitionResponse;
+    type Error = DeleteDeviceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
-            device_definition_id = input.device_definition_id
+            device_definition_id = self.device_definition_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7933,21 +8734,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a Lambda function definition.</p>
-    fn delete_function_definition(
-        &self,
-        input: DeleteFunctionDefinitionRequest,
-    ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
+impl ServiceRequest for DeleteFunctionDefinitionRequest {
+    type Output = DeleteFunctionDefinitionResponse;
+    type Error = DeleteFunctionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
-            function_definition_id = input.function_definition_id
+            function_definition_id = self.function_definition_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7962,18 +8769,24 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a group.</p>
-    fn delete_group(
-        &self,
-        input: DeleteGroupRequest,
-    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
-        let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
+impl ServiceRequest for DeleteGroupRequest {
+    type Output = DeleteGroupResponse;
+    type Error = DeleteGroupError;
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/groups/{group_id}", group_id = self.group_id);
+
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7991,21 +8804,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a logger definition.</p>
-    fn delete_logger_definition(
-        &self,
-        input: DeleteLoggerDefinitionRequest,
-    ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
+impl ServiceRequest for DeleteLoggerDefinitionRequest {
+    type Output = DeleteLoggerDefinitionResponse;
+    type Error = DeleteLoggerDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
-            logger_definition_id = input.logger_definition_id
+            logger_definition_id = self.logger_definition_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8022,21 +8841,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a resource definition.</p>
-    fn delete_resource_definition(
-        &self,
-        input: DeleteResourceDefinitionRequest,
-    ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError> {
+impl ServiceRequest for DeleteResourceDefinitionRequest {
+    type Output = DeleteResourceDefinitionResponse;
+    type Error = DeleteResourceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
-            resource_definition_id = input.resource_definition_id
+            resource_definition_id = self.resource_definition_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8051,21 +8876,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a subscription definition.</p>
-    fn delete_subscription_definition(
-        &self,
-        input: DeleteSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
+impl ServiceRequest for DeleteSubscriptionDefinitionRequest {
+    type Output = DeleteSubscriptionDefinitionResponse;
+    type Error = DeleteSubscriptionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
-            subscription_definition_id = input.subscription_definition_id
+            subscription_definition_id = self.subscription_definition_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8080,21 +8911,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the role from a group.</p>
-    fn disassociate_role_from_group(
-        &self,
-        input: DisassociateRoleFromGroupRequest,
-    ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
+impl ServiceRequest for DisassociateRoleFromGroupRequest {
+    type Output = DisassociateRoleFromGroupResponse;
+    type Error = DisassociateRoleFromGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8109,20 +8946,24 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the service role from your account. Without a service role, deployments will not work.</p>
-    fn disassociate_service_role_from_account(
-        &self,
-    ) -> RusotoFuture<
-        DisassociateServiceRoleFromAccountResponse,
-        DisassociateServiceRoleFromAccountError,
-    > {
+impl ServiceRequest for DisassociateServiceRoleFromAccountRequest {
+    type Output = DisassociateServiceRoleFromAccountResponse;
+    type Error = DisassociateServiceRoleFromAccountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/servicerole";
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8139,21 +8980,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the role associated with a particular group.</p>
-    fn get_associated_role(
-        &self,
-        input: GetAssociatedRoleRequest,
-    ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError> {
+impl ServiceRequest for GetAssociatedRoleRequest {
+    type Output = GetAssociatedRoleResponse;
+    type Error = GetAssociatedRoleError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8171,21 +9018,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Returns the status of a bulk deployment.</p>
-    fn get_bulk_deployment_status(
-        &self,
-        input: GetBulkDeploymentStatusRequest,
-    ) -> RusotoFuture<GetBulkDeploymentStatusResponse, GetBulkDeploymentStatusError> {
+impl ServiceRequest for GetBulkDeploymentStatusRequest {
+    type Output = GetBulkDeploymentStatusResponse;
+    type Error = GetBulkDeploymentStatusError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/status",
-            bulk_deployment_id = input.bulk_deployment_id
+            bulk_deployment_id = self.bulk_deployment_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8200,21 +9053,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the connectivity information for a core.</p>
-    fn get_connectivity_info(
-        &self,
-        input: GetConnectivityInfoRequest,
-    ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError> {
+impl ServiceRequest for GetConnectivityInfoRequest {
+    type Output = GetConnectivityInfoResponse;
+    type Error = GetConnectivityInfoError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
-            thing_name = input.thing_name
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8231,21 +9090,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a connector definition.</p>
-    fn get_connector_definition(
-        &self,
-        input: GetConnectorDefinitionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionResponse, GetConnectorDefinitionError> {
+impl ServiceRequest for GetConnectorDefinitionRequest {
+    type Output = GetConnectorDefinitionResponse;
+    type Error = GetConnectorDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
-            connector_definition_id = input.connector_definition_id
+            connector_definition_id = self.connector_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8262,25 +9127,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a connector definition version, including the connectors that the version contains. Connectors are prebuilt modules that interact with local infrastructure, device protocols, AWS, and other cloud services.</p>
-    fn get_connector_definition_version(
-        &self,
-        input: GetConnectorDefinitionVersionRequest,
-    ) -> RusotoFuture<GetConnectorDefinitionVersionResponse, GetConnectorDefinitionVersionError>
-    {
-        let request_uri = format!("/greengrass/definition/connectors/{connector_definition_id}/versions/{connector_definition_version_id}", connector_definition_id = input.connector_definition_id, connector_definition_version_id = input.connector_definition_version_id);
+impl ServiceRequest for GetConnectorDefinitionVersionRequest {
+    type Output = GetConnectorDefinitionVersionResponse;
+    type Error = GetConnectorDefinitionVersionError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/definition/connectors/{connector_definition_id}/versions/{connector_definition_version_id}", connector_definition_id = self.connector_definition_id, connector_definition_version_id = self.connector_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8295,21 +9165,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a core definition version.</p>
-    fn get_core_definition(
-        &self,
-        input: GetCoreDefinitionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError> {
+impl ServiceRequest for GetCoreDefinitionRequest {
+    type Output = GetCoreDefinitionResponse;
+    type Error = GetCoreDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
-            core_definition_id = input.core_definition_id
+            core_definition_id = self.core_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8327,18 +9203,24 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a core definition version.</p>
-    fn get_core_definition_version(
-        &self,
-        input: GetCoreDefinitionVersionRequest,
-    ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}", core_definition_id = input.core_definition_id, core_definition_version_id = input.core_definition_version_id);
+impl ServiceRequest for GetCoreDefinitionVersionRequest {
+    type Output = GetCoreDefinitionVersionResponse;
+    type Error = GetCoreDefinitionVersionError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}", core_definition_id = self.core_definition_id, core_definition_version_id = self.core_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8353,22 +9235,28 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Returns the status of a deployment.</p>
-    fn get_deployment_status(
-        &self,
-        input: GetDeploymentStatusRequest,
-    ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError> {
+impl ServiceRequest for GetDeploymentStatusRequest {
+    type Output = GetDeploymentStatusResponse;
+    type Error = GetDeploymentStatusError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/{deployment_id}/status",
-            deployment_id = input.deployment_id,
-            group_id = input.group_id
+            deployment_id = self.deployment_id,
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8385,21 +9273,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a device definition.</p>
-    fn get_device_definition(
-        &self,
-        input: GetDeviceDefinitionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
+impl ServiceRequest for GetDeviceDefinitionRequest {
+    type Output = GetDeviceDefinitionResponse;
+    type Error = GetDeviceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
-            device_definition_id = input.device_definition_id
+            device_definition_id = self.device_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8416,24 +9310,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a device definition version.</p>
-    fn get_device_definition_version(
-        &self,
-        input: GetDeviceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}", device_definition_id = input.device_definition_id, device_definition_version_id = input.device_definition_version_id);
+impl ServiceRequest for GetDeviceDefinitionVersionRequest {
+    type Output = GetDeviceDefinitionVersionResponse;
+    type Error = GetDeviceDefinitionVersionError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}", device_definition_id = self.device_definition_id, device_definition_version_id = self.device_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8448,21 +9348,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a Lambda function definition, including its creation time and latest version.</p>
-    fn get_function_definition(
-        &self,
-        input: GetFunctionDefinitionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
+impl ServiceRequest for GetFunctionDefinitionRequest {
+    type Output = GetFunctionDefinitionResponse;
+    type Error = GetFunctionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
-            function_definition_id = input.function_definition_id
+            function_definition_id = self.function_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8479,24 +9385,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a Lambda function definition version, including which Lambda functions are included in the version and their configurations.</p>
-    fn get_function_definition_version(
-        &self,
-        input: GetFunctionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}", function_definition_id = input.function_definition_id, function_definition_version_id = input.function_definition_version_id);
+impl ServiceRequest for GetFunctionDefinitionVersionRequest {
+    type Output = GetFunctionDefinitionVersionResponse;
+    type Error = GetFunctionDefinitionVersionError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}", function_definition_id = self.function_definition_id, function_definition_version_id = self.function_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8511,15 +9423,24 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
-        let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
+impl ServiceRequest for GetGroupRequest {
+    type Output = GetGroupResponse;
+    type Error = GetGroupError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/groups/{group_id}", group_id = self.group_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8537,22 +9458,28 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
-    fn get_group_certificate_authority(
-        &self,
-        input: GetGroupCertificateAuthorityRequest,
-    ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
+impl ServiceRequest for GetGroupCertificateAuthorityRequest {
+    type Output = GetGroupCertificateAuthorityResponse;
+    type Error = GetGroupCertificateAuthorityError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/{certificate_authority_id}",
-            certificate_authority_id = input.certificate_authority_id,
-            group_id = input.group_id
+            certificate_authority_id = self.certificate_authority_id,
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8567,22 +9494,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the current configuration for the CA used by the group.</p>
-    fn get_group_certificate_configuration(
-        &self,
-        input: GetGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>
-    {
+impl ServiceRequest for GetGroupCertificateConfigurationRequest {
+    type Output = GetGroupCertificateConfigurationResponse;
+    type Error = GetGroupCertificateConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8599,22 +9531,28 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a group version.</p>
-    fn get_group_version(
-        &self,
-        input: GetGroupVersionRequest,
-    ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError> {
+impl ServiceRequest for GetGroupVersionRequest {
+    type Output = GetGroupVersionResponse;
+    type Error = GetGroupVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions/{group_version_id}",
-            group_id = input.group_id,
-            group_version_id = input.group_version_id
+            group_id = self.group_id,
+            group_version_id = self.group_version_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8632,21 +9570,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a logger definition.</p>
-    fn get_logger_definition(
-        &self,
-        input: GetLoggerDefinitionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
+impl ServiceRequest for GetLoggerDefinitionRequest {
+    type Output = GetLoggerDefinitionResponse;
+    type Error = GetLoggerDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
-            logger_definition_id = input.logger_definition_id
+            logger_definition_id = self.logger_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8663,24 +9607,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a logger definition version.</p>
-    fn get_logger_definition_version(
-        &self,
-        input: GetLoggerDefinitionVersionRequest,
-    ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}", logger_definition_id = input.logger_definition_id, logger_definition_version_id = input.logger_definition_version_id);
+impl ServiceRequest for GetLoggerDefinitionVersionRequest {
+    type Output = GetLoggerDefinitionVersionResponse;
+    type Error = GetLoggerDefinitionVersionError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}", logger_definition_id = self.logger_definition_id, logger_definition_version_id = self.logger_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8695,21 +9645,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a resource definition, including its creation time and latest version.</p>
-    fn get_resource_definition(
-        &self,
-        input: GetResourceDefinitionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError> {
+impl ServiceRequest for GetResourceDefinitionRequest {
+    type Output = GetResourceDefinitionResponse;
+    type Error = GetResourceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
-            resource_definition_id = input.resource_definition_id
+            resource_definition_id = self.resource_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8726,18 +9682,24 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a resource definition version, including which resources are included in the version.</p>
-    fn get_resource_definition_version(
-        &self,
-        input: GetResourceDefinitionVersionRequest,
-    ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError> {
-        let request_uri = format!("/greengrass/definition/resources/{resource_definition_id}/versions/{resource_definition_version_id}", resource_definition_id = input.resource_definition_id, resource_definition_version_id = input.resource_definition_version_id);
+impl ServiceRequest for GetResourceDefinitionVersionRequest {
+    type Output = GetResourceDefinitionVersionResponse;
+    type Error = GetResourceDefinitionVersionError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/definition/resources/{resource_definition_id}/versions/{resource_definition_version_id}", resource_definition_id = self.resource_definition_id, resource_definition_version_id = self.resource_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8752,17 +9714,24 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the service role that is attached to your account.</p>
-    fn get_service_role_for_account(
-        &self,
-    ) -> RusotoFuture<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError> {
+impl ServiceRequest for GetServiceRoleForAccountRequest {
+    type Output = GetServiceRoleForAccountResponse;
+    type Error = GetServiceRoleForAccountError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/servicerole";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8777,21 +9746,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a subscription definition.</p>
-    fn get_subscription_definition(
-        &self,
-        input: GetSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
+impl ServiceRequest for GetSubscriptionDefinitionRequest {
+    type Output = GetSubscriptionDefinitionResponse;
+    type Error = GetSubscriptionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
-            subscription_definition_id = input.subscription_definition_id
+            subscription_definition_id = self.subscription_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8806,25 +9781,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a subscription definition version.</p>
-    fn get_subscription_definition_version(
-        &self,
-        input: GetSubscriptionDefinitionVersionRequest,
-    ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>
-    {
-        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}", subscription_definition_id = input.subscription_definition_id, subscription_definition_version_id = input.subscription_definition_version_id);
+impl ServiceRequest for GetSubscriptionDefinitionVersionRequest {
+    type Output = GetSubscriptionDefinitionVersionResponse;
+    type Error = GetSubscriptionDefinitionVersionError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}", subscription_definition_id = self.subscription_definition_id, subscription_definition_version_id = self.subscription_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8841,33 +9821,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
-    fn list_bulk_deployment_detailed_reports(
-        &self,
-        input: ListBulkDeploymentDetailedReportsRequest,
-    ) -> RusotoFuture<
-        ListBulkDeploymentDetailedReportsResponse,
-        ListBulkDeploymentDetailedReportsError,
-    > {
+impl ServiceRequest for ListBulkDeploymentDetailedReportsRequest {
+    type Output = ListBulkDeploymentDetailedReportsResponse;
+    type Error = ListBulkDeploymentDetailedReportsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/detailed-reports",
-            bulk_deployment_id = input.bulk_deployment_id
+            bulk_deployment_id = self.bulk_deployment_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8884,27 +9867,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of bulk deployments.</p>
-    fn list_bulk_deployments(
-        &self,
-        input: ListBulkDeploymentsRequest,
-    ) -> RusotoFuture<ListBulkDeploymentsResponse, ListBulkDeploymentsError> {
+impl ServiceRequest for ListBulkDeploymentsRequest {
+    type Output = ListBulkDeploymentsResponse;
+    type Error = ListBulkDeploymentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/bulk/deployments";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8921,31 +9910,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
-    fn list_connector_definition_versions(
-        &self,
-        input: ListConnectorDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionVersionsResponse, ListConnectorDefinitionVersionsError>
-    {
+impl ServiceRequest for ListConnectorDefinitionVersionsRequest {
+    type Output = ListConnectorDefinitionVersionsResponse;
+    type Error = ListConnectorDefinitionVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}/versions",
-            connector_definition_id = input.connector_definition_id
+            connector_definition_id = self.connector_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8962,27 +9956,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of connector definitions.</p>
-    fn list_connector_definitions(
-        &self,
-        input: ListConnectorDefinitionsRequest,
-    ) -> RusotoFuture<ListConnectorDefinitionsResponse, ListConnectorDefinitionsError> {
+impl ServiceRequest for ListConnectorDefinitionsRequest {
+    type Output = ListConnectorDefinitionsResponse;
+    type Error = ListConnectorDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/connectors";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8997,30 +9997,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a core definition.</p>
-    fn list_core_definition_versions(
-        &self,
-        input: ListCoreDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
+impl ServiceRequest for ListCoreDefinitionVersionsRequest {
+    type Output = ListCoreDefinitionVersionsResponse;
+    type Error = ListCoreDefinitionVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
-            core_definition_id = input.core_definition_id
+            core_definition_id = self.core_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9035,27 +10041,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of core definitions.</p>
-    fn list_core_definitions(
-        &self,
-        input: ListCoreDefinitionsRequest,
-    ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
+impl ServiceRequest for ListCoreDefinitionsRequest {
+    type Output = ListCoreDefinitionsResponse;
+    type Error = ListCoreDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/cores";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9072,30 +10084,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Returns a history of deployments for the group.</p>
-    fn list_deployments(
-        &self,
-        input: ListDeploymentsRequest,
-    ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError> {
+impl ServiceRequest for ListDeploymentsRequest {
+    type Output = ListDeploymentsResponse;
+    type Error = ListDeploymentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9113,30 +10131,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a device definition.</p>
-    fn list_device_definition_versions(
-        &self,
-        input: ListDeviceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
+impl ServiceRequest for ListDeviceDefinitionVersionsRequest {
+    type Output = ListDeviceDefinitionVersionsResponse;
+    type Error = ListDeviceDefinitionVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
-            device_definition_id = input.device_definition_id
+            device_definition_id = self.device_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9151,27 +10175,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of device definitions.</p>
-    fn list_device_definitions(
-        &self,
-        input: ListDeviceDefinitionsRequest,
-    ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
+impl ServiceRequest for ListDeviceDefinitionsRequest {
+    type Output = ListDeviceDefinitionsResponse;
+    type Error = ListDeviceDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/devices";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9188,31 +10218,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a Lambda function definition.</p>
-    fn list_function_definition_versions(
-        &self,
-        input: ListFunctionDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>
-    {
+impl ServiceRequest for ListFunctionDefinitionVersionsRequest {
+    type Output = ListFunctionDefinitionVersionsResponse;
+    type Error = ListFunctionDefinitionVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
-            function_definition_id = input.function_definition_id
+            function_definition_id = self.function_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9227,27 +10262,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of Lambda function definitions.</p>
-    fn list_function_definitions(
-        &self,
-        input: ListFunctionDefinitionsRequest,
-    ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
+impl ServiceRequest for ListFunctionDefinitionsRequest {
+    type Output = ListFunctionDefinitionsResponse;
+    type Error = ListFunctionDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/functions";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9262,22 +10303,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the current CAs for a group.</p>
-    fn list_group_certificate_authorities(
-        &self,
-        input: ListGroupCertificateAuthoritiesRequest,
-    ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>
-    {
+impl ServiceRequest for ListGroupCertificateAuthoritiesRequest {
+    type Output = ListGroupCertificateAuthoritiesResponse;
+    type Error = ListGroupCertificateAuthoritiesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9294,30 +10340,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a group.</p>
-    fn list_group_versions(
-        &self,
-        input: ListGroupVersionsRequest,
-    ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError> {
+impl ServiceRequest for ListGroupVersionsRequest {
+    type Output = ListGroupVersionsResponse;
+    type Error = ListGroupVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9335,27 +10387,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of groups.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
+impl ServiceRequest for ListGroupsRequest {
+    type Output = ListGroupsResponse;
+    type Error = ListGroupsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/groups";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9373,30 +10431,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a logger definition.</p>
-    fn list_logger_definition_versions(
-        &self,
-        input: ListLoggerDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
+impl ServiceRequest for ListLoggerDefinitionVersionsRequest {
+    type Output = ListLoggerDefinitionVersionsResponse;
+    type Error = ListLoggerDefinitionVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
-            logger_definition_id = input.logger_definition_id
+            logger_definition_id = self.logger_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9411,27 +10475,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of logger definitions.</p>
-    fn list_logger_definitions(
-        &self,
-        input: ListLoggerDefinitionsRequest,
-    ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
+impl ServiceRequest for ListLoggerDefinitionsRequest {
+    type Output = ListLoggerDefinitionsResponse;
+    type Error = ListLoggerDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/loggers";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9448,31 +10518,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a resource definition.</p>
-    fn list_resource_definition_versions(
-        &self,
-        input: ListResourceDefinitionVersionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>
-    {
+impl ServiceRequest for ListResourceDefinitionVersionsRequest {
+    type Output = ListResourceDefinitionVersionsResponse;
+    type Error = ListResourceDefinitionVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
-            resource_definition_id = input.resource_definition_id
+            resource_definition_id = self.resource_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9487,27 +10562,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of resource definitions.</p>
-    fn list_resource_definitions(
-        &self,
-        input: ListResourceDefinitionsRequest,
-    ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError> {
+impl ServiceRequest for ListResourceDefinitionsRequest {
+    type Output = ListResourceDefinitionsResponse;
+    type Error = ListResourceDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/resources";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9522,33 +10603,36 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of a subscription definition.</p>
-    fn list_subscription_definition_versions(
-        &self,
-        input: ListSubscriptionDefinitionVersionsRequest,
-    ) -> RusotoFuture<
-        ListSubscriptionDefinitionVersionsResponse,
-        ListSubscriptionDefinitionVersionsError,
-    > {
+impl ServiceRequest for ListSubscriptionDefinitionVersionsRequest {
+    type Output = ListSubscriptionDefinitionVersionsResponse;
+    type Error = ListSubscriptionDefinitionVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
-            subscription_definition_id = input.subscription_definition_id
+            subscription_definition_id = self.subscription_definition_id
         );
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9565,27 +10649,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of subscription definitions.</p>
-    fn list_subscription_definitions(
-        &self,
-        input: ListSubscriptionDefinitionsRequest,
-    ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
+impl ServiceRequest for ListSubscriptionDefinitionsRequest {
+    type Output = ListSubscriptionDefinitionsResponse;
+    type Error = ListSubscriptionDefinitionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/definition/subscriptions";
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9600,18 +10690,24 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the tags for a resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
 
-        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9628,28 +10724,34 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Resets a group&#39;s deployments.</p>
-    fn reset_deployments(
-        &self,
-        input: ResetDeploymentsRequest,
-    ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError> {
+impl ServiceRequest for ResetDeploymentsRequest {
+    type Output = ResetDeploymentsResponse;
+    type Error = ResetDeploymentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/$reset",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9667,25 +10769,31 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Deploys multiple groups in one operation. This action starts the bulk deployment of a specified set of group versions. Each group version deployment will be triggered with an adaptive rate that has a fixed upper limit. We recommend that you include an &#39;&#39;X-Amzn-Client-Token&#39;&#39; token in every &#39;&#39;StartBulkDeployment&#39;&#39; request. These requests are idempotent with respect to the token and the request parameters.</p>
-    fn start_bulk_deployment(
-        &self,
-        input: StartBulkDeploymentRequest,
-    ) -> RusotoFuture<StartBulkDeploymentResponse, StartBulkDeploymentError> {
+impl ServiceRequest for StartBulkDeploymentRequest {
+    type Output = StartBulkDeploymentResponse;
+    type Error = StartBulkDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/greengrass/bulk/deployments";
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref amzn_client_token) = input.amzn_client_token {
+        if let Some(ref amzn_client_token) = self.amzn_client_token {
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9702,21 +10810,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Stops the execution of a bulk deployment. This action returns a status of &#39;&#39;Stopping&#39;&#39; until the deployment is stopped. You cannot start a new bulk deployment while a previous deployment is in the &#39;&#39;Stopping&#39;&#39; state. This action doesn&#39;t rollback completed deployments or cancel pending deployments.</p>
-    fn stop_bulk_deployment(
-        &self,
-        input: StopBulkDeploymentRequest,
-    ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError> {
+impl ServiceRequest for StopBulkDeploymentRequest {
+    type Output = StopBulkDeploymentResponse;
+    type Error = StopBulkDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/bulk/deployments/{bulk_deployment_id}/$stop",
-            bulk_deployment_id = input.bulk_deployment_id
+            bulk_deployment_id = self.bulk_deployment_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9734,21 +10848,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Add tags to a resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = TagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -9762,24 +10885,33 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Remove tags with specified keys from a resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UntagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -9793,24 +10925,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
-    fn update_connectivity_info(
-        &self,
-        input: UpdateConnectivityInfoRequest,
-    ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
+impl ServiceRequest for UpdateConnectivityInfoRequest {
+    type Output = UpdateConnectivityInfoResponse;
+    type Error = UpdateConnectivityInfoError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
-            thing_name = input.thing_name
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9827,24 +10965,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a connector definition.</p>
-    fn update_connector_definition(
-        &self,
-        input: UpdateConnectorDefinitionRequest,
-    ) -> RusotoFuture<UpdateConnectorDefinitionResponse, UpdateConnectorDefinitionError> {
+impl ServiceRequest for UpdateConnectorDefinitionRequest {
+    type Output = UpdateConnectorDefinitionResponse;
+    type Error = UpdateConnectorDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/connectors/{connector_definition_id}",
-            connector_definition_id = input.connector_definition_id
+            connector_definition_id = self.connector_definition_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9859,24 +11003,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a core definition.</p>
-    fn update_core_definition(
-        &self,
-        input: UpdateCoreDefinitionRequest,
-    ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
+impl ServiceRequest for UpdateCoreDefinitionRequest {
+    type Output = UpdateCoreDefinitionResponse;
+    type Error = UpdateCoreDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
-            core_definition_id = input.core_definition_id
+            core_definition_id = self.core_definition_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9893,24 +11043,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a device definition.</p>
-    fn update_device_definition(
-        &self,
-        input: UpdateDeviceDefinitionRequest,
-    ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
+impl ServiceRequest for UpdateDeviceDefinitionRequest {
+    type Output = UpdateDeviceDefinitionResponse;
+    type Error = UpdateDeviceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
-            device_definition_id = input.device_definition_id
+            device_definition_id = self.device_definition_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9927,24 +11083,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a Lambda function definition.</p>
-    fn update_function_definition(
-        &self,
-        input: UpdateFunctionDefinitionRequest,
-    ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
+impl ServiceRequest for UpdateFunctionDefinitionRequest {
+    type Output = UpdateFunctionDefinitionResponse;
+    type Error = UpdateFunctionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
-            function_definition_id = input.function_definition_id
+            function_definition_id = self.function_definition_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9959,21 +11121,27 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a group.</p>
-    fn update_group(
-        &self,
-        input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
-        let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
+impl ServiceRequest for UpdateGroupRequest {
+    type Output = UpdateGroupResponse;
+    type Error = UpdateGroupError;
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/greengrass/groups/{group_id}", group_id = self.group_id);
+
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -9991,27 +11159,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates the Certificate expiry time for a group.</p>
-    fn update_group_certificate_configuration(
-        &self,
-        input: UpdateGroupCertificateConfigurationRequest,
-    ) -> RusotoFuture<
-        UpdateGroupCertificateConfigurationResponse,
-        UpdateGroupCertificateConfigurationError,
-    > {
+impl ServiceRequest for UpdateGroupCertificateConfigurationRequest {
+    type Output = UpdateGroupCertificateConfigurationResponse;
+    type Error = UpdateGroupCertificateConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
-            group_id = input.group_id
+            group_id = self.group_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -10028,24 +11199,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a logger definition.</p>
-    fn update_logger_definition(
-        &self,
-        input: UpdateLoggerDefinitionRequest,
-    ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
+impl ServiceRequest for UpdateLoggerDefinitionRequest {
+    type Output = UpdateLoggerDefinitionResponse;
+    type Error = UpdateLoggerDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
-            logger_definition_id = input.logger_definition_id
+            logger_definition_id = self.logger_definition_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -10062,24 +11239,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a resource definition.</p>
-    fn update_resource_definition(
-        &self,
-        input: UpdateResourceDefinitionRequest,
-    ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError> {
+impl ServiceRequest for UpdateResourceDefinitionRequest {
+    type Output = UpdateResourceDefinitionResponse;
+    type Error = UpdateResourceDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
-            resource_definition_id = input.resource_definition_id
+            resource_definition_id = self.resource_definition_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -10094,24 +11277,30 @@ impl GreenGrass for GreenGrassClient {
             }
         })
     }
+}
 
-    /// <p>Updates a subscription definition.</p>
-    fn update_subscription_definition(
-        &self,
-        input: UpdateSubscriptionDefinitionRequest,
-    ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
+impl ServiceRequest for UpdateSubscriptionDefinitionRequest {
+    type Output = UpdateSubscriptionDefinitionResponse;
+    type Error = UpdateSubscriptionDefinitionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
-            subscription_definition_id = input.subscription_definition_id
+            subscription_definition_id = self.subscription_definition_id
         );
 
-        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "greengrass", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

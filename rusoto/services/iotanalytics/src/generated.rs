@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -623,6 +624,10 @@ pub struct DeleteChannelRequest {
     pub channel_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteChannelResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDatasetContentRequest {
     /// <p>The name of the data set whose content is deleted.</p>
@@ -634,12 +639,20 @@ pub struct DeleteDatasetContentRequest {
     pub version_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDatasetContentResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDatasetRequest {
     /// <p>The name of the data set to delete.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDatasetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDatastoreRequest {
@@ -648,12 +661,20 @@ pub struct DeleteDatastoreRequest {
     pub datastore_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDatastoreResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePipelineRequest {
     /// <p>The name of the pipeline to delete.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeletePipelineResponse {}
 
 /// <p>Used to limit data to that which has arrived since the last execution of the action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1209,6 +1230,10 @@ pub struct PutLoggingOptionsRequest {
     pub logging_options: LoggingOptions,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutLoggingOptionsResponse {}
+
 /// <p>Information which is used to filter message data, to segregate it according to the time frame in which it arrives.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QueryFilter {
@@ -1477,6 +1502,10 @@ pub struct UpdateChannelRequest {
     pub retention_period: Option<RetentionPeriod>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateChannelResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDatasetRequest {
     /// <p>A list of "DatasetAction" objects.</p>
@@ -1503,6 +1532,10 @@ pub struct UpdateDatasetRequest {
     pub versioning_configuration: Option<VersioningConfiguration>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDatasetResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDatastoreRequest {
     /// <p>The name of the data store to be updated.</p>
@@ -1514,6 +1547,10 @@ pub struct UpdateDatastoreRequest {
     pub retention_period: Option<RetentionPeriod>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDatastoreResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePipelineRequest {
     /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
@@ -1523,6 +1560,10 @@ pub struct UpdatePipelineRequest {
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdatePipelineResponse {}
 
 /// <p>An instance of a variable to be passed to the "containerAction" execution. Each variable must have a name and a value given by one of "stringValue", "datasetContentVersionValue", or "outputFileUriValue".</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -3586,195 +3627,140 @@ impl Error for UpdatePipelineError {
 /// Trait representing the capabilities of the AWS IoT Analytics API. AWS IoT Analytics clients implement this trait.
 pub trait IotAnalytics {
     /// <p>Sends messages to a channel.</p>
-    fn batch_put_message(
-        &self,
-        input: BatchPutMessageRequest,
-    ) -> RusotoFuture<BatchPutMessageResponse, BatchPutMessageError>;
+    fn batch_put_message(&self, input: BatchPutMessageRequest) -> Request<BatchPutMessageRequest>;
 
     /// <p>Cancels the reprocessing of data through the pipeline.</p>
     fn cancel_pipeline_reprocessing(
         &self,
         input: CancelPipelineReprocessingRequest,
-    ) -> RusotoFuture<CancelPipelineReprocessingResponse, CancelPipelineReprocessingError>;
+    ) -> Request<CancelPipelineReprocessingRequest>;
 
     /// <p>Creates a channel. A channel collects data from an MQTT topic and archives the raw, unprocessed messages before publishing the data to a pipeline.</p>
-    fn create_channel(
-        &self,
-        input: CreateChannelRequest,
-    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError>;
+    fn create_channel(&self, input: CreateChannelRequest) -> Request<CreateChannelRequest>;
 
     /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
-    fn create_dataset(
-        &self,
-        input: CreateDatasetRequest,
-    ) -> RusotoFuture<CreateDatasetResponse, CreateDatasetError>;
+    fn create_dataset(&self, input: CreateDatasetRequest) -> Request<CreateDatasetRequest>;
 
     /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
     fn create_dataset_content(
         &self,
         input: CreateDatasetContentRequest,
-    ) -> RusotoFuture<CreateDatasetContentResponse, CreateDatasetContentError>;
+    ) -> Request<CreateDatasetContentRequest>;
 
     /// <p>Creates a data store, which is a repository for messages.</p>
-    fn create_datastore(
-        &self,
-        input: CreateDatastoreRequest,
-    ) -> RusotoFuture<CreateDatastoreResponse, CreateDatastoreError>;
+    fn create_datastore(&self, input: CreateDatastoreRequest) -> Request<CreateDatastoreRequest>;
 
     /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
-    fn create_pipeline(
-        &self,
-        input: CreatePipelineRequest,
-    ) -> RusotoFuture<CreatePipelineResponse, CreatePipelineError>;
+    fn create_pipeline(&self, input: CreatePipelineRequest) -> Request<CreatePipelineRequest>;
 
     /// <p>Deletes the specified channel.</p>
-    fn delete_channel(&self, input: DeleteChannelRequest) -> RusotoFuture<(), DeleteChannelError>;
+    fn delete_channel(&self, input: DeleteChannelRequest) -> Request<DeleteChannelRequest>;
 
     /// <p>Deletes the specified data set.</p> <p>You do not have to delete the content of the data set before you perform this operation.</p>
-    fn delete_dataset(&self, input: DeleteDatasetRequest) -> RusotoFuture<(), DeleteDatasetError>;
+    fn delete_dataset(&self, input: DeleteDatasetRequest) -> Request<DeleteDatasetRequest>;
 
     /// <p>Deletes the content of the specified data set.</p>
     fn delete_dataset_content(
         &self,
         input: DeleteDatasetContentRequest,
-    ) -> RusotoFuture<(), DeleteDatasetContentError>;
+    ) -> Request<DeleteDatasetContentRequest>;
 
     /// <p>Deletes the specified data store.</p>
-    fn delete_datastore(
-        &self,
-        input: DeleteDatastoreRequest,
-    ) -> RusotoFuture<(), DeleteDatastoreError>;
+    fn delete_datastore(&self, input: DeleteDatastoreRequest) -> Request<DeleteDatastoreRequest>;
 
     /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(
-        &self,
-        input: DeletePipelineRequest,
-    ) -> RusotoFuture<(), DeletePipelineError>;
+    fn delete_pipeline(&self, input: DeletePipelineRequest) -> Request<DeletePipelineRequest>;
 
     /// <p>Retrieves information about a channel.</p>
-    fn describe_channel(
-        &self,
-        input: DescribeChannelRequest,
-    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError>;
+    fn describe_channel(&self, input: DescribeChannelRequest) -> Request<DescribeChannelRequest>;
 
     /// <p>Retrieves information about a data set.</p>
-    fn describe_dataset(
-        &self,
-        input: DescribeDatasetRequest,
-    ) -> RusotoFuture<DescribeDatasetResponse, DescribeDatasetError>;
+    fn describe_dataset(&self, input: DescribeDatasetRequest) -> Request<DescribeDatasetRequest>;
 
     /// <p>Retrieves information about a data store.</p>
     fn describe_datastore(
         &self,
         input: DescribeDatastoreRequest,
-    ) -> RusotoFuture<DescribeDatastoreResponse, DescribeDatastoreError>;
+    ) -> Request<DescribeDatastoreRequest>;
 
     /// <p>Retrieves the current settings of the AWS IoT Analytics logging options.</p>
-    fn describe_logging_options(
-        &self,
-    ) -> RusotoFuture<DescribeLoggingOptionsResponse, DescribeLoggingOptionsError>;
+    fn describe_logging_options(&self) -> Request<DescribeLoggingOptionsRequest>;
 
     /// <p>Retrieves information about a pipeline.</p>
-    fn describe_pipeline(
-        &self,
-        input: DescribePipelineRequest,
-    ) -> RusotoFuture<DescribePipelineResponse, DescribePipelineError>;
+    fn describe_pipeline(&self, input: DescribePipelineRequest)
+        -> Request<DescribePipelineRequest>;
 
     /// <p>Retrieves the contents of a data set as pre-signed URIs.</p>
     fn get_dataset_content(
         &self,
         input: GetDatasetContentRequest,
-    ) -> RusotoFuture<GetDatasetContentResponse, GetDatasetContentError>;
+    ) -> Request<GetDatasetContentRequest>;
 
     /// <p>Retrieves a list of channels.</p>
-    fn list_channels(
-        &self,
-        input: ListChannelsRequest,
-    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError>;
+    fn list_channels(&self, input: ListChannelsRequest) -> Request<ListChannelsRequest>;
 
     /// <p>Lists information about data set contents that have been created.</p>
     fn list_dataset_contents(
         &self,
         input: ListDatasetContentsRequest,
-    ) -> RusotoFuture<ListDatasetContentsResponse, ListDatasetContentsError>;
+    ) -> Request<ListDatasetContentsRequest>;
 
     /// <p>Retrieves information about data sets.</p>
-    fn list_datasets(
-        &self,
-        input: ListDatasetsRequest,
-    ) -> RusotoFuture<ListDatasetsResponse, ListDatasetsError>;
+    fn list_datasets(&self, input: ListDatasetsRequest) -> Request<ListDatasetsRequest>;
 
     /// <p>Retrieves a list of data stores.</p>
-    fn list_datastores(
-        &self,
-        input: ListDatastoresRequest,
-    ) -> RusotoFuture<ListDatastoresResponse, ListDatastoresError>;
+    fn list_datastores(&self, input: ListDatastoresRequest) -> Request<ListDatastoresRequest>;
 
     /// <p>Retrieves a list of pipelines.</p>
-    fn list_pipelines(
-        &self,
-        input: ListPipelinesRequest,
-    ) -> RusotoFuture<ListPipelinesResponse, ListPipelinesError>;
+    fn list_pipelines(&self, input: ListPipelinesRequest) -> Request<ListPipelinesRequest>;
 
     /// <p>Lists the tags (metadata) which you have assigned to the resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>Note that if you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the roleArn field (for example, to correct an invalid policy) it takes up to 5 minutes for that change to take effect. </p>
     fn put_logging_options(
         &self,
         input: PutLoggingOptionsRequest,
-    ) -> RusotoFuture<(), PutLoggingOptionsError>;
+    ) -> Request<PutLoggingOptionsRequest>;
 
     /// <p>Simulates the results of running a pipeline activity on a message payload.</p>
     fn run_pipeline_activity(
         &self,
         input: RunPipelineActivityRequest,
-    ) -> RusotoFuture<RunPipelineActivityResponse, RunPipelineActivityError>;
+    ) -> Request<RunPipelineActivityRequest>;
 
     /// <p>Retrieves a sample of messages from the specified channel ingested during the specified timeframe. Up to 10 messages can be retrieved.</p>
     fn sample_channel_data(
         &self,
         input: SampleChannelDataRequest,
-    ) -> RusotoFuture<SampleChannelDataResponse, SampleChannelDataError>;
+    ) -> Request<SampleChannelDataRequest>;
 
     /// <p>Starts the reprocessing of raw message data through the pipeline.</p>
     fn start_pipeline_reprocessing(
         &self,
         input: StartPipelineReprocessingRequest,
-    ) -> RusotoFuture<StartPipelineReprocessingResponse, StartPipelineReprocessingError>;
+    ) -> Request<StartPipelineReprocessingRequest>;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates the settings of a channel.</p>
-    fn update_channel(&self, input: UpdateChannelRequest) -> RusotoFuture<(), UpdateChannelError>;
+    fn update_channel(&self, input: UpdateChannelRequest) -> Request<UpdateChannelRequest>;
 
     /// <p>Updates the settings of a data set.</p>
-    fn update_dataset(&self, input: UpdateDatasetRequest) -> RusotoFuture<(), UpdateDatasetError>;
+    fn update_dataset(&self, input: UpdateDatasetRequest) -> Request<UpdateDatasetRequest>;
 
     /// <p>Updates the settings of a data store.</p>
-    fn update_datastore(
-        &self,
-        input: UpdateDatastoreRequest,
-    ) -> RusotoFuture<(), UpdateDatastoreError>;
+    fn update_datastore(&self, input: UpdateDatastoreRequest) -> Request<UpdateDatastoreRequest>;
 
     /// <p>Updates the settings of a pipeline. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
-    fn update_pipeline(
-        &self,
-        input: UpdatePipelineRequest,
-    ) -> RusotoFuture<(), UpdatePipelineError>;
+    fn update_pipeline(&self, input: UpdatePipelineRequest) -> Request<UpdatePipelineRequest>;
 }
 /// A client for the AWS IoT Analytics API.
 #[derive(Clone)]
@@ -3814,19 +3800,235 @@ impl IotAnalyticsClient {
 
 impl IotAnalytics for IotAnalyticsClient {
     /// <p>Sends messages to a channel.</p>
-    fn batch_put_message(
+    fn batch_put_message(&self, input: BatchPutMessageRequest) -> Request<BatchPutMessageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels the reprocessing of data through the pipeline.</p>
+    fn cancel_pipeline_reprocessing(
         &self,
-        input: BatchPutMessageRequest,
-    ) -> RusotoFuture<BatchPutMessageResponse, BatchPutMessageError> {
+        input: CancelPipelineReprocessingRequest,
+    ) -> Request<CancelPipelineReprocessingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a channel. A channel collects data from an MQTT topic and archives the raw, unprocessed messages before publishing the data to a pipeline.</p>
+    fn create_channel(&self, input: CreateChannelRequest) -> Request<CreateChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
+    fn create_dataset(&self, input: CreateDatasetRequest) -> Request<CreateDatasetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
+    fn create_dataset_content(
+        &self,
+        input: CreateDatasetContentRequest,
+    ) -> Request<CreateDatasetContentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a data store, which is a repository for messages.</p>
+    fn create_datastore(&self, input: CreateDatastoreRequest) -> Request<CreateDatastoreRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
+    fn create_pipeline(&self, input: CreatePipelineRequest) -> Request<CreatePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified channel.</p>
+    fn delete_channel(&self, input: DeleteChannelRequest) -> Request<DeleteChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified data set.</p> <p>You do not have to delete the content of the data set before you perform this operation.</p>
+    fn delete_dataset(&self, input: DeleteDatasetRequest) -> Request<DeleteDatasetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the content of the specified data set.</p>
+    fn delete_dataset_content(
+        &self,
+        input: DeleteDatasetContentRequest,
+    ) -> Request<DeleteDatasetContentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified data store.</p>
+    fn delete_datastore(&self, input: DeleteDatastoreRequest) -> Request<DeleteDatastoreRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified pipeline.</p>
+    fn delete_pipeline(&self, input: DeletePipelineRequest) -> Request<DeletePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a channel.</p>
+    fn describe_channel(&self, input: DescribeChannelRequest) -> Request<DescribeChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a data set.</p>
+    fn describe_dataset(&self, input: DescribeDatasetRequest) -> Request<DescribeDatasetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about a data store.</p>
+    fn describe_datastore(
+        &self,
+        input: DescribeDatastoreRequest,
+    ) -> Request<DescribeDatastoreRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the current settings of the AWS IoT Analytics logging options.</p>
+    fn describe_logging_options(&self) -> Request<DescribeLoggingOptionsRequest> {
+        Request::new(
+            DescribeLoggingOptionsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieves information about a pipeline.</p>
+    fn describe_pipeline(
+        &self,
+        input: DescribePipelineRequest,
+    ) -> Request<DescribePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the contents of a data set as pre-signed URIs.</p>
+    fn get_dataset_content(
+        &self,
+        input: GetDatasetContentRequest,
+    ) -> Request<GetDatasetContentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of channels.</p>
+    fn list_channels(&self, input: ListChannelsRequest) -> Request<ListChannelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists information about data set contents that have been created.</p>
+    fn list_dataset_contents(
+        &self,
+        input: ListDatasetContentsRequest,
+    ) -> Request<ListDatasetContentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about data sets.</p>
+    fn list_datasets(&self, input: ListDatasetsRequest) -> Request<ListDatasetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of data stores.</p>
+    fn list_datastores(&self, input: ListDatastoresRequest) -> Request<ListDatastoresRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of pipelines.</p>
+    fn list_pipelines(&self, input: ListPipelinesRequest) -> Request<ListPipelinesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags (metadata) which you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>Note that if you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the roleArn field (for example, to correct an invalid policy) it takes up to 5 minutes for that change to take effect. </p>
+    fn put_logging_options(
+        &self,
+        input: PutLoggingOptionsRequest,
+    ) -> Request<PutLoggingOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Simulates the results of running a pipeline activity on a message payload.</p>
+    fn run_pipeline_activity(
+        &self,
+        input: RunPipelineActivityRequest,
+    ) -> Request<RunPipelineActivityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a sample of messages from the specified channel ingested during the specified timeframe. Up to 10 messages can be retrieved.</p>
+    fn sample_channel_data(
+        &self,
+        input: SampleChannelDataRequest,
+    ) -> Request<SampleChannelDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts the reprocessing of raw message data through the pipeline.</p>
+    fn start_pipeline_reprocessing(
+        &self,
+        input: StartPipelineReprocessingRequest,
+    ) -> Request<StartPipelineReprocessingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the given tags (metadata) from the resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the settings of a channel.</p>
+    fn update_channel(&self, input: UpdateChannelRequest) -> Request<UpdateChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the settings of a data set.</p>
+    fn update_dataset(&self, input: UpdateDatasetRequest) -> Request<UpdateDatasetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the settings of a data store.</p>
+    fn update_datastore(&self, input: UpdateDatastoreRequest) -> Request<UpdateDatastoreRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the settings of a pipeline. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
+    fn update_pipeline(&self, input: UpdatePipelineRequest) -> Request<UpdatePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchPutMessageRequest {
+    type Output = BatchPutMessageResponse;
+    type Error = BatchPutMessageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/messages/batch";
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3844,22 +4046,28 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Cancels the reprocessing of data through the pipeline.</p>
-    fn cancel_pipeline_reprocessing(
-        &self,
-        input: CancelPipelineReprocessingRequest,
-    ) -> RusotoFuture<CancelPipelineReprocessingResponse, CancelPipelineReprocessingError> {
+impl ServiceRequest for CancelPipelineReprocessingRequest {
+    type Output = CancelPipelineReprocessingResponse;
+    type Error = CancelPipelineReprocessingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/pipelines/{pipeline_name}/reprocessing/{reprocessing_id}",
-            pipeline_name = input.pipeline_name,
-            reprocessing_id = input.reprocessing_id
+            pipeline_name = self.pipeline_name,
+            reprocessing_id = self.reprocessing_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3874,21 +4082,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a channel. A channel collects data from an MQTT topic and archives the raw, unprocessed messages before publishing the data to a pipeline.</p>
-    fn create_channel(
-        &self,
-        input: CreateChannelRequest,
-    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError> {
+impl ServiceRequest for CreateChannelRequest {
+    type Output = CreateChannelResponse;
+    type Error = CreateChannelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/channels";
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3906,21 +4120,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
-    fn create_dataset(
-        &self,
-        input: CreateDatasetRequest,
-    ) -> RusotoFuture<CreateDatasetResponse, CreateDatasetError> {
+impl ServiceRequest for CreateDatasetRequest {
+    type Output = CreateDatasetResponse;
+    type Error = CreateDatasetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/datasets";
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3938,21 +4158,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
-    fn create_dataset_content(
-        &self,
-        input: CreateDatasetContentRequest,
-    ) -> RusotoFuture<CreateDatasetContentResponse, CreateDatasetContentError> {
+impl ServiceRequest for CreateDatasetContentRequest {
+    type Output = CreateDatasetContentResponse;
+    type Error = CreateDatasetContentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/datasets/{dataset_name}/content",
-            dataset_name = input.dataset_name
+            dataset_name = self.dataset_name
         );
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -3969,21 +4195,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a data store, which is a repository for messages.</p>
-    fn create_datastore(
-        &self,
-        input: CreateDatastoreRequest,
-    ) -> RusotoFuture<CreateDatastoreResponse, CreateDatastoreError> {
+impl ServiceRequest for CreateDatastoreRequest {
+    type Output = CreateDatastoreResponse;
+    type Error = CreateDatastoreError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/datastores";
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4001,21 +4233,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
-    fn create_pipeline(
-        &self,
-        input: CreatePipelineRequest,
-    ) -> RusotoFuture<CreatePipelineResponse, CreatePipelineError> {
+impl ServiceRequest for CreatePipelineRequest {
+    type Output = CreatePipelineResponse;
+    type Error = CreatePipelineError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/pipelines";
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4033,21 +4271,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified channel.</p>
-    fn delete_channel(&self, input: DeleteChannelRequest) -> RusotoFuture<(), DeleteChannelError> {
-        let request_uri = format!(
-            "/channels/{channel_name}",
-            channel_name = input.channel_name
-        );
+impl ServiceRequest for DeleteChannelRequest {
+    type Output = DeleteChannelResponse;
+    type Error = DeleteChannelError;
 
-        let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/channels/{channel_name}", channel_name = self.channel_name);
+
+        let mut request = SignedRequest::new("DELETE", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteChannelResponse {};
 
                     Ok(result)
                 }))
@@ -4061,21 +4305,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified data set.</p> <p>You do not have to delete the content of the data set before you perform this operation.</p>
-    fn delete_dataset(&self, input: DeleteDatasetRequest) -> RusotoFuture<(), DeleteDatasetError> {
-        let request_uri = format!(
-            "/datasets/{dataset_name}",
-            dataset_name = input.dataset_name
-        );
+impl ServiceRequest for DeleteDatasetRequest {
+    type Output = DeleteDatasetResponse;
+    type Error = DeleteDatasetError;
 
-        let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/datasets/{dataset_name}", dataset_name = self.dataset_name);
+
+        let mut request = SignedRequest::new("DELETE", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDatasetResponse {};
 
                     Ok(result)
                 }))
@@ -4089,30 +4339,36 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the content of the specified data set.</p>
-    fn delete_dataset_content(
-        &self,
-        input: DeleteDatasetContentRequest,
-    ) -> RusotoFuture<(), DeleteDatasetContentError> {
+impl ServiceRequest for DeleteDatasetContentRequest {
+    type Output = DeleteDatasetContentResponse;
+    type Error = DeleteDatasetContentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/datasets/{dataset_name}/content",
-            dataset_name = input.dataset_name
+            dataset_name = self.dataset_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDatasetContentResponse {};
 
                     Ok(result)
                 }))
@@ -4125,24 +4381,30 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified data store.</p>
-    fn delete_datastore(
-        &self,
-        input: DeleteDatastoreRequest,
-    ) -> RusotoFuture<(), DeleteDatastoreError> {
+impl ServiceRequest for DeleteDatastoreRequest {
+    type Output = DeleteDatastoreResponse;
+    type Error = DeleteDatastoreError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/datastores/{datastore_name}",
-            datastore_name = input.datastore_name
+            datastore_name = self.datastore_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDatastoreResponse {};
 
                     Ok(result)
                 }))
@@ -4156,24 +4418,30 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified pipeline.</p>
-    fn delete_pipeline(
-        &self,
-        input: DeletePipelineRequest,
-    ) -> RusotoFuture<(), DeletePipelineError> {
+impl ServiceRequest for DeletePipelineRequest {
+    type Output = DeletePipelineResponse;
+    type Error = DeletePipelineError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/pipelines/{pipeline_name}",
-            pipeline_name = input.pipeline_name
+            pipeline_name = self.pipeline_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeletePipelineResponse {};
 
                     Ok(result)
                 }))
@@ -4187,27 +4455,30 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a channel.</p>
-    fn describe_channel(
-        &self,
-        input: DescribeChannelRequest,
-    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError> {
-        let request_uri = format!(
-            "/channels/{channel_name}",
-            channel_name = input.channel_name
-        );
+impl ServiceRequest for DescribeChannelRequest {
+    type Output = DescribeChannelResponse;
+    type Error = DescribeChannelError;
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/channels/{channel_name}", channel_name = self.channel_name);
+
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.include_statistics {
+        if let Some(ref x) = self.include_statistics {
             params.put("includeStatistics", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4225,21 +4496,24 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a data set.</p>
-    fn describe_dataset(
-        &self,
-        input: DescribeDatasetRequest,
-    ) -> RusotoFuture<DescribeDatasetResponse, DescribeDatasetError> {
-        let request_uri = format!(
-            "/datasets/{dataset_name}",
-            dataset_name = input.dataset_name
-        );
+impl ServiceRequest for DescribeDatasetRequest {
+    type Output = DescribeDatasetResponse;
+    type Error = DescribeDatasetError;
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/datasets/{dataset_name}", dataset_name = self.dataset_name);
+
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4257,27 +4531,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a data store.</p>
-    fn describe_datastore(
-        &self,
-        input: DescribeDatastoreRequest,
-    ) -> RusotoFuture<DescribeDatastoreResponse, DescribeDatastoreError> {
+impl ServiceRequest for DescribeDatastoreRequest {
+    type Output = DescribeDatastoreResponse;
+    type Error = DescribeDatastoreError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/datastores/{datastore_name}",
-            datastore_name = input.datastore_name
+            datastore_name = self.datastore_name
         );
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.include_statistics {
+        if let Some(ref x) = self.include_statistics {
             params.put("includeStatistics", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4295,17 +4575,24 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the current settings of the AWS IoT Analytics logging options.</p>
-    fn describe_logging_options(
-        &self,
-    ) -> RusotoFuture<DescribeLoggingOptionsResponse, DescribeLoggingOptionsError> {
+impl ServiceRequest for DescribeLoggingOptionsRequest {
+    type Output = DescribeLoggingOptionsResponse;
+    type Error = DescribeLoggingOptionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/logging";
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4322,21 +4609,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about a pipeline.</p>
-    fn describe_pipeline(
-        &self,
-        input: DescribePipelineRequest,
-    ) -> RusotoFuture<DescribePipelineResponse, DescribePipelineError> {
+impl ServiceRequest for DescribePipelineRequest {
+    type Output = DescribePipelineResponse;
+    type Error = DescribePipelineError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/pipelines/{pipeline_name}",
-            pipeline_name = input.pipeline_name
+            pipeline_name = self.pipeline_name
         );
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4354,27 +4647,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the contents of a data set as pre-signed URIs.</p>
-    fn get_dataset_content(
-        &self,
-        input: GetDatasetContentRequest,
-    ) -> RusotoFuture<GetDatasetContentResponse, GetDatasetContentError> {
+impl ServiceRequest for GetDatasetContentRequest {
+    type Output = GetDatasetContentResponse;
+    type Error = GetDatasetContentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/datasets/{dataset_name}/content",
-            dataset_name = input.dataset_name
+            dataset_name = self.dataset_name
         );
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.version_id {
+        if let Some(ref x) = self.version_id {
             params.put("versionId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4392,27 +4691,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of channels.</p>
-    fn list_channels(
-        &self,
-        input: ListChannelsRequest,
-    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError> {
+impl ServiceRequest for ListChannelsRequest {
+    type Output = ListChannelsResponse;
+    type Error = ListChannelsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/channels";
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4430,36 +4735,42 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Lists information about data set contents that have been created.</p>
-    fn list_dataset_contents(
-        &self,
-        input: ListDatasetContentsRequest,
-    ) -> RusotoFuture<ListDatasetContentsResponse, ListDatasetContentsError> {
+impl ServiceRequest for ListDatasetContentsRequest {
+    type Output = ListDatasetContentsResponse;
+    type Error = ListDatasetContentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/datasets/{dataset_name}/contents",
-            dataset_name = input.dataset_name
+            dataset_name = self.dataset_name
         );
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.scheduled_before {
+        if let Some(ref x) = self.scheduled_before {
             params.put("scheduledBefore", x);
         }
-        if let Some(ref x) = input.scheduled_on_or_after {
+        if let Some(ref x) = self.scheduled_on_or_after {
             params.put("scheduledOnOrAfter", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4476,27 +4787,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves information about data sets.</p>
-    fn list_datasets(
-        &self,
-        input: ListDatasetsRequest,
-    ) -> RusotoFuture<ListDatasetsResponse, ListDatasetsError> {
+impl ServiceRequest for ListDatasetsRequest {
+    type Output = ListDatasetsResponse;
+    type Error = ListDatasetsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/datasets";
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4514,27 +4831,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of data stores.</p>
-    fn list_datastores(
-        &self,
-        input: ListDatastoresRequest,
-    ) -> RusotoFuture<ListDatastoresResponse, ListDatastoresError> {
+impl ServiceRequest for ListDatastoresRequest {
+    type Output = ListDatastoresResponse;
+    type Error = ListDatastoresError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/datastores";
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4552,27 +4875,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of pipelines.</p>
-    fn list_pipelines(
-        &self,
-        input: ListPipelinesRequest,
-    ) -> RusotoFuture<ListPipelinesResponse, ListPipelinesError> {
+impl ServiceRequest for ListPipelinesRequest {
+    type Output = ListPipelinesResponse;
+    type Error = ListPipelinesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/pipelines";
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4590,22 +4919,28 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags (metadata) which you have assigned to the resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/tags";
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        params.put("resourceArn", &input.resource_arn);
+        params.put("resourceArn", &self.resource_arn);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4622,24 +4957,30 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Sets or updates the AWS IoT Analytics logging options.</p> <p>Note that if you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. Also, if you change the policy attached to the role you specified in the roleArn field (for example, to correct an invalid policy) it takes up to 5 minutes for that change to take effect. </p>
-    fn put_logging_options(
-        &self,
-        input: PutLoggingOptionsRequest,
-    ) -> RusotoFuture<(), PutLoggingOptionsError> {
+impl ServiceRequest for PutLoggingOptionsRequest {
+    type Output = PutLoggingOptionsResponse;
+    type Error = PutLoggingOptionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/logging";
 
-        let mut request = SignedRequest::new("PUT", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = PutLoggingOptionsResponse {};
 
                     Ok(result)
                 }))
@@ -4653,21 +4994,27 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Simulates the results of running a pipeline activity on a message payload.</p>
-    fn run_pipeline_activity(
-        &self,
-        input: RunPipelineActivityRequest,
-    ) -> RusotoFuture<RunPipelineActivityResponse, RunPipelineActivityError> {
+impl ServiceRequest for RunPipelineActivityRequest {
+    type Output = RunPipelineActivityResponse;
+    type Error = RunPipelineActivityError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/pipelineactivities/run";
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4684,33 +5031,39 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a sample of messages from the specified channel ingested during the specified timeframe. Up to 10 messages can be retrieved.</p>
-    fn sample_channel_data(
-        &self,
-        input: SampleChannelDataRequest,
-    ) -> RusotoFuture<SampleChannelDataResponse, SampleChannelDataError> {
+impl ServiceRequest for SampleChannelDataRequest {
+    type Output = SampleChannelDataResponse;
+    type Error = SampleChannelDataError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/channels/{channel_name}/sample",
-            channel_name = input.channel_name
+            channel_name = self.channel_name
         );
 
-        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.end_time {
+        if let Some(ref x) = self.end_time {
             params.put("endTime", x);
         }
-        if let Some(ref x) = input.max_messages {
+        if let Some(ref x) = self.max_messages {
             params.put("maxMessages", x);
         }
-        if let Some(ref x) = input.start_time {
+        if let Some(ref x) = self.start_time {
             params.put("startTime", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4728,24 +5081,30 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Starts the reprocessing of raw message data through the pipeline.</p>
-    fn start_pipeline_reprocessing(
-        &self,
-        input: StartPipelineReprocessingRequest,
-    ) -> RusotoFuture<StartPipelineReprocessingResponse, StartPipelineReprocessingError> {
+impl ServiceRequest for StartPipelineReprocessingRequest {
+    type Output = StartPipelineReprocessingResponse;
+    type Error = StartPipelineReprocessingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/pipelines/{pipeline_name}/reprocessing",
-            pipeline_name = input.pipeline_name
+            pipeline_name = self.pipeline_name
         );
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4760,25 +5119,31 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/tags";
 
-        let mut request = SignedRequest::new("POST", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        params.put("resourceArn", &input.resource_arn);
+        params.put("resourceArn", &self.resource_arn);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4796,25 +5161,31 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Removes the given tags (metadata) from the resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/tags";
 
-        let mut request = SignedRequest::new("DELETE", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        params.put("resourceArn", &input.resource_arn);
-        for item in input.tag_keys.iter() {
+        params.put("resourceArn", &self.resource_arn);
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4832,24 +5203,30 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the settings of a channel.</p>
-    fn update_channel(&self, input: UpdateChannelRequest) -> RusotoFuture<(), UpdateChannelError> {
-        let request_uri = format!(
-            "/channels/{channel_name}",
-            channel_name = input.channel_name
-        );
+impl ServiceRequest for UpdateChannelRequest {
+    type Output = UpdateChannelResponse;
+    type Error = UpdateChannelError;
 
-        let mut request = SignedRequest::new("PUT", "iotanalytics", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/channels/{channel_name}", channel_name = self.channel_name);
+
+        let mut request = SignedRequest::new("PUT", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateChannelResponse {};
 
                     Ok(result)
                 }))
@@ -4863,24 +5240,30 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the settings of a data set.</p>
-    fn update_dataset(&self, input: UpdateDatasetRequest) -> RusotoFuture<(), UpdateDatasetError> {
-        let request_uri = format!(
-            "/datasets/{dataset_name}",
-            dataset_name = input.dataset_name
-        );
+impl ServiceRequest for UpdateDatasetRequest {
+    type Output = UpdateDatasetResponse;
+    type Error = UpdateDatasetError;
 
-        let mut request = SignedRequest::new("PUT", "iotanalytics", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/datasets/{dataset_name}", dataset_name = self.dataset_name);
+
+        let mut request = SignedRequest::new("PUT", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateDatasetResponse {};
 
                     Ok(result)
                 }))
@@ -4894,27 +5277,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the settings of a data store.</p>
-    fn update_datastore(
-        &self,
-        input: UpdateDatastoreRequest,
-    ) -> RusotoFuture<(), UpdateDatastoreError> {
+impl ServiceRequest for UpdateDatastoreRequest {
+    type Output = UpdateDatastoreResponse;
+    type Error = UpdateDatastoreError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/datastores/{datastore_name}",
-            datastore_name = input.datastore_name
+            datastore_name = self.datastore_name
         );
 
-        let mut request = SignedRequest::new("PUT", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateDatastoreResponse {};
 
                     Ok(result)
                 }))
@@ -4928,27 +5317,33 @@ impl IotAnalytics for IotAnalyticsClient {
             }
         })
     }
+}
 
-    /// <p>Updates the settings of a pipeline. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
-    fn update_pipeline(
-        &self,
-        input: UpdatePipelineRequest,
-    ) -> RusotoFuture<(), UpdatePipelineError> {
+impl ServiceRequest for UpdatePipelineRequest {
+    type Output = UpdatePipelineResponse;
+    type Error = UpdatePipelineError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/pipelines/{pipeline_name}",
-            pipeline_name = input.pipeline_name
+            pipeline_name = self.pipeline_name
         );
 
-        let mut request = SignedRequest::new("PUT", "iotanalytics", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iotanalytics", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdatePipelineResponse {};
 
                     Ok(result)
                 }))

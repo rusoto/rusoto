@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -4914,283 +4915,256 @@ pub trait Comprehend {
     fn batch_detect_dominant_language(
         &self,
         input: BatchDetectDominantLanguageRequest,
-    ) -> RusotoFuture<BatchDetectDominantLanguageResponse, BatchDetectDominantLanguageError>;
+    ) -> Request<BatchDetectDominantLanguageRequest>;
 
     /// <p>Inspects the text of a batch of documents for named entities and returns information about them. For more information about named entities, see <a>how-entities</a> </p>
     fn batch_detect_entities(
         &self,
         input: BatchDetectEntitiesRequest,
-    ) -> RusotoFuture<BatchDetectEntitiesResponse, BatchDetectEntitiesError>;
+    ) -> Request<BatchDetectEntitiesRequest>;
 
     /// <p>Detects the key noun phrases found in a batch of documents.</p>
     fn batch_detect_key_phrases(
         &self,
         input: BatchDetectKeyPhrasesRequest,
-    ) -> RusotoFuture<BatchDetectKeyPhrasesResponse, BatchDetectKeyPhrasesError>;
+    ) -> Request<BatchDetectKeyPhrasesRequest>;
 
     /// <p>Inspects a batch of documents and returns an inference of the prevailing sentiment, <code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>, in each one.</p>
     fn batch_detect_sentiment(
         &self,
         input: BatchDetectSentimentRequest,
-    ) -> RusotoFuture<BatchDetectSentimentResponse, BatchDetectSentimentError>;
+    ) -> Request<BatchDetectSentimentRequest>;
 
     /// <p>Inspects the text of a batch of documents for the syntax and part of speech of the words in the document and returns information about them. For more information, see <a>how-syntax</a>.</p>
     fn batch_detect_syntax(
         &self,
         input: BatchDetectSyntaxRequest,
-    ) -> RusotoFuture<BatchDetectSyntaxResponse, BatchDetectSyntaxError>;
+    ) -> Request<BatchDetectSyntaxRequest>;
 
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
-    ) -> RusotoFuture<CreateDocumentClassifierResponse, CreateDocumentClassifierError>;
+    ) -> Request<CreateDocumentClassifierRequest>;
 
     /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
     fn create_entity_recognizer(
         &self,
         input: CreateEntityRecognizerRequest,
-    ) -> RusotoFuture<CreateEntityRecognizerResponse, CreateEntityRecognizerError>;
+    ) -> Request<CreateEntityRecognizerRequest>;
 
     /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
     fn delete_document_classifier(
         &self,
         input: DeleteDocumentClassifierRequest,
-    ) -> RusotoFuture<DeleteDocumentClassifierResponse, DeleteDocumentClassifierError>;
+    ) -> Request<DeleteDocumentClassifierRequest>;
 
     /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
     fn delete_entity_recognizer(
         &self,
         input: DeleteEntityRecognizerRequest,
-    ) -> RusotoFuture<DeleteEntityRecognizerResponse, DeleteEntityRecognizerError>;
+    ) -> Request<DeleteEntityRecognizerRequest>;
 
     /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
     fn describe_document_classification_job(
         &self,
         input: DescribeDocumentClassificationJobRequest,
-    ) -> RusotoFuture<
-        DescribeDocumentClassificationJobResponse,
-        DescribeDocumentClassificationJobError,
-    >;
+    ) -> Request<DescribeDocumentClassificationJobRequest>;
 
     /// <p>Gets the properties associated with a document classifier.</p>
     fn describe_document_classifier(
         &self,
         input: DescribeDocumentClassifierRequest,
-    ) -> RusotoFuture<DescribeDocumentClassifierResponse, DescribeDocumentClassifierError>;
+    ) -> Request<DescribeDocumentClassifierRequest>;
 
     /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
     fn describe_dominant_language_detection_job(
         &self,
         input: DescribeDominantLanguageDetectionJobRequest,
-    ) -> RusotoFuture<
-        DescribeDominantLanguageDetectionJobResponse,
-        DescribeDominantLanguageDetectionJobError,
-    >;
+    ) -> Request<DescribeDominantLanguageDetectionJobRequest>;
 
     /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
     fn describe_entities_detection_job(
         &self,
         input: DescribeEntitiesDetectionJobRequest,
-    ) -> RusotoFuture<DescribeEntitiesDetectionJobResponse, DescribeEntitiesDetectionJobError>;
+    ) -> Request<DescribeEntitiesDetectionJobRequest>;
 
     /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
     fn describe_entity_recognizer(
         &self,
         input: DescribeEntityRecognizerRequest,
-    ) -> RusotoFuture<DescribeEntityRecognizerResponse, DescribeEntityRecognizerError>;
+    ) -> Request<DescribeEntityRecognizerRequest>;
 
     /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
     fn describe_key_phrases_detection_job(
         &self,
         input: DescribeKeyPhrasesDetectionJobRequest,
-    ) -> RusotoFuture<DescribeKeyPhrasesDetectionJobResponse, DescribeKeyPhrasesDetectionJobError>;
+    ) -> Request<DescribeKeyPhrasesDetectionJobRequest>;
 
     /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
     fn describe_sentiment_detection_job(
         &self,
         input: DescribeSentimentDetectionJobRequest,
-    ) -> RusotoFuture<DescribeSentimentDetectionJobResponse, DescribeSentimentDetectionJobError>;
+    ) -> Request<DescribeSentimentDetectionJobRequest>;
 
     /// <p>Gets the properties associated with a topic detection job. Use this operation to get the status of a detection job.</p>
     fn describe_topics_detection_job(
         &self,
         input: DescribeTopicsDetectionJobRequest,
-    ) -> RusotoFuture<DescribeTopicsDetectionJobResponse, DescribeTopicsDetectionJobError>;
+    ) -> Request<DescribeTopicsDetectionJobRequest>;
 
     /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
     fn detect_dominant_language(
         &self,
         input: DetectDominantLanguageRequest,
-    ) -> RusotoFuture<DetectDominantLanguageResponse, DetectDominantLanguageError>;
+    ) -> Request<DetectDominantLanguageRequest>;
 
     /// <p>Inspects text for named entities, and returns information about them. For more information, about named entities, see <a>how-entities</a>. </p>
-    fn detect_entities(
-        &self,
-        input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError>;
+    fn detect_entities(&self, input: DetectEntitiesRequest) -> Request<DetectEntitiesRequest>;
 
     /// <p>Detects the key noun phrases found in the text. </p>
     fn detect_key_phrases(
         &self,
         input: DetectKeyPhrasesRequest,
-    ) -> RusotoFuture<DetectKeyPhrasesResponse, DetectKeyPhrasesError>;
+    ) -> Request<DetectKeyPhrasesRequest>;
 
     /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
-    fn detect_sentiment(
-        &self,
-        input: DetectSentimentRequest,
-    ) -> RusotoFuture<DetectSentimentResponse, DetectSentimentError>;
+    fn detect_sentiment(&self, input: DetectSentimentRequest) -> Request<DetectSentimentRequest>;
 
     /// <p>Inspects text for syntax and the part of speech of words in the document. For more information, <a>how-syntax</a>.</p>
-    fn detect_syntax(
-        &self,
-        input: DetectSyntaxRequest,
-    ) -> RusotoFuture<DetectSyntaxResponse, DetectSyntaxError>;
+    fn detect_syntax(&self, input: DetectSyntaxRequest) -> Request<DetectSyntaxRequest>;
 
     /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
     fn list_document_classification_jobs(
         &self,
         input: ListDocumentClassificationJobsRequest,
-    ) -> RusotoFuture<ListDocumentClassificationJobsResponse, ListDocumentClassificationJobsError>;
+    ) -> Request<ListDocumentClassificationJobsRequest>;
 
     /// <p>Gets a list of the document classifiers that you have created.</p>
     fn list_document_classifiers(
         &self,
         input: ListDocumentClassifiersRequest,
-    ) -> RusotoFuture<ListDocumentClassifiersResponse, ListDocumentClassifiersError>;
+    ) -> Request<ListDocumentClassifiersRequest>;
 
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
     fn list_dominant_language_detection_jobs(
         &self,
         input: ListDominantLanguageDetectionJobsRequest,
-    ) -> RusotoFuture<
-        ListDominantLanguageDetectionJobsResponse,
-        ListDominantLanguageDetectionJobsError,
-    >;
+    ) -> Request<ListDominantLanguageDetectionJobsRequest>;
 
     /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
     fn list_entities_detection_jobs(
         &self,
         input: ListEntitiesDetectionJobsRequest,
-    ) -> RusotoFuture<ListEntitiesDetectionJobsResponse, ListEntitiesDetectionJobsError>;
+    ) -> Request<ListEntitiesDetectionJobsRequest>;
 
     /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
     fn list_entity_recognizers(
         &self,
         input: ListEntityRecognizersRequest,
-    ) -> RusotoFuture<ListEntityRecognizersResponse, ListEntityRecognizersError>;
+    ) -> Request<ListEntityRecognizersRequest>;
 
     /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
     fn list_key_phrases_detection_jobs(
         &self,
         input: ListKeyPhrasesDetectionJobsRequest,
-    ) -> RusotoFuture<ListKeyPhrasesDetectionJobsResponse, ListKeyPhrasesDetectionJobsError>;
+    ) -> Request<ListKeyPhrasesDetectionJobsRequest>;
 
     /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
     fn list_sentiment_detection_jobs(
         &self,
         input: ListSentimentDetectionJobsRequest,
-    ) -> RusotoFuture<ListSentimentDetectionJobsResponse, ListSentimentDetectionJobsError>;
+    ) -> Request<ListSentimentDetectionJobsRequest>;
 
     /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
     fn list_topics_detection_jobs(
         &self,
         input: ListTopicsDetectionJobsRequest,
-    ) -> RusotoFuture<ListTopicsDetectionJobsResponse, ListTopicsDetectionJobsError>;
+    ) -> Request<ListTopicsDetectionJobsRequest>;
 
     /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
     fn start_document_classification_job(
         &self,
         input: StartDocumentClassificationJobRequest,
-    ) -> RusotoFuture<StartDocumentClassificationJobResponse, StartDocumentClassificationJobError>;
+    ) -> Request<StartDocumentClassificationJobRequest>;
 
     /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
     fn start_dominant_language_detection_job(
         &self,
         input: StartDominantLanguageDetectionJobRequest,
-    ) -> RusotoFuture<
-        StartDominantLanguageDetectionJobResponse,
-        StartDominantLanguageDetectionJobError,
-    >;
+    ) -> Request<StartDominantLanguageDetectionJobRequest>;
 
     /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
     fn start_entities_detection_job(
         &self,
         input: StartEntitiesDetectionJobRequest,
-    ) -> RusotoFuture<StartEntitiesDetectionJobResponse, StartEntitiesDetectionJobError>;
+    ) -> Request<StartEntitiesDetectionJobRequest>;
 
     /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
     fn start_key_phrases_detection_job(
         &self,
         input: StartKeyPhrasesDetectionJobRequest,
-    ) -> RusotoFuture<StartKeyPhrasesDetectionJobResponse, StartKeyPhrasesDetectionJobError>;
+    ) -> Request<StartKeyPhrasesDetectionJobRequest>;
 
     /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
     fn start_sentiment_detection_job(
         &self,
         input: StartSentimentDetectionJobRequest,
-    ) -> RusotoFuture<StartSentimentDetectionJobResponse, StartSentimentDetectionJobError>;
+    ) -> Request<StartSentimentDetectionJobRequest>;
 
     /// <p>Starts an asynchronous topic detection job. Use the <code>DescribeTopicDetectionJob</code> operation to track the status of a job.</p>
     fn start_topics_detection_job(
         &self,
         input: StartTopicsDetectionJobRequest,
-    ) -> RusotoFuture<StartTopicsDetectionJobResponse, StartTopicsDetectionJobError>;
+    ) -> Request<StartTopicsDetectionJobRequest>;
 
     /// <p>Stops a dominant language detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
     fn stop_dominant_language_detection_job(
         &self,
         input: StopDominantLanguageDetectionJobRequest,
-    ) -> RusotoFuture<StopDominantLanguageDetectionJobResponse, StopDominantLanguageDetectionJobError>;
+    ) -> Request<StopDominantLanguageDetectionJobRequest>;
 
     /// <p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
     fn stop_entities_detection_job(
         &self,
         input: StopEntitiesDetectionJobRequest,
-    ) -> RusotoFuture<StopEntitiesDetectionJobResponse, StopEntitiesDetectionJobError>;
+    ) -> Request<StopEntitiesDetectionJobRequest>;
 
     /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
     fn stop_key_phrases_detection_job(
         &self,
         input: StopKeyPhrasesDetectionJobRequest,
-    ) -> RusotoFuture<StopKeyPhrasesDetectionJobResponse, StopKeyPhrasesDetectionJobError>;
+    ) -> Request<StopKeyPhrasesDetectionJobRequest>;
 
     /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
     fn stop_sentiment_detection_job(
         &self,
         input: StopSentimentDetectionJobRequest,
-    ) -> RusotoFuture<StopSentimentDetectionJobResponse, StopSentimentDetectionJobError>;
+    ) -> Request<StopSentimentDetectionJobRequest>;
 
     /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
     fn stop_training_document_classifier(
         &self,
         input: StopTrainingDocumentClassifierRequest,
-    ) -> RusotoFuture<StopTrainingDocumentClassifierResponse, StopTrainingDocumentClassifierError>;
+    ) -> Request<StopTrainingDocumentClassifierRequest>;
 
     /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
     fn stop_training_entity_recognizer(
         &self,
         input: StopTrainingEntityRecognizerRequest,
-    ) -> RusotoFuture<StopTrainingEntityRecognizerResponse, StopTrainingEntityRecognizerError>;
+    ) -> Request<StopTrainingEntityRecognizerRequest>;
 
     /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 }
 /// A client for the Amazon Comprehend API.
 #[derive(Clone)]
@@ -5233,18 +5207,368 @@ impl Comprehend for ComprehendClient {
     fn batch_detect_dominant_language(
         &self,
         input: BatchDetectDominantLanguageRequest,
-    ) -> RusotoFuture<BatchDetectDominantLanguageResponse, BatchDetectDominantLanguageError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+    ) -> Request<BatchDetectDominantLanguageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Inspects the text of a batch of documents for named entities and returns information about them. For more information about named entities, see <a>how-entities</a> </p>
+    fn batch_detect_entities(
+        &self,
+        input: BatchDetectEntitiesRequest,
+    ) -> Request<BatchDetectEntitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detects the key noun phrases found in a batch of documents.</p>
+    fn batch_detect_key_phrases(
+        &self,
+        input: BatchDetectKeyPhrasesRequest,
+    ) -> Request<BatchDetectKeyPhrasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Inspects a batch of documents and returns an inference of the prevailing sentiment, <code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>, in each one.</p>
+    fn batch_detect_sentiment(
+        &self,
+        input: BatchDetectSentimentRequest,
+    ) -> Request<BatchDetectSentimentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Inspects the text of a batch of documents for the syntax and part of speech of the words in the document and returns information about them. For more information, see <a>how-syntax</a>.</p>
+    fn batch_detect_syntax(
+        &self,
+        input: BatchDetectSyntaxRequest,
+    ) -> Request<BatchDetectSyntaxRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
+    fn create_document_classifier(
+        &self,
+        input: CreateDocumentClassifierRequest,
+    ) -> Request<CreateDocumentClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
+    fn create_entity_recognizer(
+        &self,
+        input: CreateEntityRecognizerRequest,
+    ) -> Request<CreateEntityRecognizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
+    fn delete_document_classifier(
+        &self,
+        input: DeleteDocumentClassifierRequest,
+    ) -> Request<DeleteDocumentClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
+    fn delete_entity_recognizer(
+        &self,
+        input: DeleteEntityRecognizerRequest,
+    ) -> Request<DeleteEntityRecognizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
+    fn describe_document_classification_job(
+        &self,
+        input: DescribeDocumentClassificationJobRequest,
+    ) -> Request<DescribeDocumentClassificationJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the properties associated with a document classifier.</p>
+    fn describe_document_classifier(
+        &self,
+        input: DescribeDocumentClassifierRequest,
+    ) -> Request<DescribeDocumentClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_dominant_language_detection_job(
+        &self,
+        input: DescribeDominantLanguageDetectionJobRequest,
+    ) -> Request<DescribeDominantLanguageDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_entities_detection_job(
+        &self,
+        input: DescribeEntitiesDetectionJobRequest,
+    ) -> Request<DescribeEntitiesDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
+    fn describe_entity_recognizer(
+        &self,
+        input: DescribeEntityRecognizerRequest,
+    ) -> Request<DescribeEntityRecognizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_key_phrases_detection_job(
+        &self,
+        input: DescribeKeyPhrasesDetectionJobRequest,
+    ) -> Request<DescribeKeyPhrasesDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_sentiment_detection_job(
+        &self,
+        input: DescribeSentimentDetectionJobRequest,
+    ) -> Request<DescribeSentimentDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the properties associated with a topic detection job. Use this operation to get the status of a detection job.</p>
+    fn describe_topics_detection_job(
+        &self,
+        input: DescribeTopicsDetectionJobRequest,
+    ) -> Request<DescribeTopicsDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
+    fn detect_dominant_language(
+        &self,
+        input: DetectDominantLanguageRequest,
+    ) -> Request<DetectDominantLanguageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Inspects text for named entities, and returns information about them. For more information, about named entities, see <a>how-entities</a>. </p>
+    fn detect_entities(&self, input: DetectEntitiesRequest) -> Request<DetectEntitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detects the key noun phrases found in the text. </p>
+    fn detect_key_phrases(
+        &self,
+        input: DetectKeyPhrasesRequest,
+    ) -> Request<DetectKeyPhrasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
+    fn detect_sentiment(&self, input: DetectSentimentRequest) -> Request<DetectSentimentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Inspects text for syntax and the part of speech of words in the document. For more information, <a>how-syntax</a>.</p>
+    fn detect_syntax(&self, input: DetectSyntaxRequest) -> Request<DetectSyntaxRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
+    fn list_document_classification_jobs(
+        &self,
+        input: ListDocumentClassificationJobsRequest,
+    ) -> Request<ListDocumentClassificationJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the document classifiers that you have created.</p>
+    fn list_document_classifiers(
+        &self,
+        input: ListDocumentClassifiersRequest,
+    ) -> Request<ListDocumentClassifiersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
+    fn list_dominant_language_detection_jobs(
+        &self,
+        input: ListDominantLanguageDetectionJobsRequest,
+    ) -> Request<ListDominantLanguageDetectionJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
+    fn list_entities_detection_jobs(
+        &self,
+        input: ListEntitiesDetectionJobsRequest,
+    ) -> Request<ListEntitiesDetectionJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
+    fn list_entity_recognizers(
+        &self,
+        input: ListEntityRecognizersRequest,
+    ) -> Request<ListEntityRecognizersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
+    fn list_key_phrases_detection_jobs(
+        &self,
+        input: ListKeyPhrasesDetectionJobsRequest,
+    ) -> Request<ListKeyPhrasesDetectionJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
+    fn list_sentiment_detection_jobs(
+        &self,
+        input: ListSentimentDetectionJobsRequest,
+    ) -> Request<ListSentimentDetectionJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
+    fn list_topics_detection_jobs(
+        &self,
+        input: ListTopicsDetectionJobsRequest,
+    ) -> Request<ListTopicsDetectionJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
+    fn start_document_classification_job(
+        &self,
+        input: StartDocumentClassificationJobRequest,
+    ) -> Request<StartDocumentClassificationJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
+    fn start_dominant_language_detection_job(
+        &self,
+        input: StartDominantLanguageDetectionJobRequest,
+    ) -> Request<StartDominantLanguageDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
+    fn start_entities_detection_job(
+        &self,
+        input: StartEntitiesDetectionJobRequest,
+    ) -> Request<StartEntitiesDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
+    fn start_key_phrases_detection_job(
+        &self,
+        input: StartKeyPhrasesDetectionJobRequest,
+    ) -> Request<StartKeyPhrasesDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
+    fn start_sentiment_detection_job(
+        &self,
+        input: StartSentimentDetectionJobRequest,
+    ) -> Request<StartSentimentDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an asynchronous topic detection job. Use the <code>DescribeTopicDetectionJob</code> operation to track the status of a job.</p>
+    fn start_topics_detection_job(
+        &self,
+        input: StartTopicsDetectionJobRequest,
+    ) -> Request<StartTopicsDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a dominant language detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_dominant_language_detection_job(
+        &self,
+        input: StopDominantLanguageDetectionJobRequest,
+    ) -> Request<StopDominantLanguageDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_entities_detection_job(
+        &self,
+        input: StopEntitiesDetectionJobRequest,
+    ) -> Request<StopEntitiesDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_key_phrases_detection_job(
+        &self,
+        input: StopKeyPhrasesDetectionJobRequest,
+    ) -> Request<StopKeyPhrasesDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
+    fn stop_sentiment_detection_job(
+        &self,
+        input: StopSentimentDetectionJobRequest,
+    ) -> Request<StopSentimentDetectionJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
+    fn stop_training_document_classifier(
+        &self,
+        input: StopTrainingDocumentClassifierRequest,
+    ) -> Request<StopTrainingDocumentClassifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
+    fn stop_training_entity_recognizer(
+        &self,
+        input: StopTrainingEntityRecognizerRequest,
+    ) -> Request<StopTrainingEntityRecognizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchDetectDominantLanguageRequest {
+    type Output = BatchDetectDominantLanguageResponse;
+    type Error = BatchDetectDominantLanguageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.BatchDetectDominantLanguage",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5257,20 +5581,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Inspects the text of a batch of documents for named entities and returns information about them. For more information about named entities, see <a>how-entities</a> </p>
-    fn batch_detect_entities(
-        &self,
-        input: BatchDetectEntitiesRequest,
-    ) -> RusotoFuture<BatchDetectEntitiesResponse, BatchDetectEntitiesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for BatchDetectEntitiesRequest {
+    type Output = BatchDetectEntitiesResponse;
+    type Error = BatchDetectEntitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectEntities");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5285,20 +5614,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Detects the key noun phrases found in a batch of documents.</p>
-    fn batch_detect_key_phrases(
-        &self,
-        input: BatchDetectKeyPhrasesRequest,
-    ) -> RusotoFuture<BatchDetectKeyPhrasesResponse, BatchDetectKeyPhrasesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for BatchDetectKeyPhrasesRequest {
+    type Output = BatchDetectKeyPhrasesResponse;
+    type Error = BatchDetectKeyPhrasesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectKeyPhrases");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5313,20 +5647,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Inspects a batch of documents and returns an inference of the prevailing sentiment, <code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>, in each one.</p>
-    fn batch_detect_sentiment(
-        &self,
-        input: BatchDetectSentimentRequest,
-    ) -> RusotoFuture<BatchDetectSentimentResponse, BatchDetectSentimentError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for BatchDetectSentimentRequest {
+    type Output = BatchDetectSentimentResponse;
+    type Error = BatchDetectSentimentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectSentiment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5341,20 +5680,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Inspects the text of a batch of documents for the syntax and part of speech of the words in the document and returns information about them. For more information, see <a>how-syntax</a>.</p>
-    fn batch_detect_syntax(
-        &self,
-        input: BatchDetectSyntaxRequest,
-    ) -> RusotoFuture<BatchDetectSyntaxResponse, BatchDetectSyntaxError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for BatchDetectSyntaxRequest {
+    type Output = BatchDetectSyntaxResponse;
+    type Error = BatchDetectSyntaxError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectSyntax");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5370,23 +5714,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
-    fn create_document_classifier(
-        &self,
-        input: CreateDocumentClassifierRequest,
-    ) -> RusotoFuture<CreateDocumentClassifierResponse, CreateDocumentClassifierError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for CreateDocumentClassifierRequest {
+    type Output = CreateDocumentClassifierResponse;
+    type Error = CreateDocumentClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.CreateDocumentClassifier",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5399,20 +5748,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
-    fn create_entity_recognizer(
-        &self,
-        input: CreateEntityRecognizerRequest,
-    ) -> RusotoFuture<CreateEntityRecognizerResponse, CreateEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for CreateEntityRecognizerRequest {
+    type Output = CreateEntityRecognizerResponse;
+    type Error = CreateEntityRecognizerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.CreateEntityRecognizer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5427,23 +5781,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
-    fn delete_document_classifier(
-        &self,
-        input: DeleteDocumentClassifierRequest,
-    ) -> RusotoFuture<DeleteDocumentClassifierResponse, DeleteDocumentClassifierError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DeleteDocumentClassifierRequest {
+    type Output = DeleteDocumentClassifierResponse;
+    type Error = DeleteDocumentClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DeleteDocumentClassifier",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5456,20 +5815,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
-    fn delete_entity_recognizer(
-        &self,
-        input: DeleteEntityRecognizerRequest,
-    ) -> RusotoFuture<DeleteEntityRecognizerResponse, DeleteEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DeleteEntityRecognizerRequest {
+    type Output = DeleteEntityRecognizerResponse;
+    type Error = DeleteEntityRecognizerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DeleteEntityRecognizer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5484,26 +5848,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
-    fn describe_document_classification_job(
-        &self,
-        input: DescribeDocumentClassificationJobRequest,
-    ) -> RusotoFuture<
-        DescribeDocumentClassificationJobResponse,
-        DescribeDocumentClassificationJobError,
-    > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeDocumentClassificationJobRequest {
+    type Output = DescribeDocumentClassificationJobResponse;
+    type Error = DescribeDocumentClassificationJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDocumentClassificationJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5518,23 +5884,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets the properties associated with a document classifier.</p>
-    fn describe_document_classifier(
-        &self,
-        input: DescribeDocumentClassifierRequest,
-    ) -> RusotoFuture<DescribeDocumentClassifierResponse, DescribeDocumentClassifierError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeDocumentClassifierRequest {
+    type Output = DescribeDocumentClassifierResponse;
+    type Error = DescribeDocumentClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDocumentClassifier",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5547,26 +5918,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_dominant_language_detection_job(
-        &self,
-        input: DescribeDominantLanguageDetectionJobRequest,
-    ) -> RusotoFuture<
-        DescribeDominantLanguageDetectionJobResponse,
-        DescribeDominantLanguageDetectionJobError,
-    > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeDominantLanguageDetectionJobRequest {
+    type Output = DescribeDominantLanguageDetectionJobResponse;
+    type Error = DescribeDominantLanguageDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDominantLanguageDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5581,23 +5954,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_entities_detection_job(
-        &self,
-        input: DescribeEntitiesDetectionJobRequest,
-    ) -> RusotoFuture<DescribeEntitiesDetectionJobResponse, DescribeEntitiesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeEntitiesDetectionJobRequest {
+    type Output = DescribeEntitiesDetectionJobResponse;
+    type Error = DescribeEntitiesDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeEntitiesDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5610,23 +5988,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
-    fn describe_entity_recognizer(
-        &self,
-        input: DescribeEntityRecognizerRequest,
-    ) -> RusotoFuture<DescribeEntityRecognizerResponse, DescribeEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeEntityRecognizerRequest {
+    type Output = DescribeEntityRecognizerResponse;
+    type Error = DescribeEntityRecognizerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeEntityRecognizer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5639,24 +6022,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_key_phrases_detection_job(
-        &self,
-        input: DescribeKeyPhrasesDetectionJobRequest,
-    ) -> RusotoFuture<DescribeKeyPhrasesDetectionJobResponse, DescribeKeyPhrasesDetectionJobError>
-    {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeKeyPhrasesDetectionJobRequest {
+    type Output = DescribeKeyPhrasesDetectionJobResponse;
+    type Error = DescribeKeyPhrasesDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeKeyPhrasesDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5669,24 +6056,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_sentiment_detection_job(
-        &self,
-        input: DescribeSentimentDetectionJobRequest,
-    ) -> RusotoFuture<DescribeSentimentDetectionJobResponse, DescribeSentimentDetectionJobError>
-    {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeSentimentDetectionJobRequest {
+    type Output = DescribeSentimentDetectionJobResponse;
+    type Error = DescribeSentimentDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeSentimentDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5699,23 +6090,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets the properties associated with a topic detection job. Use this operation to get the status of a detection job.</p>
-    fn describe_topics_detection_job(
-        &self,
-        input: DescribeTopicsDetectionJobRequest,
-    ) -> RusotoFuture<DescribeTopicsDetectionJobResponse, DescribeTopicsDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DescribeTopicsDetectionJobRequest {
+    type Output = DescribeTopicsDetectionJobResponse;
+    type Error = DescribeTopicsDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeTopicsDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5728,20 +6124,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
-    fn detect_dominant_language(
-        &self,
-        input: DetectDominantLanguageRequest,
-    ) -> RusotoFuture<DetectDominantLanguageResponse, DetectDominantLanguageError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DetectDominantLanguageRequest {
+    type Output = DetectDominantLanguageResponse;
+    type Error = DetectDominantLanguageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectDominantLanguage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5756,20 +6157,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Inspects text for named entities, and returns information about them. For more information, about named entities, see <a>how-entities</a>. </p>
-    fn detect_entities(
-        &self,
-        input: DetectEntitiesRequest,
-    ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DetectEntitiesRequest {
+    type Output = DetectEntitiesResponse;
+    type Error = DetectEntitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectEntities");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5785,20 +6191,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Detects the key noun phrases found in the text. </p>
-    fn detect_key_phrases(
-        &self,
-        input: DetectKeyPhrasesRequest,
-    ) -> RusotoFuture<DetectKeyPhrasesResponse, DetectKeyPhrasesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DetectKeyPhrasesRequest {
+    type Output = DetectKeyPhrasesResponse;
+    type Error = DetectKeyPhrasesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectKeyPhrases");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5814,20 +6225,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
-    fn detect_sentiment(
-        &self,
-        input: DetectSentimentRequest,
-    ) -> RusotoFuture<DetectSentimentResponse, DetectSentimentError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DetectSentimentRequest {
+    type Output = DetectSentimentResponse;
+    type Error = DetectSentimentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectSentiment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5843,20 +6259,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Inspects text for syntax and the part of speech of words in the document. For more information, <a>how-syntax</a>.</p>
-    fn detect_syntax(
-        &self,
-        input: DetectSyntaxRequest,
-    ) -> RusotoFuture<DetectSyntaxResponse, DetectSyntaxError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for DetectSyntaxRequest {
+    type Output = DetectSyntaxResponse;
+    type Error = DetectSyntaxError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectSyntax");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5872,24 +6293,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
-    fn list_document_classification_jobs(
-        &self,
-        input: ListDocumentClassificationJobsRequest,
-    ) -> RusotoFuture<ListDocumentClassificationJobsResponse, ListDocumentClassificationJobsError>
-    {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListDocumentClassificationJobsRequest {
+    type Output = ListDocumentClassificationJobsResponse;
+    type Error = ListDocumentClassificationJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDocumentClassificationJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5902,23 +6327,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the document classifiers that you have created.</p>
-    fn list_document_classifiers(
-        &self,
-        input: ListDocumentClassifiersRequest,
-    ) -> RusotoFuture<ListDocumentClassifiersResponse, ListDocumentClassifiersError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListDocumentClassifiersRequest {
+    type Output = ListDocumentClassifiersResponse;
+    type Error = ListDocumentClassifiersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDocumentClassifiers",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5931,26 +6361,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
-    fn list_dominant_language_detection_jobs(
-        &self,
-        input: ListDominantLanguageDetectionJobsRequest,
-    ) -> RusotoFuture<
-        ListDominantLanguageDetectionJobsResponse,
-        ListDominantLanguageDetectionJobsError,
-    > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListDominantLanguageDetectionJobsRequest {
+    type Output = ListDominantLanguageDetectionJobsResponse;
+    type Error = ListDominantLanguageDetectionJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDominantLanguageDetectionJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5965,23 +6397,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
-    fn list_entities_detection_jobs(
-        &self,
-        input: ListEntitiesDetectionJobsRequest,
-    ) -> RusotoFuture<ListEntitiesDetectionJobsResponse, ListEntitiesDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListEntitiesDetectionJobsRequest {
+    type Output = ListEntitiesDetectionJobsResponse;
+    type Error = ListEntitiesDetectionJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListEntitiesDetectionJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5994,20 +6431,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
-    fn list_entity_recognizers(
-        &self,
-        input: ListEntityRecognizersRequest,
-    ) -> RusotoFuture<ListEntityRecognizersResponse, ListEntityRecognizersError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListEntityRecognizersRequest {
+    type Output = ListEntityRecognizersResponse;
+    type Error = ListEntityRecognizersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.ListEntityRecognizers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6022,23 +6464,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
-    fn list_key_phrases_detection_jobs(
-        &self,
-        input: ListKeyPhrasesDetectionJobsRequest,
-    ) -> RusotoFuture<ListKeyPhrasesDetectionJobsResponse, ListKeyPhrasesDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListKeyPhrasesDetectionJobsRequest {
+    type Output = ListKeyPhrasesDetectionJobsResponse;
+    type Error = ListKeyPhrasesDetectionJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListKeyPhrasesDetectionJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6051,23 +6498,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
-    fn list_sentiment_detection_jobs(
-        &self,
-        input: ListSentimentDetectionJobsRequest,
-    ) -> RusotoFuture<ListSentimentDetectionJobsResponse, ListSentimentDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListSentimentDetectionJobsRequest {
+    type Output = ListSentimentDetectionJobsResponse;
+    type Error = ListSentimentDetectionJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListSentimentDetectionJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6080,20 +6532,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.ListTagsForResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6108,23 +6565,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
-    fn list_topics_detection_jobs(
-        &self,
-        input: ListTopicsDetectionJobsRequest,
-    ) -> RusotoFuture<ListTopicsDetectionJobsResponse, ListTopicsDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for ListTopicsDetectionJobsRequest {
+    type Output = ListTopicsDetectionJobsResponse;
+    type Error = ListTopicsDetectionJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListTopicsDetectionJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6137,24 +6599,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
-    fn start_document_classification_job(
-        &self,
-        input: StartDocumentClassificationJobRequest,
-    ) -> RusotoFuture<StartDocumentClassificationJobResponse, StartDocumentClassificationJobError>
-    {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StartDocumentClassificationJobRequest {
+    type Output = StartDocumentClassificationJobResponse;
+    type Error = StartDocumentClassificationJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartDocumentClassificationJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6167,26 +6633,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
-    fn start_dominant_language_detection_job(
-        &self,
-        input: StartDominantLanguageDetectionJobRequest,
-    ) -> RusotoFuture<
-        StartDominantLanguageDetectionJobResponse,
-        StartDominantLanguageDetectionJobError,
-    > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StartDominantLanguageDetectionJobRequest {
+    type Output = StartDominantLanguageDetectionJobResponse;
+    type Error = StartDominantLanguageDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartDominantLanguageDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6201,23 +6669,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
-    fn start_entities_detection_job(
-        &self,
-        input: StartEntitiesDetectionJobRequest,
-    ) -> RusotoFuture<StartEntitiesDetectionJobResponse, StartEntitiesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StartEntitiesDetectionJobRequest {
+    type Output = StartEntitiesDetectionJobResponse;
+    type Error = StartEntitiesDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartEntitiesDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6230,23 +6703,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
-    fn start_key_phrases_detection_job(
-        &self,
-        input: StartKeyPhrasesDetectionJobRequest,
-    ) -> RusotoFuture<StartKeyPhrasesDetectionJobResponse, StartKeyPhrasesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StartKeyPhrasesDetectionJobRequest {
+    type Output = StartKeyPhrasesDetectionJobResponse;
+    type Error = StartKeyPhrasesDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartKeyPhrasesDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6259,23 +6737,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
-    fn start_sentiment_detection_job(
-        &self,
-        input: StartSentimentDetectionJobRequest,
-    ) -> RusotoFuture<StartSentimentDetectionJobResponse, StartSentimentDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StartSentimentDetectionJobRequest {
+    type Output = StartSentimentDetectionJobResponse;
+    type Error = StartSentimentDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartSentimentDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6288,23 +6771,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Starts an asynchronous topic detection job. Use the <code>DescribeTopicDetectionJob</code> operation to track the status of a job.</p>
-    fn start_topics_detection_job(
-        &self,
-        input: StartTopicsDetectionJobRequest,
-    ) -> RusotoFuture<StartTopicsDetectionJobResponse, StartTopicsDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StartTopicsDetectionJobRequest {
+    type Output = StartTopicsDetectionJobResponse;
+    type Error = StartTopicsDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartTopicsDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6317,24 +6805,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Stops a dominant language detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    fn stop_dominant_language_detection_job(
-        &self,
-        input: StopDominantLanguageDetectionJobRequest,
-    ) -> RusotoFuture<StopDominantLanguageDetectionJobResponse, StopDominantLanguageDetectionJobError>
-    {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StopDominantLanguageDetectionJobRequest {
+    type Output = StopDominantLanguageDetectionJobResponse;
+    type Error = StopDominantLanguageDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopDominantLanguageDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6349,23 +6841,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    fn stop_entities_detection_job(
-        &self,
-        input: StopEntitiesDetectionJobRequest,
-    ) -> RusotoFuture<StopEntitiesDetectionJobResponse, StopEntitiesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StopEntitiesDetectionJobRequest {
+    type Output = StopEntitiesDetectionJobResponse;
+    type Error = StopEntitiesDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopEntitiesDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6378,23 +6875,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    fn stop_key_phrases_detection_job(
-        &self,
-        input: StopKeyPhrasesDetectionJobRequest,
-    ) -> RusotoFuture<StopKeyPhrasesDetectionJobResponse, StopKeyPhrasesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StopKeyPhrasesDetectionJobRequest {
+    type Output = StopKeyPhrasesDetectionJobResponse;
+    type Error = StopKeyPhrasesDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopKeyPhrasesDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6407,23 +6909,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
-    fn stop_sentiment_detection_job(
-        &self,
-        input: StopSentimentDetectionJobRequest,
-    ) -> RusotoFuture<StopSentimentDetectionJobResponse, StopSentimentDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StopSentimentDetectionJobRequest {
+    type Output = StopSentimentDetectionJobResponse;
+    type Error = StopSentimentDetectionJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopSentimentDetectionJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6436,24 +6943,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
-    fn stop_training_document_classifier(
-        &self,
-        input: StopTrainingDocumentClassifierRequest,
-    ) -> RusotoFuture<StopTrainingDocumentClassifierResponse, StopTrainingDocumentClassifierError>
-    {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StopTrainingDocumentClassifierRequest {
+    type Output = StopTrainingDocumentClassifierResponse;
+    type Error = StopTrainingDocumentClassifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopTrainingDocumentClassifier",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6466,23 +6977,28 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
-    fn stop_training_entity_recognizer(
-        &self,
-        input: StopTrainingEntityRecognizerRequest,
-    ) -> RusotoFuture<StopTrainingEntityRecognizerResponse, StopTrainingEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for StopTrainingEntityRecognizerRequest {
+    type Output = StopTrainingEntityRecognizerResponse;
+    type Error = StopTrainingEntityRecognizerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopTrainingEntityRecognizer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6495,20 +7011,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6524,20 +7045,25 @@ impl Comprehend for ComprehendClient {
             }
         })
     }
+}
 
-    /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "comprehend", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

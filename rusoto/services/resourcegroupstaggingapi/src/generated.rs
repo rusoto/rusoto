@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -43,7 +44,7 @@ pub struct FailureInfo {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetResourcesInput {
+pub struct GetResourcesRequest {
     /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a <code>PaginationToken</code>, use that string for this value to request an additional page of data.</p>
     #[serde(rename = "PaginationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -68,7 +69,7 @@ pub struct GetResourcesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetResourcesOutput {
+pub struct GetResourcesResponse {
     /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
     #[serde(rename = "PaginationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -80,7 +81,7 @@ pub struct GetResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetTagKeysInput {
+pub struct GetTagKeysRequest {
     /// <p>A string that indicates that additional data is available. Leave this value empty for your initial request. If the response includes a PaginationToken, use that string for this value to request an additional page of data.</p>
     #[serde(rename = "PaginationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -89,7 +90,7 @@ pub struct GetTagKeysInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetTagKeysOutput {
+pub struct GetTagKeysResponse {
     /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
     #[serde(rename = "PaginationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -101,7 +102,7 @@ pub struct GetTagKeysOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetTagValuesInput {
+pub struct GetTagValuesRequest {
     /// <p>The key for which you want to list all existing values in the specified region for the AWS account.</p>
     #[serde(rename = "Key")]
     pub key: String,
@@ -113,7 +114,7 @@ pub struct GetTagValuesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetTagValuesOutput {
+pub struct GetTagValuesResponse {
     /// <p>A string that indicates that the response contains more data than can be returned in a single response. To receive additional data, specify this string for the <code>PaginationToken</code> value in a subsequent request.</p>
     #[serde(rename = "PaginationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -164,7 +165,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagResourcesInput {
+pub struct TagResourcesRequest {
     /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to tag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "ResourceARNList")]
     pub resource_arn_list: Vec<String>,
@@ -175,7 +176,7 @@ pub struct TagResourcesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagResourcesOutput {
+pub struct TagResourcesResponse {
     /// <p>Details of resources that could not be tagged. An error code, status code, and error message are returned for each failed item.</p>
     #[serde(rename = "FailedResourcesMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -183,7 +184,7 @@ pub struct TagResourcesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagResourcesInput {
+pub struct UntagResourcesRequest {
     /// <p>A list of ARNs. An ARN (Amazon Resource Name) uniquely identifies a resource. You can specify a minimum of 1 and a maximum of 20 ARNs (resources) to untag. An ARN can be set to a maximum of 1600 characters. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "ResourceARNList")]
     pub resource_arn_list: Vec<String>,
@@ -194,7 +195,7 @@ pub struct UntagResourcesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagResourcesOutput {
+pub struct UntagResourcesResponse {
     /// <p>Details of resources that could not be untagged. An error code, status code, and error message are returned for each failed item.</p>
     #[serde(rename = "FailedResourcesMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -447,34 +448,19 @@ impl Error for UntagResourcesError {
 /// Trait representing the capabilities of the AWS Resource Groups Tagging API API. AWS Resource Groups Tagging API clients implement this trait.
 pub trait ResourceGroupsTaggingApi {
     /// <p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>
-    fn get_resources(
-        &self,
-        input: GetResourcesInput,
-    ) -> RusotoFuture<GetResourcesOutput, GetResourcesError>;
+    fn get_resources(&self, input: GetResourcesRequest) -> Request<GetResourcesRequest>;
 
     /// <p>Returns all tag keys in the specified region for the AWS account.</p>
-    fn get_tag_keys(
-        &self,
-        input: GetTagKeysInput,
-    ) -> RusotoFuture<GetTagKeysOutput, GetTagKeysError>;
+    fn get_tag_keys(&self, input: GetTagKeysRequest) -> Request<GetTagKeysRequest>;
 
     /// <p>Returns all tag values for the specified key in the specified region for the AWS account.</p>
-    fn get_tag_values(
-        &self,
-        input: GetTagValuesInput,
-    ) -> RusotoFuture<GetTagValuesOutput, GetTagValuesError>;
+    fn get_tag_values(&self, input: GetTagValuesRequest) -> Request<GetTagValuesRequest>;
 
     /// <p><p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul></p>
-    fn tag_resources(
-        &self,
-        input: TagResourcesInput,
-    ) -> RusotoFuture<TagResourcesOutput, TagResourcesError>;
+    fn tag_resources(&self, input: TagResourcesRequest) -> Request<TagResourcesRequest>;
 
     /// <p><p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul></p>
-    fn untag_resources(
-        &self,
-        input: UntagResourcesInput,
-    ) -> RusotoFuture<UntagResourcesOutput, UntagResourcesError>;
+    fn untag_resources(&self, input: UntagResourcesRequest) -> Request<UntagResourcesRequest>;
 }
 /// A client for the AWS Resource Groups Tagging API API.
 #[derive(Clone)]
@@ -514,25 +500,55 @@ impl ResourceGroupsTaggingApiClient {
 
 impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
     /// <p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>
-    fn get_resources(
-        &self,
-        input: GetResourcesInput,
-    ) -> RusotoFuture<GetResourcesOutput, GetResourcesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+    fn get_resources(&self, input: GetResourcesRequest) -> Request<GetResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns all tag keys in the specified region for the AWS account.</p>
+    fn get_tag_keys(&self, input: GetTagKeysRequest) -> Request<GetTagKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns all tag values for the specified key in the specified region for the AWS account.</p>
+    fn get_tag_values(&self, input: GetTagValuesRequest) -> Request<GetTagValuesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul></p>
+    fn tag_resources(&self, input: TagResourcesRequest) -> Request<TagResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul></p>
+    fn untag_resources(&self, input: UntagResourcesRequest) -> Request<UntagResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for GetResourcesRequest {
+    type Output = GetResourcesResponse;
+    type Error = GetResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "tagging", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.GetResources",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetResourcesOutput, _>()
+                        .deserialize::<GetResourcesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -544,27 +560,32 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             }
         })
     }
+}
 
-    /// <p>Returns all tag keys in the specified region for the AWS account.</p>
-    fn get_tag_keys(
-        &self,
-        input: GetTagKeysInput,
-    ) -> RusotoFuture<GetTagKeysOutput, GetTagKeysError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+impl ServiceRequest for GetTagKeysRequest {
+    type Output = GetTagKeysResponse;
+    type Error = GetTagKeysError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "tagging", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.GetTagKeys",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTagKeysOutput, _>()
+                        .deserialize::<GetTagKeysResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -576,27 +597,32 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             }
         })
     }
+}
 
-    /// <p>Returns all tag values for the specified key in the specified region for the AWS account.</p>
-    fn get_tag_values(
-        &self,
-        input: GetTagValuesInput,
-    ) -> RusotoFuture<GetTagValuesOutput, GetTagValuesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+impl ServiceRequest for GetTagValuesRequest {
+    type Output = GetTagValuesResponse;
+    type Error = GetTagValuesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "tagging", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.GetTagValues",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetTagValuesOutput, _>()
+                        .deserialize::<GetTagValuesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -608,27 +634,32 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             }
         })
     }
+}
 
-    /// <p><p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul></p>
-    fn tag_resources(
-        &self,
-        input: TagResourcesInput,
-    ) -> RusotoFuture<TagResourcesOutput, TagResourcesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+impl ServiceRequest for TagResourcesRequest {
+    type Output = TagResourcesResponse;
+    type Error = TagResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "tagging", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.TagResources",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourcesOutput, _>()
+                        .deserialize::<TagResourcesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -640,27 +671,32 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             }
         })
     }
+}
 
-    /// <p><p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul></p>
-    fn untag_resources(
-        &self,
-        input: UntagResourcesInput,
-    ) -> RusotoFuture<UntagResourcesOutput, UntagResourcesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+impl ServiceRequest for UntagResourcesRequest {
+    type Output = UntagResourcesResponse;
+    type Error = UntagResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "tagging", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.UntagResources",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourcesOutput, _>()
+                        .deserialize::<UntagResourcesResponse, _>()
                 }))
             } else {
                 Box::new(

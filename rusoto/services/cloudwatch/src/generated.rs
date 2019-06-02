@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -503,15 +504,15 @@ impl DatapointsToAlarmDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteAlarmsInput {
+pub struct DeleteAlarmsRequest {
     /// <p>The alarms to be deleted.</p>
     pub alarm_names: Vec<String>,
 }
 
-/// Serialize `DeleteAlarmsInput` contents to a `SignedRequest`.
-struct DeleteAlarmsInputSerializer;
-impl DeleteAlarmsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteAlarmsInput) {
+/// Serialize `DeleteAlarmsRequest` contents to a `SignedRequest`.
+struct DeleteAlarmsRequestSerializer;
+impl DeleteAlarmsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteAlarmsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -526,15 +527,28 @@ impl DeleteAlarmsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDashboardsInput {
+pub struct DeleteAlarmsResponse {}
+
+struct DeleteAlarmsResponseDeserializer;
+impl DeleteAlarmsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAlarmsResponse, XmlParseError> {
+        Ok(DeleteAlarmsResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDashboardsRequest {
     /// <p>The dashboards to be deleted. This parameter is required.</p>
     pub dashboard_names: Vec<String>,
 }
 
-/// Serialize `DeleteDashboardsInput` contents to a `SignedRequest`.
-struct DeleteDashboardsInputSerializer;
-impl DeleteDashboardsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDashboardsInput) {
+/// Serialize `DeleteDashboardsRequest` contents to a `SignedRequest`.
+struct DeleteDashboardsRequestSerializer;
+impl DeleteDashboardsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteDashboardsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -549,18 +563,18 @@ impl DeleteDashboardsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDashboardsOutput {}
+pub struct DeleteDashboardsResponse {}
 
-struct DeleteDashboardsOutputDeserializer;
-impl DeleteDashboardsOutputDeserializer {
+struct DeleteDashboardsResponseDeserializer;
+impl DeleteDashboardsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDashboardsOutput, XmlParseError> {
+    ) -> Result<DeleteDashboardsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteDashboardsOutput::default();
+        let obj = DeleteDashboardsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -568,7 +582,7 @@ impl DeleteDashboardsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAlarmHistoryInput {
+pub struct DescribeAlarmHistoryRequest {
     /// <p>The name of the alarm.</p>
     pub alarm_name: Option<String>,
     /// <p>The ending date to retrieve alarm history.</p>
@@ -583,10 +597,10 @@ pub struct DescribeAlarmHistoryInput {
     pub start_date: Option<String>,
 }
 
-/// Serialize `DescribeAlarmHistoryInput` contents to a `SignedRequest`.
-struct DescribeAlarmHistoryInputSerializer;
-impl DescribeAlarmHistoryInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmHistoryInput) {
+/// Serialize `DescribeAlarmHistoryRequest` contents to a `SignedRequest`.
+struct DescribeAlarmHistoryRequestSerializer;
+impl DescribeAlarmHistoryRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmHistoryRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -614,21 +628,21 @@ impl DescribeAlarmHistoryInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAlarmHistoryOutput {
+pub struct DescribeAlarmHistoryResponse {
     /// <p>The alarm histories, in JSON format.</p>
     pub alarm_history_items: Option<Vec<AlarmHistoryItem>>,
     /// <p>The token that marks the start of the next batch of returned results.</p>
     pub next_token: Option<String>,
 }
 
-struct DescribeAlarmHistoryOutputDeserializer;
-impl DescribeAlarmHistoryOutputDeserializer {
+struct DescribeAlarmHistoryResponseDeserializer;
+impl DescribeAlarmHistoryResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAlarmHistoryOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeAlarmHistoryOutput, _>(
+    ) -> Result<DescribeAlarmHistoryResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAlarmHistoryResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -650,7 +664,7 @@ impl DescribeAlarmHistoryOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAlarmsForMetricInput {
+pub struct DescribeAlarmsForMetricRequest {
     /// <p>The dimensions associated with the metric. If the metric has any associated dimensions, you must specify them in order for the call to succeed.</p>
     pub dimensions: Option<Vec<Dimension>>,
     /// <p>The percentile statistic for the metric. Specify a value between p0.0 and p100.</p>
@@ -667,10 +681,10 @@ pub struct DescribeAlarmsForMetricInput {
     pub unit: Option<String>,
 }
 
-/// Serialize `DescribeAlarmsForMetricInput` contents to a `SignedRequest`.
-struct DescribeAlarmsForMetricInputSerializer;
-impl DescribeAlarmsForMetricInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmsForMetricInput) {
+/// Serialize `DescribeAlarmsForMetricRequest` contents to a `SignedRequest`.
+struct DescribeAlarmsForMetricRequestSerializer;
+impl DescribeAlarmsForMetricRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmsForMetricRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -701,19 +715,19 @@ impl DescribeAlarmsForMetricInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAlarmsForMetricOutput {
+pub struct DescribeAlarmsForMetricResponse {
     /// <p>The information for each alarm with the specified metric.</p>
     pub metric_alarms: Option<Vec<MetricAlarm>>,
 }
 
-struct DescribeAlarmsForMetricOutputDeserializer;
-impl DescribeAlarmsForMetricOutputDeserializer {
+struct DescribeAlarmsForMetricResponseDeserializer;
+impl DescribeAlarmsForMetricResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAlarmsForMetricOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeAlarmsForMetricOutput, _>(
+    ) -> Result<DescribeAlarmsForMetricResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAlarmsForMetricResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -731,7 +745,7 @@ impl DescribeAlarmsForMetricOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAlarmsInput {
+pub struct DescribeAlarmsRequest {
     /// <p>The action name prefix.</p>
     pub action_prefix: Option<String>,
     /// <p>The alarm name prefix. If this parameter is specified, you cannot specify <code>AlarmNames</code>.</p>
@@ -746,10 +760,10 @@ pub struct DescribeAlarmsInput {
     pub state_value: Option<String>,
 }
 
-/// Serialize `DescribeAlarmsInput` contents to a `SignedRequest`.
-struct DescribeAlarmsInputSerializer;
-impl DescribeAlarmsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmsInput) {
+/// Serialize `DescribeAlarmsRequest` contents to a `SignedRequest`.
+struct DescribeAlarmsRequestSerializer;
+impl DescribeAlarmsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAlarmsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -781,21 +795,21 @@ impl DescribeAlarmsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAlarmsOutput {
+pub struct DescribeAlarmsResponse {
     /// <p>The information for the specified alarms.</p>
     pub metric_alarms: Option<Vec<MetricAlarm>>,
     /// <p>The token that marks the start of the next batch of returned results.</p>
     pub next_token: Option<String>,
 }
 
-struct DescribeAlarmsOutputDeserializer;
-impl DescribeAlarmsOutputDeserializer {
+struct DescribeAlarmsResponseDeserializer;
+impl DescribeAlarmsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAlarmsOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeAlarmsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DescribeAlarmsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAlarmsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MetricAlarms" => {
                     obj.metric_alarms.get_or_insert(vec![]).extend(
@@ -944,15 +958,15 @@ impl DimensionsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DisableAlarmActionsInput {
+pub struct DisableAlarmActionsRequest {
     /// <p>The names of the alarms.</p>
     pub alarm_names: Vec<String>,
 }
 
-/// Serialize `DisableAlarmActionsInput` contents to a `SignedRequest`.
-struct DisableAlarmActionsInputSerializer;
-impl DisableAlarmActionsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DisableAlarmActionsInput) {
+/// Serialize `DisableAlarmActionsRequest` contents to a `SignedRequest`.
+struct DisableAlarmActionsRequestSerializer;
+impl DisableAlarmActionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DisableAlarmActionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -967,15 +981,28 @@ impl DisableAlarmActionsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnableAlarmActionsInput {
+pub struct DisableAlarmActionsResponse {}
+
+struct DisableAlarmActionsResponseDeserializer;
+impl DisableAlarmActionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableAlarmActionsResponse, XmlParseError> {
+        Ok(DisableAlarmActionsResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableAlarmActionsRequest {
     /// <p>The names of the alarms.</p>
     pub alarm_names: Vec<String>,
 }
 
-/// Serialize `EnableAlarmActionsInput` contents to a `SignedRequest`.
-struct EnableAlarmActionsInputSerializer;
-impl EnableAlarmActionsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnableAlarmActionsInput) {
+/// Serialize `EnableAlarmActionsRequest` contents to a `SignedRequest`.
+struct EnableAlarmActionsRequestSerializer;
+impl EnableAlarmActionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &EnableAlarmActionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -989,6 +1016,19 @@ impl EnableAlarmActionsInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableAlarmActionsResponse {}
+
+struct EnableAlarmActionsResponseDeserializer;
+impl EnableAlarmActionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableAlarmActionsResponse, XmlParseError> {
+        Ok(EnableAlarmActionsResponse::default())
+    }
+}
 struct EvaluateLowSampleCountPercentileDeserializer;
 impl EvaluateLowSampleCountPercentileDeserializer {
     #[allow(unused_variables)]
@@ -1035,15 +1075,15 @@ impl ExtendedStatisticsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetDashboardInput {
+pub struct GetDashboardRequest {
     /// <p>The name of the dashboard to be described.</p>
     pub dashboard_name: String,
 }
 
-/// Serialize `GetDashboardInput` contents to a `SignedRequest`.
-struct GetDashboardInputSerializer;
-impl GetDashboardInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetDashboardInput) {
+/// Serialize `GetDashboardRequest` contents to a `SignedRequest`.
+struct GetDashboardRequestSerializer;
+impl GetDashboardRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetDashboardRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1057,7 +1097,7 @@ impl GetDashboardInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetDashboardOutput {
+pub struct GetDashboardResponse {
     /// <p>The Amazon Resource Name (ARN) of the dashboard.</p>
     pub dashboard_arn: Option<String>,
     /// <p>The detailed information about the dashboard, including what widgets are included and their location on the dashboard. For more information about the <code>DashboardBody</code> syntax, see <a>CloudWatch-Dashboard-Body-Structure</a>. </p>
@@ -1066,14 +1106,14 @@ pub struct GetDashboardOutput {
     pub dashboard_name: Option<String>,
 }
 
-struct GetDashboardOutputDeserializer;
-impl GetDashboardOutputDeserializer {
+struct GetDashboardResponseDeserializer;
+impl GetDashboardResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetDashboardOutput, XmlParseError> {
-        deserialize_elements::<_, GetDashboardOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<GetDashboardResponse, XmlParseError> {
+        deserialize_elements::<_, GetDashboardResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DashboardArn" => {
                     obj.dashboard_arn = Some(DashboardArnDeserializer::deserialize(
@@ -1100,7 +1140,7 @@ impl GetDashboardOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetMetricDataInput {
+pub struct GetMetricDataRequest {
     /// <p>The time stamp indicating the latest data to be returned.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p>
     pub end_time: String,
     /// <p>The maximum number of data points the request should return before paginating. If you omit this, the default of 100,800 is used.</p>
@@ -1115,10 +1155,10 @@ pub struct GetMetricDataInput {
     pub start_time: String,
 }
 
-/// Serialize `GetMetricDataInput` contents to a `SignedRequest`.
-struct GetMetricDataInputSerializer;
-impl GetMetricDataInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetMetricDataInput) {
+/// Serialize `GetMetricDataRequest` contents to a `SignedRequest`.
+struct GetMetricDataRequestSerializer;
+impl GetMetricDataRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetMetricDataRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1144,7 +1184,7 @@ impl GetMetricDataInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetMetricDataOutput {
+pub struct GetMetricDataResponse {
     /// <p>Contains a message about this <code>GetMetricData</code> operation, if the operation results in such a message. An example of a message that may be returned is <code>Maximum number of allowed metrics exceeded</code>. If there is a message, as much of the operation as possible is still executed.</p> <p>A message appears here only if it is related to the global <code>GetMetricData</code> operation. Any message about a specific metric returned by the operation appears in the <code>MetricDataResult</code> object returned for that metric.</p>
     pub messages: Option<Vec<MessageData>>,
     /// <p>The metrics that are returned, including the metric name, namespace, and dimensions.</p>
@@ -1153,14 +1193,14 @@ pub struct GetMetricDataOutput {
     pub next_token: Option<String>,
 }
 
-struct GetMetricDataOutputDeserializer;
-impl GetMetricDataOutputDeserializer {
+struct GetMetricDataResponseDeserializer;
+impl GetMetricDataResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetMetricDataOutput, XmlParseError> {
-        deserialize_elements::<_, GetMetricDataOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<GetMetricDataResponse, XmlParseError> {
+        deserialize_elements::<_, GetMetricDataResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Messages" => {
                     obj.messages.get_or_insert(vec![]).extend(
@@ -1182,7 +1222,7 @@ impl GetMetricDataOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetMetricStatisticsInput {
+pub struct GetMetricStatisticsRequest {
     /// <p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. If a specific combination of dimensions was not published, you can't retrieve statistics for it. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub dimensions: Option<Vec<Dimension>>,
     /// <p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>
@@ -1203,10 +1243,10 @@ pub struct GetMetricStatisticsInput {
     pub unit: Option<String>,
 }
 
-/// Serialize `GetMetricStatisticsInput` contents to a `SignedRequest`.
-struct GetMetricStatisticsInputSerializer;
-impl GetMetricStatisticsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetMetricStatisticsInput) {
+/// Serialize `GetMetricStatisticsRequest` contents to a `SignedRequest`.
+struct GetMetricStatisticsRequestSerializer;
+impl GetMetricStatisticsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetMetricStatisticsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1245,21 +1285,21 @@ impl GetMetricStatisticsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetMetricStatisticsOutput {
+pub struct GetMetricStatisticsResponse {
     /// <p>The data points for the specified metric.</p>
     pub datapoints: Option<Vec<Datapoint>>,
     /// <p>A label for the specified metric.</p>
     pub label: Option<String>,
 }
 
-struct GetMetricStatisticsOutputDeserializer;
-impl GetMetricStatisticsOutputDeserializer {
+struct GetMetricStatisticsResponseDeserializer;
+impl GetMetricStatisticsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetMetricStatisticsOutput, XmlParseError> {
-        deserialize_elements::<_, GetMetricStatisticsOutput, _>(
+    ) -> Result<GetMetricStatisticsResponse, XmlParseError> {
+        deserialize_elements::<_, GetMetricStatisticsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1280,17 +1320,17 @@ impl GetMetricStatisticsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetMetricWidgetImageInput {
+pub struct GetMetricWidgetImageRequest {
     /// <p>A JSON string that defines the bitmap graph to be retrieved. The string includes the metrics to include in the graph, statistics, annotations, title, axis limits, and so on. You can include only one <code>MetricWidget</code> parameter in each <code>GetMetricWidgetImage</code> call.</p> <p>For more information about the syntax of <code>MetricWidget</code> see <a>CloudWatch-Metric-Widget-Structure</a>.</p> <p>If any metric on the graph could not load all the requested data points, an orange triangle with an exclamation point appears next to the graph legend.</p>
     pub metric_widget: String,
     /// <p>The format of the resulting image. Only PNG images are supported.</p> <p>The default is <code>png</code>. If you specify <code>png</code>, the API returns an HTTP response with the content-type set to <code>text/xml</code>. The image data is in a <code>MetricWidgetImage</code> field. For example:</p> <p> <code> &lt;GetMetricWidgetImageResponse xmlns=&lt;URLstring&gt;&gt;</code> </p> <p> <code> &lt;GetMetricWidgetImageResult&gt;</code> </p> <p> <code> &lt;MetricWidgetImage&gt;</code> </p> <p> <code> iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQEAYAAAAip...</code> </p> <p> <code> &lt;/MetricWidgetImage&gt;</code> </p> <p> <code> &lt;/GetMetricWidgetImageResult&gt;</code> </p> <p> <code> &lt;ResponseMetadata&gt;</code> </p> <p> <code> &lt;RequestId&gt;6f0d4192-4d42-11e8-82c1-f539a07e0e3b&lt;/RequestId&gt;</code> </p> <p> <code> &lt;/ResponseMetadata&gt;</code> </p> <p> <code>&lt;/GetMetricWidgetImageResponse&gt;</code> </p> <p>The <code>image/png</code> setting is intended only for custom HTTP requests. For most use cases, and all actions using an AWS SDK, you should use <code>png</code>. If you specify <code>image/png</code>, the HTTP response has a content-type set to <code>image/png</code>, and the body of the response is a PNG image. </p>
     pub output_format: Option<String>,
 }
 
-/// Serialize `GetMetricWidgetImageInput` contents to a `SignedRequest`.
-struct GetMetricWidgetImageInputSerializer;
-impl GetMetricWidgetImageInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetMetricWidgetImageInput) {
+/// Serialize `GetMetricWidgetImageRequest` contents to a `SignedRequest`.
+struct GetMetricWidgetImageRequestSerializer;
+impl GetMetricWidgetImageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetMetricWidgetImageRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1304,19 +1344,19 @@ impl GetMetricWidgetImageInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetMetricWidgetImageOutput {
+pub struct GetMetricWidgetImageResponse {
     /// <p>The image of the graph, in the output format specified.</p>
     pub metric_widget_image: Option<bytes::Bytes>,
 }
 
-struct GetMetricWidgetImageOutputDeserializer;
-impl GetMetricWidgetImageOutputDeserializer {
+struct GetMetricWidgetImageResponseDeserializer;
+impl GetMetricWidgetImageResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetMetricWidgetImageOutput, XmlParseError> {
-        deserialize_elements::<_, GetMetricWidgetImageOutput, _>(
+    ) -> Result<GetMetricWidgetImageResponse, XmlParseError> {
+        deserialize_elements::<_, GetMetricWidgetImageResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1379,17 +1419,17 @@ impl LastModifiedDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListDashboardsInput {
+pub struct ListDashboardsRequest {
     /// <p>If you specify this parameter, only the dashboards with names starting with the specified string are listed. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, ".", "-", and "_". </p>
     pub dashboard_name_prefix: Option<String>,
     /// <p>The token returned by a previous call to indicate that there is more data available.</p>
     pub next_token: Option<String>,
 }
 
-/// Serialize `ListDashboardsInput` contents to a `SignedRequest`.
-struct ListDashboardsInputSerializer;
-impl ListDashboardsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListDashboardsInput) {
+/// Serialize `ListDashboardsRequest` contents to a `SignedRequest`.
+struct ListDashboardsRequestSerializer;
+impl ListDashboardsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListDashboardsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1408,21 +1448,21 @@ impl ListDashboardsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListDashboardsOutput {
+pub struct ListDashboardsResponse {
     /// <p>The list of matching dashboards.</p>
     pub dashboard_entries: Option<Vec<DashboardEntry>>,
     /// <p>The token that marks the start of the next batch of returned results.</p>
     pub next_token: Option<String>,
 }
 
-struct ListDashboardsOutputDeserializer;
-impl ListDashboardsOutputDeserializer {
+struct ListDashboardsResponseDeserializer;
+impl ListDashboardsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListDashboardsOutput, XmlParseError> {
-        deserialize_elements::<_, ListDashboardsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListDashboardsResponse, XmlParseError> {
+        deserialize_elements::<_, ListDashboardsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DashboardEntries" => {
                     obj.dashboard_entries.get_or_insert(vec![]).extend(
@@ -1439,7 +1479,7 @@ impl ListDashboardsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListMetricsInput {
+pub struct ListMetricsRequest {
     /// <p>The dimensions to filter against.</p>
     pub dimensions: Option<Vec<DimensionFilter>>,
     /// <p>The name of the metric to filter against.</p>
@@ -1450,10 +1490,10 @@ pub struct ListMetricsInput {
     pub next_token: Option<String>,
 }
 
-/// Serialize `ListMetricsInput` contents to a `SignedRequest`.
-struct ListMetricsInputSerializer;
-impl ListMetricsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListMetricsInput) {
+/// Serialize `ListMetricsRequest` contents to a `SignedRequest`.
+struct ListMetricsRequestSerializer;
+impl ListMetricsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListMetricsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1479,21 +1519,21 @@ impl ListMetricsInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListMetricsOutput {
+pub struct ListMetricsResponse {
     /// <p>The metrics.</p>
     pub metrics: Option<Vec<Metric>>,
     /// <p>The token that marks the start of the next batch of returned results.</p>
     pub next_token: Option<String>,
 }
 
-struct ListMetricsOutputDeserializer;
-impl ListMetricsOutputDeserializer {
+struct ListMetricsResponseDeserializer;
+impl ListMetricsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListMetricsOutput, XmlParseError> {
-        deserialize_elements::<_, ListMetricsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListMetricsResponse, XmlParseError> {
+        deserialize_elements::<_, ListMetricsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Metrics" => {
                     obj.metrics
@@ -1510,15 +1550,15 @@ impl ListMetricsOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTagsForResourceInput {
+pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the CloudWatch resource that you want to view tags for. For more information on ARN format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-cloudwatch">Example ARNs</a> in the <i>Amazon Web Services General Reference</i>.</p>
     pub resource_arn: String,
 }
 
-/// Serialize `ListTagsForResourceInput` contents to a `SignedRequest`.
-struct ListTagsForResourceInputSerializer;
-impl ListTagsForResourceInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceInput) {
+/// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
+struct ListTagsForResourceRequestSerializer;
+impl ListTagsForResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1529,19 +1569,19 @@ impl ListTagsForResourceInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTagsForResourceOutput {
+pub struct ListTagsForResourceResponse {
     /// <p>The list of tag keys and values associated with the resource you specified.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
-struct ListTagsForResourceOutputDeserializer;
-impl ListTagsForResourceOutputDeserializer {
+struct ListTagsForResourceResponseDeserializer;
+impl ListTagsForResourceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListTagsForResourceOutput, XmlParseError> {
-        deserialize_elements::<_, ListTagsForResourceOutput, _>(
+    ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        deserialize_elements::<_, ListTagsForResourceResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2345,17 +2385,17 @@ impl PeriodDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutDashboardInput {
+pub struct PutDashboardRequest {
     /// <p>The detailed information about the dashboard in JSON format, including the widgets to include and their location on the dashboard. This parameter is required.</p> <p>For more information about the syntax, see <a>CloudWatch-Dashboard-Body-Structure</a>.</p>
     pub dashboard_body: String,
     /// <p>The name of the dashboard. If a dashboard with this name already exists, this call modifies that dashboard, replacing its current contents. Otherwise, a new dashboard is created. The maximum length is 255, and valid characters are A-Z, a-z, 0-9, "-", and "_". This parameter is required.</p>
     pub dashboard_name: String,
 }
 
-/// Serialize `PutDashboardInput` contents to a `SignedRequest`.
-struct PutDashboardInputSerializer;
-impl PutDashboardInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutDashboardInput) {
+/// Serialize `PutDashboardRequest` contents to a `SignedRequest`.
+struct PutDashboardRequestSerializer;
+impl PutDashboardRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutDashboardRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2373,19 +2413,19 @@ impl PutDashboardInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutDashboardOutput {
+pub struct PutDashboardResponse {
     /// <p>If the input for <code>PutDashboard</code> was correct and the dashboard was successfully created or modified, this result is empty.</p> <p>If this result includes only warning messages, then the input was valid enough for the dashboard to be created or modified, but some elements of the dashboard may not render.</p> <p>If this result includes error messages, the input was not valid and the operation failed.</p>
     pub dashboard_validation_messages: Option<Vec<DashboardValidationMessage>>,
 }
 
-struct PutDashboardOutputDeserializer;
-impl PutDashboardOutputDeserializer {
+struct PutDashboardResponseDeserializer;
+impl PutDashboardResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<PutDashboardOutput, XmlParseError> {
-        deserialize_elements::<_, PutDashboardOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<PutDashboardResponse, XmlParseError> {
+        deserialize_elements::<_, PutDashboardResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DashboardValidationMessages" => {
                     obj.dashboard_validation_messages
@@ -2402,7 +2442,7 @@ impl PutDashboardOutputDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutMetricAlarmInput {
+pub struct PutMetricAlarmRequest {
     /// <p>Indicates whether actions should be executed during any changes to the alarm state. The default is TRUE.</p>
     pub actions_enabled: Option<bool>,
     /// <p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
@@ -2447,10 +2487,10 @@ pub struct PutMetricAlarmInput {
     pub unit: Option<String>,
 }
 
-/// Serialize `PutMetricAlarmInput` contents to a `SignedRequest`.
-struct PutMetricAlarmInputSerializer;
-impl PutMetricAlarmInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutMetricAlarmInput) {
+/// Serialize `PutMetricAlarmRequest` contents to a `SignedRequest`.
+struct PutMetricAlarmRequestSerializer;
+impl PutMetricAlarmRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutMetricAlarmRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2544,17 +2584,30 @@ impl PutMetricAlarmInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutMetricDataInput {
+pub struct PutMetricAlarmResponse {}
+
+struct PutMetricAlarmResponseDeserializer;
+impl PutMetricAlarmResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutMetricAlarmResponse, XmlParseError> {
+        Ok(PutMetricAlarmResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutMetricDataRequest {
     /// <p>The data for the metric. The array can include no more than 20 metrics per call.</p>
     pub metric_data: Vec<MetricDatum>,
     /// <p>The namespace for the metric data.</p> <p>You cannot specify a namespace that begins with "AWS/". Namespaces that begin with "AWS/" are reserved for use by Amazon Web Services products.</p>
     pub namespace: String,
 }
 
-/// Serialize `PutMetricDataInput` contents to a `SignedRequest`.
-struct PutMetricDataInputSerializer;
-impl PutMetricDataInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutMetricDataInput) {
+/// Serialize `PutMetricDataRequest` contents to a `SignedRequest`.
+struct PutMetricDataRequestSerializer;
+impl PutMetricDataRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutMetricDataRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2569,6 +2622,19 @@ impl PutMetricDataInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutMetricDataResponse {}
+
+struct PutMetricDataResponseDeserializer;
+impl PutMetricDataResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutMetricDataResponse, XmlParseError> {
+        Ok(PutMetricDataResponse::default())
+    }
+}
 struct ResourceListDeserializer;
 impl ResourceListDeserializer {
     #[allow(unused_variables)]
@@ -2621,7 +2687,7 @@ impl ReturnDataDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetAlarmStateInput {
+pub struct SetAlarmStateRequest {
     /// <p>The name for the alarm. This name must be unique within the AWS account. The maximum length is 255 characters.</p>
     pub alarm_name: String,
     /// <p>The reason that this alarm is set to this specific state, in text format.</p>
@@ -2632,10 +2698,10 @@ pub struct SetAlarmStateInput {
     pub state_value: String,
 }
 
-/// Serialize `SetAlarmStateInput` contents to a `SignedRequest`.
-struct SetAlarmStateInputSerializer;
-impl SetAlarmStateInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetAlarmStateInput) {
+/// Serialize `SetAlarmStateRequest` contents to a `SignedRequest`.
+struct SetAlarmStateRequestSerializer;
+impl SetAlarmStateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetAlarmStateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2650,6 +2716,19 @@ impl SetAlarmStateInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetAlarmStateResponse {}
+
+struct SetAlarmStateResponseDeserializer;
+impl SetAlarmStateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetAlarmStateResponse, XmlParseError> {
+        Ok(SetAlarmStateResponse::default())
+    }
+}
 struct SizeDeserializer;
 impl SizeDeserializer {
     #[allow(unused_variables)]
@@ -2873,17 +2952,17 @@ impl TagListSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagResourceInput {
+pub struct TagResourceRequest {
     /// <p>The ARN of the CloudWatch resource that you're adding tags to. For more information on ARN format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-cloudwatch">Example ARNs</a> in the <i>Amazon Web Services General Reference</i>.</p>
     pub resource_arn: String,
     /// <p>The list of key-value pairs to associate with the resource.</p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `TagResourceInput` contents to a `SignedRequest`.
-struct TagResourceInputSerializer;
-impl TagResourceInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TagResourceInput) {
+/// Serialize `TagResourceRequest` contents to a `SignedRequest`.
+struct TagResourceRequestSerializer;
+impl TagResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TagResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2895,18 +2974,18 @@ impl TagResourceInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagResourceOutput {}
+pub struct TagResourceResponse {}
 
-struct TagResourceOutputDeserializer;
-impl TagResourceOutputDeserializer {
+struct TagResourceResponseDeserializer;
+impl TagResourceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<TagResourceOutput, XmlParseError> {
+    ) -> Result<TagResourceResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = TagResourceOutput::default();
+        let obj = TagResourceResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -2975,17 +3054,17 @@ impl TreatMissingDataDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UntagResourceInput {
+pub struct UntagResourceRequest {
     /// <p>The ARN of the CloudWatch resource that you're removing tags from. For more information on ARN format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-cloudwatch">Example ARNs</a> in the <i>Amazon Web Services General Reference</i>.</p>
     pub resource_arn: String,
     /// <p>The list of tag keys to remove from the resource.</p>
     pub tag_keys: Vec<String>,
 }
 
-/// Serialize `UntagResourceInput` contents to a `SignedRequest`.
-struct UntagResourceInputSerializer;
-impl UntagResourceInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UntagResourceInput) {
+/// Serialize `UntagResourceRequest` contents to a `SignedRequest`.
+struct UntagResourceRequestSerializer;
+impl UntagResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UntagResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2997,18 +3076,18 @@ impl UntagResourceInputSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UntagResourceOutput {}
+pub struct UntagResourceResponse {}
 
-struct UntagResourceOutputDeserializer;
-impl UntagResourceOutputDeserializer {
+struct UntagResourceResponseDeserializer;
+impl UntagResourceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<UntagResourceOutput, XmlParseError> {
+    ) -> Result<UntagResourceResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = UntagResourceOutput::default();
+        let obj = UntagResourceResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -4110,113 +4189,86 @@ impl Error for UntagResourceError {
 /// Trait representing the capabilities of the CloudWatch API. CloudWatch clients implement this trait.
 pub trait CloudWatch {
     /// <p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>
-    fn delete_alarms(&self, input: DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError>;
+    fn delete_alarms(&self, input: DeleteAlarmsRequest) -> Request<DeleteAlarmsRequest>;
 
     /// <p>Deletes all dashboards that you specify. You may specify up to 100 dashboards to delete. If there is an error during this call, no dashboards are deleted.</p>
-    fn delete_dashboards(
-        &self,
-        input: DeleteDashboardsInput,
-    ) -> RusotoFuture<DeleteDashboardsOutput, DeleteDashboardsError>;
+    fn delete_dashboards(&self, input: DeleteDashboardsRequest)
+        -> Request<DeleteDashboardsRequest>;
 
     /// <p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>CloudWatch retains the history of an alarm even if you delete the alarm.</p>
     fn describe_alarm_history(
         &self,
-        input: DescribeAlarmHistoryInput,
-    ) -> RusotoFuture<DescribeAlarmHistoryOutput, DescribeAlarmHistoryError>;
+        input: DescribeAlarmHistoryRequest,
+    ) -> Request<DescribeAlarmHistoryRequest>;
 
     /// <p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>
-    fn describe_alarms(
-        &self,
-        input: DescribeAlarmsInput,
-    ) -> RusotoFuture<DescribeAlarmsOutput, DescribeAlarmsError>;
+    fn describe_alarms(&self, input: DescribeAlarmsRequest) -> Request<DescribeAlarmsRequest>;
 
     /// <p>Retrieves the alarms for the specified metric. To filter the results, specify a statistic, period, or unit.</p>
     fn describe_alarms_for_metric(
         &self,
-        input: DescribeAlarmsForMetricInput,
-    ) -> RusotoFuture<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError>;
+        input: DescribeAlarmsForMetricRequest,
+    ) -> Request<DescribeAlarmsForMetricRequest>;
 
     /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
     fn disable_alarm_actions(
         &self,
-        input: DisableAlarmActionsInput,
-    ) -> RusotoFuture<(), DisableAlarmActionsError>;
+        input: DisableAlarmActionsRequest,
+    ) -> Request<DisableAlarmActionsRequest>;
 
     /// <p>Enables the actions for the specified alarms.</p>
     fn enable_alarm_actions(
         &self,
-        input: EnableAlarmActionsInput,
-    ) -> RusotoFuture<(), EnableAlarmActionsError>;
+        input: EnableAlarmActionsRequest,
+    ) -> Request<EnableAlarmActionsRequest>;
 
     /// <p>Displays the details of the dashboard that you specify.</p> <p>To copy an existing dashboard, use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code> to create the copy.</p>
-    fn get_dashboard(
-        &self,
-        input: GetDashboardInput,
-    ) -> RusotoFuture<GetDashboardOutput, GetDashboardError>;
+    fn get_dashboard(&self, input: GetDashboardRequest) -> Request<GetDashboardRequest>;
 
     /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p>
-    fn get_metric_data(
-        &self,
-        input: GetMetricDataInput,
-    ) -> RusotoFuture<GetMetricDataOutput, GetMetricDataError>;
+    fn get_metric_data(&self, input: GetMetricDataRequest) -> Request<GetMetricDataRequest>;
 
     /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     fn get_metric_statistics(
         &self,
-        input: GetMetricStatisticsInput,
-    ) -> RusotoFuture<GetMetricStatisticsOutput, GetMetricStatisticsError>;
+        input: GetMetricStatisticsRequest,
+    ) -> Request<GetMetricStatisticsRequest>;
 
     /// <p><p>You can use the <code>GetMetricWidgetImage</code> API to retrieve a snapshot graph of one or more Amazon CloudWatch metrics as a bitmap image. You can then embed this image into your services and products, such as wiki pages, reports, and documents. You could also retrieve images regularly, such as every minute, and create your own custom live dashboard.</p> <p>The graph you retrieve can include all CloudWatch metric graph features, including metric math and horizontal and vertical annotations.</p> <p>There is a limit of 20 transactions per second for this API. Each <code>GetMetricWidgetImage</code> action has the following limits:</p> <ul> <li> <p>As many as 100 metrics in the graph.</p> </li> <li> <p>Up to 100 KB uncompressed payload.</p> </li> </ul></p>
     fn get_metric_widget_image(
         &self,
-        input: GetMetricWidgetImageInput,
-    ) -> RusotoFuture<GetMetricWidgetImageOutput, GetMetricWidgetImageError>;
+        input: GetMetricWidgetImageRequest,
+    ) -> Request<GetMetricWidgetImageRequest>;
 
     /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p> <p> <code>ListDashboards</code> returns up to 1000 results on one page. If there are more than 1000 dashboards, you can call <code>ListDashboards</code> again and include the value you received for <code>NextToken</code> in the first call, to receive the next 1000 results.</p>
-    fn list_dashboards(
-        &self,
-        input: ListDashboardsInput,
-    ) -> RusotoFuture<ListDashboardsOutput, ListDashboardsError>;
+    fn list_dashboards(&self, input: ListDashboardsRequest) -> Request<ListDashboardsRequest>;
 
     /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricData</a> or <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricData</a> or <a>GetMetricStatistics</a>.</p>
-    fn list_metrics(
-        &self,
-        input: ListMetricsInput,
-    ) -> RusotoFuture<ListMetricsOutput, ListMetricsError>;
+    fn list_metrics(&self, input: ListMetricsRequest) -> Request<ListMetricsRequest>;
 
     /// <p>Displays the tags associated with a CloudWatch resource. Alarms support tagging.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>There is no limit to the number of dashboards in your account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
-    fn put_dashboard(
-        &self,
-        input: PutDashboardInput,
-    ) -> RusotoFuture<PutDashboardOutput, PutDashboardError>;
+    fn put_dashboard(&self, input: PutDashboardRequest) -> Request<PutDashboardRequest>;
 
     /// <p>Creates or updates an alarm and associates it with the specified metric or metric math expression.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
-    fn put_metric_alarm(&self, input: PutMetricAlarmInput)
-        -> RusotoFuture<(), PutMetricAlarmError>;
+    fn put_metric_alarm(&self, input: PutMetricAlarmRequest) -> Request<PutMetricAlarmRequest>;
 
     /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
-    fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError>;
+    fn put_metric_data(&self, input: PutMetricDataRequest) -> Request<PutMetricDataRequest>;
 
     /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>
-    fn set_alarm_state(&self, input: SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError>;
+    fn set_alarm_state(&self, input: SetAlarmStateRequest) -> Request<SetAlarmStateRequest>;
 
     /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. In CloudWatch, alarms can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes one or more tags from the specified resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 }
 /// A client for the CloudWatch API.
 #[derive(Clone)]
@@ -4256,17 +4308,149 @@ impl CloudWatchClient {
 
 impl CloudWatch for CloudWatchClient {
     /// <p>Deletes the specified alarms. In the event of an error, no alarms are deleted.</p>
-    fn delete_alarms(&self, input: DeleteAlarmsInput) -> RusotoFuture<(), DeleteAlarmsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+    fn delete_alarms(&self, input: DeleteAlarmsRequest) -> Request<DeleteAlarmsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes all dashboards that you specify. You may specify up to 100 dashboards to delete. If there is an error during this call, no dashboards are deleted.</p>
+    fn delete_dashboards(
+        &self,
+        input: DeleteDashboardsRequest,
+    ) -> Request<DeleteDashboardsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>CloudWatch retains the history of an alarm even if you delete the alarm.</p>
+    fn describe_alarm_history(
+        &self,
+        input: DescribeAlarmHistoryRequest,
+    ) -> Request<DescribeAlarmHistoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>
+    fn describe_alarms(&self, input: DescribeAlarmsRequest) -> Request<DescribeAlarmsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the alarms for the specified metric. To filter the results, specify a statistic, period, or unit.</p>
+    fn describe_alarms_for_metric(
+        &self,
+        input: DescribeAlarmsForMetricRequest,
+    ) -> Request<DescribeAlarmsForMetricRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
+    fn disable_alarm_actions(
+        &self,
+        input: DisableAlarmActionsRequest,
+    ) -> Request<DisableAlarmActionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables the actions for the specified alarms.</p>
+    fn enable_alarm_actions(
+        &self,
+        input: EnableAlarmActionsRequest,
+    ) -> Request<EnableAlarmActionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Displays the details of the dashboard that you specify.</p> <p>To copy an existing dashboard, use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code> to create the copy.</p>
+    fn get_dashboard(&self, input: GetDashboardRequest) -> Request<GetDashboardRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p>
+    fn get_metric_data(&self, input: GetMetricDataRequest) -> Request<GetMetricDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    fn get_metric_statistics(
+        &self,
+        input: GetMetricStatisticsRequest,
+    ) -> Request<GetMetricStatisticsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>You can use the <code>GetMetricWidgetImage</code> API to retrieve a snapshot graph of one or more Amazon CloudWatch metrics as a bitmap image. You can then embed this image into your services and products, such as wiki pages, reports, and documents. You could also retrieve images regularly, such as every minute, and create your own custom live dashboard.</p> <p>The graph you retrieve can include all CloudWatch metric graph features, including metric math and horizontal and vertical annotations.</p> <p>There is a limit of 20 transactions per second for this API. Each <code>GetMetricWidgetImage</code> action has the following limits:</p> <ul> <li> <p>As many as 100 metrics in the graph.</p> </li> <li> <p>Up to 100 KB uncompressed payload.</p> </li> </ul></p>
+    fn get_metric_widget_image(
+        &self,
+        input: GetMetricWidgetImageRequest,
+    ) -> Request<GetMetricWidgetImageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p> <p> <code>ListDashboards</code> returns up to 1000 results on one page. If there are more than 1000 dashboards, you can call <code>ListDashboards</code> again and include the value you received for <code>NextToken</code> in the first call, to receive the next 1000 results.</p>
+    fn list_dashboards(&self, input: ListDashboardsRequest) -> Request<ListDashboardsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricData</a> or <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricData</a> or <a>GetMetricStatistics</a>.</p>
+    fn list_metrics(&self, input: ListMetricsRequest) -> Request<ListMetricsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Displays the tags associated with a CloudWatch resource. Alarms support tagging.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>There is no limit to the number of dashboards in your account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
+    fn put_dashboard(&self, input: PutDashboardRequest) -> Request<PutDashboardRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates an alarm and associates it with the specified metric or metric math expression.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
+    fn put_metric_alarm(&self, input: PutMetricAlarmRequest) -> Request<PutMetricAlarmRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
+    fn put_metric_data(&self, input: PutMetricDataRequest) -> Request<PutMetricDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>
+    fn set_alarm_state(&self, input: SetAlarmStateRequest) -> Request<SetAlarmStateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. In CloudWatch, alarms can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes one or more tags from the specified resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DeleteAlarmsRequest {
+    type Output = DeleteAlarmsResponse;
+    type Error = DeleteAlarmsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAlarms");
         params.put("Version", "2010-08-01");
-        DeleteAlarmsInputSerializer::serialize(&mut params, "", &input);
+        DeleteAlarmsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4276,25 +4460,50 @@ impl CloudWatch for CloudWatchClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteAlarmsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteAlarmsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes all dashboards that you specify. You may specify up to 100 dashboards to delete. If there is an error during this call, no dashboards are deleted.</p>
-    fn delete_dashboards(
-        &self,
-        input: DeleteDashboardsInput,
-    ) -> RusotoFuture<DeleteDashboardsOutput, DeleteDashboardsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for DeleteDashboardsRequest {
+    type Output = DeleteDashboardsResponse;
+    type Error = DeleteDashboardsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDashboards");
         params.put("Version", "2010-08-01");
-        DeleteDashboardsInputSerializer::serialize(&mut params, "", &input);
+        DeleteDashboardsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4308,7 +4517,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDashboardsOutput::default();
+                    result = DeleteDashboardsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4318,7 +4527,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDashboardsOutputDeserializer::deserialize(
+                    result = DeleteDashboardsResponseDeserializer::deserialize(
                         "DeleteDashboardsResult",
                         &mut stack,
                     )?;
@@ -4330,22 +4539,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for all alarms are returned.</p> <p>CloudWatch retains the history of an alarm even if you delete the alarm.</p>
-    fn describe_alarm_history(
-        &self,
-        input: DescribeAlarmHistoryInput,
-    ) -> RusotoFuture<DescribeAlarmHistoryOutput, DescribeAlarmHistoryError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for DescribeAlarmHistoryRequest {
+    type Output = DescribeAlarmHistoryResponse;
+    type Error = DescribeAlarmHistoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAlarmHistory");
         params.put("Version", "2010-08-01");
-        DescribeAlarmHistoryInputSerializer::serialize(&mut params, "", &input);
+        DescribeAlarmHistoryRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4358,7 +4572,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAlarmHistoryOutput::default();
+                    result = DescribeAlarmHistoryResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4368,7 +4582,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAlarmHistoryOutputDeserializer::deserialize(
+                    result = DescribeAlarmHistoryResponseDeserializer::deserialize(
                         "DescribeAlarmHistoryResult",
                         &mut stack,
                     )?;
@@ -4380,22 +4594,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the specified alarms. If no alarms are specified, all alarms are returned. Alarms can be retrieved by using only a prefix for the alarm name, the alarm state, or a prefix for any action.</p>
-    fn describe_alarms(
-        &self,
-        input: DescribeAlarmsInput,
-    ) -> RusotoFuture<DescribeAlarmsOutput, DescribeAlarmsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for DescribeAlarmsRequest {
+    type Output = DescribeAlarmsResponse;
+    type Error = DescribeAlarmsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAlarms");
         params.put("Version", "2010-08-01");
-        DescribeAlarmsInputSerializer::serialize(&mut params, "", &input);
+        DescribeAlarmsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4409,7 +4628,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAlarmsOutput::default();
+                    result = DescribeAlarmsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4419,7 +4638,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAlarmsOutputDeserializer::deserialize(
+                    result = DescribeAlarmsResponseDeserializer::deserialize(
                         "DescribeAlarmsResult",
                         &mut stack,
                     )?;
@@ -4431,22 +4650,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the alarms for the specified metric. To filter the results, specify a statistic, period, or unit.</p>
-    fn describe_alarms_for_metric(
-        &self,
-        input: DescribeAlarmsForMetricInput,
-    ) -> RusotoFuture<DescribeAlarmsForMetricOutput, DescribeAlarmsForMetricError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for DescribeAlarmsForMetricRequest {
+    type Output = DescribeAlarmsForMetricResponse;
+    type Error = DescribeAlarmsForMetricError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAlarmsForMetric");
         params.put("Version", "2010-08-01");
-        DescribeAlarmsForMetricInputSerializer::serialize(&mut params, "", &input);
+        DescribeAlarmsForMetricRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAlarmsForMetricError::from_response(response))
@@ -4457,7 +4681,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAlarmsForMetricOutput::default();
+                    result = DescribeAlarmsForMetricResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4467,7 +4691,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAlarmsForMetricOutputDeserializer::deserialize(
+                    result = DescribeAlarmsForMetricResponseDeserializer::deserialize(
                         "DescribeAlarmsForMetricResult",
                         &mut stack,
                     )?;
@@ -4479,22 +4703,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Disables the actions for the specified alarms. When an alarm's actions are disabled, the alarm actions do not execute when the alarm state changes.</p>
-    fn disable_alarm_actions(
-        &self,
-        input: DisableAlarmActionsInput,
-    ) -> RusotoFuture<(), DisableAlarmActionsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for DisableAlarmActionsRequest {
+    type Output = DisableAlarmActionsResponse;
+    type Error = DisableAlarmActionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableAlarmActions");
         params.put("Version", "2010-08-01");
-        DisableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
+        DisableAlarmActionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4503,25 +4732,50 @@ impl CloudWatch for CloudWatchClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DisableAlarmActionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DisableAlarmActionsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Enables the actions for the specified alarms.</p>
-    fn enable_alarm_actions(
-        &self,
-        input: EnableAlarmActionsInput,
-    ) -> RusotoFuture<(), EnableAlarmActionsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for EnableAlarmActionsRequest {
+    type Output = EnableAlarmActionsResponse;
+    type Error = EnableAlarmActionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableAlarmActions");
         params.put("Version", "2010-08-01");
-        EnableAlarmActionsInputSerializer::serialize(&mut params, "", &input);
+        EnableAlarmActionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4531,25 +4785,50 @@ impl CloudWatch for CloudWatchClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = EnableAlarmActionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = EnableAlarmActionsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Displays the details of the dashboard that you specify.</p> <p>To copy an existing dashboard, use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code> to create the copy.</p>
-    fn get_dashboard(
-        &self,
-        input: GetDashboardInput,
-    ) -> RusotoFuture<GetDashboardOutput, GetDashboardError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for GetDashboardRequest {
+    type Output = GetDashboardResponse;
+    type Error = GetDashboardError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetDashboard");
         params.put("Version", "2010-08-01");
-        GetDashboardInputSerializer::serialize(&mut params, "", &input);
+        GetDashboardRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4563,7 +4842,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetDashboardOutput::default();
+                    result = GetDashboardResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4573,7 +4852,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetDashboardOutputDeserializer::deserialize(
+                    result = GetDashboardResponseDeserializer::deserialize(
                         "GetDashboardResult",
                         &mut stack,
                     )?;
@@ -4585,22 +4864,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p>
-    fn get_metric_data(
-        &self,
-        input: GetMetricDataInput,
-    ) -> RusotoFuture<GetMetricDataOutput, GetMetricDataError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for GetMetricDataRequest {
+    type Output = GetMetricDataResponse;
+    type Error = GetMetricDataError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetMetricData");
         params.put("Version", "2010-08-01");
-        GetMetricDataInputSerializer::serialize(&mut params, "", &input);
+        GetMetricDataRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4614,7 +4898,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetMetricDataOutput::default();
+                    result = GetMetricDataResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4624,7 +4908,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetMetricDataOutputDeserializer::deserialize(
+                    result = GetMetricDataResponseDeserializer::deserialize(
                         "GetMetricDataResult",
                         &mut stack,
                     )?;
@@ -4636,22 +4920,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
-    fn get_metric_statistics(
-        &self,
-        input: GetMetricStatisticsInput,
-    ) -> RusotoFuture<GetMetricStatisticsOutput, GetMetricStatisticsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for GetMetricStatisticsRequest {
+    type Output = GetMetricStatisticsResponse;
+    type Error = GetMetricStatisticsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetMetricStatistics");
         params.put("Version", "2010-08-01");
-        GetMetricStatisticsInputSerializer::serialize(&mut params, "", &input);
+        GetMetricStatisticsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4664,7 +4953,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetMetricStatisticsOutput::default();
+                    result = GetMetricStatisticsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4674,7 +4963,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetMetricStatisticsOutputDeserializer::deserialize(
+                    result = GetMetricStatisticsResponseDeserializer::deserialize(
                         "GetMetricStatisticsResult",
                         &mut stack,
                     )?;
@@ -4686,22 +4975,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p><p>You can use the <code>GetMetricWidgetImage</code> API to retrieve a snapshot graph of one or more Amazon CloudWatch metrics as a bitmap image. You can then embed this image into your services and products, such as wiki pages, reports, and documents. You could also retrieve images regularly, such as every minute, and create your own custom live dashboard.</p> <p>The graph you retrieve can include all CloudWatch metric graph features, including metric math and horizontal and vertical annotations.</p> <p>There is a limit of 20 transactions per second for this API. Each <code>GetMetricWidgetImage</code> action has the following limits:</p> <ul> <li> <p>As many as 100 metrics in the graph.</p> </li> <li> <p>Up to 100 KB uncompressed payload.</p> </li> </ul></p>
-    fn get_metric_widget_image(
-        &self,
-        input: GetMetricWidgetImageInput,
-    ) -> RusotoFuture<GetMetricWidgetImageOutput, GetMetricWidgetImageError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for GetMetricWidgetImageRequest {
+    type Output = GetMetricWidgetImageResponse;
+    type Error = GetMetricWidgetImageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetMetricWidgetImage");
         params.put("Version", "2010-08-01");
-        GetMetricWidgetImageInputSerializer::serialize(&mut params, "", &input);
+        GetMetricWidgetImageRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4714,7 +5008,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetMetricWidgetImageOutput::default();
+                    result = GetMetricWidgetImageResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4724,7 +5018,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetMetricWidgetImageOutputDeserializer::deserialize(
+                    result = GetMetricWidgetImageResponseDeserializer::deserialize(
                         "GetMetricWidgetImageResult",
                         &mut stack,
                     )?;
@@ -4736,22 +5030,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p> <p> <code>ListDashboards</code> returns up to 1000 results on one page. If there are more than 1000 dashboards, you can call <code>ListDashboards</code> again and include the value you received for <code>NextToken</code> in the first call, to receive the next 1000 results.</p>
-    fn list_dashboards(
-        &self,
-        input: ListDashboardsInput,
-    ) -> RusotoFuture<ListDashboardsOutput, ListDashboardsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for ListDashboardsRequest {
+    type Output = ListDashboardsResponse;
+    type Error = ListDashboardsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListDashboards");
         params.put("Version", "2010-08-01");
-        ListDashboardsInputSerializer::serialize(&mut params, "", &input);
+        ListDashboardsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4765,7 +5064,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ListDashboardsOutput::default();
+                    result = ListDashboardsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4775,7 +5074,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ListDashboardsOutputDeserializer::deserialize(
+                    result = ListDashboardsResponseDeserializer::deserialize(
                         "ListDashboardsResult",
                         &mut stack,
                     )?;
@@ -4787,22 +5086,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricData</a> or <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricData</a> or <a>GetMetricStatistics</a>.</p>
-    fn list_metrics(
-        &self,
-        input: ListMetricsInput,
-    ) -> RusotoFuture<ListMetricsOutput, ListMetricsError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for ListMetricsRequest {
+    type Output = ListMetricsResponse;
+    type Error = ListMetricsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListMetrics");
         params.put("Version", "2010-08-01");
-        ListMetricsInputSerializer::serialize(&mut params, "", &input);
+        ListMetricsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4816,7 +5120,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ListMetricsOutput::default();
+                    result = ListMetricsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4826,7 +5130,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ListMetricsOutputDeserializer::deserialize(
+                    result = ListMetricsResponseDeserializer::deserialize(
                         "ListMetricsResult",
                         &mut stack,
                     )?;
@@ -4838,22 +5142,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Displays the tags associated with a CloudWatch resource. Alarms support tagging.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2010-08-01");
-        ListTagsForResourceInputSerializer::serialize(&mut params, "", &input);
+        ListTagsForResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -4866,7 +5175,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ListTagsForResourceOutput::default();
+                    result = ListTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4876,7 +5185,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ListTagsForResourceOutputDeserializer::deserialize(
+                    result = ListTagsForResourceResponseDeserializer::deserialize(
                         "ListTagsForResourceResult",
                         &mut stack,
                     )?;
@@ -4888,22 +5197,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>There is no limit to the number of dashboards in your account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
-    fn put_dashboard(
-        &self,
-        input: PutDashboardInput,
-    ) -> RusotoFuture<PutDashboardOutput, PutDashboardError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for PutDashboardRequest {
+    type Output = PutDashboardResponse;
+    type Error = PutDashboardError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutDashboard");
         params.put("Version", "2010-08-01");
-        PutDashboardInputSerializer::serialize(&mut params, "", &input);
+        PutDashboardRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4917,7 +5231,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PutDashboardOutput::default();
+                    result = PutDashboardResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -4927,7 +5241,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PutDashboardOutputDeserializer::deserialize(
+                    result = PutDashboardResponseDeserializer::deserialize(
                         "PutDashboardResult",
                         &mut stack,
                     )?;
@@ -4939,22 +5253,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Creates or updates an alarm and associates it with the specified metric or metric math expression.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p>No specific permissions are needed for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
-    fn put_metric_alarm(
-        &self,
-        input: PutMetricAlarmInput,
-    ) -> RusotoFuture<(), PutMetricAlarmError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for PutMetricAlarmRequest {
+    type Output = PutMetricAlarmResponse;
+    type Error = PutMetricAlarmError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutMetricAlarm");
         params.put("Version", "2010-08-01");
-        PutMetricAlarmInputSerializer::serialize(&mut params, "", &input);
+        PutMetricAlarmRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4964,22 +5283,50 @@ impl CloudWatch for CloudWatchClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutMetricAlarmResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutMetricAlarmResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
-    fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for PutMetricDataRequest {
+    type Output = PutMetricDataResponse;
+    type Error = PutMetricDataError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutMetricData");
         params.put("Version", "2010-08-01");
-        PutMetricDataInputSerializer::serialize(&mut params, "", &input);
+        PutMetricDataRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -4989,22 +5336,50 @@ impl CloudWatch for CloudWatchClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutMetricDataResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutMetricDataResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>
-    fn set_alarm_state(&self, input: SetAlarmStateInput) -> RusotoFuture<(), SetAlarmStateError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for SetAlarmStateRequest {
+    type Output = SetAlarmStateResponse;
+    type Error = SetAlarmStateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetAlarmState");
         params.put("Version", "2010-08-01");
-        SetAlarmStateInputSerializer::serialize(&mut params, "", &input);
+        SetAlarmStateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5014,25 +5389,50 @@ impl CloudWatch for CloudWatchClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetAlarmStateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetAlarmStateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. In CloudWatch, alarms can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TagResource");
         params.put("Version", "2010-08-01");
-        TagResourceInputSerializer::serialize(&mut params, "", &input);
+        TagResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5046,7 +5446,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TagResourceOutput::default();
+                    result = TagResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -5056,7 +5456,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TagResourceOutputDeserializer::deserialize(
+                    result = TagResourceResponseDeserializer::deserialize(
                         "TagResourceResult",
                         &mut stack,
                     )?;
@@ -5068,22 +5468,27 @@ impl CloudWatch for CloudWatchClient {
             }))
         })
     }
+}
 
-    /// <p>Removes one or more tags from the specified resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "monitoring", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UntagResource");
         params.put("Version", "2010-08-01");
-        UntagResourceInputSerializer::serialize(&mut params, "", &input);
+        UntagResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5097,7 +5502,7 @@ impl CloudWatch for CloudWatchClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = UntagResourceOutput::default();
+                    result = UntagResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -5107,7 +5512,7 @@ impl CloudWatch for CloudWatchClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = UntagResourceOutputDeserializer::deserialize(
+                    result = UntagResourceResponseDeserializer::deserialize(
                         "UntagResourceResult",
                         &mut stack,
                     )?;
@@ -5139,7 +5544,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client =
             CloudWatchClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAlarmHistoryInput::default();
+        let request = DescribeAlarmHistoryRequest::default();
         let result = client.describe_alarm_history(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
@@ -5153,7 +5558,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             CloudWatchClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAlarmHistoryInput::default();
+        let request = DescribeAlarmHistoryRequest::default();
         let result = client.describe_alarm_history(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -5167,7 +5572,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             CloudWatchClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAlarmsInput::default();
+        let request = DescribeAlarmsRequest::default();
         let result = client.describe_alarms(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -5181,7 +5586,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             CloudWatchClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListMetricsInput::default();
+        let request = ListMetricsRequest::default();
         let result = client.list_metrics(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }

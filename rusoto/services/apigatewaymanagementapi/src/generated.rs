@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -37,6 +38,10 @@ pub struct PostToConnectionRequest {
     )]
     pub data: bytes::Bytes,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PostToConnectionResponse {}
 
 /// Errors returned by PostToConnection
 #[derive(Debug, PartialEq)]
@@ -95,7 +100,7 @@ pub trait ApiGatewayManagementApi {
     fn post_to_connection(
         &self,
         input: PostToConnectionRequest,
-    ) -> RusotoFuture<(), PostToConnectionError>;
+    ) -> Request<PostToConnectionRequest>;
 }
 /// A client for the AmazonApiGatewayManagementApi API.
 #[derive(Clone)]
@@ -138,22 +143,36 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
     fn post_to_connection(
         &self,
         input: PostToConnectionRequest,
-    ) -> RusotoFuture<(), PostToConnectionError> {
+    ) -> Request<PostToConnectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for PostToConnectionRequest {
+    type Output = PostToConnectionResponse;
+    type Error = PostToConnectionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/@connections/{connection_id}",
-            connection_id = input.connection_id
+            connection_id = self.connection_id
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(input.data.to_owned());
+        let encoded = Some(self.data.to_owned());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = PostToConnectionResponse {};
 
                     Ok(result)
                 }))

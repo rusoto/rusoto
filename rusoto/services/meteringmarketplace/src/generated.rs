@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -38,7 +39,7 @@ pub struct BatchMeterUsageRequest {
 /// <p>Contains the UsageRecords processed by BatchMeterUsage and any records that have failed due to transient error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchMeterUsageResult {
+pub struct BatchMeterUsageResponse {
     /// <p>Contains all UsageRecords processed by BatchMeterUsage. These records were either honored by AWS Marketplace Metering Service or were invalid.</p>
     #[serde(rename = "Results")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -72,7 +73,7 @@ pub struct MeterUsageRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct MeterUsageResult {
+pub struct MeterUsageResponse {
     /// <p>Metering record id.</p>
     #[serde(rename = "MeteringRecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -95,7 +96,7 @@ pub struct RegisterUsageRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RegisterUsageResult {
+pub struct RegisterUsageResponse {
     /// <p>(Optional) Only included when public key version has expired</p>
     #[serde(rename = "PublicKeyRotationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,7 +118,7 @@ pub struct ResolveCustomerRequest {
 /// <p>The result of the ResolveCustomer operation. Contains the CustomerIdentifier and product code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ResolveCustomerResult {
+pub struct ResolveCustomerResponse {
     /// <p>The CustomerIdentifier is used to identify an individual customer in your application. Calls to BatchMeterUsage require CustomerIdentifiers for each UsageRecord.</p>
     #[serde(rename = "CustomerIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -449,28 +450,16 @@ impl Error for ResolveCustomerError {
 /// Trait representing the capabilities of the AWSMarketplace Metering API. AWSMarketplace Metering clients implement this trait.
 pub trait MarketplaceMetering {
     /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
-    fn batch_meter_usage(
-        &self,
-        input: BatchMeterUsageRequest,
-    ) -> RusotoFuture<BatchMeterUsageResult, BatchMeterUsageError>;
+    fn batch_meter_usage(&self, input: BatchMeterUsageRequest) -> Request<BatchMeterUsageRequest>;
 
     /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>
-    fn meter_usage(
-        &self,
-        input: MeterUsageRequest,
-    ) -> RusotoFuture<MeterUsageResult, MeterUsageError>;
+    fn meter_usage(&self, input: MeterUsageRequest) -> Request<MeterUsageRequest>;
 
     /// <p><p>Paid container software products sold through AWS Marketplace must integrate with the AWS Marketplace Metering Service and call the RegisterUsage operation for software entitlement and metering. Calling RegisterUsage from containers running outside of ECS is not currently supported. Free and BYOL products for ECS aren&#39;t required to call RegisterUsage, but you may choose to do so if you would like to receive usage data in your seller reports. The sections below explain the behavior of RegisterUsage. RegisterUsage performs two primary functions: metering and entitlement.</p> <ul> <li> <p> <i>Entitlement</i>: RegisterUsage allows you to verify that the customer running your paid software is subscribed to your product on AWS Marketplace, enabling you to guard against unauthorized use. Your container image that integrates with RegisterUsage is only required to guard against unauthorized use at container startup, as such a CustomerNotSubscribedException/PlatformNotSupportedException will only be thrown on the initial call to RegisterUsage. Subsequent calls from the same Amazon ECS task instance (e.g. task-id) will not throw a CustomerNotSubscribedException, even if the customer unsubscribes while the Amazon ECS task is still running.</p> </li> <li> <p> <i>Metering</i>: RegisterUsage meters software use per ECS task, per hour, with usage prorated to the second. A minimum of 1 minute of usage applies to tasks that are short lived. For example, if a customer has a 10 node ECS cluster and creates an ECS service configured as a Daemon Set, then ECS will launch a task on all 10 cluster nodes and the customer will be charged: (10 * hourly_rate). Metering for software use is automatically handled by the AWS Marketplace Metering Control Plane -- your software is not required to perform any metering specific actions, other than call RegisterUsage once for metering of software use to commence. The AWS Marketplace Metering Control Plane will also continue to bill customers for running ECS tasks, regardless of the customers subscription state, removing the need for your software to perform entitlement checks at runtime.</p> </li> </ul></p>
-    fn register_usage(
-        &self,
-        input: RegisterUsageRequest,
-    ) -> RusotoFuture<RegisterUsageResult, RegisterUsageError>;
+    fn register_usage(&self, input: RegisterUsageRequest) -> Request<RegisterUsageRequest>;
 
     /// <p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>
-    fn resolve_customer(
-        &self,
-        input: ResolveCustomerRequest,
-    ) -> RusotoFuture<ResolveCustomerResult, ResolveCustomerError>;
+    fn resolve_customer(&self, input: ResolveCustomerRequest) -> Request<ResolveCustomerRequest>;
 }
 /// A client for the AWSMarketplace Metering API.
 #[derive(Clone)]
@@ -510,22 +499,47 @@ impl MarketplaceMeteringClient {
 
 impl MarketplaceMetering for MarketplaceMeteringClient {
     /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
-    fn batch_meter_usage(
-        &self,
-        input: BatchMeterUsageRequest,
-    ) -> RusotoFuture<BatchMeterUsageResult, BatchMeterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+    fn batch_meter_usage(&self, input: BatchMeterUsageRequest) -> Request<BatchMeterUsageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>
+    fn meter_usage(&self, input: MeterUsageRequest) -> Request<MeterUsageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Paid container software products sold through AWS Marketplace must integrate with the AWS Marketplace Metering Service and call the RegisterUsage operation for software entitlement and metering. Calling RegisterUsage from containers running outside of ECS is not currently supported. Free and BYOL products for ECS aren&#39;t required to call RegisterUsage, but you may choose to do so if you would like to receive usage data in your seller reports. The sections below explain the behavior of RegisterUsage. RegisterUsage performs two primary functions: metering and entitlement.</p> <ul> <li> <p> <i>Entitlement</i>: RegisterUsage allows you to verify that the customer running your paid software is subscribed to your product on AWS Marketplace, enabling you to guard against unauthorized use. Your container image that integrates with RegisterUsage is only required to guard against unauthorized use at container startup, as such a CustomerNotSubscribedException/PlatformNotSupportedException will only be thrown on the initial call to RegisterUsage. Subsequent calls from the same Amazon ECS task instance (e.g. task-id) will not throw a CustomerNotSubscribedException, even if the customer unsubscribes while the Amazon ECS task is still running.</p> </li> <li> <p> <i>Metering</i>: RegisterUsage meters software use per ECS task, per hour, with usage prorated to the second. A minimum of 1 minute of usage applies to tasks that are short lived. For example, if a customer has a 10 node ECS cluster and creates an ECS service configured as a Daemon Set, then ECS will launch a task on all 10 cluster nodes and the customer will be charged: (10 * hourly_rate). Metering for software use is automatically handled by the AWS Marketplace Metering Control Plane -- your software is not required to perform any metering specific actions, other than call RegisterUsage once for metering of software use to commence. The AWS Marketplace Metering Control Plane will also continue to bill customers for running ECS tasks, regardless of the customers subscription state, removing the need for your software to perform entitlement checks at runtime.</p> </li> </ul></p>
+    fn register_usage(&self, input: RegisterUsageRequest) -> Request<RegisterUsageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>
+    fn resolve_customer(&self, input: ResolveCustomerRequest) -> Request<ResolveCustomerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchMeterUsageRequest {
+    type Output = BatchMeterUsageResponse;
+    type Error = BatchMeterUsageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "aws-marketplace", region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.BatchMeterUsage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchMeterUsageResult, _>()
+                        .deserialize::<BatchMeterUsageResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -537,24 +551,29 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
             }
         })
     }
+}
 
-    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>
-    fn meter_usage(
-        &self,
-        input: MeterUsageRequest,
-    ) -> RusotoFuture<MeterUsageResult, MeterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+impl ServiceRequest for MeterUsageRequest {
+    type Output = MeterUsageResponse;
+    type Error = MeterUsageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "aws-marketplace", region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.MeterUsage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<MeterUsageResult, _>()
+                        .deserialize::<MeterUsageResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -566,24 +585,29 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
             }
         })
     }
+}
 
-    /// <p><p>Paid container software products sold through AWS Marketplace must integrate with the AWS Marketplace Metering Service and call the RegisterUsage operation for software entitlement and metering. Calling RegisterUsage from containers running outside of ECS is not currently supported. Free and BYOL products for ECS aren&#39;t required to call RegisterUsage, but you may choose to do so if you would like to receive usage data in your seller reports. The sections below explain the behavior of RegisterUsage. RegisterUsage performs two primary functions: metering and entitlement.</p> <ul> <li> <p> <i>Entitlement</i>: RegisterUsage allows you to verify that the customer running your paid software is subscribed to your product on AWS Marketplace, enabling you to guard against unauthorized use. Your container image that integrates with RegisterUsage is only required to guard against unauthorized use at container startup, as such a CustomerNotSubscribedException/PlatformNotSupportedException will only be thrown on the initial call to RegisterUsage. Subsequent calls from the same Amazon ECS task instance (e.g. task-id) will not throw a CustomerNotSubscribedException, even if the customer unsubscribes while the Amazon ECS task is still running.</p> </li> <li> <p> <i>Metering</i>: RegisterUsage meters software use per ECS task, per hour, with usage prorated to the second. A minimum of 1 minute of usage applies to tasks that are short lived. For example, if a customer has a 10 node ECS cluster and creates an ECS service configured as a Daemon Set, then ECS will launch a task on all 10 cluster nodes and the customer will be charged: (10 * hourly_rate). Metering for software use is automatically handled by the AWS Marketplace Metering Control Plane -- your software is not required to perform any metering specific actions, other than call RegisterUsage once for metering of software use to commence. The AWS Marketplace Metering Control Plane will also continue to bill customers for running ECS tasks, regardless of the customers subscription state, removing the need for your software to perform entitlement checks at runtime.</p> </li> </ul></p>
-    fn register_usage(
-        &self,
-        input: RegisterUsageRequest,
-    ) -> RusotoFuture<RegisterUsageResult, RegisterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+impl ServiceRequest for RegisterUsageRequest {
+    type Output = RegisterUsageResponse;
+    type Error = RegisterUsageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "aws-marketplace", region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.RegisterUsage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterUsageResult, _>()
+                        .deserialize::<RegisterUsageResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -595,24 +619,29 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
             }
         })
     }
+}
 
-    /// <p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>
-    fn resolve_customer(
-        &self,
-        input: ResolveCustomerRequest,
-    ) -> RusotoFuture<ResolveCustomerResult, ResolveCustomerError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+impl ServiceRequest for ResolveCustomerRequest {
+    type Output = ResolveCustomerResponse;
+    type Error = ResolveCustomerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "aws-marketplace", region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.ResolveCustomer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ResolveCustomerResult, _>()
+                        .deserialize::<ResolveCustomerResponse, _>()
                 }))
             } else {
                 Box::new(

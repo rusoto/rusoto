@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -30,6 +31,10 @@ pub struct AssociateAdminAccountRequest {
     #[serde(rename = "AdminAccount")]
     pub admin_account: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateAdminAccountResponse {}
 
 /// <p>Details of the resource that is not protected by the policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -52,6 +57,10 @@ pub struct ComplianceViolator {
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteNotificationChannelRequest {}
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteNotificationChannelResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePolicyRequest {
     /// <p>If <code>True</code>, the request will also perform a clean-up process that will:</p> <ul> <li> <p>Delete rule groups created by AWS Firewall Manager</p> </li> <li> <p>Remove web ACLs from in-scope resources</p> </li> <li> <p>Delete web ACLs that contain no rules or rule groups</p> </li> </ul> <p>After the cleanup, in-scope resources will no longer be protected by web ACLs in this policy. Protection of out-of-scope resources will remain unchanged. Scope is determined by tags and accounts associated with the policy. When creating the policy, if you specified that only resources in specific accounts or with specific tags be protected by the policy, those resources are in-scope. All others are out of scope. If you did not specify tags or accounts, all resources are in-scope. </p>
@@ -63,8 +72,16 @@ pub struct DeletePolicyRequest {
     pub policy_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeletePolicyResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateAdminAccountRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateAdminAccountResponse {}
 
 /// <p>Describes the compliance status for the account. An account is considered non-compliant if it includes resources that are not protected by the specified policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -432,6 +449,10 @@ pub struct PutNotificationChannelRequest {
     #[serde(rename = "SnsTopicArn")]
     pub sns_topic_arn: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutNotificationChannelResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutPolicyRequest {
@@ -1165,72 +1186,61 @@ pub trait Fms {
     fn associate_admin_account(
         &self,
         input: AssociateAdminAccountRequest,
-    ) -> RusotoFuture<(), AssociateAdminAccountError>;
+    ) -> Request<AssociateAdminAccountRequest>;
 
     /// <p>Deletes an AWS Firewall Manager association with the IAM role and the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
-    fn delete_notification_channel(&self) -> RusotoFuture<(), DeleteNotificationChannelError>;
+    fn delete_notification_channel(&self) -> Request<DeleteNotificationChannelRequest>;
 
     /// <p>Permanently deletes an AWS Firewall Manager policy. </p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest>;
 
     /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. To set a different account as the administrator account, you must submit an <code>AssociateAdminAccount</code> request .</p>
-    fn disassociate_admin_account(&self) -> RusotoFuture<(), DisassociateAdminAccountError>;
+    fn disassociate_admin_account(&self) -> Request<DisassociateAdminAccountRequest>;
 
     /// <p>Returns the AWS Organizations master account that is associated with AWS Firewall Manager as the AWS Firewall Manager administrator.</p>
-    fn get_admin_account(&self) -> RusotoFuture<GetAdminAccountResponse, GetAdminAccountError>;
+    fn get_admin_account(&self) -> Request<GetAdminAccountRequest>;
 
     /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered non-compliant if the specified policy has not been applied to them.</p>
     fn get_compliance_detail(
         &self,
         input: GetComplianceDetailRequest,
-    ) -> RusotoFuture<GetComplianceDetailResponse, GetComplianceDetailError>;
+    ) -> Request<GetComplianceDetailRequest>;
 
     /// <p>Returns information about the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
-    fn get_notification_channel(
-        &self,
-    ) -> RusotoFuture<GetNotificationChannelResponse, GetNotificationChannelError>;
+    fn get_notification_channel(&self) -> Request<GetNotificationChannelRequest>;
 
     /// <p>Returns information about the specified AWS Firewall Manager policy.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest>;
 
     /// <p>If you created a Shield Advanced policy, returns policy-level attack summary information in the event of a potential DDoS attack.</p>
     fn get_protection_status(
         &self,
         input: GetProtectionStatusRequest,
-    ) -> RusotoFuture<GetProtectionStatusResponse, GetProtectionStatusError>;
+    ) -> Request<GetProtectionStatusRequest>;
 
     /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
     fn list_compliance_status(
         &self,
         input: ListComplianceStatusRequest,
-    ) -> RusotoFuture<ListComplianceStatusResponse, ListComplianceStatusError>;
+    ) -> Request<ListComplianceStatusRequest>;
 
     /// <p>Returns a <code>MemberAccounts</code> object that lists the member accounts in the administrator's AWS organization.</p> <p>The <code>ListMemberAccounts</code> must be submitted by the account that is set as the AWS Firewall Manager administrator.</p>
     fn list_member_accounts(
         &self,
         input: ListMemberAccountsRequest,
-    ) -> RusotoFuture<ListMemberAccountsResponse, ListMemberAccountsError>;
+    ) -> Request<ListMemberAccountsRequest>;
 
     /// <p>Returns an array of <code>PolicySummary</code> objects in the response.</p>
-    fn list_policies(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError>;
+    fn list_policies(&self, input: ListPoliciesRequest) -> Request<ListPoliciesRequest>;
 
     /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
     fn put_notification_channel(
         &self,
         input: PutNotificationChannelRequest,
-    ) -> RusotoFuture<(), PutNotificationChannelError>;
+    ) -> Request<PutNotificationChannelRequest>;
 
     /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides two types of policies: A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources, or a WAF policy, which contains a rule group and defines which resources are to be protected by that rule group. A policy is specific to either WAF or Shield Advanced. If you want to enforce both WAF rules and Shield Advanced protection across accounts, you can create multiple policies. You can create one or more policies for WAF rules, and one or more policies for Shield Advanced.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information on subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
-    fn put_policy(
-        &self,
-        input: PutPolicyRequest,
-    ) -> RusotoFuture<PutPolicyResponse, PutPolicyError>;
+    fn put_policy(&self, input: PutPolicyRequest) -> Request<PutPolicyRequest>;
 }
 /// A client for the FMS API.
 #[derive(Clone)]
@@ -1273,17 +1283,129 @@ impl Fms for FmsClient {
     fn associate_admin_account(
         &self,
         input: AssociateAdminAccountRequest,
-    ) -> RusotoFuture<(), AssociateAdminAccountError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+    ) -> Request<AssociateAdminAccountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an AWS Firewall Manager association with the IAM role and the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
+    fn delete_notification_channel(&self) -> Request<DeleteNotificationChannelRequest> {
+        Request::new(
+            DeleteNotificationChannelRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Permanently deletes an AWS Firewall Manager policy. </p>
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. To set a different account as the administrator account, you must submit an <code>AssociateAdminAccount</code> request .</p>
+    fn disassociate_admin_account(&self) -> Request<DisassociateAdminAccountRequest> {
+        Request::new(
+            DisassociateAdminAccountRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns the AWS Organizations master account that is associated with AWS Firewall Manager as the AWS Firewall Manager administrator.</p>
+    fn get_admin_account(&self) -> Request<GetAdminAccountRequest> {
+        Request::new(
+            GetAdminAccountRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered non-compliant if the specified policy has not been applied to them.</p>
+    fn get_compliance_detail(
+        &self,
+        input: GetComplianceDetailRequest,
+    ) -> Request<GetComplianceDetailRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
+    fn get_notification_channel(&self) -> Request<GetNotificationChannelRequest> {
+        Request::new(
+            GetNotificationChannelRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns information about the specified AWS Firewall Manager policy.</p>
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>If you created a Shield Advanced policy, returns policy-level attack summary information in the event of a potential DDoS attack.</p>
+    fn get_protection_status(
+        &self,
+        input: GetProtectionStatusRequest,
+    ) -> Request<GetProtectionStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
+    fn list_compliance_status(
+        &self,
+        input: ListComplianceStatusRequest,
+    ) -> Request<ListComplianceStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a <code>MemberAccounts</code> object that lists the member accounts in the administrator's AWS organization.</p> <p>The <code>ListMemberAccounts</code> must be submitted by the account that is set as the AWS Firewall Manager administrator.</p>
+    fn list_member_accounts(
+        &self,
+        input: ListMemberAccountsRequest,
+    ) -> Request<ListMemberAccountsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of <code>PolicySummary</code> objects in the response.</p>
+    fn list_policies(&self, input: ListPoliciesRequest) -> Request<ListPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
+    fn put_notification_channel(
+        &self,
+        input: PutNotificationChannelRequest,
+    ) -> Request<PutNotificationChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides two types of policies: A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources, or a WAF policy, which contains a rule group and defines which resources are to be protected by that rule group. A policy is specific to either WAF or Shield Advanced. If you want to enforce both WAF rules and Shield Advanced protection across accounts, you can create multiple policies. You can create one or more policies for WAF rules, and one or more policies for Shield Advanced.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information on subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
+    fn put_policy(&self, input: PutPolicyRequest) -> Request<PutPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssociateAdminAccountRequest {
+    type Output = AssociateAdminAccountResponse;
+    type Error = AssociateAdminAccountError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.AssociateAdminAccount");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateAdminAccountResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -1293,18 +1415,29 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an AWS Firewall Manager association with the IAM role and the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
-    fn delete_notification_channel(&self) -> RusotoFuture<(), DeleteNotificationChannelError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for DeleteNotificationChannelRequest {
+    type Output = DeleteNotificationChannelResponse;
+    type Error = DeleteNotificationChannelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.DeleteNotificationChannel");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteNotificationChannelResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNotificationChannelError::from_response(response))
@@ -1312,19 +1445,30 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Permanently deletes an AWS Firewall Manager policy. </p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for DeletePolicyRequest {
+    type Output = DeletePolicyResponse;
+    type Error = DeletePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.DeletePolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePolicyResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -1335,18 +1479,29 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. To set a different account as the administrator account, you must submit an <code>AssociateAdminAccount</code> request .</p>
-    fn disassociate_admin_account(&self) -> RusotoFuture<(), DisassociateAdminAccountError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for DisassociateAdminAccountRequest {
+    type Output = DisassociateAdminAccountResponse;
+    type Error = DisassociateAdminAccountError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.DisassociateAdminAccount");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateAdminAccountResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateAdminAccountError::from_response(response))
@@ -1354,16 +1509,24 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Returns the AWS Organizations master account that is associated with AWS Firewall Manager as the AWS Firewall Manager administrator.</p>
-    fn get_admin_account(&self) -> RusotoFuture<GetAdminAccountResponse, GetAdminAccountError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for GetAdminAccountRequest {
+    type Output = GetAdminAccountResponse;
+    type Error = GetAdminAccountError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetAdminAccount");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1379,20 +1542,25 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Returns detailed compliance information about the specified member account. Details include resources that are in and out of compliance with the specified policy. Resources are considered non-compliant if the specified policy has not been applied to them.</p>
-    fn get_compliance_detail(
-        &self,
-        input: GetComplianceDetailRequest,
-    ) -> RusotoFuture<GetComplianceDetailResponse, GetComplianceDetailError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for GetComplianceDetailRequest {
+    type Output = GetComplianceDetailResponse;
+    type Error = GetComplianceDetailError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetComplianceDetail");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1407,18 +1575,24 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
-    fn get_notification_channel(
-        &self,
-    ) -> RusotoFuture<GetNotificationChannelResponse, GetNotificationChannelError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for GetNotificationChannelRequest {
+    type Output = GetNotificationChannelResponse;
+    type Error = GetNotificationChannelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetNotificationChannel");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1433,20 +1607,25 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the specified AWS Firewall Manager policy.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for GetPolicyRequest {
+    type Output = GetPolicyResponse;
+    type Error = GetPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetPolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1462,20 +1641,25 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>If you created a Shield Advanced policy, returns policy-level attack summary information in the event of a potential DDoS attack.</p>
-    fn get_protection_status(
-        &self,
-        input: GetProtectionStatusRequest,
-    ) -> RusotoFuture<GetProtectionStatusResponse, GetProtectionStatusError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for GetProtectionStatusRequest {
+    type Output = GetProtectionStatusResponse;
+    type Error = GetProtectionStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetProtectionStatus");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1490,20 +1674,25 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
-    fn list_compliance_status(
-        &self,
-        input: ListComplianceStatusRequest,
-    ) -> RusotoFuture<ListComplianceStatusResponse, ListComplianceStatusError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for ListComplianceStatusRequest {
+    type Output = ListComplianceStatusResponse;
+    type Error = ListComplianceStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.ListComplianceStatus");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1518,20 +1707,25 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a <code>MemberAccounts</code> object that lists the member accounts in the administrator's AWS organization.</p> <p>The <code>ListMemberAccounts</code> must be submitted by the account that is set as the AWS Firewall Manager administrator.</p>
-    fn list_member_accounts(
-        &self,
-        input: ListMemberAccountsRequest,
-    ) -> RusotoFuture<ListMemberAccountsResponse, ListMemberAccountsError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for ListMemberAccountsRequest {
+    type Output = ListMemberAccountsResponse;
+    type Error = ListMemberAccountsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.ListMemberAccounts");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1547,20 +1741,25 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of <code>PolicySummary</code> objects in the response.</p>
-    fn list_policies(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for ListPoliciesRequest {
+    type Output = ListPoliciesResponse;
+    type Error = ListPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.ListPolicies");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1576,22 +1775,30 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Designates the IAM role and Amazon Simple Notification Service (SNS) topic that AWS Firewall Manager uses to record SNS logs.</p>
-    fn put_notification_channel(
-        &self,
-        input: PutNotificationChannelRequest,
-    ) -> RusotoFuture<(), PutNotificationChannelError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for PutNotificationChannelRequest {
+    type Output = PutNotificationChannelResponse;
+    type Error = PutNotificationChannelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.PutNotificationChannel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutNotificationChannelResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -1601,20 +1808,25 @@ impl Fms for FmsClient {
             }
         })
     }
+}
 
-    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides two types of policies: A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources, or a WAF policy, which contains a rule group and defines which resources are to be protected by that rule group. A policy is specific to either WAF or Shield Advanced. If you want to enforce both WAF rules and Shield Advanced protection across accounts, you can create multiple policies. You can create one or more policies for WAF rules, and one or more policies for Shield Advanced.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information on subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
-    fn put_policy(
-        &self,
-        input: PutPolicyRequest,
-    ) -> RusotoFuture<PutPolicyResponse, PutPolicyError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+impl ServiceRequest for PutPolicyRequest {
+    type Output = PutPolicyResponse;
+    type Error = PutPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "fms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.PutPolicy");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -1165,12 +1166,20 @@ pub struct DeleteApiMappingRequest {
     pub domain_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteApiMappingResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApiRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteApiResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteAuthorizerRequest {
@@ -1182,6 +1191,10 @@ pub struct DeleteAuthorizerRequest {
     pub authorizer_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteAuthorizerResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDeploymentRequest {
     /// <p>The API identifier.</p>
@@ -1192,12 +1205,20 @@ pub struct DeleteDeploymentRequest {
     pub deployment_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDeploymentResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDomainNameRequest {
     /// <p>The domain name.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDomainNameResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIntegrationRequest {
@@ -1208,6 +1229,10 @@ pub struct DeleteIntegrationRequest {
     #[serde(rename = "IntegrationId")]
     pub integration_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIntegrationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIntegrationResponseRequest {
@@ -1222,6 +1247,10 @@ pub struct DeleteIntegrationResponseRequest {
     pub integration_response_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIntegrationResponseResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteModelRequest {
     /// <p>The API identifier.</p>
@@ -1232,6 +1261,10 @@ pub struct DeleteModelRequest {
     pub model_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteModelResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRouteRequest {
     /// <p>The API identifier.</p>
@@ -1241,6 +1274,10 @@ pub struct DeleteRouteRequest {
     #[serde(rename = "RouteId")]
     pub route_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteRouteResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRouteResponseRequest {
@@ -1255,6 +1292,10 @@ pub struct DeleteRouteResponseRequest {
     pub route_response_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteRouteResponseResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteStageRequest {
     /// <p>The API identifier.</p>
@@ -1264,6 +1305,10 @@ pub struct DeleteStageRequest {
     #[serde(rename = "StageName")]
     pub stage_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteStageResponse {}
 
 /// <p>An immutable representation of an API that can be called by users. A
 /// Deployment must be associated with a Stage for it to be
@@ -6383,313 +6428,238 @@ impl Error for UpdateStageError {
 /// Trait representing the capabilities of the AmazonApiGatewayV2 API. AmazonApiGatewayV2 clients implement this trait.
 pub trait ApiGatewayV2 {
     /// <p>Creates an Api resource.</p>
-    fn create_api(
-        &self,
-        input: CreateApiRequest,
-    ) -> RusotoFuture<CreateApiResponse, CreateApiError>;
+    fn create_api(&self, input: CreateApiRequest) -> Request<CreateApiRequest>;
 
     /// <p>Creates an API mapping.</p>
     fn create_api_mapping(
         &self,
         input: CreateApiMappingRequest,
-    ) -> RusotoFuture<CreateApiMappingResponse, CreateApiMappingError>;
+    ) -> Request<CreateApiMappingRequest>;
 
     /// <p>Creates an Authorizer for an API.</p>
-    fn create_authorizer(
-        &self,
-        input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError>;
+    fn create_authorizer(&self, input: CreateAuthorizerRequest)
+        -> Request<CreateAuthorizerRequest>;
 
     /// <p>Creates a Deployment for an API.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError>;
+    fn create_deployment(&self, input: CreateDeploymentRequest)
+        -> Request<CreateDeploymentRequest>;
 
     /// <p>Creates a domain name.</p>
     fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
-    ) -> RusotoFuture<CreateDomainNameResponse, CreateDomainNameError>;
+    ) -> Request<CreateDomainNameRequest>;
 
     /// <p>Creates an Integration.</p>
     fn create_integration(
         &self,
         input: CreateIntegrationRequest,
-    ) -> RusotoFuture<CreateIntegrationResponse, CreateIntegrationError>;
+    ) -> Request<CreateIntegrationRequest>;
 
     /// <p>Creates an IntegrationResponses.</p>
     fn create_integration_response(
         &self,
         input: CreateIntegrationResponseRequest,
-    ) -> RusotoFuture<CreateIntegrationResponseResponse, CreateIntegrationResponseError>;
+    ) -> Request<CreateIntegrationResponseRequest>;
 
     /// <p>Creates a Model for an API.</p>
-    fn create_model(
-        &self,
-        input: CreateModelRequest,
-    ) -> RusotoFuture<CreateModelResponse, CreateModelError>;
+    fn create_model(&self, input: CreateModelRequest) -> Request<CreateModelRequest>;
 
     /// <p>Creates a Route for an API.</p>
-    fn create_route(
-        &self,
-        input: CreateRouteRequest,
-    ) -> RusotoFuture<CreateRouteResponse, CreateRouteError>;
+    fn create_route(&self, input: CreateRouteRequest) -> Request<CreateRouteRequest>;
 
     /// <p>Creates a RouteResponse for a Route.</p>
     fn create_route_response(
         &self,
         input: CreateRouteResponseRequest,
-    ) -> RusotoFuture<CreateRouteResponseResponse, CreateRouteResponseError>;
+    ) -> Request<CreateRouteResponseRequest>;
 
     /// <p>Creates a Stage for an API.</p>
-    fn create_stage(
-        &self,
-        input: CreateStageRequest,
-    ) -> RusotoFuture<CreateStageResponse, CreateStageError>;
+    fn create_stage(&self, input: CreateStageRequest) -> Request<CreateStageRequest>;
 
     /// <p>Deletes an Api resource.</p>
-    fn delete_api(&self, input: DeleteApiRequest) -> RusotoFuture<(), DeleteApiError>;
+    fn delete_api(&self, input: DeleteApiRequest) -> Request<DeleteApiRequest>;
 
     /// <p>Deletes an API mapping.</p>
     fn delete_api_mapping(
         &self,
         input: DeleteApiMappingRequest,
-    ) -> RusotoFuture<(), DeleteApiMappingError>;
+    ) -> Request<DeleteApiMappingRequest>;
 
     /// <p>Deletes an Authorizer.</p>
-    fn delete_authorizer(
-        &self,
-        input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<(), DeleteAuthorizerError>;
+    fn delete_authorizer(&self, input: DeleteAuthorizerRequest)
+        -> Request<DeleteAuthorizerRequest>;
 
     /// <p>Deletes a Deployment.</p>
-    fn delete_deployment(
-        &self,
-        input: DeleteDeploymentRequest,
-    ) -> RusotoFuture<(), DeleteDeploymentError>;
+    fn delete_deployment(&self, input: DeleteDeploymentRequest)
+        -> Request<DeleteDeploymentRequest>;
 
     /// <p>Deletes a domain name.</p>
     fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
-    ) -> RusotoFuture<(), DeleteDomainNameError>;
+    ) -> Request<DeleteDomainNameRequest>;
 
     /// <p>Deletes an Integration.</p>
     fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationError>;
+    ) -> Request<DeleteIntegrationRequest>;
 
     /// <p>Deletes an IntegrationResponses.</p>
     fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationResponseError>;
+    ) -> Request<DeleteIntegrationResponseRequest>;
 
     /// <p>Deletes a Model.</p>
-    fn delete_model(&self, input: DeleteModelRequest) -> RusotoFuture<(), DeleteModelError>;
+    fn delete_model(&self, input: DeleteModelRequest) -> Request<DeleteModelRequest>;
 
     /// <p>Deletes a Route.</p>
-    fn delete_route(&self, input: DeleteRouteRequest) -> RusotoFuture<(), DeleteRouteError>;
+    fn delete_route(&self, input: DeleteRouteRequest) -> Request<DeleteRouteRequest>;
 
     /// <p>Deletes a RouteResponse.</p>
     fn delete_route_response(
         &self,
         input: DeleteRouteResponseRequest,
-    ) -> RusotoFuture<(), DeleteRouteResponseError>;
+    ) -> Request<DeleteRouteResponseRequest>;
 
     /// <p>Deletes a Stage.</p>
-    fn delete_stage(&self, input: DeleteStageRequest) -> RusotoFuture<(), DeleteStageError>;
+    fn delete_stage(&self, input: DeleteStageRequest) -> Request<DeleteStageRequest>;
 
     /// <p>Gets an Api resource.</p>
-    fn get_api(&self, input: GetApiRequest) -> RusotoFuture<GetApiResponse, GetApiError>;
+    fn get_api(&self, input: GetApiRequest) -> Request<GetApiRequest>;
 
     /// <p>The API mapping.</p>
-    fn get_api_mapping(
-        &self,
-        input: GetApiMappingRequest,
-    ) -> RusotoFuture<GetApiMappingResponse, GetApiMappingError>;
+    fn get_api_mapping(&self, input: GetApiMappingRequest) -> Request<GetApiMappingRequest>;
 
     /// <p>The API mappings.</p>
-    fn get_api_mappings(
-        &self,
-        input: GetApiMappingsRequest,
-    ) -> RusotoFuture<GetApiMappingsResponse, GetApiMappingsError>;
+    fn get_api_mappings(&self, input: GetApiMappingsRequest) -> Request<GetApiMappingsRequest>;
 
     /// <p>Gets a collection of Api resources.</p>
-    fn get_apis(&self, input: GetApisRequest) -> RusotoFuture<GetApisResponse, GetApisError>;
+    fn get_apis(&self, input: GetApisRequest) -> Request<GetApisRequest>;
 
     /// <p>Gets an Authorizer.</p>
-    fn get_authorizer(
-        &self,
-        input: GetAuthorizerRequest,
-    ) -> RusotoFuture<GetAuthorizerResponse, GetAuthorizerError>;
+    fn get_authorizer(&self, input: GetAuthorizerRequest) -> Request<GetAuthorizerRequest>;
 
     /// <p>Gets the Authorizers for an API.</p>
-    fn get_authorizers(
-        &self,
-        input: GetAuthorizersRequest,
-    ) -> RusotoFuture<GetAuthorizersResponse, GetAuthorizersError>;
+    fn get_authorizers(&self, input: GetAuthorizersRequest) -> Request<GetAuthorizersRequest>;
 
     /// <p>Gets a Deployment.</p>
-    fn get_deployment(
-        &self,
-        input: GetDeploymentRequest,
-    ) -> RusotoFuture<GetDeploymentResponse, GetDeploymentError>;
+    fn get_deployment(&self, input: GetDeploymentRequest) -> Request<GetDeploymentRequest>;
 
     /// <p>Gets the Deployments for an API.</p>
-    fn get_deployments(
-        &self,
-        input: GetDeploymentsRequest,
-    ) -> RusotoFuture<GetDeploymentsResponse, GetDeploymentsError>;
+    fn get_deployments(&self, input: GetDeploymentsRequest) -> Request<GetDeploymentsRequest>;
 
     /// <p>Gets a domain name.</p>
-    fn get_domain_name(
-        &self,
-        input: GetDomainNameRequest,
-    ) -> RusotoFuture<GetDomainNameResponse, GetDomainNameError>;
+    fn get_domain_name(&self, input: GetDomainNameRequest) -> Request<GetDomainNameRequest>;
 
     /// <p>Gets the domain names for an AWS account.</p>
-    fn get_domain_names(
-        &self,
-        input: GetDomainNamesRequest,
-    ) -> RusotoFuture<GetDomainNamesResponse, GetDomainNamesError>;
+    fn get_domain_names(&self, input: GetDomainNamesRequest) -> Request<GetDomainNamesRequest>;
 
     /// <p>Gets an Integration.</p>
-    fn get_integration(
-        &self,
-        input: GetIntegrationRequest,
-    ) -> RusotoFuture<GetIntegrationResponse, GetIntegrationError>;
+    fn get_integration(&self, input: GetIntegrationRequest) -> Request<GetIntegrationRequest>;
 
     /// <p>Gets an IntegrationResponses.</p>
     fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
-    ) -> RusotoFuture<GetIntegrationResponseResponse, GetIntegrationResponseError>;
+    ) -> Request<GetIntegrationResponseRequest>;
 
     /// <p>Gets the IntegrationResponses for an Integration.</p>
     fn get_integration_responses(
         &self,
         input: GetIntegrationResponsesRequest,
-    ) -> RusotoFuture<GetIntegrationResponsesResponse, GetIntegrationResponsesError>;
+    ) -> Request<GetIntegrationResponsesRequest>;
 
     /// <p>Gets the Integrations for an API.</p>
-    fn get_integrations(
-        &self,
-        input: GetIntegrationsRequest,
-    ) -> RusotoFuture<GetIntegrationsResponse, GetIntegrationsError>;
+    fn get_integrations(&self, input: GetIntegrationsRequest) -> Request<GetIntegrationsRequest>;
 
     /// <p>Gets a Model.</p>
-    fn get_model(&self, input: GetModelRequest) -> RusotoFuture<GetModelResponse, GetModelError>;
+    fn get_model(&self, input: GetModelRequest) -> Request<GetModelRequest>;
 
     /// <p>Gets a model template.</p>
     fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
-    ) -> RusotoFuture<GetModelTemplateResponse, GetModelTemplateError>;
+    ) -> Request<GetModelTemplateRequest>;
 
     /// <p>Gets the Models for an API.</p>
-    fn get_models(
-        &self,
-        input: GetModelsRequest,
-    ) -> RusotoFuture<GetModelsResponse, GetModelsError>;
+    fn get_models(&self, input: GetModelsRequest) -> Request<GetModelsRequest>;
 
     /// <p>Gets a Route.</p>
-    fn get_route(&self, input: GetRouteRequest) -> RusotoFuture<GetRouteResponse, GetRouteError>;
+    fn get_route(&self, input: GetRouteRequest) -> Request<GetRouteRequest>;
 
     /// <p>Gets a RouteResponse.</p>
     fn get_route_response(
         &self,
         input: GetRouteResponseRequest,
-    ) -> RusotoFuture<GetRouteResponseResponse, GetRouteResponseError>;
+    ) -> Request<GetRouteResponseRequest>;
 
     /// <p>Gets the RouteResponses for a Route.</p>
     fn get_route_responses(
         &self,
         input: GetRouteResponsesRequest,
-    ) -> RusotoFuture<GetRouteResponsesResponse, GetRouteResponsesError>;
+    ) -> Request<GetRouteResponsesRequest>;
 
     /// <p>Gets the Routes for an API.</p>
-    fn get_routes(
-        &self,
-        input: GetRoutesRequest,
-    ) -> RusotoFuture<GetRoutesResponse, GetRoutesError>;
+    fn get_routes(&self, input: GetRoutesRequest) -> Request<GetRoutesRequest>;
 
     /// <p>Gets a Stage.</p>
-    fn get_stage(&self, input: GetStageRequest) -> RusotoFuture<GetStageResponse, GetStageError>;
+    fn get_stage(&self, input: GetStageRequest) -> Request<GetStageRequest>;
 
     /// <p>Gets the Stages for an API.</p>
-    fn get_stages(
-        &self,
-        input: GetStagesRequest,
-    ) -> RusotoFuture<GetStagesResponse, GetStagesError>;
+    fn get_stages(&self, input: GetStagesRequest) -> Request<GetStagesRequest>;
 
     /// <p>Updates an Api resource.</p>
-    fn update_api(
-        &self,
-        input: UpdateApiRequest,
-    ) -> RusotoFuture<UpdateApiResponse, UpdateApiError>;
+    fn update_api(&self, input: UpdateApiRequest) -> Request<UpdateApiRequest>;
 
     /// <p>The API mapping.</p>
     fn update_api_mapping(
         &self,
         input: UpdateApiMappingRequest,
-    ) -> RusotoFuture<UpdateApiMappingResponse, UpdateApiMappingError>;
+    ) -> Request<UpdateApiMappingRequest>;
 
     /// <p>Updates an Authorizer.</p>
-    fn update_authorizer(
-        &self,
-        input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError>;
+    fn update_authorizer(&self, input: UpdateAuthorizerRequest)
+        -> Request<UpdateAuthorizerRequest>;
 
     /// <p>Updates a Deployment.</p>
-    fn update_deployment(
-        &self,
-        input: UpdateDeploymentRequest,
-    ) -> RusotoFuture<UpdateDeploymentResponse, UpdateDeploymentError>;
+    fn update_deployment(&self, input: UpdateDeploymentRequest)
+        -> Request<UpdateDeploymentRequest>;
 
     /// <p>Updates a domain name.</p>
     fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
-    ) -> RusotoFuture<UpdateDomainNameResponse, UpdateDomainNameError>;
+    ) -> Request<UpdateDomainNameRequest>;
 
     /// <p>Updates an Integration.</p>
     fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> RusotoFuture<UpdateIntegrationResponse, UpdateIntegrationError>;
+    ) -> Request<UpdateIntegrationRequest>;
 
     /// <p>Updates an IntegrationResponses.</p>
     fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
-    ) -> RusotoFuture<UpdateIntegrationResponseResponse, UpdateIntegrationResponseError>;
+    ) -> Request<UpdateIntegrationResponseRequest>;
 
     /// <p>Updates a Model.</p>
-    fn update_model(
-        &self,
-        input: UpdateModelRequest,
-    ) -> RusotoFuture<UpdateModelResponse, UpdateModelError>;
+    fn update_model(&self, input: UpdateModelRequest) -> Request<UpdateModelRequest>;
 
     /// <p>Updates a Route.</p>
-    fn update_route(
-        &self,
-        input: UpdateRouteRequest,
-    ) -> RusotoFuture<UpdateRouteResponse, UpdateRouteError>;
+    fn update_route(&self, input: UpdateRouteRequest) -> Request<UpdateRouteRequest>;
 
     /// <p>Updates a RouteResponse.</p>
     fn update_route_response(
         &self,
         input: UpdateRouteResponseRequest,
-    ) -> RusotoFuture<UpdateRouteResponseResponse, UpdateRouteResponseError>;
+    ) -> Request<UpdateRouteResponseRequest>;
 
     /// <p>Updates a Stage.</p>
-    fn update_stage(
-        &self,
-        input: UpdateStageRequest,
-    ) -> RusotoFuture<UpdateStageResponse, UpdateStageError>;
+    fn update_stage(&self, input: UpdateStageRequest) -> Request<UpdateStageRequest>;
 }
 /// A client for the AmazonApiGatewayV2 API.
 #[derive(Clone)]
@@ -6729,19 +6699,383 @@ impl ApiGatewayV2Client {
 
 impl ApiGatewayV2 for ApiGatewayV2Client {
     /// <p>Creates an Api resource.</p>
-    fn create_api(
+    fn create_api(&self, input: CreateApiRequest) -> Request<CreateApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an API mapping.</p>
+    fn create_api_mapping(
         &self,
-        input: CreateApiRequest,
-    ) -> RusotoFuture<CreateApiResponse, CreateApiError> {
+        input: CreateApiMappingRequest,
+    ) -> Request<CreateApiMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Authorizer for an API.</p>
+    fn create_authorizer(
+        &self,
+        input: CreateAuthorizerRequest,
+    ) -> Request<CreateAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Deployment for an API.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> Request<CreateDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a domain name.</p>
+    fn create_domain_name(
+        &self,
+        input: CreateDomainNameRequest,
+    ) -> Request<CreateDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Integration.</p>
+    fn create_integration(
+        &self,
+        input: CreateIntegrationRequest,
+    ) -> Request<CreateIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an IntegrationResponses.</p>
+    fn create_integration_response(
+        &self,
+        input: CreateIntegrationResponseRequest,
+    ) -> Request<CreateIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Model for an API.</p>
+    fn create_model(&self, input: CreateModelRequest) -> Request<CreateModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Route for an API.</p>
+    fn create_route(&self, input: CreateRouteRequest) -> Request<CreateRouteRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a RouteResponse for a Route.</p>
+    fn create_route_response(
+        &self,
+        input: CreateRouteResponseRequest,
+    ) -> Request<CreateRouteResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Stage for an API.</p>
+    fn create_stage(&self, input: CreateStageRequest) -> Request<CreateStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an Api resource.</p>
+    fn delete_api(&self, input: DeleteApiRequest) -> Request<DeleteApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an API mapping.</p>
+    fn delete_api_mapping(
+        &self,
+        input: DeleteApiMappingRequest,
+    ) -> Request<DeleteApiMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an Authorizer.</p>
+    fn delete_authorizer(
+        &self,
+        input: DeleteAuthorizerRequest,
+    ) -> Request<DeleteAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Deployment.</p>
+    fn delete_deployment(
+        &self,
+        input: DeleteDeploymentRequest,
+    ) -> Request<DeleteDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a domain name.</p>
+    fn delete_domain_name(
+        &self,
+        input: DeleteDomainNameRequest,
+    ) -> Request<DeleteDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an Integration.</p>
+    fn delete_integration(
+        &self,
+        input: DeleteIntegrationRequest,
+    ) -> Request<DeleteIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an IntegrationResponses.</p>
+    fn delete_integration_response(
+        &self,
+        input: DeleteIntegrationResponseRequest,
+    ) -> Request<DeleteIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Model.</p>
+    fn delete_model(&self, input: DeleteModelRequest) -> Request<DeleteModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Route.</p>
+    fn delete_route(&self, input: DeleteRouteRequest) -> Request<DeleteRouteRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a RouteResponse.</p>
+    fn delete_route_response(
+        &self,
+        input: DeleteRouteResponseRequest,
+    ) -> Request<DeleteRouteResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Stage.</p>
+    fn delete_stage(&self, input: DeleteStageRequest) -> Request<DeleteStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an Api resource.</p>
+    fn get_api(&self, input: GetApiRequest) -> Request<GetApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The API mapping.</p>
+    fn get_api_mapping(&self, input: GetApiMappingRequest) -> Request<GetApiMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The API mappings.</p>
+    fn get_api_mappings(&self, input: GetApiMappingsRequest) -> Request<GetApiMappingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a collection of Api resources.</p>
+    fn get_apis(&self, input: GetApisRequest) -> Request<GetApisRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an Authorizer.</p>
+    fn get_authorizer(&self, input: GetAuthorizerRequest) -> Request<GetAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the Authorizers for an API.</p>
+    fn get_authorizers(&self, input: GetAuthorizersRequest) -> Request<GetAuthorizersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a Deployment.</p>
+    fn get_deployment(&self, input: GetDeploymentRequest) -> Request<GetDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the Deployments for an API.</p>
+    fn get_deployments(&self, input: GetDeploymentsRequest) -> Request<GetDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a domain name.</p>
+    fn get_domain_name(&self, input: GetDomainNameRequest) -> Request<GetDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the domain names for an AWS account.</p>
+    fn get_domain_names(&self, input: GetDomainNamesRequest) -> Request<GetDomainNamesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an Integration.</p>
+    fn get_integration(&self, input: GetIntegrationRequest) -> Request<GetIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an IntegrationResponses.</p>
+    fn get_integration_response(
+        &self,
+        input: GetIntegrationResponseRequest,
+    ) -> Request<GetIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the IntegrationResponses for an Integration.</p>
+    fn get_integration_responses(
+        &self,
+        input: GetIntegrationResponsesRequest,
+    ) -> Request<GetIntegrationResponsesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the Integrations for an API.</p>
+    fn get_integrations(&self, input: GetIntegrationsRequest) -> Request<GetIntegrationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a Model.</p>
+    fn get_model(&self, input: GetModelRequest) -> Request<GetModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a model template.</p>
+    fn get_model_template(
+        &self,
+        input: GetModelTemplateRequest,
+    ) -> Request<GetModelTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the Models for an API.</p>
+    fn get_models(&self, input: GetModelsRequest) -> Request<GetModelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a Route.</p>
+    fn get_route(&self, input: GetRouteRequest) -> Request<GetRouteRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a RouteResponse.</p>
+    fn get_route_response(
+        &self,
+        input: GetRouteResponseRequest,
+    ) -> Request<GetRouteResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the RouteResponses for a Route.</p>
+    fn get_route_responses(
+        &self,
+        input: GetRouteResponsesRequest,
+    ) -> Request<GetRouteResponsesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the Routes for an API.</p>
+    fn get_routes(&self, input: GetRoutesRequest) -> Request<GetRoutesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a Stage.</p>
+    fn get_stage(&self, input: GetStageRequest) -> Request<GetStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the Stages for an API.</p>
+    fn get_stages(&self, input: GetStagesRequest) -> Request<GetStagesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an Api resource.</p>
+    fn update_api(&self, input: UpdateApiRequest) -> Request<UpdateApiRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The API mapping.</p>
+    fn update_api_mapping(
+        &self,
+        input: UpdateApiMappingRequest,
+    ) -> Request<UpdateApiMappingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an Authorizer.</p>
+    fn update_authorizer(
+        &self,
+        input: UpdateAuthorizerRequest,
+    ) -> Request<UpdateAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a Deployment.</p>
+    fn update_deployment(
+        &self,
+        input: UpdateDeploymentRequest,
+    ) -> Request<UpdateDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a domain name.</p>
+    fn update_domain_name(
+        &self,
+        input: UpdateDomainNameRequest,
+    ) -> Request<UpdateDomainNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an Integration.</p>
+    fn update_integration(
+        &self,
+        input: UpdateIntegrationRequest,
+    ) -> Request<UpdateIntegrationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an IntegrationResponses.</p>
+    fn update_integration_response(
+        &self,
+        input: UpdateIntegrationResponseRequest,
+    ) -> Request<UpdateIntegrationResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a Model.</p>
+    fn update_model(&self, input: UpdateModelRequest) -> Request<UpdateModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a Route.</p>
+    fn update_route(&self, input: UpdateRouteRequest) -> Request<UpdateRouteRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a RouteResponse.</p>
+    fn update_route_response(
+        &self,
+        input: UpdateRouteResponseRequest,
+    ) -> Request<UpdateRouteResponseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a Stage.</p>
+    fn update_stage(&self, input: UpdateStageRequest) -> Request<UpdateStageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateApiRequest {
+    type Output = CreateApiResponse;
+    type Error = CreateApiError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2/apis";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6759,24 +7093,30 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates an API mapping.</p>
-    fn create_api_mapping(
-        &self,
-        input: CreateApiMappingRequest,
-    ) -> RusotoFuture<CreateApiMappingResponse, CreateApiMappingError> {
+impl ServiceRequest for CreateApiMappingRequest {
+    type Output = CreateApiMappingResponse;
+    type Error = CreateApiMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}/apimappings",
-            domain_name = input.domain_name
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6794,21 +7134,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates an Authorizer for an API.</p>
-    fn create_authorizer(
-        &self,
-        input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError> {
-        let request_uri = format!("/v2/apis/{api_id}/authorizers", api_id = input.api_id);
+impl ServiceRequest for CreateAuthorizerRequest {
+    type Output = CreateAuthorizerResponse;
+    type Error = CreateAuthorizerError;
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/authorizers", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6826,21 +7172,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates a Deployment for an API.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError> {
-        let request_uri = format!("/v2/apis/{api_id}/deployments", api_id = input.api_id);
+impl ServiceRequest for CreateDeploymentRequest {
+    type Output = CreateDeploymentResponse;
+    type Error = CreateDeploymentError;
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/deployments", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6858,21 +7210,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates a domain name.</p>
-    fn create_domain_name(
-        &self,
-        input: CreateDomainNameRequest,
-    ) -> RusotoFuture<CreateDomainNameResponse, CreateDomainNameError> {
+impl ServiceRequest for CreateDomainNameRequest {
+    type Output = CreateDomainNameResponse;
+    type Error = CreateDomainNameError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2/domainnames";
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6890,21 +7248,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates an Integration.</p>
-    fn create_integration(
-        &self,
-        input: CreateIntegrationRequest,
-    ) -> RusotoFuture<CreateIntegrationResponse, CreateIntegrationError> {
-        let request_uri = format!("/v2/apis/{api_id}/integrations", api_id = input.api_id);
+impl ServiceRequest for CreateIntegrationRequest {
+    type Output = CreateIntegrationResponse;
+    type Error = CreateIntegrationError;
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/integrations", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6922,25 +7286,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates an IntegrationResponses.</p>
-    fn create_integration_response(
-        &self,
-        input: CreateIntegrationResponseRequest,
-    ) -> RusotoFuture<CreateIntegrationResponseResponse, CreateIntegrationResponseError> {
+impl ServiceRequest for CreateIntegrationResponseRequest {
+    type Output = CreateIntegrationResponseResponse;
+    type Error = CreateIntegrationResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses",
-            api_id = input.api_id,
-            integration_id = input.integration_id
+            api_id = self.api_id,
+            integration_id = self.integration_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6955,21 +7325,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates a Model for an API.</p>
-    fn create_model(
-        &self,
-        input: CreateModelRequest,
-    ) -> RusotoFuture<CreateModelResponse, CreateModelError> {
-        let request_uri = format!("/v2/apis/{api_id}/models", api_id = input.api_id);
+impl ServiceRequest for CreateModelRequest {
+    type Output = CreateModelResponse;
+    type Error = CreateModelError;
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/models", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -6987,21 +7363,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates a Route for an API.</p>
-    fn create_route(
-        &self,
-        input: CreateRouteRequest,
-    ) -> RusotoFuture<CreateRouteResponse, CreateRouteError> {
-        let request_uri = format!("/v2/apis/{api_id}/routes", api_id = input.api_id);
+impl ServiceRequest for CreateRouteRequest {
+    type Output = CreateRouteResponse;
+    type Error = CreateRouteError;
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/routes", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7019,25 +7401,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates a RouteResponse for a Route.</p>
-    fn create_route_response(
-        &self,
-        input: CreateRouteResponseRequest,
-    ) -> RusotoFuture<CreateRouteResponseResponse, CreateRouteResponseError> {
+impl ServiceRequest for CreateRouteResponseRequest {
+    type Output = CreateRouteResponseResponse;
+    type Error = CreateRouteResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}/routeresponses",
-            api_id = input.api_id,
-            route_id = input.route_id
+            api_id = self.api_id,
+            route_id = self.route_id
         );
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7054,21 +7442,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Creates a Stage for an API.</p>
-    fn create_stage(
-        &self,
-        input: CreateStageRequest,
-    ) -> RusotoFuture<CreateStageResponse, CreateStageError> {
-        let request_uri = format!("/v2/apis/{api_id}/stages", api_id = input.api_id);
+impl ServiceRequest for CreateStageRequest {
+    type Output = CreateStageResponse;
+    type Error = CreateStageError;
 
-        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/stages", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("POST", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7086,18 +7480,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes an Api resource.</p>
-    fn delete_api(&self, input: DeleteApiRequest) -> RusotoFuture<(), DeleteApiError> {
-        let request_uri = format!("/v2/apis/{api_id}", api_id = input.api_id);
+impl ServiceRequest for DeleteApiRequest {
+    type Output = DeleteApiResponse;
+    type Error = DeleteApiError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteApiResponse {};
 
                     Ok(result)
                 }))
@@ -7111,25 +7514,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes an API mapping.</p>
-    fn delete_api_mapping(
-        &self,
-        input: DeleteApiMappingRequest,
-    ) -> RusotoFuture<(), DeleteApiMappingError> {
+impl ServiceRequest for DeleteApiMappingRequest {
+    type Output = DeleteApiMappingResponse;
+    type Error = DeleteApiMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}/apimappings/{api_mapping_id}",
-            api_mapping_id = input.api_mapping_id,
-            domain_name = input.domain_name
+            api_mapping_id = self.api_mapping_id,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteApiMappingResponse {};
 
                     Ok(result)
                 }))
@@ -7143,25 +7552,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes an Authorizer.</p>
-    fn delete_authorizer(
-        &self,
-        input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<(), DeleteAuthorizerError> {
+impl ServiceRequest for DeleteAuthorizerRequest {
+    type Output = DeleteAuthorizerResponse;
+    type Error = DeleteAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/authorizers/{authorizer_id}",
-            api_id = input.api_id,
-            authorizer_id = input.authorizer_id
+            api_id = self.api_id,
+            authorizer_id = self.authorizer_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteAuthorizerResponse {};
 
                     Ok(result)
                 }))
@@ -7175,25 +7590,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes a Deployment.</p>
-    fn delete_deployment(
-        &self,
-        input: DeleteDeploymentRequest,
-    ) -> RusotoFuture<(), DeleteDeploymentError> {
+impl ServiceRequest for DeleteDeploymentRequest {
+    type Output = DeleteDeploymentResponse;
+    type Error = DeleteDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/deployments/{deployment_id}",
-            api_id = input.api_id,
-            deployment_id = input.deployment_id
+            api_id = self.api_id,
+            deployment_id = self.deployment_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDeploymentResponse {};
 
                     Ok(result)
                 }))
@@ -7207,24 +7628,30 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes a domain name.</p>
-    fn delete_domain_name(
-        &self,
-        input: DeleteDomainNameRequest,
-    ) -> RusotoFuture<(), DeleteDomainNameError> {
+impl ServiceRequest for DeleteDomainNameRequest {
+    type Output = DeleteDomainNameResponse;
+    type Error = DeleteDomainNameError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}",
-            domain_name = input.domain_name
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteDomainNameResponse {};
 
                     Ok(result)
                 }))
@@ -7238,25 +7665,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes an Integration.</p>
-    fn delete_integration(
-        &self,
-        input: DeleteIntegrationRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationError> {
+impl ServiceRequest for DeleteIntegrationRequest {
+    type Output = DeleteIntegrationResponse;
+    type Error = DeleteIntegrationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}",
-            api_id = input.api_id,
-            integration_id = input.integration_id
+            api_id = self.api_id,
+            integration_id = self.integration_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteIntegrationResponse {};
 
                     Ok(result)
                 }))
@@ -7270,21 +7703,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes an IntegrationResponses.</p>
-    fn delete_integration_response(
-        &self,
-        input: DeleteIntegrationResponseRequest,
-    ) -> RusotoFuture<(), DeleteIntegrationResponseError> {
-        let request_uri = format!("/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses/{integration_response_id}", api_id = input.api_id, integration_id = input.integration_id, integration_response_id = input.integration_response_id);
+impl ServiceRequest for DeleteIntegrationResponseRequest {
+    type Output = DeleteIntegrationResponseResponse;
+    type Error = DeleteIntegrationResponseError;
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses/{integration_response_id}", api_id = self.api_id, integration_id = self.integration_id, integration_response_id = self.integration_response_id);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteIntegrationResponseResponse {};
 
                     Ok(result)
                 }))
@@ -7295,22 +7734,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes a Model.</p>
-    fn delete_model(&self, input: DeleteModelRequest) -> RusotoFuture<(), DeleteModelError> {
+impl ServiceRequest for DeleteModelRequest {
+    type Output = DeleteModelResponse;
+    type Error = DeleteModelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/models/{model_id}",
-            api_id = input.api_id,
-            model_id = input.model_id
+            api_id = self.api_id,
+            model_id = self.model_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteModelResponse {};
 
                     Ok(result)
                 }))
@@ -7324,22 +7772,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes a Route.</p>
-    fn delete_route(&self, input: DeleteRouteRequest) -> RusotoFuture<(), DeleteRouteError> {
+impl ServiceRequest for DeleteRouteRequest {
+    type Output = DeleteRouteResponse;
+    type Error = DeleteRouteError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}",
-            api_id = input.api_id,
-            route_id = input.route_id
+            api_id = self.api_id,
+            route_id = self.route_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteRouteResponse {};
 
                     Ok(result)
                 }))
@@ -7353,26 +7810,32 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes a RouteResponse.</p>
-    fn delete_route_response(
-        &self,
-        input: DeleteRouteResponseRequest,
-    ) -> RusotoFuture<(), DeleteRouteResponseError> {
+impl ServiceRequest for DeleteRouteResponseRequest {
+    type Output = DeleteRouteResponseResponse;
+    type Error = DeleteRouteResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}/routeresponses/{route_response_id}",
-            api_id = input.api_id,
-            route_id = input.route_id,
-            route_response_id = input.route_response_id
+            api_id = self.api_id,
+            route_id = self.route_id,
+            route_response_id = self.route_response_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteRouteResponseResponse {};
 
                     Ok(result)
                 }))
@@ -7385,22 +7848,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Deletes a Stage.</p>
-    fn delete_stage(&self, input: DeleteStageRequest) -> RusotoFuture<(), DeleteStageError> {
+impl ServiceRequest for DeleteStageRequest {
+    type Output = DeleteStageResponse;
+    type Error = DeleteStageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/stages/{stage_name}",
-            api_id = input.api_id,
-            stage_name = input.stage_name
+            api_id = self.api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteStageResponse {};
 
                     Ok(result)
                 }))
@@ -7414,15 +7886,24 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets an Api resource.</p>
-    fn get_api(&self, input: GetApiRequest) -> RusotoFuture<GetApiResponse, GetApiError> {
-        let request_uri = format!("/v2/apis/{api_id}", api_id = input.api_id);
+impl ServiceRequest for GetApiRequest {
+    type Output = GetApiResponse;
+    type Error = GetApiError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7440,22 +7921,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>The API mapping.</p>
-    fn get_api_mapping(
-        &self,
-        input: GetApiMappingRequest,
-    ) -> RusotoFuture<GetApiMappingResponse, GetApiMappingError> {
+impl ServiceRequest for GetApiMappingRequest {
+    type Output = GetApiMappingResponse;
+    type Error = GetApiMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}/apimappings/{api_mapping_id}",
-            api_mapping_id = input.api_mapping_id,
-            domain_name = input.domain_name
+            api_mapping_id = self.api_mapping_id,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7473,30 +7960,36 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>The API mappings.</p>
-    fn get_api_mappings(
-        &self,
-        input: GetApiMappingsRequest,
-    ) -> RusotoFuture<GetApiMappingsResponse, GetApiMappingsError> {
+impl ServiceRequest for GetApiMappingsRequest {
+    type Output = GetApiMappingsResponse;
+    type Error = GetApiMappingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}/apimappings",
-            domain_name = input.domain_name
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7514,24 +8007,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a collection of Api resources.</p>
-    fn get_apis(&self, input: GetApisRequest) -> RusotoFuture<GetApisResponse, GetApisError> {
+impl ServiceRequest for GetApisRequest {
+    type Output = GetApisResponse;
+    type Error = GetApisError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2/apis";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7549,22 +8051,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets an Authorizer.</p>
-    fn get_authorizer(
-        &self,
-        input: GetAuthorizerRequest,
-    ) -> RusotoFuture<GetAuthorizerResponse, GetAuthorizerError> {
+impl ServiceRequest for GetAuthorizerRequest {
+    type Output = GetAuthorizerResponse;
+    type Error = GetAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/authorizers/{authorizer_id}",
-            api_id = input.api_id,
-            authorizer_id = input.authorizer_id
+            api_id = self.api_id,
+            authorizer_id = self.authorizer_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7582,27 +8090,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the Authorizers for an API.</p>
-    fn get_authorizers(
-        &self,
-        input: GetAuthorizersRequest,
-    ) -> RusotoFuture<GetAuthorizersResponse, GetAuthorizersError> {
-        let request_uri = format!("/v2/apis/{api_id}/authorizers", api_id = input.api_id);
+impl ServiceRequest for GetAuthorizersRequest {
+    type Output = GetAuthorizersResponse;
+    type Error = GetAuthorizersError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/authorizers", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7620,22 +8134,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a Deployment.</p>
-    fn get_deployment(
-        &self,
-        input: GetDeploymentRequest,
-    ) -> RusotoFuture<GetDeploymentResponse, GetDeploymentError> {
+impl ServiceRequest for GetDeploymentRequest {
+    type Output = GetDeploymentResponse;
+    type Error = GetDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/deployments/{deployment_id}",
-            api_id = input.api_id,
-            deployment_id = input.deployment_id
+            api_id = self.api_id,
+            deployment_id = self.deployment_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7653,27 +8173,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the Deployments for an API.</p>
-    fn get_deployments(
-        &self,
-        input: GetDeploymentsRequest,
-    ) -> RusotoFuture<GetDeploymentsResponse, GetDeploymentsError> {
-        let request_uri = format!("/v2/apis/{api_id}/deployments", api_id = input.api_id);
+impl ServiceRequest for GetDeploymentsRequest {
+    type Output = GetDeploymentsResponse;
+    type Error = GetDeploymentsError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/deployments", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7691,21 +8217,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a domain name.</p>
-    fn get_domain_name(
-        &self,
-        input: GetDomainNameRequest,
-    ) -> RusotoFuture<GetDomainNameResponse, GetDomainNameError> {
+impl ServiceRequest for GetDomainNameRequest {
+    type Output = GetDomainNameResponse;
+    type Error = GetDomainNameError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}",
-            domain_name = input.domain_name
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7723,27 +8255,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the domain names for an AWS account.</p>
-    fn get_domain_names(
-        &self,
-        input: GetDomainNamesRequest,
-    ) -> RusotoFuture<GetDomainNamesResponse, GetDomainNamesError> {
+impl ServiceRequest for GetDomainNamesRequest {
+    type Output = GetDomainNamesResponse;
+    type Error = GetDomainNamesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2/domainnames";
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7761,22 +8299,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets an Integration.</p>
-    fn get_integration(
-        &self,
-        input: GetIntegrationRequest,
-    ) -> RusotoFuture<GetIntegrationResponse, GetIntegrationError> {
+impl ServiceRequest for GetIntegrationRequest {
+    type Output = GetIntegrationResponse;
+    type Error = GetIntegrationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}",
-            api_id = input.api_id,
-            integration_id = input.integration_id
+            api_id = self.api_id,
+            integration_id = self.integration_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7794,18 +8338,24 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets an IntegrationResponses.</p>
-    fn get_integration_response(
-        &self,
-        input: GetIntegrationResponseRequest,
-    ) -> RusotoFuture<GetIntegrationResponseResponse, GetIntegrationResponseError> {
-        let request_uri = format!("/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses/{integration_response_id}", api_id = input.api_id, integration_id = input.integration_id, integration_response_id = input.integration_response_id);
+impl ServiceRequest for GetIntegrationResponseRequest {
+    type Output = GetIntegrationResponseResponse;
+    type Error = GetIntegrationResponseError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses/{integration_response_id}", api_id = self.api_id, integration_id = self.integration_id, integration_response_id = self.integration_response_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7822,31 +8372,37 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the IntegrationResponses for an Integration.</p>
-    fn get_integration_responses(
-        &self,
-        input: GetIntegrationResponsesRequest,
-    ) -> RusotoFuture<GetIntegrationResponsesResponse, GetIntegrationResponsesError> {
+impl ServiceRequest for GetIntegrationResponsesRequest {
+    type Output = GetIntegrationResponsesResponse;
+    type Error = GetIntegrationResponsesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses",
-            api_id = input.api_id,
-            integration_id = input.integration_id
+            api_id = self.api_id,
+            integration_id = self.integration_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7861,27 +8417,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the Integrations for an API.</p>
-    fn get_integrations(
-        &self,
-        input: GetIntegrationsRequest,
-    ) -> RusotoFuture<GetIntegrationsResponse, GetIntegrationsError> {
-        let request_uri = format!("/v2/apis/{api_id}/integrations", api_id = input.api_id);
+impl ServiceRequest for GetIntegrationsRequest {
+    type Output = GetIntegrationsResponse;
+    type Error = GetIntegrationsError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/integrations", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7899,19 +8461,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a Model.</p>
-    fn get_model(&self, input: GetModelRequest) -> RusotoFuture<GetModelResponse, GetModelError> {
+impl ServiceRequest for GetModelRequest {
+    type Output = GetModelResponse;
+    type Error = GetModelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/models/{model_id}",
-            api_id = input.api_id,
-            model_id = input.model_id
+            api_id = self.api_id,
+            model_id = self.model_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7929,22 +8500,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a model template.</p>
-    fn get_model_template(
-        &self,
-        input: GetModelTemplateRequest,
-    ) -> RusotoFuture<GetModelTemplateResponse, GetModelTemplateError> {
+impl ServiceRequest for GetModelTemplateRequest {
+    type Output = GetModelTemplateResponse;
+    type Error = GetModelTemplateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/models/{model_id}/template",
-            api_id = input.api_id,
-            model_id = input.model_id
+            api_id = self.api_id,
+            model_id = self.model_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -7962,27 +8539,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the Models for an API.</p>
-    fn get_models(
-        &self,
-        input: GetModelsRequest,
-    ) -> RusotoFuture<GetModelsResponse, GetModelsError> {
-        let request_uri = format!("/v2/apis/{api_id}/models", api_id = input.api_id);
+impl ServiceRequest for GetModelsRequest {
+    type Output = GetModelsResponse;
+    type Error = GetModelsError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/models", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8000,19 +8583,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a Route.</p>
-    fn get_route(&self, input: GetRouteRequest) -> RusotoFuture<GetRouteResponse, GetRouteError> {
+impl ServiceRequest for GetRouteRequest {
+    type Output = GetRouteResponse;
+    type Error = GetRouteError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}",
-            api_id = input.api_id,
-            route_id = input.route_id
+            api_id = self.api_id,
+            route_id = self.route_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8030,23 +8622,29 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a RouteResponse.</p>
-    fn get_route_response(
-        &self,
-        input: GetRouteResponseRequest,
-    ) -> RusotoFuture<GetRouteResponseResponse, GetRouteResponseError> {
+impl ServiceRequest for GetRouteResponseRequest {
+    type Output = GetRouteResponseResponse;
+    type Error = GetRouteResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}/routeresponses/{route_response_id}",
-            api_id = input.api_id,
-            route_id = input.route_id,
-            route_response_id = input.route_response_id
+            api_id = self.api_id,
+            route_id = self.route_id,
+            route_response_id = self.route_response_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8064,31 +8662,37 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the RouteResponses for a Route.</p>
-    fn get_route_responses(
-        &self,
-        input: GetRouteResponsesRequest,
-    ) -> RusotoFuture<GetRouteResponsesResponse, GetRouteResponsesError> {
+impl ServiceRequest for GetRouteResponsesRequest {
+    type Output = GetRouteResponsesResponse;
+    type Error = GetRouteResponsesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}/routeresponses",
-            api_id = input.api_id,
-            route_id = input.route_id
+            api_id = self.api_id,
+            route_id = self.route_id
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8106,27 +8710,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the Routes for an API.</p>
-    fn get_routes(
-        &self,
-        input: GetRoutesRequest,
-    ) -> RusotoFuture<GetRoutesResponse, GetRoutesError> {
-        let request_uri = format!("/v2/apis/{api_id}/routes", api_id = input.api_id);
+impl ServiceRequest for GetRoutesRequest {
+    type Output = GetRoutesResponse;
+    type Error = GetRoutesError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/routes", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8144,19 +8754,28 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets a Stage.</p>
-    fn get_stage(&self, input: GetStageRequest) -> RusotoFuture<GetStageResponse, GetStageError> {
+impl ServiceRequest for GetStageRequest {
+    type Output = GetStageResponse;
+    type Error = GetStageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/stages/{stage_name}",
-            api_id = input.api_id,
-            stage_name = input.stage_name
+            api_id = self.api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8174,27 +8793,33 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Gets the Stages for an API.</p>
-    fn get_stages(
-        &self,
-        input: GetStagesRequest,
-    ) -> RusotoFuture<GetStagesResponse, GetStagesError> {
-        let request_uri = format!("/v2/apis/{api_id}/stages", api_id = input.api_id);
+impl ServiceRequest for GetStagesRequest {
+    type Output = GetStagesResponse;
+    type Error = GetStagesError;
 
-        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/stages", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8212,21 +8837,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates an Api resource.</p>
-    fn update_api(
-        &self,
-        input: UpdateApiRequest,
-    ) -> RusotoFuture<UpdateApiResponse, UpdateApiError> {
-        let request_uri = format!("/v2/apis/{api_id}", api_id = input.api_id);
+impl ServiceRequest for UpdateApiRequest {
+    type Output = UpdateApiResponse;
+    type Error = UpdateApiError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}", api_id = self.api_id);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8244,25 +8875,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>The API mapping.</p>
-    fn update_api_mapping(
-        &self,
-        input: UpdateApiMappingRequest,
-    ) -> RusotoFuture<UpdateApiMappingResponse, UpdateApiMappingError> {
+impl ServiceRequest for UpdateApiMappingRequest {
+    type Output = UpdateApiMappingResponse;
+    type Error = UpdateApiMappingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}/apimappings/{api_mapping_id}",
-            api_mapping_id = input.api_mapping_id,
-            domain_name = input.domain_name
+            api_mapping_id = self.api_mapping_id,
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8280,25 +8917,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates an Authorizer.</p>
-    fn update_authorizer(
-        &self,
-        input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError> {
+impl ServiceRequest for UpdateAuthorizerRequest {
+    type Output = UpdateAuthorizerResponse;
+    type Error = UpdateAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/authorizers/{authorizer_id}",
-            api_id = input.api_id,
-            authorizer_id = input.authorizer_id
+            api_id = self.api_id,
+            authorizer_id = self.authorizer_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8316,25 +8959,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates a Deployment.</p>
-    fn update_deployment(
-        &self,
-        input: UpdateDeploymentRequest,
-    ) -> RusotoFuture<UpdateDeploymentResponse, UpdateDeploymentError> {
+impl ServiceRequest for UpdateDeploymentRequest {
+    type Output = UpdateDeploymentResponse;
+    type Error = UpdateDeploymentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/deployments/{deployment_id}",
-            api_id = input.api_id,
-            deployment_id = input.deployment_id
+            api_id = self.api_id,
+            deployment_id = self.deployment_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8352,24 +9001,30 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates a domain name.</p>
-    fn update_domain_name(
-        &self,
-        input: UpdateDomainNameRequest,
-    ) -> RusotoFuture<UpdateDomainNameResponse, UpdateDomainNameError> {
+impl ServiceRequest for UpdateDomainNameRequest {
+    type Output = UpdateDomainNameResponse;
+    type Error = UpdateDomainNameError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/domainnames/{domain_name}",
-            domain_name = input.domain_name
+            domain_name = self.domain_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8387,25 +9042,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates an Integration.</p>
-    fn update_integration(
-        &self,
-        input: UpdateIntegrationRequest,
-    ) -> RusotoFuture<UpdateIntegrationResponse, UpdateIntegrationError> {
+impl ServiceRequest for UpdateIntegrationRequest {
+    type Output = UpdateIntegrationResponse;
+    type Error = UpdateIntegrationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}",
-            api_id = input.api_id,
-            integration_id = input.integration_id
+            api_id = self.api_id,
+            integration_id = self.integration_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8423,21 +9084,27 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates an IntegrationResponses.</p>
-    fn update_integration_response(
-        &self,
-        input: UpdateIntegrationResponseRequest,
-    ) -> RusotoFuture<UpdateIntegrationResponseResponse, UpdateIntegrationResponseError> {
-        let request_uri = format!("/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses/{integration_response_id}", api_id = input.api_id, integration_id = input.integration_id, integration_response_id = input.integration_response_id);
+impl ServiceRequest for UpdateIntegrationResponseRequest {
+    type Output = UpdateIntegrationResponseResponse;
+    type Error = UpdateIntegrationResponseError;
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/v2/apis/{api_id}/integrations/{integration_id}/integrationresponses/{integration_response_id}", api_id = self.api_id, integration_id = self.integration_id, integration_response_id = self.integration_response_id);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8452,25 +9119,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates a Model.</p>
-    fn update_model(
-        &self,
-        input: UpdateModelRequest,
-    ) -> RusotoFuture<UpdateModelResponse, UpdateModelError> {
+impl ServiceRequest for UpdateModelRequest {
+    type Output = UpdateModelResponse;
+    type Error = UpdateModelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/models/{model_id}",
-            api_id = input.api_id,
-            model_id = input.model_id
+            api_id = self.api_id,
+            model_id = self.model_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8488,25 +9161,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates a Route.</p>
-    fn update_route(
-        &self,
-        input: UpdateRouteRequest,
-    ) -> RusotoFuture<UpdateRouteResponse, UpdateRouteError> {
+impl ServiceRequest for UpdateRouteRequest {
+    type Output = UpdateRouteResponse;
+    type Error = UpdateRouteError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}",
-            api_id = input.api_id,
-            route_id = input.route_id
+            api_id = self.api_id,
+            route_id = self.route_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8524,26 +9203,32 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates a RouteResponse.</p>
-    fn update_route_response(
-        &self,
-        input: UpdateRouteResponseRequest,
-    ) -> RusotoFuture<UpdateRouteResponseResponse, UpdateRouteResponseError> {
+impl ServiceRequest for UpdateRouteResponseRequest {
+    type Output = UpdateRouteResponseResponse;
+    type Error = UpdateRouteResponseError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}/routeresponses/{route_response_id}",
-            api_id = input.api_id,
-            route_id = input.route_id,
-            route_response_id = input.route_response_id
+            api_id = self.api_id,
+            route_id = self.route_id,
+            route_response_id = self.route_response_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -8560,25 +9245,31 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             }
         })
     }
+}
 
-    /// <p>Updates a Stage.</p>
-    fn update_stage(
-        &self,
-        input: UpdateStageRequest,
-    ) -> RusotoFuture<UpdateStageResponse, UpdateStageError> {
+impl ServiceRequest for UpdateStageRequest {
+    type Output = UpdateStageResponse;
+    type Error = UpdateStageError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/v2/apis/{api_id}/stages/{stage_name}",
-            api_id = input.api_id,
-            stage_name = input.stage_name
+            api_id = self.api_id,
+            stage_name = self.stage_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "apigateway", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

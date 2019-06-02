@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -61,6 +62,10 @@ pub struct AcceptCertificateTransferRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub set_as_active: Option<bool>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AcceptCertificateTransferResponse {}
 
 /// <p>Describes the actions associated with a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -279,6 +284,10 @@ pub struct AttachPolicyRequest {
     pub target: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AttachPolicyResponse {}
+
 /// <p>The input for the AttachPrincipalPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachPrincipalPolicyRequest {
@@ -289,6 +298,10 @@ pub struct AttachPrincipalPolicyRequest {
     #[serde(rename = "principal")]
     pub principal: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AttachPrincipalPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachSecurityProfileRequest {
@@ -704,6 +717,10 @@ pub struct CancelCertificateTransferRequest {
     pub certificate_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CancelCertificateTransferResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelJobExecutionRequest {
     /// <p>(Optional) The expected current version of the job execution. Each time you update the job execution, its version is incremented. If the version of the job execution stored in Jobs does not match, the update is rejected with a VersionMismatch error, and an ErrorResponse that contains the current job execution status data is returned. (This makes it unnecessary to perform a separate DescribeJobExecution request in order to obtain the job execution status data.)</p>
@@ -725,6 +742,10 @@ pub struct CancelJobExecutionRequest {
     #[serde(rename = "thingName")]
     pub thing_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CancelJobExecutionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelJobRequest {
@@ -1598,6 +1619,10 @@ pub struct CreateTopicRuleRequest {
     pub topic_rule_payload: TopicRulePayload,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateTopicRuleResponse {}
+
 /// <p>Describes a custom method used to code sign a file.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomCodeSigning {
@@ -1682,6 +1707,10 @@ pub struct DeleteCertificateRequest {
     pub force_delete: Option<bool>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteCertificateResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDynamicThingGroupRequest {
     /// <p>The expected version of the dynamic thing group to delete.</p>
@@ -1714,6 +1743,10 @@ pub struct DeleteJobExecutionRequest {
     pub thing_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteJobExecutionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteJobRequest {
     /// <p><p>(Optional) When true, you can delete a job which is &quot;IN<em>PROGRESS&quot;. Otherwise, you can only delete a job which is in a terminal state (&quot;COMPLETED&quot; or &quot;CANCELED&quot;) or an exception will occur. The default is false.</p> <note> <p>Deleting a job which is &quot;IN</em>PROGRESS&quot;, will cause a device which is executing the job to be unable to access job information or update the job execution status. Use caution and ensure that each device executing a job which is deleted is able to recover to a valid state.</p> </note></p>
@@ -1724,6 +1757,10 @@ pub struct DeleteJobRequest {
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteJobResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteOTAUpdateRequest {
@@ -1752,6 +1789,10 @@ pub struct DeletePolicyRequest {
     pub policy_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeletePolicyResponse {}
+
 /// <p>The input for the DeletePolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePolicyVersionRequest {
@@ -1762,6 +1803,10 @@ pub struct DeletePolicyVersionRequest {
     #[serde(rename = "policyVersionId")]
     pub policy_version_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeletePolicyVersionResponse {}
 
 /// <p>The input for the DeleteRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1873,6 +1918,10 @@ pub struct DeleteTopicRuleRequest {
     pub rule_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteTopicRuleResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteV2LoggingLevelRequest {
     /// <p>The name of the resource for which you are configuring logging.</p>
@@ -1882,6 +1931,10 @@ pub struct DeleteV2LoggingLevelRequest {
     #[serde(rename = "targetType")]
     pub target_type: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteV2LoggingLevelResponse {}
 
 /// <p>Contains information that denied the authorization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2509,6 +2562,10 @@ pub struct DetachPolicyRequest {
     pub target: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DetachPolicyResponse {}
+
 /// <p>The input for the DetachPrincipalPolicy operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachPrincipalPolicyRequest {
@@ -2519,6 +2576,10 @@ pub struct DetachPrincipalPolicyRequest {
     #[serde(rename = "principal")]
     pub principal: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DetachPrincipalPolicyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DetachSecurityProfileRequest {
@@ -2557,6 +2618,10 @@ pub struct DisableTopicRuleRequest {
     #[serde(rename = "ruleName")]
     pub rule_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisableTopicRuleResponse {}
 
 /// <p>Describes an action to write to a DynamoDB table.</p> <p>The <code>tableName</code>, <code>hashKeyField</code>, and <code>rangeKeyField</code> values must match the values used when you created the table.</p> <p>The <code>hashKeyValue</code> and <code>rangeKeyvalue</code> fields use a substitution template syntax. These templates provide data at runtime. The syntax is as follows: ${<i>sql-expression</i>}.</p> <p>You can specify any valid expression in a WHERE or SELECT clause, including JSON properties, comparisons, calculations, and functions. For example, the following field uses the third level of the topic:</p> <p> <code>"hashKeyValue": "${topic(3)}"</code> </p> <p>The following field uses the timestamp:</p> <p> <code>"rangeKeyValue": "${timestamp()}"</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2655,6 +2720,10 @@ pub struct EnableTopicRuleRequest {
     #[serde(rename = "ruleName")]
     pub rule_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EnableTopicRuleResponse {}
 
 /// <p>Error information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5009,6 +5078,10 @@ pub struct RejectCertificateTransferRequest {
     pub reject_reason: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RejectCertificateTransferResponse {}
+
 /// <p>Information about a related resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -5085,6 +5158,10 @@ pub struct ReplaceTopicRuleRequest {
     #[serde(rename = "topicRulePayload")]
     pub topic_rule_payload: TopicRulePayload,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ReplaceTopicRuleResponse {}
 
 /// <p>Describes an action to republish to another topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -5351,6 +5428,10 @@ pub struct SetDefaultPolicyVersionRequest {
     pub policy_version_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetDefaultPolicyVersionResponse {}
+
 /// <p>The input for the SetLoggingOptions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetLoggingOptionsRequest {
@@ -5358,6 +5439,10 @@ pub struct SetLoggingOptionsRequest {
     #[serde(rename = "loggingOptionsPayload")]
     pub logging_options_payload: LoggingOptionsPayload,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetLoggingOptionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetV2LoggingLevelRequest {
@@ -5368,6 +5453,10 @@ pub struct SetV2LoggingLevelRequest {
     #[serde(rename = "logTarget")]
     pub log_target: LogTarget,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetV2LoggingLevelResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetV2LoggingOptionsRequest {
@@ -5384,6 +5473,10 @@ pub struct SetV2LoggingOptionsRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetV2LoggingOptionsResponse {}
 
 /// <p>Describes the code-signing profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -6230,6 +6323,10 @@ pub struct UpdateCACertificateRequest {
     pub remove_auto_registration: Option<bool>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateCACertificateResponse {}
+
 /// <p>The input for the UpdateCertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCertificateRequest {
@@ -6240,6 +6337,10 @@ pub struct UpdateCertificateRequest {
     #[serde(rename = "newStatus")]
     pub new_status: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateCertificateResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDynamicThingGroupRequest {
@@ -6330,6 +6431,10 @@ pub struct UpdateJobRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_config: Option<TimeoutConfig>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateJobResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoleAliasRequest {
@@ -17032,979 +17137,818 @@ pub trait Iot {
     fn accept_certificate_transfer(
         &self,
         input: AcceptCertificateTransferRequest,
-    ) -> RusotoFuture<(), AcceptCertificateTransferError>;
+    ) -> Request<AcceptCertificateTransferRequest>;
 
     /// <p>Adds a thing to a billing group.</p>
     fn add_thing_to_billing_group(
         &self,
         input: AddThingToBillingGroupRequest,
-    ) -> RusotoFuture<AddThingToBillingGroupResponse, AddThingToBillingGroupError>;
+    ) -> Request<AddThingToBillingGroupRequest>;
 
     /// <p>Adds a thing to a thing group.</p>
     fn add_thing_to_thing_group(
         &self,
         input: AddThingToThingGroupRequest,
-    ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError>;
+    ) -> Request<AddThingToThingGroupRequest>;
 
     /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
     fn associate_targets_with_job(
         &self,
         input: AssociateTargetsWithJobRequest,
-    ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError>;
+    ) -> Request<AssociateTargetsWithJobRequest>;
 
     /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError>;
+    fn attach_policy(&self, input: AttachPolicyRequest) -> Request<AttachPolicyRequest>;
 
     /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
     fn attach_principal_policy(
         &self,
         input: AttachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), AttachPrincipalPolicyError>;
+    ) -> Request<AttachPrincipalPolicyRequest>;
 
     /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
     fn attach_security_profile(
         &self,
         input: AttachSecurityProfileRequest,
-    ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError>;
+    ) -> Request<AttachSecurityProfileRequest>;
 
     /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
     fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
-    ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError>;
+    ) -> Request<AttachThingPrincipalRequest>;
 
     /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
-    fn cancel_audit_task(
-        &self,
-        input: CancelAuditTaskRequest,
-    ) -> RusotoFuture<CancelAuditTaskResponse, CancelAuditTaskError>;
+    fn cancel_audit_task(&self, input: CancelAuditTaskRequest) -> Request<CancelAuditTaskRequest>;
 
     /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
     fn cancel_certificate_transfer(
         &self,
         input: CancelCertificateTransferRequest,
-    ) -> RusotoFuture<(), CancelCertificateTransferError>;
+    ) -> Request<CancelCertificateTransferRequest>;
 
     /// <p>Cancels a job.</p>
-    fn cancel_job(
-        &self,
-        input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest>;
 
     /// <p>Cancels the execution of a job for a given thing.</p>
     fn cancel_job_execution(
         &self,
         input: CancelJobExecutionRequest,
-    ) -> RusotoFuture<(), CancelJobExecutionError>;
+    ) -> Request<CancelJobExecutionRequest>;
 
     /// <p>Clears the default authorizer.</p>
-    fn clear_default_authorizer(
-        &self,
-    ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError>;
+    fn clear_default_authorizer(&self) -> Request<ClearDefaultAuthorizerRequest>;
 
     /// <p>Creates an authorizer.</p>
-    fn create_authorizer(
-        &self,
-        input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError>;
+    fn create_authorizer(&self, input: CreateAuthorizerRequest)
+        -> Request<CreateAuthorizerRequest>;
 
     /// <p>Creates a billing group.</p>
     fn create_billing_group(
         &self,
         input: CreateBillingGroupRequest,
-    ) -> RusotoFuture<CreateBillingGroupResponse, CreateBillingGroupError>;
+    ) -> Request<CreateBillingGroupRequest>;
 
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
         input: CreateCertificateFromCsrRequest,
-    ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
+    ) -> Request<CreateCertificateFromCsrRequest>;
 
     /// <p>Creates a dynamic thing group.</p>
     fn create_dynamic_thing_group(
         &self,
         input: CreateDynamicThingGroupRequest,
-    ) -> RusotoFuture<CreateDynamicThingGroupResponse, CreateDynamicThingGroupError>;
+    ) -> Request<CreateDynamicThingGroupRequest>;
 
     /// <p>Creates a job.</p>
-    fn create_job(
-        &self,
-        input: CreateJobRequest,
-    ) -> RusotoFuture<CreateJobResponse, CreateJobError>;
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest>;
 
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: CreateKeysAndCertificateRequest,
-    ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
+    ) -> Request<CreateKeysAndCertificateRequest>;
 
     /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
-    fn create_ota_update(
-        &self,
-        input: CreateOTAUpdateRequest,
-    ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError>;
+    fn create_ota_update(&self, input: CreateOTAUpdateRequest) -> Request<CreateOTAUpdateRequest>;
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
-    fn create_policy(
-        &self,
-        input: CreatePolicyRequest,
-    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError>;
+    fn create_policy(&self, input: CreatePolicyRequest) -> Request<CreatePolicyRequest>;
 
     /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
     fn create_policy_version(
         &self,
         input: CreatePolicyVersionRequest,
-    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError>;
+    ) -> Request<CreatePolicyVersionRequest>;
 
     /// <p>Creates a role alias.</p>
-    fn create_role_alias(
-        &self,
-        input: CreateRoleAliasRequest,
-    ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError>;
+    fn create_role_alias(&self, input: CreateRoleAliasRequest) -> Request<CreateRoleAliasRequest>;
 
     /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
     fn create_scheduled_audit(
         &self,
         input: CreateScheduledAuditRequest,
-    ) -> RusotoFuture<CreateScheduledAuditResponse, CreateScheduledAuditError>;
+    ) -> Request<CreateScheduledAuditRequest>;
 
     /// <p>Creates a Device Defender security profile.</p>
     fn create_security_profile(
         &self,
         input: CreateSecurityProfileRequest,
-    ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError>;
+    ) -> Request<CreateSecurityProfileRequest>;
 
     /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
-    fn create_stream(
-        &self,
-        input: CreateStreamRequest,
-    ) -> RusotoFuture<CreateStreamResponse, CreateStreamError>;
+    fn create_stream(&self, input: CreateStreamRequest) -> Request<CreateStreamRequest>;
 
     /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    fn create_thing(
-        &self,
-        input: CreateThingRequest,
-    ) -> RusotoFuture<CreateThingResponse, CreateThingError>;
+    fn create_thing(&self, input: CreateThingRequest) -> Request<CreateThingRequest>;
 
     /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
-    ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError>;
+    ) -> Request<CreateThingGroupRequest>;
 
     /// <p>Creates a new thing type.</p>
-    fn create_thing_type(
-        &self,
-        input: CreateThingTypeRequest,
-    ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError>;
+    fn create_thing_type(&self, input: CreateThingTypeRequest) -> Request<CreateThingTypeRequest>;
 
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn create_topic_rule(
-        &self,
-        input: CreateTopicRuleRequest,
-    ) -> RusotoFuture<(), CreateTopicRuleError>;
+    fn create_topic_rule(&self, input: CreateTopicRuleRequest) -> Request<CreateTopicRuleRequest>;
 
     /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
     fn delete_account_audit_configuration(
         &self,
         input: DeleteAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<DeleteAccountAuditConfigurationResponse, DeleteAccountAuditConfigurationError>;
+    ) -> Request<DeleteAccountAuditConfigurationRequest>;
 
     /// <p>Deletes an authorizer.</p>
-    fn delete_authorizer(
-        &self,
-        input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError>;
+    fn delete_authorizer(&self, input: DeleteAuthorizerRequest)
+        -> Request<DeleteAuthorizerRequest>;
 
     /// <p>Deletes the billing group.</p>
     fn delete_billing_group(
         &self,
         input: DeleteBillingGroupRequest,
-    ) -> RusotoFuture<DeleteBillingGroupResponse, DeleteBillingGroupError>;
+    ) -> Request<DeleteBillingGroupRequest>;
 
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
         input: DeleteCACertificateRequest,
-    ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError>;
+    ) -> Request<DeleteCACertificateRequest>;
 
     /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
     fn delete_certificate(
         &self,
         input: DeleteCertificateRequest,
-    ) -> RusotoFuture<(), DeleteCertificateError>;
+    ) -> Request<DeleteCertificateRequest>;
 
     /// <p>Deletes a dynamic thing group.</p>
     fn delete_dynamic_thing_group(
         &self,
         input: DeleteDynamicThingGroupRequest,
-    ) -> RusotoFuture<DeleteDynamicThingGroupResponse, DeleteDynamicThingGroupError>;
+    ) -> Request<DeleteDynamicThingGroupRequest>;
 
     /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
-    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError>;
+    fn delete_job(&self, input: DeleteJobRequest) -> Request<DeleteJobRequest>;
 
     /// <p>Deletes a job execution.</p>
     fn delete_job_execution(
         &self,
         input: DeleteJobExecutionRequest,
-    ) -> RusotoFuture<(), DeleteJobExecutionError>;
+    ) -> Request<DeleteJobExecutionRequest>;
 
     /// <p>Delete an OTA update.</p>
-    fn delete_ota_update(
-        &self,
-        input: DeleteOTAUpdateRequest,
-    ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError>;
+    fn delete_ota_update(&self, input: DeleteOTAUpdateRequest) -> Request<DeleteOTAUpdateRequest>;
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest>;
 
     /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
     fn delete_policy_version(
         &self,
         input: DeletePolicyVersionRequest,
-    ) -> RusotoFuture<(), DeletePolicyVersionError>;
+    ) -> Request<DeletePolicyVersionRequest>;
 
     /// <p>Deletes a CA certificate registration code.</p>
-    fn delete_registration_code(
-        &self,
-    ) -> RusotoFuture<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
+    fn delete_registration_code(&self) -> Request<DeleteRegistrationCodeRequest>;
 
     /// <p>Deletes a role alias</p>
-    fn delete_role_alias(
-        &self,
-        input: DeleteRoleAliasRequest,
-    ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError>;
+    fn delete_role_alias(&self, input: DeleteRoleAliasRequest) -> Request<DeleteRoleAliasRequest>;
 
     /// <p>Deletes a scheduled audit.</p>
     fn delete_scheduled_audit(
         &self,
         input: DeleteScheduledAuditRequest,
-    ) -> RusotoFuture<DeleteScheduledAuditResponse, DeleteScheduledAuditError>;
+    ) -> Request<DeleteScheduledAuditRequest>;
 
     /// <p>Deletes a Device Defender security profile.</p>
     fn delete_security_profile(
         &self,
         input: DeleteSecurityProfileRequest,
-    ) -> RusotoFuture<DeleteSecurityProfileResponse, DeleteSecurityProfileError>;
+    ) -> Request<DeleteSecurityProfileRequest>;
 
     /// <p>Deletes a stream.</p>
-    fn delete_stream(
-        &self,
-        input: DeleteStreamRequest,
-    ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError>;
+    fn delete_stream(&self, input: DeleteStreamRequest) -> Request<DeleteStreamRequest>;
 
     /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
-    fn delete_thing(
-        &self,
-        input: DeleteThingRequest,
-    ) -> RusotoFuture<DeleteThingResponse, DeleteThingError>;
+    fn delete_thing(&self, input: DeleteThingRequest) -> Request<DeleteThingRequest>;
 
     /// <p>Deletes a thing group.</p>
     fn delete_thing_group(
         &self,
         input: DeleteThingGroupRequest,
-    ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError>;
+    ) -> Request<DeleteThingGroupRequest>;
 
     /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
-    fn delete_thing_type(
-        &self,
-        input: DeleteThingTypeRequest,
-    ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError>;
+    fn delete_thing_type(&self, input: DeleteThingTypeRequest) -> Request<DeleteThingTypeRequest>;
 
     /// <p>Deletes the rule.</p>
-    fn delete_topic_rule(
-        &self,
-        input: DeleteTopicRuleRequest,
-    ) -> RusotoFuture<(), DeleteTopicRuleError>;
+    fn delete_topic_rule(&self, input: DeleteTopicRuleRequest) -> Request<DeleteTopicRuleRequest>;
 
     /// <p>Deletes a logging level.</p>
     fn delete_v2_logging_level(
         &self,
         input: DeleteV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), DeleteV2LoggingLevelError>;
+    ) -> Request<DeleteV2LoggingLevelRequest>;
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
         input: DeprecateThingTypeRequest,
-    ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError>;
+    ) -> Request<DeprecateThingTypeRequest>;
 
     /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
     fn describe_account_audit_configuration(
         &self,
-    ) -> RusotoFuture<
-        DescribeAccountAuditConfigurationResponse,
-        DescribeAccountAuditConfigurationError,
-    >;
+    ) -> Request<DescribeAccountAuditConfigurationRequest>;
 
     /// <p>Gets information about a Device Defender audit.</p>
     fn describe_audit_task(
         &self,
         input: DescribeAuditTaskRequest,
-    ) -> RusotoFuture<DescribeAuditTaskResponse, DescribeAuditTaskError>;
+    ) -> Request<DescribeAuditTaskRequest>;
 
     /// <p>Describes an authorizer.</p>
     fn describe_authorizer(
         &self,
         input: DescribeAuthorizerRequest,
-    ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError>;
+    ) -> Request<DescribeAuthorizerRequest>;
 
     /// <p>Returns information about a billing group.</p>
     fn describe_billing_group(
         &self,
         input: DescribeBillingGroupRequest,
-    ) -> RusotoFuture<DescribeBillingGroupResponse, DescribeBillingGroupError>;
+    ) -> Request<DescribeBillingGroupRequest>;
 
     /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
         &self,
         input: DescribeCACertificateRequest,
-    ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError>;
+    ) -> Request<DescribeCACertificateRequest>;
 
     /// <p>Gets information about the specified certificate.</p>
     fn describe_certificate(
         &self,
         input: DescribeCertificateRequest,
-    ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError>;
+    ) -> Request<DescribeCertificateRequest>;
 
     /// <p>Describes the default authorizer.</p>
-    fn describe_default_authorizer(
-        &self,
-    ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError>;
+    fn describe_default_authorizer(&self) -> Request<DescribeDefaultAuthorizerRequest>;
 
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    fn describe_endpoint(
-        &self,
-        input: DescribeEndpointRequest,
-    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError>;
+    fn describe_endpoint(&self, input: DescribeEndpointRequest)
+        -> Request<DescribeEndpointRequest>;
 
     /// <p>Describes event configurations.</p>
-    fn describe_event_configurations(
-        &self,
-    ) -> RusotoFuture<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError>;
+    fn describe_event_configurations(&self) -> Request<DescribeEventConfigurationsRequest>;
 
     /// <p>Describes a search index.</p>
-    fn describe_index(
-        &self,
-        input: DescribeIndexRequest,
-    ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError>;
+    fn describe_index(&self, input: DescribeIndexRequest) -> Request<DescribeIndexRequest>;
 
     /// <p>Describes a job.</p>
-    fn describe_job(
-        &self,
-        input: DescribeJobRequest,
-    ) -> RusotoFuture<DescribeJobResponse, DescribeJobError>;
+    fn describe_job(&self, input: DescribeJobRequest) -> Request<DescribeJobRequest>;
 
     /// <p>Describes a job execution.</p>
     fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError>;
+    ) -> Request<DescribeJobExecutionRequest>;
 
     /// <p>Describes a role alias.</p>
     fn describe_role_alias(
         &self,
         input: DescribeRoleAliasRequest,
-    ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError>;
+    ) -> Request<DescribeRoleAliasRequest>;
 
     /// <p>Gets information about a scheduled audit.</p>
     fn describe_scheduled_audit(
         &self,
         input: DescribeScheduledAuditRequest,
-    ) -> RusotoFuture<DescribeScheduledAuditResponse, DescribeScheduledAuditError>;
+    ) -> Request<DescribeScheduledAuditRequest>;
 
     /// <p>Gets information about a Device Defender security profile.</p>
     fn describe_security_profile(
         &self,
         input: DescribeSecurityProfileRequest,
-    ) -> RusotoFuture<DescribeSecurityProfileResponse, DescribeSecurityProfileError>;
+    ) -> Request<DescribeSecurityProfileRequest>;
 
     /// <p>Gets information about a stream.</p>
-    fn describe_stream(
-        &self,
-        input: DescribeStreamRequest,
-    ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError>;
+    fn describe_stream(&self, input: DescribeStreamRequest) -> Request<DescribeStreamRequest>;
 
     /// <p>Gets information about the specified thing.</p>
-    fn describe_thing(
-        &self,
-        input: DescribeThingRequest,
-    ) -> RusotoFuture<DescribeThingResponse, DescribeThingError>;
+    fn describe_thing(&self, input: DescribeThingRequest) -> Request<DescribeThingRequest>;
 
     /// <p>Describe a thing group.</p>
     fn describe_thing_group(
         &self,
         input: DescribeThingGroupRequest,
-    ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError>;
+    ) -> Request<DescribeThingGroupRequest>;
 
     /// <p>Describes a bulk thing provisioning task.</p>
     fn describe_thing_registration_task(
         &self,
         input: DescribeThingRegistrationTaskRequest,
-    ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>;
+    ) -> Request<DescribeThingRegistrationTaskRequest>;
 
     /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
         input: DescribeThingTypeRequest,
-    ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError>;
+    ) -> Request<DescribeThingTypeRequest>;
 
     /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError>;
+    fn detach_policy(&self, input: DetachPolicyRequest) -> Request<DetachPolicyRequest>;
 
     /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
     fn detach_principal_policy(
         &self,
         input: DetachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), DetachPrincipalPolicyError>;
+    ) -> Request<DetachPrincipalPolicyRequest>;
 
     /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
     fn detach_security_profile(
         &self,
         input: DetachSecurityProfileRequest,
-    ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError>;
+    ) -> Request<DetachSecurityProfileRequest>;
 
     /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
     fn detach_thing_principal(
         &self,
         input: DetachThingPrincipalRequest,
-    ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError>;
+    ) -> Request<DetachThingPrincipalRequest>;
 
     /// <p>Disables the rule.</p>
     fn disable_topic_rule(
         &self,
         input: DisableTopicRuleRequest,
-    ) -> RusotoFuture<(), DisableTopicRuleError>;
+    ) -> Request<DisableTopicRuleRequest>;
 
     /// <p>Enables the rule.</p>
-    fn enable_topic_rule(
-        &self,
-        input: EnableTopicRuleRequest,
-    ) -> RusotoFuture<(), EnableTopicRuleError>;
+    fn enable_topic_rule(&self, input: EnableTopicRuleRequest) -> Request<EnableTopicRuleRequest>;
 
     /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
     fn get_effective_policies(
         &self,
         input: GetEffectivePoliciesRequest,
-    ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError>;
+    ) -> Request<GetEffectivePoliciesRequest>;
 
     /// <p>Gets the search configuration.</p>
-    fn get_indexing_configuration(
-        &self,
-    ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError>;
+    fn get_indexing_configuration(&self) -> Request<GetIndexingConfigurationRequest>;
 
     /// <p>Gets a job document.</p>
-    fn get_job_document(
-        &self,
-        input: GetJobDocumentRequest,
-    ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError>;
+    fn get_job_document(&self, input: GetJobDocumentRequest) -> Request<GetJobDocumentRequest>;
 
     /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
-    fn get_logging_options(
-        &self,
-    ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError>;
+    fn get_logging_options(&self) -> Request<GetLoggingOptionsRequest>;
 
     /// <p>Gets an OTA update.</p>
-    fn get_ota_update(
-        &self,
-        input: GetOTAUpdateRequest,
-    ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError>;
+    fn get_ota_update(&self, input: GetOTAUpdateRequest) -> Request<GetOTAUpdateRequest>;
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest>;
 
     /// <p>Gets information about the specified policy version.</p>
     fn get_policy_version(
         &self,
         input: GetPolicyVersionRequest,
-    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError>;
+    ) -> Request<GetPolicyVersionRequest>;
 
     /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
-    fn get_registration_code(
-        &self,
-    ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError>;
+    fn get_registration_code(&self) -> Request<GetRegistrationCodeRequest>;
 
     /// <p>Gets statistics about things that match the specified query.</p>
-    fn get_statistics(
-        &self,
-        input: GetStatisticsRequest,
-    ) -> RusotoFuture<GetStatisticsResponse, GetStatisticsError>;
+    fn get_statistics(&self, input: GetStatisticsRequest) -> Request<GetStatisticsRequest>;
 
     /// <p>Gets information about the rule.</p>
-    fn get_topic_rule(
-        &self,
-        input: GetTopicRuleRequest,
-    ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError>;
+    fn get_topic_rule(&self, input: GetTopicRuleRequest) -> Request<GetTopicRuleRequest>;
 
     /// <p>Gets the fine grained logging options.</p>
-    fn get_v2_logging_options(
-        &self,
-    ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError>;
+    fn get_v2_logging_options(&self) -> Request<GetV2LoggingOptionsRequest>;
 
     /// <p>Lists the active violations for a given Device Defender security profile.</p>
     fn list_active_violations(
         &self,
         input: ListActiveViolationsRequest,
-    ) -> RusotoFuture<ListActiveViolationsResponse, ListActiveViolationsError>;
+    ) -> Request<ListActiveViolationsRequest>;
 
     /// <p>Lists the policies attached to the specified thing group.</p>
     fn list_attached_policies(
         &self,
         input: ListAttachedPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError>;
+    ) -> Request<ListAttachedPoliciesRequest>;
 
     /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
     fn list_audit_findings(
         &self,
         input: ListAuditFindingsRequest,
-    ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError>;
+    ) -> Request<ListAuditFindingsRequest>;
 
     /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
-    fn list_audit_tasks(
-        &self,
-        input: ListAuditTasksRequest,
-    ) -> RusotoFuture<ListAuditTasksResponse, ListAuditTasksError>;
+    fn list_audit_tasks(&self, input: ListAuditTasksRequest) -> Request<ListAuditTasksRequest>;
 
     /// <p>Lists the authorizers registered in your account.</p>
-    fn list_authorizers(
-        &self,
-        input: ListAuthorizersRequest,
-    ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError>;
+    fn list_authorizers(&self, input: ListAuthorizersRequest) -> Request<ListAuthorizersRequest>;
 
     /// <p>Lists the billing groups you have created.</p>
     fn list_billing_groups(
         &self,
         input: ListBillingGroupsRequest,
-    ) -> RusotoFuture<ListBillingGroupsResponse, ListBillingGroupsError>;
+    ) -> Request<ListBillingGroupsRequest>;
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
         input: ListCACertificatesRequest,
-    ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError>;
+    ) -> Request<ListCACertificatesRequest>;
 
     /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    fn list_certificates(
-        &self,
-        input: ListCertificatesRequest,
-    ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError>;
+    fn list_certificates(&self, input: ListCertificatesRequest)
+        -> Request<ListCertificatesRequest>;
 
     /// <p>List the device certificates signed by the specified CA certificate.</p>
     fn list_certificates_by_ca(
         &self,
         input: ListCertificatesByCARequest,
-    ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError>;
+    ) -> Request<ListCertificatesByCARequest>;
 
     /// <p>Lists the search indices.</p>
-    fn list_indices(
-        &self,
-        input: ListIndicesRequest,
-    ) -> RusotoFuture<ListIndicesResponse, ListIndicesError>;
+    fn list_indices(&self, input: ListIndicesRequest) -> Request<ListIndicesRequest>;
 
     /// <p>Lists the job executions for a job.</p>
     fn list_job_executions_for_job(
         &self,
         input: ListJobExecutionsForJobRequest,
-    ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError>;
+    ) -> Request<ListJobExecutionsForJobRequest>;
 
     /// <p>Lists the job executions for the specified thing.</p>
     fn list_job_executions_for_thing(
         &self,
         input: ListJobExecutionsForThingRequest,
-    ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError>;
+    ) -> Request<ListJobExecutionsForThingRequest>;
 
     /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest>;
 
     /// <p>Lists OTA updates.</p>
-    fn list_ota_updates(
-        &self,
-        input: ListOTAUpdatesRequest,
-    ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError>;
+    fn list_ota_updates(&self, input: ListOTAUpdatesRequest) -> Request<ListOTAUpdatesRequest>;
 
     /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
         input: ListOutgoingCertificatesRequest,
-    ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError>;
+    ) -> Request<ListOutgoingCertificatesRequest>;
 
     /// <p>Lists your policies.</p>
-    fn list_policies(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError>;
+    fn list_policies(&self, input: ListPoliciesRequest) -> Request<ListPoliciesRequest>;
 
     /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     fn list_policy_principals(
         &self,
         input: ListPolicyPrincipalsRequest,
-    ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError>;
+    ) -> Request<ListPolicyPrincipalsRequest>;
 
     /// <p>Lists the versions of the specified policy and identifies the default version.</p>
     fn list_policy_versions(
         &self,
         input: ListPolicyVersionsRequest,
-    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError>;
+    ) -> Request<ListPolicyVersionsRequest>;
 
     /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
         input: ListPrincipalPoliciesRequest,
-    ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
+    ) -> Request<ListPrincipalPoliciesRequest>;
 
     /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
     fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
-    ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError>;
+    ) -> Request<ListPrincipalThingsRequest>;
 
     /// <p>Lists the role aliases registered in your account.</p>
-    fn list_role_aliases(
-        &self,
-        input: ListRoleAliasesRequest,
-    ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError>;
+    fn list_role_aliases(&self, input: ListRoleAliasesRequest) -> Request<ListRoleAliasesRequest>;
 
     /// <p>Lists all of your scheduled audits.</p>
     fn list_scheduled_audits(
         &self,
         input: ListScheduledAuditsRequest,
-    ) -> RusotoFuture<ListScheduledAuditsResponse, ListScheduledAuditsError>;
+    ) -> Request<ListScheduledAuditsRequest>;
 
     /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
     fn list_security_profiles(
         &self,
         input: ListSecurityProfilesRequest,
-    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError>;
+    ) -> Request<ListSecurityProfilesRequest>;
 
     /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
     fn list_security_profiles_for_target(
         &self,
         input: ListSecurityProfilesForTargetRequest,
-    ) -> RusotoFuture<ListSecurityProfilesForTargetResponse, ListSecurityProfilesForTargetError>;
+    ) -> Request<ListSecurityProfilesForTargetRequest>;
 
     /// <p>Lists all of the streams in your AWS account.</p>
-    fn list_streams(
-        &self,
-        input: ListStreamsRequest,
-    ) -> RusotoFuture<ListStreamsResponse, ListStreamsError>;
+    fn list_streams(&self, input: ListStreamsRequest) -> Request<ListStreamsRequest>;
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>List targets for the specified policy.</p>
     fn list_targets_for_policy(
         &self,
         input: ListTargetsForPolicyRequest,
-    ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
+    ) -> Request<ListTargetsForPolicyRequest>;
 
     /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
     fn list_targets_for_security_profile(
         &self,
         input: ListTargetsForSecurityProfileRequest,
-    ) -> RusotoFuture<ListTargetsForSecurityProfileResponse, ListTargetsForSecurityProfileError>;
+    ) -> Request<ListTargetsForSecurityProfileRequest>;
 
     /// <p>List the thing groups in your account.</p>
-    fn list_thing_groups(
-        &self,
-        input: ListThingGroupsRequest,
-    ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError>;
+    fn list_thing_groups(&self, input: ListThingGroupsRequest) -> Request<ListThingGroupsRequest>;
 
     /// <p>List the thing groups to which the specified thing belongs.</p>
     fn list_thing_groups_for_thing(
         &self,
         input: ListThingGroupsForThingRequest,
-    ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError>;
+    ) -> Request<ListThingGroupsForThingRequest>;
 
     /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
     fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
-    ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError>;
+    ) -> Request<ListThingPrincipalsRequest>;
 
     /// <p>Information about the thing registration tasks.</p>
     fn list_thing_registration_task_reports(
         &self,
         input: ListThingRegistrationTaskReportsRequest,
-    ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>;
+    ) -> Request<ListThingRegistrationTaskReportsRequest>;
 
     /// <p>List bulk thing provisioning tasks.</p>
     fn list_thing_registration_tasks(
         &self,
         input: ListThingRegistrationTasksRequest,
-    ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError>;
+    ) -> Request<ListThingRegistrationTasksRequest>;
 
     /// <p>Lists the existing thing types.</p>
-    fn list_thing_types(
-        &self,
-        input: ListThingTypesRequest,
-    ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError>;
+    fn list_thing_types(&self, input: ListThingTypesRequest) -> Request<ListThingTypesRequest>;
 
     /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
-    fn list_things(
-        &self,
-        input: ListThingsRequest,
-    ) -> RusotoFuture<ListThingsResponse, ListThingsError>;
+    fn list_things(&self, input: ListThingsRequest) -> Request<ListThingsRequest>;
 
     /// <p>Lists the things you have added to the given billing group.</p>
     fn list_things_in_billing_group(
         &self,
         input: ListThingsInBillingGroupRequest,
-    ) -> RusotoFuture<ListThingsInBillingGroupResponse, ListThingsInBillingGroupError>;
+    ) -> Request<ListThingsInBillingGroupRequest>;
 
     /// <p>Lists the things in the specified group.</p>
     fn list_things_in_thing_group(
         &self,
         input: ListThingsInThingGroupRequest,
-    ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError>;
+    ) -> Request<ListThingsInThingGroupRequest>;
 
     /// <p>Lists the rules for the specific topic.</p>
-    fn list_topic_rules(
-        &self,
-        input: ListTopicRulesRequest,
-    ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError>;
+    fn list_topic_rules(&self, input: ListTopicRulesRequest) -> Request<ListTopicRulesRequest>;
 
     /// <p>Lists logging levels.</p>
     fn list_v2_logging_levels(
         &self,
         input: ListV2LoggingLevelsRequest,
-    ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
+    ) -> Request<ListV2LoggingLevelsRequest>;
 
     /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
     fn list_violation_events(
         &self,
         input: ListViolationEventsRequest,
-    ) -> RusotoFuture<ListViolationEventsResponse, ListViolationEventsError>;
+    ) -> Request<ListViolationEventsRequest>;
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
         &self,
         input: RegisterCACertificateRequest,
-    ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError>;
+    ) -> Request<RegisterCACertificateRequest>;
 
     /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
     fn register_certificate(
         &self,
         input: RegisterCertificateRequest,
-    ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError>;
+    ) -> Request<RegisterCertificateRequest>;
 
     /// <p>Provisions a thing.</p>
-    fn register_thing(
-        &self,
-        input: RegisterThingRequest,
-    ) -> RusotoFuture<RegisterThingResponse, RegisterThingError>;
+    fn register_thing(&self, input: RegisterThingRequest) -> Request<RegisterThingRequest>;
 
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
         input: RejectCertificateTransferRequest,
-    ) -> RusotoFuture<(), RejectCertificateTransferError>;
+    ) -> Request<RejectCertificateTransferRequest>;
 
     /// <p>Removes the given thing from the billing group.</p>
     fn remove_thing_from_billing_group(
         &self,
         input: RemoveThingFromBillingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromBillingGroupResponse, RemoveThingFromBillingGroupError>;
+    ) -> Request<RemoveThingFromBillingGroupRequest>;
 
     /// <p>Remove the specified thing from the specified group.</p>
     fn remove_thing_from_thing_group(
         &self,
         input: RemoveThingFromThingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError>;
+    ) -> Request<RemoveThingFromThingGroupRequest>;
 
     /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
         input: ReplaceTopicRuleRequest,
-    ) -> RusotoFuture<(), ReplaceTopicRuleError>;
+    ) -> Request<ReplaceTopicRuleRequest>;
 
     /// <p>The query search index.</p>
-    fn search_index(
-        &self,
-        input: SearchIndexRequest,
-    ) -> RusotoFuture<SearchIndexResponse, SearchIndexError>;
+    fn search_index(&self, input: SearchIndexRequest) -> Request<SearchIndexRequest>;
 
     /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
     fn set_default_authorizer(
         &self,
         input: SetDefaultAuthorizerRequest,
-    ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError>;
+    ) -> Request<SetDefaultAuthorizerRequest>;
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
         &self,
         input: SetDefaultPolicyVersionRequest,
-    ) -> RusotoFuture<(), SetDefaultPolicyVersionError>;
+    ) -> Request<SetDefaultPolicyVersionRequest>;
 
     /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
     fn set_logging_options(
         &self,
         input: SetLoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetLoggingOptionsError>;
+    ) -> Request<SetLoggingOptionsRequest>;
 
     /// <p>Sets the logging level.</p>
     fn set_v2_logging_level(
         &self,
         input: SetV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), SetV2LoggingLevelError>;
+    ) -> Request<SetV2LoggingLevelRequest>;
 
     /// <p>Sets the logging options for the V2 logging service.</p>
     fn set_v2_logging_options(
         &self,
         input: SetV2LoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetV2LoggingOptionsError>;
+    ) -> Request<SetV2LoggingOptionsRequest>;
 
     /// <p>Starts an on-demand Device Defender audit.</p>
     fn start_on_demand_audit_task(
         &self,
         input: StartOnDemandAuditTaskRequest,
-    ) -> RusotoFuture<StartOnDemandAuditTaskResponse, StartOnDemandAuditTaskError>;
+    ) -> Request<StartOnDemandAuditTaskRequest>;
 
     /// <p>Creates a bulk thing provisioning task.</p>
     fn start_thing_registration_task(
         &self,
         input: StartThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError>;
+    ) -> Request<StartThingRegistrationTaskRequest>;
 
     /// <p>Cancels a bulk thing provisioning task.</p>
     fn stop_thing_registration_task(
         &self,
         input: StopThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
+    ) -> Request<StopThingRegistrationTaskRequest>;
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_authorization(
         &self,
         input: TestAuthorizationRequest,
-    ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError>;
+    ) -> Request<TestAuthorizationRequest>;
 
     /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
-    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
+    ) -> Request<TestInvokeAuthorizerRequest>;
 
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
         input: TransferCertificateRequest,
-    ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError>;
+    ) -> Request<TransferCertificateRequest>;
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
     fn update_account_audit_configuration(
         &self,
         input: UpdateAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<UpdateAccountAuditConfigurationResponse, UpdateAccountAuditConfigurationError>;
+    ) -> Request<UpdateAccountAuditConfigurationRequest>;
 
     /// <p>Updates an authorizer.</p>
-    fn update_authorizer(
-        &self,
-        input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError>;
+    fn update_authorizer(&self, input: UpdateAuthorizerRequest)
+        -> Request<UpdateAuthorizerRequest>;
 
     /// <p>Updates information about the billing group.</p>
     fn update_billing_group(
         &self,
         input: UpdateBillingGroupRequest,
-    ) -> RusotoFuture<UpdateBillingGroupResponse, UpdateBillingGroupError>;
+    ) -> Request<UpdateBillingGroupRequest>;
 
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
         input: UpdateCACertificateRequest,
-    ) -> RusotoFuture<(), UpdateCACertificateError>;
+    ) -> Request<UpdateCACertificateRequest>;
 
     /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
     fn update_certificate(
         &self,
         input: UpdateCertificateRequest,
-    ) -> RusotoFuture<(), UpdateCertificateError>;
+    ) -> Request<UpdateCertificateRequest>;
 
     /// <p>Updates a dynamic thing group.</p>
     fn update_dynamic_thing_group(
         &self,
         input: UpdateDynamicThingGroupRequest,
-    ) -> RusotoFuture<UpdateDynamicThingGroupResponse, UpdateDynamicThingGroupError>;
+    ) -> Request<UpdateDynamicThingGroupRequest>;
 
     /// <p>Updates the event configurations.</p>
     fn update_event_configurations(
         &self,
         input: UpdateEventConfigurationsRequest,
-    ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError>;
+    ) -> Request<UpdateEventConfigurationsRequest>;
 
     /// <p>Updates the search configuration.</p>
     fn update_indexing_configuration(
         &self,
         input: UpdateIndexingConfigurationRequest,
-    ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError>;
+    ) -> Request<UpdateIndexingConfigurationRequest>;
 
     /// <p>Updates supported fields of the specified job.</p>
-    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<(), UpdateJobError>;
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest>;
 
     /// <p>Updates a role alias.</p>
-    fn update_role_alias(
-        &self,
-        input: UpdateRoleAliasRequest,
-    ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError>;
+    fn update_role_alias(&self, input: UpdateRoleAliasRequest) -> Request<UpdateRoleAliasRequest>;
 
     /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
     fn update_scheduled_audit(
         &self,
         input: UpdateScheduledAuditRequest,
-    ) -> RusotoFuture<UpdateScheduledAuditResponse, UpdateScheduledAuditError>;
+    ) -> Request<UpdateScheduledAuditRequest>;
 
     /// <p>Updates a Device Defender security profile.</p>
     fn update_security_profile(
         &self,
         input: UpdateSecurityProfileRequest,
-    ) -> RusotoFuture<UpdateSecurityProfileResponse, UpdateSecurityProfileError>;
+    ) -> Request<UpdateSecurityProfileRequest>;
 
     /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
-    fn update_stream(
-        &self,
-        input: UpdateStreamRequest,
-    ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError>;
+    fn update_stream(&self, input: UpdateStreamRequest) -> Request<UpdateStreamRequest>;
 
     /// <p>Updates the data for a thing.</p>
-    fn update_thing(
-        &self,
-        input: UpdateThingRequest,
-    ) -> RusotoFuture<UpdateThingResponse, UpdateThingError>;
+    fn update_thing(&self, input: UpdateThingRequest) -> Request<UpdateThingRequest>;
 
     /// <p>Update a thing group.</p>
     fn update_thing_group(
         &self,
         input: UpdateThingGroupRequest,
-    ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError>;
+    ) -> Request<UpdateThingGroupRequest>;
 
     /// <p>Updates the groups to which the thing belongs.</p>
     fn update_thing_groups_for_thing(
         &self,
         input: UpdateThingGroupsForThingRequest,
-    ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
+    ) -> Request<UpdateThingGroupsForThingRequest>;
 
     /// <p>Validates a Device Defender security profile behaviors specification.</p>
     fn validate_security_profile_behaviors(
         &self,
         input: ValidateSecurityProfileBehaviorsRequest,
-    ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>;
+    ) -> Request<ValidateSecurityProfileBehaviorsRequest>;
 }
 /// A client for the AWS IoT API.
 #[derive(Clone)]
@@ -18047,27 +17991,1230 @@ impl Iot for IotClient {
     fn accept_certificate_transfer(
         &self,
         input: AcceptCertificateTransferRequest,
-    ) -> RusotoFuture<(), AcceptCertificateTransferError> {
+    ) -> Request<AcceptCertificateTransferRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a thing to a billing group.</p>
+    fn add_thing_to_billing_group(
+        &self,
+        input: AddThingToBillingGroupRequest,
+    ) -> Request<AddThingToBillingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a thing to a thing group.</p>
+    fn add_thing_to_thing_group(
+        &self,
+        input: AddThingToThingGroupRequest,
+    ) -> Request<AddThingToThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
+    fn associate_targets_with_job(
+        &self,
+        input: AssociateTargetsWithJobRequest,
+    ) -> Request<AssociateTargetsWithJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches a policy to the specified target.</p>
+    fn attach_policy(&self, input: AttachPolicyRequest) -> Request<AttachPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
+    fn attach_principal_policy(
+        &self,
+        input: AttachPrincipalPolicyRequest,
+    ) -> Request<AttachPrincipalPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
+    fn attach_security_profile(
+        &self,
+        input: AttachSecurityProfileRequest,
+    ) -> Request<AttachSecurityProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
+    fn attach_thing_principal(
+        &self,
+        input: AttachThingPrincipalRequest,
+    ) -> Request<AttachThingPrincipalRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
+    fn cancel_audit_task(&self, input: CancelAuditTaskRequest) -> Request<CancelAuditTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
+    fn cancel_certificate_transfer(
+        &self,
+        input: CancelCertificateTransferRequest,
+    ) -> Request<CancelCertificateTransferRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels a job.</p>
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels the execution of a job for a given thing.</p>
+    fn cancel_job_execution(
+        &self,
+        input: CancelJobExecutionRequest,
+    ) -> Request<CancelJobExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Clears the default authorizer.</p>
+    fn clear_default_authorizer(&self) -> Request<ClearDefaultAuthorizerRequest> {
+        Request::new(
+            ClearDefaultAuthorizerRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Creates an authorizer.</p>
+    fn create_authorizer(
+        &self,
+        input: CreateAuthorizerRequest,
+    ) -> Request<CreateAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a billing group.</p>
+    fn create_billing_group(
+        &self,
+        input: CreateBillingGroupRequest,
+    ) -> Request<CreateBillingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
+    fn create_certificate_from_csr(
+        &self,
+        input: CreateCertificateFromCsrRequest,
+    ) -> Request<CreateCertificateFromCsrRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a dynamic thing group.</p>
+    fn create_dynamic_thing_group(
+        &self,
+        input: CreateDynamicThingGroupRequest,
+    ) -> Request<CreateDynamicThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a job.</p>
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
+    fn create_keys_and_certificate(
+        &self,
+        input: CreateKeysAndCertificateRequest,
+    ) -> Request<CreateKeysAndCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
+    fn create_ota_update(&self, input: CreateOTAUpdateRequest) -> Request<CreateOTAUpdateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
+    fn create_policy(&self, input: CreatePolicyRequest) -> Request<CreatePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
+    fn create_policy_version(
+        &self,
+        input: CreatePolicyVersionRequest,
+    ) -> Request<CreatePolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a role alias.</p>
+    fn create_role_alias(&self, input: CreateRoleAliasRequest) -> Request<CreateRoleAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
+    fn create_scheduled_audit(
+        &self,
+        input: CreateScheduledAuditRequest,
+    ) -> Request<CreateScheduledAuditRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Device Defender security profile.</p>
+    fn create_security_profile(
+        &self,
+        input: CreateSecurityProfileRequest,
+    ) -> Request<CreateSecurityProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    fn create_stream(&self, input: CreateStreamRequest) -> Request<CreateStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    fn create_thing(&self, input: CreateThingRequest) -> Request<CreateThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    fn create_thing_group(
+        &self,
+        input: CreateThingGroupRequest,
+    ) -> Request<CreateThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new thing type.</p>
+    fn create_thing_type(&self, input: CreateThingTypeRequest) -> Request<CreateThingTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
+    fn create_topic_rule(&self, input: CreateTopicRuleRequest) -> Request<CreateTopicRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
+    fn delete_account_audit_configuration(
+        &self,
+        input: DeleteAccountAuditConfigurationRequest,
+    ) -> Request<DeleteAccountAuditConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an authorizer.</p>
+    fn delete_authorizer(
+        &self,
+        input: DeleteAuthorizerRequest,
+    ) -> Request<DeleteAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the billing group.</p>
+    fn delete_billing_group(
+        &self,
+        input: DeleteBillingGroupRequest,
+    ) -> Request<DeleteBillingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a registered CA certificate.</p>
+    fn delete_ca_certificate(
+        &self,
+        input: DeleteCACertificateRequest,
+    ) -> Request<DeleteCACertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
+    fn delete_certificate(
+        &self,
+        input: DeleteCertificateRequest,
+    ) -> Request<DeleteCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a dynamic thing group.</p>
+    fn delete_dynamic_thing_group(
+        &self,
+        input: DeleteDynamicThingGroupRequest,
+    ) -> Request<DeleteDynamicThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
+    fn delete_job(&self, input: DeleteJobRequest) -> Request<DeleteJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a job execution.</p>
+    fn delete_job_execution(
+        &self,
+        input: DeleteJobExecutionRequest,
+    ) -> Request<DeleteJobExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Delete an OTA update.</p>
+    fn delete_ota_update(&self, input: DeleteOTAUpdateRequest) -> Request<DeleteOTAUpdateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
+    fn delete_policy_version(
+        &self,
+        input: DeletePolicyVersionRequest,
+    ) -> Request<DeletePolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a CA certificate registration code.</p>
+    fn delete_registration_code(&self) -> Request<DeleteRegistrationCodeRequest> {
+        Request::new(
+            DeleteRegistrationCodeRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Deletes a role alias</p>
+    fn delete_role_alias(&self, input: DeleteRoleAliasRequest) -> Request<DeleteRoleAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a scheduled audit.</p>
+    fn delete_scheduled_audit(
+        &self,
+        input: DeleteScheduledAuditRequest,
+    ) -> Request<DeleteScheduledAuditRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Device Defender security profile.</p>
+    fn delete_security_profile(
+        &self,
+        input: DeleteSecurityProfileRequest,
+    ) -> Request<DeleteSecurityProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a stream.</p>
+    fn delete_stream(&self, input: DeleteStreamRequest) -> Request<DeleteStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
+    fn delete_thing(&self, input: DeleteThingRequest) -> Request<DeleteThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a thing group.</p>
+    fn delete_thing_group(
+        &self,
+        input: DeleteThingGroupRequest,
+    ) -> Request<DeleteThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
+    fn delete_thing_type(&self, input: DeleteThingTypeRequest) -> Request<DeleteThingTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the rule.</p>
+    fn delete_topic_rule(&self, input: DeleteTopicRuleRequest) -> Request<DeleteTopicRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a logging level.</p>
+    fn delete_v2_logging_level(
+        &self,
+        input: DeleteV2LoggingLevelRequest,
+    ) -> Request<DeleteV2LoggingLevelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
+    fn deprecate_thing_type(
+        &self,
+        input: DeprecateThingTypeRequest,
+    ) -> Request<DeprecateThingTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn describe_account_audit_configuration(
+        &self,
+    ) -> Request<DescribeAccountAuditConfigurationRequest> {
+        Request::new(
+            DescribeAccountAuditConfigurationRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Gets information about a Device Defender audit.</p>
+    fn describe_audit_task(
+        &self,
+        input: DescribeAuditTaskRequest,
+    ) -> Request<DescribeAuditTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes an authorizer.</p>
+    fn describe_authorizer(
+        &self,
+        input: DescribeAuthorizerRequest,
+    ) -> Request<DescribeAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a billing group.</p>
+    fn describe_billing_group(
+        &self,
+        input: DescribeBillingGroupRequest,
+    ) -> Request<DescribeBillingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a registered CA certificate.</p>
+    fn describe_ca_certificate(
+        &self,
+        input: DescribeCACertificateRequest,
+    ) -> Request<DescribeCACertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the specified certificate.</p>
+    fn describe_certificate(
+        &self,
+        input: DescribeCertificateRequest,
+    ) -> Request<DescribeCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the default authorizer.</p>
+    fn describe_default_authorizer(&self) -> Request<DescribeDefaultAuthorizerRequest> {
+        Request::new(
+            DescribeDefaultAuthorizerRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
+    fn describe_endpoint(
+        &self,
+        input: DescribeEndpointRequest,
+    ) -> Request<DescribeEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes event configurations.</p>
+    fn describe_event_configurations(&self) -> Request<DescribeEventConfigurationsRequest> {
+        Request::new(
+            DescribeEventConfigurationsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes a search index.</p>
+    fn describe_index(&self, input: DescribeIndexRequest) -> Request<DescribeIndexRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a job.</p>
+    fn describe_job(&self, input: DescribeJobRequest) -> Request<DescribeJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a job execution.</p>
+    fn describe_job_execution(
+        &self,
+        input: DescribeJobExecutionRequest,
+    ) -> Request<DescribeJobExecutionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a role alias.</p>
+    fn describe_role_alias(
+        &self,
+        input: DescribeRoleAliasRequest,
+    ) -> Request<DescribeRoleAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a scheduled audit.</p>
+    fn describe_scheduled_audit(
+        &self,
+        input: DescribeScheduledAuditRequest,
+    ) -> Request<DescribeScheduledAuditRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a Device Defender security profile.</p>
+    fn describe_security_profile(
+        &self,
+        input: DescribeSecurityProfileRequest,
+    ) -> Request<DescribeSecurityProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a stream.</p>
+    fn describe_stream(&self, input: DescribeStreamRequest) -> Request<DescribeStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the specified thing.</p>
+    fn describe_thing(&self, input: DescribeThingRequest) -> Request<DescribeThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describe a thing group.</p>
+    fn describe_thing_group(
+        &self,
+        input: DescribeThingGroupRequest,
+    ) -> Request<DescribeThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a bulk thing provisioning task.</p>
+    fn describe_thing_registration_task(
+        &self,
+        input: DescribeThingRegistrationTaskRequest,
+    ) -> Request<DescribeThingRegistrationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the specified thing type.</p>
+    fn describe_thing_type(
+        &self,
+        input: DescribeThingTypeRequest,
+    ) -> Request<DescribeThingTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detaches a policy from the specified target.</p>
+    fn detach_policy(&self, input: DetachPolicyRequest) -> Request<DetachPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
+    fn detach_principal_policy(
+        &self,
+        input: DetachPrincipalPolicyRequest,
+    ) -> Request<DetachPrincipalPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
+    fn detach_security_profile(
+        &self,
+        input: DetachSecurityProfileRequest,
+    ) -> Request<DetachSecurityProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
+    fn detach_thing_principal(
+        &self,
+        input: DetachThingPrincipalRequest,
+    ) -> Request<DetachThingPrincipalRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables the rule.</p>
+    fn disable_topic_rule(
+        &self,
+        input: DisableTopicRuleRequest,
+    ) -> Request<DisableTopicRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables the rule.</p>
+    fn enable_topic_rule(&self, input: EnableTopicRuleRequest) -> Request<EnableTopicRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
+    fn get_effective_policies(
+        &self,
+        input: GetEffectivePoliciesRequest,
+    ) -> Request<GetEffectivePoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the search configuration.</p>
+    fn get_indexing_configuration(&self) -> Request<GetIndexingConfigurationRequest> {
+        Request::new(
+            GetIndexingConfigurationRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Gets a job document.</p>
+    fn get_job_document(&self, input: GetJobDocumentRequest) -> Request<GetJobDocumentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
+    fn get_logging_options(&self) -> Request<GetLoggingOptionsRequest> {
+        Request::new(
+            GetLoggingOptionsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Gets an OTA update.</p>
+    fn get_ota_update(&self, input: GetOTAUpdateRequest) -> Request<GetOTAUpdateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the specified policy with the policy document of the default version.</p>
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the specified policy version.</p>
+    fn get_policy_version(
+        &self,
+        input: GetPolicyVersionRequest,
+    ) -> Request<GetPolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
+    fn get_registration_code(&self) -> Request<GetRegistrationCodeRequest> {
+        Request::new(
+            GetRegistrationCodeRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Gets statistics about things that match the specified query.</p>
+    fn get_statistics(&self, input: GetStatisticsRequest) -> Request<GetStatisticsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the rule.</p>
+    fn get_topic_rule(&self, input: GetTopicRuleRequest) -> Request<GetTopicRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the fine grained logging options.</p>
+    fn get_v2_logging_options(&self) -> Request<GetV2LoggingOptionsRequest> {
+        Request::new(
+            GetV2LoggingOptionsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Lists the active violations for a given Device Defender security profile.</p>
+    fn list_active_violations(
+        &self,
+        input: ListActiveViolationsRequest,
+    ) -> Request<ListActiveViolationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the policies attached to the specified thing group.</p>
+    fn list_attached_policies(
+        &self,
+        input: ListAttachedPoliciesRequest,
+    ) -> Request<ListAttachedPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
+    fn list_audit_findings(
+        &self,
+        input: ListAuditFindingsRequest,
+    ) -> Request<ListAuditFindingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
+    fn list_audit_tasks(&self, input: ListAuditTasksRequest) -> Request<ListAuditTasksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the authorizers registered in your account.</p>
+    fn list_authorizers(&self, input: ListAuthorizersRequest) -> Request<ListAuthorizersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the billing groups you have created.</p>
+    fn list_billing_groups(
+        &self,
+        input: ListBillingGroupsRequest,
+    ) -> Request<ListBillingGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
+    fn list_ca_certificates(
+        &self,
+        input: ListCACertificatesRequest,
+    ) -> Request<ListCACertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
+    fn list_certificates(
+        &self,
+        input: ListCertificatesRequest,
+    ) -> Request<ListCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List the device certificates signed by the specified CA certificate.</p>
+    fn list_certificates_by_ca(
+        &self,
+        input: ListCertificatesByCARequest,
+    ) -> Request<ListCertificatesByCARequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the search indices.</p>
+    fn list_indices(&self, input: ListIndicesRequest) -> Request<ListIndicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the job executions for a job.</p>
+    fn list_job_executions_for_job(
+        &self,
+        input: ListJobExecutionsForJobRequest,
+    ) -> Request<ListJobExecutionsForJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the job executions for the specified thing.</p>
+    fn list_job_executions_for_thing(
+        &self,
+        input: ListJobExecutionsForThingRequest,
+    ) -> Request<ListJobExecutionsForThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists jobs.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists OTA updates.</p>
+    fn list_ota_updates(&self, input: ListOTAUpdatesRequest) -> Request<ListOTAUpdatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists certificates that are being transferred but not yet accepted.</p>
+    fn list_outgoing_certificates(
+        &self,
+        input: ListOutgoingCertificatesRequest,
+    ) -> Request<ListOutgoingCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists your policies.</p>
+    fn list_policies(&self, input: ListPoliciesRequest) -> Request<ListPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
+    fn list_policy_principals(
+        &self,
+        input: ListPolicyPrincipalsRequest,
+    ) -> Request<ListPolicyPrincipalsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the versions of the specified policy and identifies the default version.</p>
+    fn list_policy_versions(
+        &self,
+        input: ListPolicyVersionsRequest,
+    ) -> Request<ListPolicyVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
+    fn list_principal_policies(
+        &self,
+        input: ListPrincipalPoliciesRequest,
+    ) -> Request<ListPrincipalPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
+    fn list_principal_things(
+        &self,
+        input: ListPrincipalThingsRequest,
+    ) -> Request<ListPrincipalThingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the role aliases registered in your account.</p>
+    fn list_role_aliases(&self, input: ListRoleAliasesRequest) -> Request<ListRoleAliasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all of your scheduled audits.</p>
+    fn list_scheduled_audits(
+        &self,
+        input: ListScheduledAuditsRequest,
+    ) -> Request<ListScheduledAuditsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
+    fn list_security_profiles(
+        &self,
+        input: ListSecurityProfilesRequest,
+    ) -> Request<ListSecurityProfilesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
+    fn list_security_profiles_for_target(
+        &self,
+        input: ListSecurityProfilesForTargetRequest,
+    ) -> Request<ListSecurityProfilesForTargetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all of the streams in your AWS account.</p>
+    fn list_streams(&self, input: ListStreamsRequest) -> Request<ListStreamsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List targets for the specified policy.</p>
+    fn list_targets_for_policy(
+        &self,
+        input: ListTargetsForPolicyRequest,
+    ) -> Request<ListTargetsForPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
+    fn list_targets_for_security_profile(
+        &self,
+        input: ListTargetsForSecurityProfileRequest,
+    ) -> Request<ListTargetsForSecurityProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List the thing groups in your account.</p>
+    fn list_thing_groups(&self, input: ListThingGroupsRequest) -> Request<ListThingGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List the thing groups to which the specified thing belongs.</p>
+    fn list_thing_groups_for_thing(
+        &self,
+        input: ListThingGroupsForThingRequest,
+    ) -> Request<ListThingGroupsForThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
+    fn list_thing_principals(
+        &self,
+        input: ListThingPrincipalsRequest,
+    ) -> Request<ListThingPrincipalsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Information about the thing registration tasks.</p>
+    fn list_thing_registration_task_reports(
+        &self,
+        input: ListThingRegistrationTaskReportsRequest,
+    ) -> Request<ListThingRegistrationTaskReportsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List bulk thing provisioning tasks.</p>
+    fn list_thing_registration_tasks(
+        &self,
+        input: ListThingRegistrationTasksRequest,
+    ) -> Request<ListThingRegistrationTasksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the existing thing types.</p>
+    fn list_thing_types(&self, input: ListThingTypesRequest) -> Request<ListThingTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
+    fn list_things(&self, input: ListThingsRequest) -> Request<ListThingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the things you have added to the given billing group.</p>
+    fn list_things_in_billing_group(
+        &self,
+        input: ListThingsInBillingGroupRequest,
+    ) -> Request<ListThingsInBillingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the things in the specified group.</p>
+    fn list_things_in_thing_group(
+        &self,
+        input: ListThingsInThingGroupRequest,
+    ) -> Request<ListThingsInThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the rules for the specific topic.</p>
+    fn list_topic_rules(&self, input: ListTopicRulesRequest) -> Request<ListTopicRulesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists logging levels.</p>
+    fn list_v2_logging_levels(
+        &self,
+        input: ListV2LoggingLevelsRequest,
+    ) -> Request<ListV2LoggingLevelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
+    fn list_violation_events(
+        &self,
+        input: ListViolationEventsRequest,
+    ) -> Request<ListViolationEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
+    fn register_ca_certificate(
+        &self,
+        input: RegisterCACertificateRequest,
+    ) -> Request<RegisterCACertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
+    fn register_certificate(
+        &self,
+        input: RegisterCertificateRequest,
+    ) -> Request<RegisterCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provisions a thing.</p>
+    fn register_thing(&self, input: RegisterThingRequest) -> Request<RegisterThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
+    fn reject_certificate_transfer(
+        &self,
+        input: RejectCertificateTransferRequest,
+    ) -> Request<RejectCertificateTransferRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the given thing from the billing group.</p>
+    fn remove_thing_from_billing_group(
+        &self,
+        input: RemoveThingFromBillingGroupRequest,
+    ) -> Request<RemoveThingFromBillingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Remove the specified thing from the specified group.</p>
+    fn remove_thing_from_thing_group(
+        &self,
+        input: RemoveThingFromThingGroupRequest,
+    ) -> Request<RemoveThingFromThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
+    fn replace_topic_rule(
+        &self,
+        input: ReplaceTopicRuleRequest,
+    ) -> Request<ReplaceTopicRuleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>The query search index.</p>
+    fn search_index(&self, input: SearchIndexRequest) -> Request<SearchIndexRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
+    fn set_default_authorizer(
+        &self,
+        input: SetDefaultAuthorizerRequest,
+    ) -> Request<SetDefaultAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
+    fn set_default_policy_version(
+        &self,
+        input: SetDefaultPolicyVersionRequest,
+    ) -> Request<SetDefaultPolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
+    fn set_logging_options(
+        &self,
+        input: SetLoggingOptionsRequest,
+    ) -> Request<SetLoggingOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the logging level.</p>
+    fn set_v2_logging_level(
+        &self,
+        input: SetV2LoggingLevelRequest,
+    ) -> Request<SetV2LoggingLevelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the logging options for the V2 logging service.</p>
+    fn set_v2_logging_options(
+        &self,
+        input: SetV2LoggingOptionsRequest,
+    ) -> Request<SetV2LoggingOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts an on-demand Device Defender audit.</p>
+    fn start_on_demand_audit_task(
+        &self,
+        input: StartOnDemandAuditTaskRequest,
+    ) -> Request<StartOnDemandAuditTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a bulk thing provisioning task.</p>
+    fn start_thing_registration_task(
+        &self,
+        input: StartThingRegistrationTaskRequest,
+    ) -> Request<StartThingRegistrationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels a bulk thing provisioning task.</p>
+    fn stop_thing_registration_task(
+        &self,
+        input: StopThingRegistrationTaskRequest,
+    ) -> Request<StopThingRegistrationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
+    fn test_authorization(
+        &self,
+        input: TestAuthorizationRequest,
+    ) -> Request<TestAuthorizationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
+    fn test_invoke_authorizer(
+        &self,
+        input: TestInvokeAuthorizerRequest,
+    ) -> Request<TestInvokeAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
+    fn transfer_certificate(
+        &self,
+        input: TransferCertificateRequest,
+    ) -> Request<TransferCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the given tags (metadata) from the resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
+    fn update_account_audit_configuration(
+        &self,
+        input: UpdateAccountAuditConfigurationRequest,
+    ) -> Request<UpdateAccountAuditConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an authorizer.</p>
+    fn update_authorizer(
+        &self,
+        input: UpdateAuthorizerRequest,
+    ) -> Request<UpdateAuthorizerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates information about the billing group.</p>
+    fn update_billing_group(
+        &self,
+        input: UpdateBillingGroupRequest,
+    ) -> Request<UpdateBillingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a registered CA certificate.</p>
+    fn update_ca_certificate(
+        &self,
+        input: UpdateCACertificateRequest,
+    ) -> Request<UpdateCACertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
+    fn update_certificate(
+        &self,
+        input: UpdateCertificateRequest,
+    ) -> Request<UpdateCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a dynamic thing group.</p>
+    fn update_dynamic_thing_group(
+        &self,
+        input: UpdateDynamicThingGroupRequest,
+    ) -> Request<UpdateDynamicThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the event configurations.</p>
+    fn update_event_configurations(
+        &self,
+        input: UpdateEventConfigurationsRequest,
+    ) -> Request<UpdateEventConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the search configuration.</p>
+    fn update_indexing_configuration(
+        &self,
+        input: UpdateIndexingConfigurationRequest,
+    ) -> Request<UpdateIndexingConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates supported fields of the specified job.</p>
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a role alias.</p>
+    fn update_role_alias(&self, input: UpdateRoleAliasRequest) -> Request<UpdateRoleAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
+    fn update_scheduled_audit(
+        &self,
+        input: UpdateScheduledAuditRequest,
+    ) -> Request<UpdateScheduledAuditRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a Device Defender security profile.</p>
+    fn update_security_profile(
+        &self,
+        input: UpdateSecurityProfileRequest,
+    ) -> Request<UpdateSecurityProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
+    fn update_stream(&self, input: UpdateStreamRequest) -> Request<UpdateStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the data for a thing.</p>
+    fn update_thing(&self, input: UpdateThingRequest) -> Request<UpdateThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Update a thing group.</p>
+    fn update_thing_group(
+        &self,
+        input: UpdateThingGroupRequest,
+    ) -> Request<UpdateThingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the groups to which the thing belongs.</p>
+    fn update_thing_groups_for_thing(
+        &self,
+        input: UpdateThingGroupsForThingRequest,
+    ) -> Request<UpdateThingGroupsForThingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Validates a Device Defender security profile behaviors specification.</p>
+    fn validate_security_profile_behaviors(
+        &self,
+        input: ValidateSecurityProfileBehaviorsRequest,
+    ) -> Request<ValidateSecurityProfileBehaviorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AcceptCertificateTransferRequest {
+    type Output = AcceptCertificateTransferResponse;
+    type Error = AcceptCertificateTransferError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/accept-certificate-transfer/{certificate_id}",
-            certificate_id = input.certificate_id
+            certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.set_as_active {
+        if let Some(ref x) = self.set_as_active {
             params.put("setAsActive", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = AcceptCertificateTransferResponse {};
 
                     Ok(result)
                 }))
@@ -18078,22 +19225,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Adds a thing to a billing group.</p>
-    fn add_thing_to_billing_group(
-        &self,
-        input: AddThingToBillingGroupRequest,
-    ) -> RusotoFuture<AddThingToBillingGroupResponse, AddThingToBillingGroupError> {
+impl ServiceRequest for AddThingToBillingGroupRequest {
+    type Output = AddThingToBillingGroupResponse;
+    type Error = AddThingToBillingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/billing-groups/addThingToBillingGroup";
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18110,22 +19263,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Adds a thing to a thing group.</p>
-    fn add_thing_to_thing_group(
-        &self,
-        input: AddThingToThingGroupRequest,
-    ) -> RusotoFuture<AddThingToThingGroupResponse, AddThingToThingGroupError> {
+impl ServiceRequest for AddThingToThingGroupRequest {
+    type Output = AddThingToThingGroupResponse;
+    type Error = AddThingToThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/thing-groups/addThingToThingGroup";
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18142,22 +19301,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
-    fn associate_targets_with_job(
-        &self,
-        input: AssociateTargetsWithJobRequest,
-    ) -> RusotoFuture<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError> {
-        let request_uri = format!("/jobs/{job_id}/targets", job_id = input.job_id);
+impl ServiceRequest for AssociateTargetsWithJobRequest {
+    type Output = AssociateTargetsWithJobResponse;
+    type Error = AssociateTargetsWithJobError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}/targets", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18172,25 +19337,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Attaches a policy to the specified target.</p>
-    fn attach_policy(&self, input: AttachPolicyRequest) -> RusotoFuture<(), AttachPolicyError> {
+impl ServiceRequest for AttachPolicyRequest {
+    type Output = AttachPolicyResponse;
+    type Error = AttachPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
-            policy_name = input.policy_name
+            policy_name = self.policy_name
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = AttachPolicyResponse {};
 
                     Ok(result)
                 }))
@@ -18204,28 +19378,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
-    fn attach_principal_policy(
-        &self,
-        input: AttachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), AttachPrincipalPolicyError> {
+impl ServiceRequest for AttachPrincipalPolicyRequest {
+    type Output = AttachPrincipalPolicyResponse;
+    type Error = AttachPrincipalPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
-            policy_name = input.policy_name
+            policy_name = self.policy_name
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-principal", &input.principal);
+        request.add_header("x-amzn-iot-principal", &self.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = AttachPrincipalPolicyResponse {};
 
                     Ok(result)
                 }))
@@ -18238,18 +19418,24 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Associates a Device Defender security profile with a thing group or with this account. Each thing group or account can have up to five security profiles associated with it.</p>
-    fn attach_security_profile(
-        &self,
-        input: AttachSecurityProfileRequest,
-    ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError> {
+impl ServiceRequest for AttachSecurityProfileRequest {
+    type Output = AttachSecurityProfileResponse;
+    type Error = AttachSecurityProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
-            security_profile_name = input.security_profile_name
+            security_profile_name = self.security_profile_name
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -18257,11 +19443,11 @@ impl Iot for IotClient {
         let mut params = Params::new();
         params.put(
             "securityProfileTargetArn",
-            &input.security_profile_target_arn,
+            &self.security_profile_target_arn,
         );
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18278,25 +19464,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    fn attach_thing_principal(
-        &self,
-        input: AttachThingPrincipalRequest,
-    ) -> RusotoFuture<AttachThingPrincipalResponse, AttachThingPrincipalError> {
+impl ServiceRequest for AttachThingPrincipalRequest {
+    type Output = AttachThingPrincipalResponse;
+    type Error = AttachThingPrincipalError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
-            thing_name = input.thing_name
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-principal", &input.principal);
+        request.add_header("x-amzn-principal", &self.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18313,20 +19505,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Cancels an audit that is in progress. The audit can be either scheduled or on-demand. If the audit is not in progress, an "InvalidRequestException" occurs.</p>
-    fn cancel_audit_task(
-        &self,
-        input: CancelAuditTaskRequest,
-    ) -> RusotoFuture<CancelAuditTaskResponse, CancelAuditTaskError> {
-        let request_uri = format!("/audit/tasks/{task_id}/cancel", task_id = input.task_id);
+impl ServiceRequest for CancelAuditTaskRequest {
+    type Output = CancelAuditTaskResponse;
+    type Error = CancelAuditTaskError;
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/audit/tasks/{task_id}/cancel", task_id = self.task_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18344,26 +19542,32 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Cancels a pending transfer for the specified certificate.</p> <p> <b>Note</b> Only the transfer source account can use this operation to cancel a transfer. (Transfer destinations can use <a>RejectCertificateTransfer</a> instead.) After transfer, AWS IoT returns the certificate to the source account in the INACTIVE state. After the destination account has accepted the transfer, the transfer cannot be cancelled.</p> <p>After a certificate transfer is cancelled, the status of the certificate changes from PENDING_TRANSFER to INACTIVE.</p>
-    fn cancel_certificate_transfer(
-        &self,
-        input: CancelCertificateTransferRequest,
-    ) -> RusotoFuture<(), CancelCertificateTransferError> {
+impl ServiceRequest for CancelCertificateTransferRequest {
+    type Output = CancelCertificateTransferResponse;
+    type Error = CancelCertificateTransferError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/cancel-certificate-transfer/{certificate_id}",
-            certificate_id = input.certificate_id
+            certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = CancelCertificateTransferResponse {};
 
                     Ok(result)
                 }))
@@ -18374,28 +19578,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Cancels a job.</p>
-    fn cancel_job(
-        &self,
-        input: CancelJobRequest,
-    ) -> RusotoFuture<CancelJobResponse, CancelJobError> {
-        let request_uri = format!("/jobs/{job_id}/cancel", job_id = input.job_id);
+impl ServiceRequest for CancelJobRequest {
+    type Output = CancelJobResponse;
+    type Error = CancelJobError;
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}/cancel", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.force {
+        if let Some(ref x) = self.force {
             params.put("force", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18413,35 +19623,41 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Cancels the execution of a job for a given thing.</p>
-    fn cancel_job_execution(
-        &self,
-        input: CancelJobExecutionRequest,
-    ) -> RusotoFuture<(), CancelJobExecutionError> {
+impl ServiceRequest for CancelJobExecutionRequest {
+    type Output = CancelJobExecutionResponse;
+    type Error = CancelJobExecutionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/cancel",
-            job_id = input.job_id,
-            thing_name = input.thing_name
+            job_id = self.job_id,
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.force {
+        if let Some(ref x) = self.force {
             params.put("force", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = CancelJobExecutionResponse {};
 
                     Ok(result)
                 }))
@@ -18455,19 +19671,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Clears the default authorizer.</p>
-    fn clear_default_authorizer(
-        &self,
-    ) -> RusotoFuture<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError> {
+impl ServiceRequest for ClearDefaultAuthorizerRequest {
+    type Output = ClearDefaultAuthorizerResponse;
+    type Error = ClearDefaultAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/default-authorizer";
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18484,25 +19707,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates an authorizer.</p>
-    fn create_authorizer(
-        &self,
-        input: CreateAuthorizerRequest,
-    ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError> {
+impl ServiceRequest for CreateAuthorizerRequest {
+    type Output = CreateAuthorizerResponse;
+    type Error = CreateAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
-            authorizer_name = input.authorizer_name
+            authorizer_name = self.authorizer_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18520,25 +19749,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a billing group.</p>
-    fn create_billing_group(
-        &self,
-        input: CreateBillingGroupRequest,
-    ) -> RusotoFuture<CreateBillingGroupResponse, CreateBillingGroupError> {
+impl ServiceRequest for CreateBillingGroupRequest {
+    type Output = CreateBillingGroupResponse;
+    type Error = CreateBillingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
-            billing_group_name = input.billing_group_name
+            billing_group_name = self.billing_group_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18556,28 +19791,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
-    fn create_certificate_from_csr(
-        &self,
-        input: CreateCertificateFromCsrRequest,
-    ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError> {
+impl ServiceRequest for CreateCertificateFromCsrRequest {
+    type Output = CreateCertificateFromCsrResponse;
+    type Error = CreateCertificateFromCsrError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/certificates";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.set_as_active {
+        if let Some(ref x) = self.set_as_active {
             params.put("setAsActive", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18592,25 +19833,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a dynamic thing group.</p>
-    fn create_dynamic_thing_group(
-        &self,
-        input: CreateDynamicThingGroupRequest,
-    ) -> RusotoFuture<CreateDynamicThingGroupResponse, CreateDynamicThingGroupError> {
+impl ServiceRequest for CreateDynamicThingGroupRequest {
+    type Output = CreateDynamicThingGroupResponse;
+    type Error = CreateDynamicThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18625,22 +19872,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a job.</p>
-    fn create_job(
-        &self,
-        input: CreateJobRequest,
-    ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
-        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+impl ServiceRequest for CreateJobRequest {
+    type Output = CreateJobResponse;
+    type Error = CreateJobError;
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18658,26 +19911,32 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
-    fn create_keys_and_certificate(
-        &self,
-        input: CreateKeysAndCertificateRequest,
-    ) -> RusotoFuture<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError> {
+impl ServiceRequest for CreateKeysAndCertificateRequest {
+    type Output = CreateKeysAndCertificateResponse;
+    type Error = CreateKeysAndCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/keys-and-certificate";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.set_as_active {
+        if let Some(ref x) = self.set_as_active {
             params.put("setAsActive", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18692,25 +19951,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
-    fn create_ota_update(
-        &self,
-        input: CreateOTAUpdateRequest,
-    ) -> RusotoFuture<CreateOTAUpdateResponse, CreateOTAUpdateError> {
+impl ServiceRequest for CreateOTAUpdateRequest {
+    type Output = CreateOTAUpdateResponse;
+    type Error = CreateOTAUpdateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
-            ota_update_id = input.ota_update_id
+            ota_update_id = self.ota_update_id
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18728,22 +19993,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
-    fn create_policy(
-        &self,
-        input: CreatePolicyRequest,
-    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError> {
-        let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
+impl ServiceRequest for CreatePolicyRequest {
+    type Output = CreatePolicyResponse;
+    type Error = CreatePolicyError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/policies/{policy_name}", policy_name = self.policy_name);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18761,31 +20032,37 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new version of the specified AWS IoT policy. To update a policy, create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must use <a>DeletePolicyVersion</a> to delete an existing version before you create a new one.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the operative version (that is, the version that is in effect for the certificates to which the policy is attached).</p>
-    fn create_policy_version(
-        &self,
-        input: CreatePolicyVersionRequest,
-    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError> {
+impl ServiceRequest for CreatePolicyVersionRequest {
+    type Output = CreatePolicyVersionResponse;
+    type Error = CreatePolicyVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
-            policy_name = input.policy_name
+            policy_name = self.policy_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.set_as_default {
+        if let Some(ref x) = self.set_as_default {
             params.put("setAsDefault", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18802,22 +20079,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a role alias.</p>
-    fn create_role_alias(
-        &self,
-        input: CreateRoleAliasRequest,
-    ) -> RusotoFuture<CreateRoleAliasResponse, CreateRoleAliasError> {
-        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+impl ServiceRequest for CreateRoleAliasRequest {
+    type Output = CreateRoleAliasResponse;
+    type Error = CreateRoleAliasError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = self.role_alias);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18835,25 +20118,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a scheduled audit that is run at a specified time interval.</p>
-    fn create_scheduled_audit(
-        &self,
-        input: CreateScheduledAuditRequest,
-    ) -> RusotoFuture<CreateScheduledAuditResponse, CreateScheduledAuditError> {
+impl ServiceRequest for CreateScheduledAuditRequest {
+    type Output = CreateScheduledAuditResponse;
+    type Error = CreateScheduledAuditError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
-            scheduled_audit_name = input.scheduled_audit_name
+            scheduled_audit_name = self.scheduled_audit_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18870,25 +20159,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Device Defender security profile.</p>
-    fn create_security_profile(
-        &self,
-        input: CreateSecurityProfileRequest,
-    ) -> RusotoFuture<CreateSecurityProfileResponse, CreateSecurityProfileError> {
+impl ServiceRequest for CreateSecurityProfileRequest {
+    type Output = CreateSecurityProfileResponse;
+    type Error = CreateSecurityProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
-            security_profile_name = input.security_profile_name
+            security_profile_name = self.security_profile_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18905,22 +20200,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
-    fn create_stream(
-        &self,
-        input: CreateStreamRequest,
-    ) -> RusotoFuture<CreateStreamResponse, CreateStreamError> {
-        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+impl ServiceRequest for CreateStreamRequest {
+    type Output = CreateStreamResponse;
+    type Error = CreateStreamError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = self.stream_id);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18938,22 +20239,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    fn create_thing(
-        &self,
-        input: CreateThingRequest,
-    ) -> RusotoFuture<CreateThingResponse, CreateThingError> {
-        let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
+impl ServiceRequest for CreateThingRequest {
+    type Output = CreateThingResponse;
+    type Error = CreateThingError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/things/{thing_name}", thing_name = self.thing_name);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -18971,25 +20278,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
-    fn create_thing_group(
-        &self,
-        input: CreateThingGroupRequest,
-    ) -> RusotoFuture<CreateThingGroupResponse, CreateThingGroupError> {
+impl ServiceRequest for CreateThingGroupRequest {
+    type Output = CreateThingGroupResponse;
+    type Error = CreateThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19007,25 +20320,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new thing type.</p>
-    fn create_thing_type(
-        &self,
-        input: CreateThingTypeRequest,
-    ) -> RusotoFuture<CreateThingTypeResponse, CreateThingTypeError> {
+impl ServiceRequest for CreateThingTypeRequest {
+    type Output = CreateThingTypeResponse;
+    type Error = CreateThingTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
-            thing_type_name = input.thing_type_name
+            thing_type_name = self.thing_type_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19043,29 +20362,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn create_topic_rule(
-        &self,
-        input: CreateTopicRuleRequest,
-    ) -> RusotoFuture<(), CreateTopicRuleError> {
-        let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
+impl ServiceRequest for CreateTopicRuleRequest {
+    type Output = CreateTopicRuleResponse;
+    type Error = CreateTopicRuleError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/rules/{rule_name}", rule_name = self.rule_name);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
+        let encoded = Some(serde_json::to_vec(&self.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        if let Some(ref tags) = input.tags {
+        if let Some(ref tags) = self.tags {
             request.add_header("x-amz-tagging", &tags.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = CreateTopicRuleResponse {};
 
                     Ok(result)
                 }))
@@ -19079,27 +20404,32 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Restores the default settings for Device Defender audits for this account. Any configuration data you entered is deleted and all audit checks are reset to disabled. </p>
-    fn delete_account_audit_configuration(
-        &self,
-        input: DeleteAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<DeleteAccountAuditConfigurationResponse, DeleteAccountAuditConfigurationError>
-    {
+impl ServiceRequest for DeleteAccountAuditConfigurationRequest {
+    type Output = DeleteAccountAuditConfigurationResponse;
+    type Error = DeleteAccountAuditConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/audit/configuration";
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.delete_scheduled_audits {
+        if let Some(ref x) = self.delete_scheduled_audits {
             params.put("deleteScheduledAudits", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19116,23 +20446,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an authorizer.</p>
-    fn delete_authorizer(
-        &self,
-        input: DeleteAuthorizerRequest,
-    ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError> {
+impl ServiceRequest for DeleteAuthorizerRequest {
+    type Output = DeleteAuthorizerResponse;
+    type Error = DeleteAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
-            authorizer_name = input.authorizer_name
+            authorizer_name = self.authorizer_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19150,29 +20486,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the billing group.</p>
-    fn delete_billing_group(
-        &self,
-        input: DeleteBillingGroupRequest,
-    ) -> RusotoFuture<DeleteBillingGroupResponse, DeleteBillingGroupError> {
+impl ServiceRequest for DeleteBillingGroupRequest {
+    type Output = DeleteBillingGroupResponse;
+    type Error = DeleteBillingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
-            billing_group_name = input.billing_group_name
+            billing_group_name = self.billing_group_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.expected_version {
+        if let Some(ref x) = self.expected_version {
             params.put("expectedVersion", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19190,23 +20532,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a registered CA certificate.</p>
-    fn delete_ca_certificate(
-        &self,
-        input: DeleteCACertificateRequest,
-    ) -> RusotoFuture<DeleteCACertificateResponse, DeleteCACertificateError> {
+impl ServiceRequest for DeleteCACertificateRequest {
+    type Output = DeleteCACertificateResponse;
+    type Error = DeleteCACertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
-            ca_certificate_id = input.certificate_id
+            ca_certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19223,32 +20571,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified certificate.</p> <p>A certificate cannot be deleted if it has a policy attached to it or if its status is set to ACTIVE. To delete a certificate, first use the <a>DetachPrincipalPolicy</a> API to detach all policies. Next, use the <a>UpdateCertificate</a> API to set the certificate to the INACTIVE status.</p>
-    fn delete_certificate(
-        &self,
-        input: DeleteCertificateRequest,
-    ) -> RusotoFuture<(), DeleteCertificateError> {
+impl ServiceRequest for DeleteCertificateRequest {
+    type Output = DeleteCertificateResponse;
+    type Error = DeleteCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
-            certificate_id = input.certificate_id
+            certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.force_delete {
+        if let Some(ref x) = self.force_delete {
             params.put("forceDelete", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteCertificateResponse {};
 
                     Ok(result)
                 }))
@@ -19262,29 +20616,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a dynamic thing group.</p>
-    fn delete_dynamic_thing_group(
-        &self,
-        input: DeleteDynamicThingGroupRequest,
-    ) -> RusotoFuture<DeleteDynamicThingGroupResponse, DeleteDynamicThingGroupError> {
+impl ServiceRequest for DeleteDynamicThingGroupRequest {
+    type Output = DeleteDynamicThingGroupResponse;
+    type Error = DeleteDynamicThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.expected_version {
+        if let Some(ref x) = self.expected_version {
             params.put("expectedVersion", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19299,26 +20659,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
-    fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError> {
-        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+impl ServiceRequest for DeleteJobRequest {
+    type Output = DeleteJobResponse;
+    type Error = DeleteJobError;
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.force {
+        if let Some(ref x) = self.force {
             params.put("force", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteJobResponse {};
 
                     Ok(result)
                 }))
@@ -19332,34 +20701,40 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a job execution.</p>
-    fn delete_job_execution(
-        &self,
-        input: DeleteJobExecutionRequest,
-    ) -> RusotoFuture<(), DeleteJobExecutionError> {
+impl ServiceRequest for DeleteJobExecutionRequest {
+    type Output = DeleteJobExecutionResponse;
+    type Error = DeleteJobExecutionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}/executionNumber/{execution_number}",
-            execution_number = input.execution_number,
-            job_id = input.job_id,
-            thing_name = input.thing_name
+            execution_number = self.execution_number,
+            job_id = self.job_id,
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.force {
+        if let Some(ref x) = self.force {
             params.put("force", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteJobExecutionResponse {};
 
                     Ok(result)
                 }))
@@ -19373,32 +20748,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Delete an OTA update.</p>
-    fn delete_ota_update(
-        &self,
-        input: DeleteOTAUpdateRequest,
-    ) -> RusotoFuture<DeleteOTAUpdateResponse, DeleteOTAUpdateError> {
+impl ServiceRequest for DeleteOTAUpdateRequest {
+    type Output = DeleteOTAUpdateResponse;
+    type Error = DeleteOTAUpdateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
-            ota_update_id = input.ota_update_id
+            ota_update_id = self.ota_update_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.delete_stream {
+        if let Some(ref x) = self.delete_stream {
             params.put("deleteStream", x);
         }
-        if let Some(ref x) = input.force_delete_aws_job {
+        if let Some(ref x) = self.force_delete_aws_job {
             params.put("forceDeleteAWSJob", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19416,20 +20797,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
-        let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
+impl ServiceRequest for DeletePolicyRequest {
+    type Output = DeletePolicyResponse;
+    type Error = DeletePolicyError;
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/policies/{policy_name}", policy_name = self.policy_name);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeletePolicyResponse {};
 
                     Ok(result)
                 }))
@@ -19443,27 +20833,33 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified version of the specified policy. You cannot delete the default version of a policy using this API. To delete the default version of a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use ListPolicyVersions.</p>
-    fn delete_policy_version(
-        &self,
-        input: DeletePolicyVersionRequest,
-    ) -> RusotoFuture<(), DeletePolicyVersionError> {
+impl ServiceRequest for DeletePolicyVersionRequest {
+    type Output = DeletePolicyVersionResponse;
+    type Error = DeletePolicyVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
-            policy_name = input.policy_name,
-            policy_version_id = input.policy_version_id
+            policy_name = self.policy_name,
+            policy_version_id = self.policy_version_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeletePolicyVersionResponse {};
 
                     Ok(result)
                 }))
@@ -19476,19 +20872,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a CA certificate registration code.</p>
-    fn delete_registration_code(
-        &self,
-    ) -> RusotoFuture<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError> {
+impl ServiceRequest for DeleteRegistrationCodeRequest {
+    type Output = DeleteRegistrationCodeResponse;
+    type Error = DeleteRegistrationCodeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/registrationcode";
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19505,20 +20908,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a role alias</p>
-    fn delete_role_alias(
-        &self,
-        input: DeleteRoleAliasRequest,
-    ) -> RusotoFuture<DeleteRoleAliasResponse, DeleteRoleAliasError> {
-        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+impl ServiceRequest for DeleteRoleAliasRequest {
+    type Output = DeleteRoleAliasResponse;
+    type Error = DeleteRoleAliasError;
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = self.role_alias);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19536,23 +20945,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a scheduled audit.</p>
-    fn delete_scheduled_audit(
-        &self,
-        input: DeleteScheduledAuditRequest,
-    ) -> RusotoFuture<DeleteScheduledAuditResponse, DeleteScheduledAuditError> {
+impl ServiceRequest for DeleteScheduledAuditRequest {
+    type Output = DeleteScheduledAuditResponse;
+    type Error = DeleteScheduledAuditError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
-            scheduled_audit_name = input.scheduled_audit_name
+            scheduled_audit_name = self.scheduled_audit_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19569,29 +20984,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a Device Defender security profile.</p>
-    fn delete_security_profile(
-        &self,
-        input: DeleteSecurityProfileRequest,
-    ) -> RusotoFuture<DeleteSecurityProfileResponse, DeleteSecurityProfileError> {
+impl ServiceRequest for DeleteSecurityProfileRequest {
+    type Output = DeleteSecurityProfileResponse;
+    type Error = DeleteSecurityProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
-            security_profile_name = input.security_profile_name
+            security_profile_name = self.security_profile_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.expected_version {
+        if let Some(ref x) = self.expected_version {
             params.put("expectedVersion", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19608,20 +21029,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a stream.</p>
-    fn delete_stream(
-        &self,
-        input: DeleteStreamRequest,
-    ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError> {
-        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+impl ServiceRequest for DeleteStreamRequest {
+    type Output = DeleteStreamResponse;
+    type Error = DeleteStreamError;
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = self.stream_id);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19639,26 +21066,32 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
-    fn delete_thing(
-        &self,
-        input: DeleteThingRequest,
-    ) -> RusotoFuture<DeleteThingResponse, DeleteThingError> {
-        let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
+impl ServiceRequest for DeleteThingRequest {
+    type Output = DeleteThingResponse;
+    type Error = DeleteThingError;
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/things/{thing_name}", thing_name = self.thing_name);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.expected_version {
+        if let Some(ref x) = self.expected_version {
             params.put("expectedVersion", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19676,29 +21109,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a thing group.</p>
-    fn delete_thing_group(
-        &self,
-        input: DeleteThingGroupRequest,
-    ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError> {
+impl ServiceRequest for DeleteThingGroupRequest {
+    type Output = DeleteThingGroupResponse;
+    type Error = DeleteThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.expected_version {
+        if let Some(ref x) = self.expected_version {
             params.put("expectedVersion", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19716,23 +21155,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
-    fn delete_thing_type(
-        &self,
-        input: DeleteThingTypeRequest,
-    ) -> RusotoFuture<DeleteThingTypeResponse, DeleteThingTypeError> {
+impl ServiceRequest for DeleteThingTypeRequest {
+    type Output = DeleteThingTypeResponse;
+    type Error = DeleteThingTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
-            thing_type_name = input.thing_type_name
+            thing_type_name = self.thing_type_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19750,23 +21195,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the rule.</p>
-    fn delete_topic_rule(
-        &self,
-        input: DeleteTopicRuleRequest,
-    ) -> RusotoFuture<(), DeleteTopicRuleError> {
-        let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
+impl ServiceRequest for DeleteTopicRuleRequest {
+    type Output = DeleteTopicRuleResponse;
+    type Error = DeleteTopicRuleError;
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/rules/{rule_name}", rule_name = self.rule_name);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteTopicRuleResponse {};
 
                     Ok(result)
                 }))
@@ -19780,28 +21231,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a logging level.</p>
-    fn delete_v2_logging_level(
-        &self,
-        input: DeleteV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), DeleteV2LoggingLevelError> {
+impl ServiceRequest for DeleteV2LoggingLevelRequest {
+    type Output = DeleteV2LoggingLevelResponse;
+    type Error = DeleteV2LoggingLevelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2LoggingLevel";
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        params.put("targetName", &input.target_name);
-        params.put("targetType", &input.target_type);
+        params.put("targetName", &self.target_name);
+        params.put("targetType", &self.target_type);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteV2LoggingLevelResponse {};
 
                     Ok(result)
                 }))
@@ -19814,25 +21271,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
-    fn deprecate_thing_type(
-        &self,
-        input: DeprecateThingTypeRequest,
-    ) -> RusotoFuture<DeprecateThingTypeResponse, DeprecateThingTypeError> {
+impl ServiceRequest for DeprecateThingTypeRequest {
+    type Output = DeprecateThingTypeResponse;
+    type Error = DeprecateThingTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}/deprecate",
-            thing_type_name = input.thing_type_name
+            thing_type_name = self.thing_type_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19850,22 +21313,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    fn describe_account_audit_configuration(
-        &self,
-    ) -> RusotoFuture<
-        DescribeAccountAuditConfigurationResponse,
-        DescribeAccountAuditConfigurationError,
-    > {
+impl ServiceRequest for DescribeAccountAuditConfigurationRequest {
+    type Output = DescribeAccountAuditConfigurationResponse;
+    type Error = DescribeAccountAuditConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/audit/configuration";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19882,20 +21349,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a Device Defender audit.</p>
-    fn describe_audit_task(
-        &self,
-        input: DescribeAuditTaskRequest,
-    ) -> RusotoFuture<DescribeAuditTaskResponse, DescribeAuditTaskError> {
-        let request_uri = format!("/audit/tasks/{task_id}", task_id = input.task_id);
+impl ServiceRequest for DescribeAuditTaskRequest {
+    type Output = DescribeAuditTaskResponse;
+    type Error = DescribeAuditTaskError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/audit/tasks/{task_id}", task_id = self.task_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19913,23 +21386,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes an authorizer.</p>
-    fn describe_authorizer(
-        &self,
-        input: DescribeAuthorizerRequest,
-    ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError> {
+impl ServiceRequest for DescribeAuthorizerRequest {
+    type Output = DescribeAuthorizerResponse;
+    type Error = DescribeAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
-            authorizer_name = input.authorizer_name
+            authorizer_name = self.authorizer_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19947,23 +21426,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a billing group.</p>
-    fn describe_billing_group(
-        &self,
-        input: DescribeBillingGroupRequest,
-    ) -> RusotoFuture<DescribeBillingGroupResponse, DescribeBillingGroupError> {
+impl ServiceRequest for DescribeBillingGroupRequest {
+    type Output = DescribeBillingGroupResponse;
+    type Error = DescribeBillingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
-            billing_group_name = input.billing_group_name
+            billing_group_name = self.billing_group_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -19980,23 +21465,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes a registered CA certificate.</p>
-    fn describe_ca_certificate(
-        &self,
-        input: DescribeCACertificateRequest,
-    ) -> RusotoFuture<DescribeCACertificateResponse, DescribeCACertificateError> {
+impl ServiceRequest for DescribeCACertificateRequest {
+    type Output = DescribeCACertificateResponse;
+    type Error = DescribeCACertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
-            ca_certificate_id = input.certificate_id
+            ca_certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20013,23 +21504,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the specified certificate.</p>
-    fn describe_certificate(
-        &self,
-        input: DescribeCertificateRequest,
-    ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError> {
+impl ServiceRequest for DescribeCertificateRequest {
+    type Output = DescribeCertificateResponse;
+    type Error = DescribeCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
-            certificate_id = input.certificate_id
+            certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20046,19 +21543,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes the default authorizer.</p>
-    fn describe_default_authorizer(
-        &self,
-    ) -> RusotoFuture<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError> {
+impl ServiceRequest for DescribeDefaultAuthorizerRequest {
+    type Output = DescribeDefaultAuthorizerResponse;
+    type Error = DescribeDefaultAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/default-authorizer";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20073,26 +21577,32 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    fn describe_endpoint(
-        &self,
-        input: DescribeEndpointRequest,
-    ) -> RusotoFuture<DescribeEndpointResponse, DescribeEndpointError> {
+impl ServiceRequest for DescribeEndpointRequest {
+    type Output = DescribeEndpointResponse;
+    type Error = DescribeEndpointError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/endpoint";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.endpoint_type {
+        if let Some(ref x) = self.endpoint_type {
             params.put("endpointType", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20110,19 +21620,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes event configurations.</p>
-    fn describe_event_configurations(
-        &self,
-    ) -> RusotoFuture<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError> {
+impl ServiceRequest for DescribeEventConfigurationsRequest {
+    type Output = DescribeEventConfigurationsResponse;
+    type Error = DescribeEventConfigurationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/event-configurations";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20137,20 +21654,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes a search index.</p>
-    fn describe_index(
-        &self,
-        input: DescribeIndexRequest,
-    ) -> RusotoFuture<DescribeIndexResponse, DescribeIndexError> {
-        let request_uri = format!("/indices/{index_name}", index_name = input.index_name);
+impl ServiceRequest for DescribeIndexRequest {
+    type Output = DescribeIndexResponse;
+    type Error = DescribeIndexError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/indices/{index_name}", index_name = self.index_name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20168,20 +21691,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes a job.</p>
-    fn describe_job(
-        &self,
-        input: DescribeJobRequest,
-    ) -> RusotoFuture<DescribeJobResponse, DescribeJobError> {
-        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+impl ServiceRequest for DescribeJobRequest {
+    type Output = DescribeJobResponse;
+    type Error = DescribeJobError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20199,30 +21728,36 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes a job execution.</p>
-    fn describe_job_execution(
-        &self,
-        input: DescribeJobExecutionRequest,
-    ) -> RusotoFuture<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+impl ServiceRequest for DescribeJobExecutionRequest {
+    type Output = DescribeJobExecutionResponse;
+    type Error = DescribeJobExecutionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/jobs/{job_id}",
-            job_id = input.job_id,
-            thing_name = input.thing_name
+            job_id = self.job_id,
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.execution_number {
+        if let Some(ref x) = self.execution_number {
             params.put("executionNumber", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20239,20 +21774,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes a role alias.</p>
-    fn describe_role_alias(
-        &self,
-        input: DescribeRoleAliasRequest,
-    ) -> RusotoFuture<DescribeRoleAliasResponse, DescribeRoleAliasError> {
-        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+impl ServiceRequest for DescribeRoleAliasRequest {
+    type Output = DescribeRoleAliasResponse;
+    type Error = DescribeRoleAliasError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = self.role_alias);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20270,23 +21811,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a scheduled audit.</p>
-    fn describe_scheduled_audit(
-        &self,
-        input: DescribeScheduledAuditRequest,
-    ) -> RusotoFuture<DescribeScheduledAuditResponse, DescribeScheduledAuditError> {
+impl ServiceRequest for DescribeScheduledAuditRequest {
+    type Output = DescribeScheduledAuditResponse;
+    type Error = DescribeScheduledAuditError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
-            scheduled_audit_name = input.scheduled_audit_name
+            scheduled_audit_name = self.scheduled_audit_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20303,23 +21850,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a Device Defender security profile.</p>
-    fn describe_security_profile(
-        &self,
-        input: DescribeSecurityProfileRequest,
-    ) -> RusotoFuture<DescribeSecurityProfileResponse, DescribeSecurityProfileError> {
+impl ServiceRequest for DescribeSecurityProfileRequest {
+    type Output = DescribeSecurityProfileResponse;
+    type Error = DescribeSecurityProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
-            security_profile_name = input.security_profile_name
+            security_profile_name = self.security_profile_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20334,20 +21887,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a stream.</p>
-    fn describe_stream(
-        &self,
-        input: DescribeStreamRequest,
-    ) -> RusotoFuture<DescribeStreamResponse, DescribeStreamError> {
-        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+impl ServiceRequest for DescribeStreamRequest {
+    type Output = DescribeStreamResponse;
+    type Error = DescribeStreamError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = self.stream_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20365,20 +21924,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the specified thing.</p>
-    fn describe_thing(
-        &self,
-        input: DescribeThingRequest,
-    ) -> RusotoFuture<DescribeThingResponse, DescribeThingError> {
-        let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
+impl ServiceRequest for DescribeThingRequest {
+    type Output = DescribeThingResponse;
+    type Error = DescribeThingError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/things/{thing_name}", thing_name = self.thing_name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20396,23 +21961,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describe a thing group.</p>
-    fn describe_thing_group(
-        &self,
-        input: DescribeThingGroupRequest,
-    ) -> RusotoFuture<DescribeThingGroupResponse, DescribeThingGroupError> {
+impl ServiceRequest for DescribeThingGroupRequest {
+    type Output = DescribeThingGroupResponse;
+    type Error = DescribeThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20430,24 +22001,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Describes a bulk thing provisioning task.</p>
-    fn describe_thing_registration_task(
-        &self,
-        input: DescribeThingRegistrationTaskRequest,
-    ) -> RusotoFuture<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>
-    {
+impl ServiceRequest for DescribeThingRegistrationTaskRequest {
+    type Output = DescribeThingRegistrationTaskResponse;
+    type Error = DescribeThingRegistrationTaskError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}",
-            task_id = input.task_id
+            task_id = self.task_id
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20462,23 +22038,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the specified thing type.</p>
-    fn describe_thing_type(
-        &self,
-        input: DescribeThingTypeRequest,
-    ) -> RusotoFuture<DescribeThingTypeResponse, DescribeThingTypeError> {
+impl ServiceRequest for DescribeThingTypeRequest {
+    type Output = DescribeThingTypeResponse;
+    type Error = DescribeThingTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-types/{thing_type_name}",
-            thing_type_name = input.thing_type_name
+            thing_type_name = self.thing_type_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20496,25 +22078,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Detaches a policy from the specified target.</p>
-    fn detach_policy(&self, input: DetachPolicyRequest) -> RusotoFuture<(), DetachPolicyError> {
+impl ServiceRequest for DetachPolicyRequest {
+    type Output = DetachPolicyResponse;
+    type Error = DetachPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/target-policies/{policy_name}",
-            policy_name = input.policy_name
+            policy_name = self.policy_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DetachPolicyResponse {};
 
                     Ok(result)
                 }))
@@ -20528,28 +22119,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
-    fn detach_principal_policy(
-        &self,
-        input: DetachPrincipalPolicyRequest,
-    ) -> RusotoFuture<(), DetachPrincipalPolicyError> {
+impl ServiceRequest for DetachPrincipalPolicyRequest {
+    type Output = DetachPrincipalPolicyResponse;
+    type Error = DetachPrincipalPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/principal-policies/{policy_name}",
-            policy_name = input.policy_name
+            policy_name = self.policy_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-principal", &input.principal);
+        request.add_header("x-amzn-iot-principal", &self.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DetachPrincipalPolicyResponse {};
 
                     Ok(result)
                 }))
@@ -20562,18 +22159,24 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates a Device Defender security profile from a thing group or from this account.</p>
-    fn detach_security_profile(
-        &self,
-        input: DetachSecurityProfileRequest,
-    ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError> {
+impl ServiceRequest for DetachSecurityProfileRequest {
+    type Output = DetachSecurityProfileResponse;
+    type Error = DetachSecurityProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
-            security_profile_name = input.security_profile_name
+            security_profile_name = self.security_profile_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
@@ -20581,11 +22184,11 @@ impl Iot for IotClient {
         let mut params = Params::new();
         params.put(
             "securityProfileTargetArn",
-            &input.security_profile_target_arn,
+            &self.security_profile_target_arn,
         );
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20602,25 +22205,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
-    fn detach_thing_principal(
-        &self,
-        input: DetachThingPrincipalRequest,
-    ) -> RusotoFuture<DetachThingPrincipalResponse, DetachThingPrincipalError> {
+impl ServiceRequest for DetachThingPrincipalRequest {
+    type Output = DetachThingPrincipalResponse;
+    type Error = DetachThingPrincipalError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
-            thing_name = input.thing_name
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-principal", &input.principal);
+        request.add_header("x-amzn-principal", &self.principal);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20637,23 +22246,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Disables the rule.</p>
-    fn disable_topic_rule(
-        &self,
-        input: DisableTopicRuleRequest,
-    ) -> RusotoFuture<(), DisableTopicRuleError> {
-        let request_uri = format!("/rules/{rule_name}/disable", rule_name = input.rule_name);
+impl ServiceRequest for DisableTopicRuleRequest {
+    type Output = DisableTopicRuleResponse;
+    type Error = DisableTopicRuleError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/rules/{rule_name}/disable", rule_name = self.rule_name);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DisableTopicRuleResponse {};
 
                     Ok(result)
                 }))
@@ -20667,23 +22282,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Enables the rule.</p>
-    fn enable_topic_rule(
-        &self,
-        input: EnableTopicRuleRequest,
-    ) -> RusotoFuture<(), EnableTopicRuleError> {
-        let request_uri = format!("/rules/{rule_name}/enable", rule_name = input.rule_name);
+impl ServiceRequest for EnableTopicRuleRequest {
+    type Output = EnableTopicRuleResponse;
+    type Error = EnableTopicRuleError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/rules/{rule_name}/enable", rule_name = self.rule_name);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = EnableTopicRuleResponse {};
 
                     Ok(result)
                 }))
@@ -20697,28 +22318,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the policies that have an effect on the authorization behavior of the specified device when it connects to the AWS IoT device gateway.</p>
-    fn get_effective_policies(
-        &self,
-        input: GetEffectivePoliciesRequest,
-    ) -> RusotoFuture<GetEffectivePoliciesResponse, GetEffectivePoliciesError> {
+impl ServiceRequest for GetEffectivePoliciesRequest {
+    type Output = GetEffectivePoliciesResponse;
+    type Error = GetEffectivePoliciesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/effective-policies";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.thing_name {
+        if let Some(ref x) = self.thing_name {
             params.put("thingName", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20735,19 +22362,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets the search configuration.</p>
-    fn get_indexing_configuration(
-        &self,
-    ) -> RusotoFuture<GetIndexingConfigurationResponse, GetIndexingConfigurationError> {
+impl ServiceRequest for GetIndexingConfigurationRequest {
+    type Output = GetIndexingConfigurationResponse;
+    type Error = GetIndexingConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/indexing/config";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20762,20 +22396,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets a job document.</p>
-    fn get_job_document(
-        &self,
-        input: GetJobDocumentRequest,
-    ) -> RusotoFuture<GetJobDocumentResponse, GetJobDocumentError> {
-        let request_uri = format!("/jobs/{job_id}/job-document", job_id = input.job_id);
+impl ServiceRequest for GetJobDocumentRequest {
+    type Output = GetJobDocumentResponse;
+    type Error = GetJobDocumentError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}/job-document", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20793,19 +22433,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>GetV2LoggingOptions</code> instead.</p>
-    fn get_logging_options(
-        &self,
-    ) -> RusotoFuture<GetLoggingOptionsResponse, GetLoggingOptionsError> {
+impl ServiceRequest for GetLoggingOptionsRequest {
+    type Output = GetLoggingOptionsResponse;
+    type Error = GetLoggingOptionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/loggingOptions";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20823,23 +22470,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets an OTA update.</p>
-    fn get_ota_update(
-        &self,
-        input: GetOTAUpdateRequest,
-    ) -> RusotoFuture<GetOTAUpdateResponse, GetOTAUpdateError> {
+impl ServiceRequest for GetOTAUpdateRequest {
+    type Output = GetOTAUpdateResponse;
+    type Error = GetOTAUpdateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/otaUpdates/{ota_update_id}",
-            ota_update_id = input.ota_update_id
+            ota_update_id = self.ota_update_id
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20857,20 +22510,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the specified policy with the policy document of the default version.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
-        let request_uri = format!("/policies/{policy_name}", policy_name = input.policy_name);
+impl ServiceRequest for GetPolicyRequest {
+    type Output = GetPolicyResponse;
+    type Error = GetPolicyError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/policies/{policy_name}", policy_name = self.policy_name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20888,24 +22547,30 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the specified policy version.</p>
-    fn get_policy_version(
-        &self,
-        input: GetPolicyVersionRequest,
-    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError> {
+impl ServiceRequest for GetPolicyVersionRequest {
+    type Output = GetPolicyVersionResponse;
+    type Error = GetPolicyVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
-            policy_name = input.policy_name,
-            policy_version_id = input.policy_version_id
+            policy_name = self.policy_name,
+            policy_version_id = self.policy_version_id
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20923,19 +22588,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets a registration code used to register a CA certificate with AWS IoT.</p>
-    fn get_registration_code(
-        &self,
-    ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError> {
+impl ServiceRequest for GetRegistrationCodeRequest {
+    type Output = GetRegistrationCodeResponse;
+    type Error = GetRegistrationCodeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/registrationcode";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20952,22 +22624,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets statistics about things that match the specified query.</p>
-    fn get_statistics(
-        &self,
-        input: GetStatisticsRequest,
-    ) -> RusotoFuture<GetStatisticsResponse, GetStatisticsError> {
+impl ServiceRequest for GetStatisticsRequest {
+    type Output = GetStatisticsResponse;
+    type Error = GetStatisticsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/indices/statistics";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -20985,20 +22663,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about the rule.</p>
-    fn get_topic_rule(
-        &self,
-        input: GetTopicRuleRequest,
-    ) -> RusotoFuture<GetTopicRuleResponse, GetTopicRuleError> {
-        let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
+impl ServiceRequest for GetTopicRuleRequest {
+    type Output = GetTopicRuleResponse;
+    type Error = GetTopicRuleError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/rules/{rule_name}", rule_name = self.rule_name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21016,19 +22700,26 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Gets the fine grained logging options.</p>
-    fn get_v2_logging_options(
-        &self,
-    ) -> RusotoFuture<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError> {
+impl ServiceRequest for GetV2LoggingOptionsRequest {
+    type Output = GetV2LoggingOptionsResponse;
+    type Error = GetV2LoggingOptionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2LoggingOptions";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21045,35 +22736,41 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the active violations for a given Device Defender security profile.</p>
-    fn list_active_violations(
-        &self,
-        input: ListActiveViolationsRequest,
-    ) -> RusotoFuture<ListActiveViolationsResponse, ListActiveViolationsError> {
+impl ServiceRequest for ListActiveViolationsRequest {
+    type Output = ListActiveViolationsResponse;
+    type Error = ListActiveViolationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/active-violations";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.security_profile_name {
+        if let Some(ref x) = self.security_profile_name {
             params.put("securityProfileName", x);
         }
-        if let Some(ref x) = input.thing_name {
+        if let Some(ref x) = self.thing_name {
             params.put("thingName", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21090,32 +22787,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the policies attached to the specified thing group.</p>
-    fn list_attached_policies(
-        &self,
-        input: ListAttachedPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedPoliciesResponse, ListAttachedPoliciesError> {
-        let request_uri = format!("/attached-policies/{target}", target = input.target);
+impl ServiceRequest for ListAttachedPoliciesRequest {
+    type Output = ListAttachedPoliciesResponse;
+    type Error = ListAttachedPoliciesError;
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/attached-policies/{target}", target = self.target);
+
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
-        if let Some(ref x) = input.recursive {
+        if let Some(ref x) = self.recursive {
             params.put("recursive", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21132,22 +22835,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the findings (results) of a Device Defender audit or of the audits performed during a specified time period. (Findings are retained for 180 days.)</p>
-    fn list_audit_findings(
-        &self,
-        input: ListAuditFindingsRequest,
-    ) -> RusotoFuture<ListAuditFindingsResponse, ListAuditFindingsError> {
+impl ServiceRequest for ListAuditFindingsRequest {
+    type Output = ListAuditFindingsResponse;
+    type Error = ListAuditFindingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/audit/findings";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21165,37 +22874,43 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the Device Defender audits that have been performed during a given time period.</p>
-    fn list_audit_tasks(
-        &self,
-        input: ListAuditTasksRequest,
-    ) -> RusotoFuture<ListAuditTasksResponse, ListAuditTasksError> {
+impl ServiceRequest for ListAuditTasksRequest {
+    type Output = ListAuditTasksResponse;
+    type Error = ListAuditTasksError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/audit/tasks";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        params.put("endTime", &input.end_time);
-        if let Some(ref x) = input.max_results {
+        params.put("endTime", &self.end_time);
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        params.put("startTime", &input.start_time);
-        if let Some(ref x) = input.task_status {
+        params.put("startTime", &self.start_time);
+        if let Some(ref x) = self.task_status {
             params.put("taskStatus", x);
         }
-        if let Some(ref x) = input.task_type {
+        if let Some(ref x) = self.task_type {
             params.put("taskType", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21213,35 +22928,41 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the authorizers registered in your account.</p>
-    fn list_authorizers(
-        &self,
-        input: ListAuthorizersRequest,
-    ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError> {
+impl ServiceRequest for ListAuthorizersRequest {
+    type Output = ListAuthorizersResponse;
+    type Error = ListAuthorizersError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/authorizers/";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
-        if let Some(ref x) = input.status {
+        if let Some(ref x) = self.status {
             params.put("status", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21259,32 +22980,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the billing groups you have created.</p>
-    fn list_billing_groups(
-        &self,
-        input: ListBillingGroupsRequest,
-    ) -> RusotoFuture<ListBillingGroupsResponse, ListBillingGroupsError> {
+impl ServiceRequest for ListBillingGroupsRequest {
+    type Output = ListBillingGroupsResponse;
+    type Error = ListBillingGroupsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/billing-groups";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.name_prefix_filter {
+        if let Some(ref x) = self.name_prefix_filter {
             params.put("namePrefixFilter", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21302,32 +23029,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    fn list_ca_certificates(
-        &self,
-        input: ListCACertificatesRequest,
-    ) -> RusotoFuture<ListCACertificatesResponse, ListCACertificatesError> {
+impl ServiceRequest for ListCACertificatesRequest {
+    type Output = ListCACertificatesResponse;
+    type Error = ListCACertificatesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/cacertificates";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21345,32 +23078,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the certificates registered in your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
-    fn list_certificates(
-        &self,
-        input: ListCertificatesRequest,
-    ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError> {
+impl ServiceRequest for ListCertificatesRequest {
+    type Output = ListCertificatesResponse;
+    type Error = ListCertificatesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/certificates";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21388,35 +23127,41 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>List the device certificates signed by the specified CA certificate.</p>
-    fn list_certificates_by_ca(
-        &self,
-        input: ListCertificatesByCARequest,
-    ) -> RusotoFuture<ListCertificatesByCAResponse, ListCertificatesByCAError> {
+impl ServiceRequest for ListCertificatesByCARequest {
+    type Output = ListCertificatesByCAResponse;
+    type Error = ListCertificatesByCAError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/certificates-by-ca/{ca_certificate_id}",
-            ca_certificate_id = input.ca_certificate_id
+            ca_certificate_id = self.ca_certificate_id
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21433,29 +23178,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the search indices.</p>
-    fn list_indices(
-        &self,
-        input: ListIndicesRequest,
-    ) -> RusotoFuture<ListIndicesResponse, ListIndicesError> {
+impl ServiceRequest for ListIndicesRequest {
+    type Output = ListIndicesResponse;
+    type Error = ListIndicesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/indices";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21473,32 +23224,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the job executions for a job.</p>
-    fn list_job_executions_for_job(
-        &self,
-        input: ListJobExecutionsForJobRequest,
-    ) -> RusotoFuture<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError> {
-        let request_uri = format!("/jobs/{job_id}/things", job_id = input.job_id);
+impl ServiceRequest for ListJobExecutionsForJobRequest {
+    type Output = ListJobExecutionsForJobResponse;
+    type Error = ListJobExecutionsForJobError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}/things", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.status {
+        if let Some(ref x) = self.status {
             params.put("status", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21513,32 +23270,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the job executions for the specified thing.</p>
-    fn list_job_executions_for_thing(
-        &self,
-        input: ListJobExecutionsForThingRequest,
-    ) -> RusotoFuture<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError> {
-        let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
+impl ServiceRequest for ListJobExecutionsForThingRequest {
+    type Output = ListJobExecutionsForThingResponse;
+    type Error = ListJobExecutionsForThingError;
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/things/{thing_name}/jobs", thing_name = self.thing_name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.status {
+        if let Some(ref x) = self.status {
             params.put("status", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21553,38 +23316,47 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists jobs.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+impl ServiceRequest for ListJobsRequest {
+    type Output = ListJobsResponse;
+    type Error = ListJobsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/jobs";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.status {
+        if let Some(ref x) = self.status {
             params.put("status", x);
         }
-        if let Some(ref x) = input.target_selection {
+        if let Some(ref x) = self.target_selection {
             params.put("targetSelection", x);
         }
-        if let Some(ref x) = input.thing_group_id {
+        if let Some(ref x) = self.thing_group_id {
             params.put("thingGroupId", x);
         }
-        if let Some(ref x) = input.thing_group_name {
+        if let Some(ref x) = self.thing_group_name {
             params.put("thingGroupName", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21602,32 +23374,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists OTA updates.</p>
-    fn list_ota_updates(
-        &self,
-        input: ListOTAUpdatesRequest,
-    ) -> RusotoFuture<ListOTAUpdatesResponse, ListOTAUpdatesError> {
+impl ServiceRequest for ListOTAUpdatesRequest {
+    type Output = ListOTAUpdatesResponse;
+    type Error = ListOTAUpdatesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/otaUpdates";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.ota_update_status {
+        if let Some(ref x) = self.ota_update_status {
             params.put("otaUpdateStatus", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21645,32 +23423,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists certificates that are being transferred but not yet accepted.</p>
-    fn list_outgoing_certificates(
-        &self,
-        input: ListOutgoingCertificatesRequest,
-    ) -> RusotoFuture<ListOutgoingCertificatesResponse, ListOutgoingCertificatesError> {
+impl ServiceRequest for ListOutgoingCertificatesRequest {
+    type Output = ListOutgoingCertificatesResponse;
+    type Error = ListOutgoingCertificatesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/certificates-out-going";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21685,32 +23469,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists your policies.</p>
-    fn list_policies(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
+impl ServiceRequest for ListPoliciesRequest {
+    type Output = ListPoliciesResponse;
+    type Error = ListPoliciesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/policies";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21728,33 +23518,39 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
-    fn list_policy_principals(
-        &self,
-        input: ListPolicyPrincipalsRequest,
-    ) -> RusotoFuture<ListPolicyPrincipalsResponse, ListPolicyPrincipalsError> {
+impl ServiceRequest for ListPolicyPrincipalsRequest {
+    type Output = ListPolicyPrincipalsResponse;
+    type Error = ListPolicyPrincipalsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/policy-principals";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-policy", &input.policy_name);
+        request.add_header("x-amzn-iot-policy", &self.policy_name);
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21771,23 +23567,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the versions of the specified policy and identifies the default version.</p>
-    fn list_policy_versions(
-        &self,
-        input: ListPolicyVersionsRequest,
-    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError> {
+impl ServiceRequest for ListPolicyVersionsRequest {
+    type Output = ListPolicyVersionsResponse;
+    type Error = ListPolicyVersionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/policies/{policy_name}/version",
-            policy_name = input.policy_name
+            policy_name = self.policy_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21805,33 +23607,39 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
-    fn list_principal_policies(
-        &self,
-        input: ListPrincipalPoliciesRequest,
-    ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError> {
+impl ServiceRequest for ListPrincipalPoliciesRequest {
+    type Output = ListPrincipalPoliciesResponse;
+    type Error = ListPrincipalPoliciesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/principal-policies";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-principal", &input.principal);
+        request.add_header("x-amzn-iot-principal", &self.principal);
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21848,30 +23656,36 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
-    fn list_principal_things(
-        &self,
-        input: ListPrincipalThingsRequest,
-    ) -> RusotoFuture<ListPrincipalThingsResponse, ListPrincipalThingsError> {
+impl ServiceRequest for ListPrincipalThingsRequest {
+    type Output = ListPrincipalThingsResponse;
+    type Error = ListPrincipalThingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/principals/things";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-principal", &input.principal);
+        request.add_header("x-amzn-principal", &self.principal);
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21888,32 +23702,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the role aliases registered in your account.</p>
-    fn list_role_aliases(
-        &self,
-        input: ListRoleAliasesRequest,
-    ) -> RusotoFuture<ListRoleAliasesResponse, ListRoleAliasesError> {
+impl ServiceRequest for ListRoleAliasesRequest {
+    type Output = ListRoleAliasesResponse;
+    type Error = ListRoleAliasesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/role-aliases";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21931,29 +23751,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists all of your scheduled audits.</p>
-    fn list_scheduled_audits(
-        &self,
-        input: ListScheduledAuditsRequest,
-    ) -> RusotoFuture<ListScheduledAuditsResponse, ListScheduledAuditsError> {
+impl ServiceRequest for ListScheduledAuditsRequest {
+    type Output = ListScheduledAuditsResponse;
+    type Error = ListScheduledAuditsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/audit/scheduledaudits";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -21970,29 +23796,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the Device Defender security profiles you have created. You can use filters to list only those security profiles associated with a thing group or only those associated with your account.</p>
-    fn list_security_profiles(
-        &self,
-        input: ListSecurityProfilesRequest,
-    ) -> RusotoFuture<ListSecurityProfilesResponse, ListSecurityProfilesError> {
+impl ServiceRequest for ListSecurityProfilesRequest {
+    type Output = ListSecurityProfilesResponse;
+    type Error = ListSecurityProfilesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/security-profiles";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22009,37 +23841,42 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the Device Defender security profiles attached to a target (thing group).</p>
-    fn list_security_profiles_for_target(
-        &self,
-        input: ListSecurityProfilesForTargetRequest,
-    ) -> RusotoFuture<ListSecurityProfilesForTargetResponse, ListSecurityProfilesForTargetError>
-    {
+impl ServiceRequest for ListSecurityProfilesForTargetRequest {
+    type Output = ListSecurityProfilesForTargetResponse;
+    type Error = ListSecurityProfilesForTargetError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/security-profiles-for-target";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.recursive {
+        if let Some(ref x) = self.recursive {
             params.put("recursive", x);
         }
         params.put(
             "securityProfileTargetArn",
-            &input.security_profile_target_arn,
+            &self.security_profile_target_arn,
         );
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22054,32 +23891,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists all of the streams in your AWS account.</p>
-    fn list_streams(
-        &self,
-        input: ListStreamsRequest,
-    ) -> RusotoFuture<ListStreamsResponse, ListStreamsError> {
+impl ServiceRequest for ListStreamsRequest {
+    type Output = ListStreamsResponse;
+    type Error = ListStreamsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/streams";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.ascending_order {
+        if let Some(ref x) = self.ascending_order {
             params.put("isAscendingOrder", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22097,27 +23940,33 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/tags";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        params.put("resourceArn", &input.resource_arn);
+        params.put("resourceArn", &self.resource_arn);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22134,32 +23983,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>List targets for the specified policy.</p>
-    fn list_targets_for_policy(
-        &self,
-        input: ListTargetsForPolicyRequest,
-    ) -> RusotoFuture<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
+impl ServiceRequest for ListTargetsForPolicyRequest {
+    type Output = ListTargetsForPolicyResponse;
+    type Error = ListTargetsForPolicyError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/policy-targets/{policy_name}",
-            policy_name = input.policy_name
+            policy_name = self.policy_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("marker", x);
         }
-        if let Some(ref x) = input.page_size {
+        if let Some(ref x) = self.page_size {
             params.put("pageSize", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22176,33 +24031,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the targets (thing groups) associated with a given Device Defender security profile.</p>
-    fn list_targets_for_security_profile(
-        &self,
-        input: ListTargetsForSecurityProfileRequest,
-    ) -> RusotoFuture<ListTargetsForSecurityProfileResponse, ListTargetsForSecurityProfileError>
-    {
+impl ServiceRequest for ListTargetsForSecurityProfileRequest {
+    type Output = ListTargetsForSecurityProfileResponse;
+    type Error = ListTargetsForSecurityProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}/targets",
-            security_profile_name = input.security_profile_name
+            security_profile_name = self.security_profile_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22217,38 +24077,44 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>List the thing groups in your account.</p>
-    fn list_thing_groups(
-        &self,
-        input: ListThingGroupsRequest,
-    ) -> RusotoFuture<ListThingGroupsResponse, ListThingGroupsError> {
+impl ServiceRequest for ListThingGroupsRequest {
+    type Output = ListThingGroupsResponse;
+    type Error = ListThingGroupsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/thing-groups";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.name_prefix_filter {
+        if let Some(ref x) = self.name_prefix_filter {
             params.put("namePrefixFilter", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.parent_group {
+        if let Some(ref x) = self.parent_group {
             params.put("parentGroup", x);
         }
-        if let Some(ref x) = input.recursive {
+        if let Some(ref x) = self.recursive {
             params.put("recursive", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22266,32 +24132,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>List the thing groups to which the specified thing belongs.</p>
-    fn list_thing_groups_for_thing(
-        &self,
-        input: ListThingGroupsForThingRequest,
-    ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError> {
+impl ServiceRequest for ListThingGroupsForThingRequest {
+    type Output = ListThingGroupsForThingResponse;
+    type Error = ListThingGroupsForThingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/thing-groups",
-            thing_name = input.thing_name
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22306,23 +24178,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
-    fn list_thing_principals(
-        &self,
-        input: ListThingPrincipalsRequest,
-    ) -> RusotoFuture<ListThingPrincipalsResponse, ListThingPrincipalsError> {
+impl ServiceRequest for ListThingPrincipalsRequest {
+    type Output = ListThingPrincipalsResponse;
+    type Error = ListThingPrincipalsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/things/{thing_name}/principals",
-            thing_name = input.thing_name
+            thing_name = self.thing_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22339,34 +24217,39 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Information about the thing registration tasks.</p>
-    fn list_thing_registration_task_reports(
-        &self,
-        input: ListThingRegistrationTaskReportsRequest,
-    ) -> RusotoFuture<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>
-    {
+impl ServiceRequest for ListThingRegistrationTaskReportsRequest {
+    type Output = ListThingRegistrationTaskReportsResponse;
+    type Error = ListThingRegistrationTaskReportsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/reports",
-            task_id = input.task_id
+            task_id = self.task_id
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        params.put("reportType", &input.report_type);
+        params.put("reportType", &self.report_type);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22383,32 +24266,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>List bulk thing provisioning tasks.</p>
-    fn list_thing_registration_tasks(
-        &self,
-        input: ListThingRegistrationTasksRequest,
-    ) -> RusotoFuture<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError> {
+impl ServiceRequest for ListThingRegistrationTasksRequest {
+    type Output = ListThingRegistrationTasksResponse;
+    type Error = ListThingRegistrationTasksError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/thing-registration-tasks";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.status {
+        if let Some(ref x) = self.status {
             params.put("status", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22423,32 +24312,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the existing thing types.</p>
-    fn list_thing_types(
-        &self,
-        input: ListThingTypesRequest,
-    ) -> RusotoFuture<ListThingTypesResponse, ListThingTypesError> {
+impl ServiceRequest for ListThingTypesRequest {
+    type Output = ListThingTypesResponse;
+    type Error = ListThingTypesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/thing-types";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.thing_type_name {
+        if let Some(ref x) = self.thing_type_name {
             params.put("thingTypeName", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22466,38 +24361,44 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists your things. Use the <b>attributeName</b> and <b>attributeValue</b> parameters to filter your things. For example, calling <code>ListThings</code> with attributeName=Color and attributeValue=Red retrieves all things in the registry that contain an attribute <b>Color</b> with the value <b>Red</b>. </p>
-    fn list_things(
-        &self,
-        input: ListThingsRequest,
-    ) -> RusotoFuture<ListThingsResponse, ListThingsError> {
+impl ServiceRequest for ListThingsRequest {
+    type Output = ListThingsResponse;
+    type Error = ListThingsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/things";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.attribute_name {
+        if let Some(ref x) = self.attribute_name {
             params.put("attributeName", x);
         }
-        if let Some(ref x) = input.attribute_value {
+        if let Some(ref x) = self.attribute_value {
             params.put("attributeValue", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.thing_type_name {
+        if let Some(ref x) = self.thing_type_name {
             params.put("thingTypeName", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22515,32 +24416,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the things you have added to the given billing group.</p>
-    fn list_things_in_billing_group(
-        &self,
-        input: ListThingsInBillingGroupRequest,
-    ) -> RusotoFuture<ListThingsInBillingGroupResponse, ListThingsInBillingGroupError> {
+impl ServiceRequest for ListThingsInBillingGroupRequest {
+    type Output = ListThingsInBillingGroupResponse;
+    type Error = ListThingsInBillingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}/things",
-            billing_group_name = input.billing_group_name
+            billing_group_name = self.billing_group_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22555,35 +24462,41 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the things in the specified group.</p>
-    fn list_things_in_thing_group(
-        &self,
-        input: ListThingsInThingGroupRequest,
-    ) -> RusotoFuture<ListThingsInThingGroupResponse, ListThingsInThingGroupError> {
+impl ServiceRequest for ListThingsInThingGroupRequest {
+    type Output = ListThingsInThingGroupResponse;
+    type Error = ListThingsInThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}/things",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.recursive {
+        if let Some(ref x) = self.recursive {
             params.put("recursive", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22600,35 +24513,41 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the rules for the specific topic.</p>
-    fn list_topic_rules(
-        &self,
-        input: ListTopicRulesRequest,
-    ) -> RusotoFuture<ListTopicRulesResponse, ListTopicRulesError> {
+impl ServiceRequest for ListTopicRulesRequest {
+    type Output = ListTopicRulesResponse;
+    type Error = ListTopicRulesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/rules";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.rule_disabled {
+        if let Some(ref x) = self.rule_disabled {
             params.put("ruleDisabled", x);
         }
-        if let Some(ref x) = input.topic {
+        if let Some(ref x) = self.topic {
             params.put("topic", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22646,32 +24565,38 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists logging levels.</p>
-    fn list_v2_logging_levels(
-        &self,
-        input: ListV2LoggingLevelsRequest,
-    ) -> RusotoFuture<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError> {
+impl ServiceRequest for ListV2LoggingLevelsRequest {
+    type Output = ListV2LoggingLevelsResponse;
+    type Error = ListV2LoggingLevelsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2LoggingLevel";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.target_type {
+        if let Some(ref x) = self.target_type {
             params.put("targetType", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22688,37 +24613,43 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Lists the Device Defender security profile violations discovered during the given time period. You can use filters to limit the results to those alerts issued for a particular security profile, behavior or thing (device).</p>
-    fn list_violation_events(
-        &self,
-        input: ListViolationEventsRequest,
-    ) -> RusotoFuture<ListViolationEventsResponse, ListViolationEventsError> {
+impl ServiceRequest for ListViolationEventsRequest {
+    type Output = ListViolationEventsResponse;
+    type Error = ListViolationEventsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/violation-events";
 
-        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        params.put("endTime", &input.end_time);
-        if let Some(ref x) = input.max_results {
+        params.put("endTime", &self.end_time);
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.security_profile_name {
+        if let Some(ref x) = self.security_profile_name {
             params.put("securityProfileName", x);
         }
-        params.put("startTime", &input.start_time);
-        if let Some(ref x) = input.thing_name {
+        params.put("startTime", &self.start_time);
+        if let Some(ref x) = self.thing_name {
             params.put("thingName", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22735,31 +24666,37 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
-    fn register_ca_certificate(
-        &self,
-        input: RegisterCACertificateRequest,
-    ) -> RusotoFuture<RegisterCACertificateResponse, RegisterCACertificateError> {
+impl ServiceRequest for RegisterCACertificateRequest {
+    type Output = RegisterCACertificateResponse;
+    type Error = RegisterCACertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/cacertificate";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.allow_auto_registration {
+        if let Some(ref x) = self.allow_auto_registration {
             params.put("allowAutoRegistration", x);
         }
-        if let Some(ref x) = input.set_as_active {
+        if let Some(ref x) = self.set_as_active {
             params.put("setAsActive", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22776,22 +24713,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Registers a device certificate with AWS IoT. If you have more than one CA certificate that has the same subject field, you must specify the CA certificate that was used to sign the device certificate being registered.</p>
-    fn register_certificate(
-        &self,
-        input: RegisterCertificateRequest,
-    ) -> RusotoFuture<RegisterCertificateResponse, RegisterCertificateError> {
+impl ServiceRequest for RegisterCertificateRequest {
+    type Output = RegisterCertificateResponse;
+    type Error = RegisterCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/certificate/register";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22808,22 +24751,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Provisions a thing.</p>
-    fn register_thing(
-        &self,
-        input: RegisterThingRequest,
-    ) -> RusotoFuture<RegisterThingResponse, RegisterThingError> {
+impl ServiceRequest for RegisterThingRequest {
+    type Output = RegisterThingResponse;
+    type Error = RegisterThingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/things";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22841,28 +24790,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
-    fn reject_certificate_transfer(
-        &self,
-        input: RejectCertificateTransferRequest,
-    ) -> RusotoFuture<(), RejectCertificateTransferError> {
+impl ServiceRequest for RejectCertificateTransferRequest {
+    type Output = RejectCertificateTransferResponse;
+    type Error = RejectCertificateTransferError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/reject-certificate-transfer/{certificate_id}",
-            certificate_id = input.certificate_id
+            certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = RejectCertificateTransferResponse {};
 
                     Ok(result)
                 }))
@@ -22873,22 +24828,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Removes the given thing from the billing group.</p>
-    fn remove_thing_from_billing_group(
-        &self,
-        input: RemoveThingFromBillingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromBillingGroupResponse, RemoveThingFromBillingGroupError> {
+impl ServiceRequest for RemoveThingFromBillingGroupRequest {
+    type Output = RemoveThingFromBillingGroupResponse;
+    type Error = RemoveThingFromBillingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/billing-groups/removeThingFromBillingGroup";
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22903,22 +24864,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Remove the specified thing from the specified group.</p>
-    fn remove_thing_from_thing_group(
-        &self,
-        input: RemoveThingFromThingGroupRequest,
-    ) -> RusotoFuture<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError> {
+impl ServiceRequest for RemoveThingFromThingGroupRequest {
+    type Output = RemoveThingFromThingGroupResponse;
+    type Error = RemoveThingFromThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/thing-groups/removeThingFromThingGroup";
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22933,25 +24900,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
-    fn replace_topic_rule(
-        &self,
-        input: ReplaceTopicRuleRequest,
-    ) -> RusotoFuture<(), ReplaceTopicRuleError> {
-        let request_uri = format!("/rules/{rule_name}", rule_name = input.rule_name);
+impl ServiceRequest for ReplaceTopicRuleRequest {
+    type Output = ReplaceTopicRuleResponse;
+    type Error = ReplaceTopicRuleError;
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/rules/{rule_name}", rule_name = self.rule_name);
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
+        let encoded = Some(serde_json::to_vec(&self.topic_rule_payload).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = ReplaceTopicRuleResponse {};
 
                     Ok(result)
                 }))
@@ -22965,22 +24938,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>The query search index.</p>
-    fn search_index(
-        &self,
-        input: SearchIndexRequest,
-    ) -> RusotoFuture<SearchIndexResponse, SearchIndexError> {
+impl ServiceRequest for SearchIndexRequest {
+    type Output = SearchIndexResponse;
+    type Error = SearchIndexError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/indices/search";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -22998,22 +24977,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
-    fn set_default_authorizer(
-        &self,
-        input: SetDefaultAuthorizerRequest,
-    ) -> RusotoFuture<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError> {
+impl ServiceRequest for SetDefaultAuthorizerRequest {
+    type Output = SetDefaultAuthorizerResponse;
+    type Error = SetDefaultAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/default-authorizer";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23030,27 +25015,33 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
-    fn set_default_policy_version(
-        &self,
-        input: SetDefaultPolicyVersionRequest,
-    ) -> RusotoFuture<(), SetDefaultPolicyVersionError> {
+impl ServiceRequest for SetDefaultPolicyVersionRequest {
+    type Output = SetDefaultPolicyVersionResponse;
+    type Error = SetDefaultPolicyVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/policies/{policy_name}/version/{policy_version_id}",
-            policy_name = input.policy_name,
-            policy_version_id = input.policy_version_id
+            policy_name = self.policy_name,
+            policy_version_id = self.policy_version_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = SetDefaultPolicyVersionResponse {};
 
                     Ok(result)
                 }))
@@ -23061,25 +25052,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Sets the logging options.</p> <p>NOTE: use of this command is not recommended. Use <code>SetV2LoggingOptions</code> instead.</p>
-    fn set_logging_options(
-        &self,
-        input: SetLoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetLoggingOptionsError> {
+impl ServiceRequest for SetLoggingOptionsRequest {
+    type Output = SetLoggingOptionsResponse;
+    type Error = SetLoggingOptionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/loggingOptions";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input.logging_options_payload).unwrap());
+        let encoded = Some(serde_json::to_vec(&self.logging_options_payload).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = SetLoggingOptionsResponse {};
 
                     Ok(result)
                 }))
@@ -23093,25 +25090,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Sets the logging level.</p>
-    fn set_v2_logging_level(
-        &self,
-        input: SetV2LoggingLevelRequest,
-    ) -> RusotoFuture<(), SetV2LoggingLevelError> {
+impl ServiceRequest for SetV2LoggingLevelRequest {
+    type Output = SetV2LoggingLevelResponse;
+    type Error = SetV2LoggingLevelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2LoggingLevel";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = SetV2LoggingLevelResponse {};
 
                     Ok(result)
                 }))
@@ -23125,25 +25128,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Sets the logging options for the V2 logging service.</p>
-    fn set_v2_logging_options(
-        &self,
-        input: SetV2LoggingOptionsRequest,
-    ) -> RusotoFuture<(), SetV2LoggingOptionsError> {
+impl ServiceRequest for SetV2LoggingOptionsRequest {
+    type Output = SetV2LoggingOptionsResponse;
+    type Error = SetV2LoggingOptionsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/v2LoggingOptions";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = SetV2LoggingOptionsResponse {};
 
                     Ok(result)
                 }))
@@ -23156,22 +25165,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Starts an on-demand Device Defender audit.</p>
-    fn start_on_demand_audit_task(
-        &self,
-        input: StartOnDemandAuditTaskRequest,
-    ) -> RusotoFuture<StartOnDemandAuditTaskResponse, StartOnDemandAuditTaskError> {
+impl ServiceRequest for StartOnDemandAuditTaskRequest {
+    type Output = StartOnDemandAuditTaskResponse;
+    type Error = StartOnDemandAuditTaskError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/audit/tasks";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23188,22 +25203,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Creates a bulk thing provisioning task.</p>
-    fn start_thing_registration_task(
-        &self,
-        input: StartThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError> {
+impl ServiceRequest for StartThingRegistrationTaskRequest {
+    type Output = StartThingRegistrationTaskResponse;
+    type Error = StartThingRegistrationTaskError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/thing-registration-tasks";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23218,23 +25239,29 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Cancels a bulk thing provisioning task.</p>
-    fn stop_thing_registration_task(
-        &self,
-        input: StopThingRegistrationTaskRequest,
-    ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError> {
+impl ServiceRequest for StopThingRegistrationTaskRequest {
+    type Output = StopThingRegistrationTaskResponse;
+    type Error = StopThingRegistrationTaskError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-registration-tasks/{task_id}/cancel",
-            task_id = input.task_id
+            task_id = self.task_id
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23249,22 +25276,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/tags";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23282,28 +25315,34 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    fn test_authorization(
-        &self,
-        input: TestAuthorizationRequest,
-    ) -> RusotoFuture<TestAuthorizationResponse, TestAuthorizationError> {
+impl ServiceRequest for TestAuthorizationRequest {
+    type Output = TestAuthorizationResponse;
+    type Error = TestAuthorizationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/test-authorization";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.client_id {
+        if let Some(ref x) = self.client_id {
             params.put("clientId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23321,25 +25360,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Tests a custom authorization behavior by invoking a specified custom authorizer. Use this to test and debug the custom authorization behavior of devices that connect to the AWS IoT device gateway.</p>
-    fn test_invoke_authorizer(
-        &self,
-        input: TestInvokeAuthorizerRequest,
-    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+impl ServiceRequest for TestInvokeAuthorizerRequest {
+    type Output = TestInvokeAuthorizerResponse;
+    type Error = TestInvokeAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}/test",
-            authorizer_name = input.authorizer_name
+            authorizer_name = self.authorizer_name
         );
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23356,29 +25401,35 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
-    fn transfer_certificate(
-        &self,
-        input: TransferCertificateRequest,
-    ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError> {
+impl ServiceRequest for TransferCertificateRequest {
+    type Output = TransferCertificateResponse;
+    type Error = TransferCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/transfer-certificate/{certificate_id}",
-            certificate_id = input.certificate_id
+            certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        params.put("targetAwsAccount", &input.target_aws_account);
+        params.put("targetAwsAccount", &self.target_aws_account);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23395,22 +25446,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Removes the given tags (metadata) from the resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/untag";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23428,23 +25485,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
-    fn update_account_audit_configuration(
-        &self,
-        input: UpdateAccountAuditConfigurationRequest,
-    ) -> RusotoFuture<UpdateAccountAuditConfigurationResponse, UpdateAccountAuditConfigurationError>
-    {
+impl ServiceRequest for UpdateAccountAuditConfigurationRequest {
+    type Output = UpdateAccountAuditConfigurationResponse;
+    type Error = UpdateAccountAuditConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/audit/configuration";
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23461,25 +25523,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates an authorizer.</p>
-    fn update_authorizer(
-        &self,
-        input: UpdateAuthorizerRequest,
-    ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError> {
+impl ServiceRequest for UpdateAuthorizerRequest {
+    type Output = UpdateAuthorizerResponse;
+    type Error = UpdateAuthorizerError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/authorizer/{authorizer_name}",
-            authorizer_name = input.authorizer_name
+            authorizer_name = self.authorizer_name
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23497,25 +25565,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates information about the billing group.</p>
-    fn update_billing_group(
-        &self,
-        input: UpdateBillingGroupRequest,
-    ) -> RusotoFuture<UpdateBillingGroupResponse, UpdateBillingGroupError> {
+impl ServiceRequest for UpdateBillingGroupRequest {
+    type Output = UpdateBillingGroupResponse;
+    type Error = UpdateBillingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/billing-groups/{billing_group_name}",
-            billing_group_name = input.billing_group_name
+            billing_group_name = self.billing_group_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23533,37 +25607,43 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates a registered CA certificate.</p>
-    fn update_ca_certificate(
-        &self,
-        input: UpdateCACertificateRequest,
-    ) -> RusotoFuture<(), UpdateCACertificateError> {
+impl ServiceRequest for UpdateCACertificateRequest {
+    type Output = UpdateCACertificateResponse;
+    type Error = UpdateCACertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/cacertificate/{ca_certificate_id}",
-            ca_certificate_id = input.certificate_id
+            ca_certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.new_auto_registration_status {
+        if let Some(ref x) = self.new_auto_registration_status {
             params.put("newAutoRegistrationStatus", x);
         }
-        if let Some(ref x) = input.new_status {
+        if let Some(ref x) = self.new_status {
             params.put("newStatus", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateCACertificateResponse {};
 
                     Ok(result)
                 }))
@@ -23576,30 +25656,36 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates the status of the specified certificate. This operation is idempotent.</p> <p>Moving a certificate from the ACTIVE state (including REVOKED) will not disconnect currently connected devices, but these devices will be unable to reconnect.</p> <p>The ACTIVE state is required to authenticate devices connecting to AWS IoT using a certificate.</p>
-    fn update_certificate(
-        &self,
-        input: UpdateCertificateRequest,
-    ) -> RusotoFuture<(), UpdateCertificateError> {
+impl ServiceRequest for UpdateCertificateRequest {
+    type Output = UpdateCertificateResponse;
+    type Error = UpdateCertificateError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/certificates/{certificate_id}",
-            certificate_id = input.certificate_id
+            certificate_id = self.certificate_id
         );
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
 
         let mut params = Params::new();
-        params.put("newStatus", &input.new_status);
+        params.put("newStatus", &self.new_status);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateCertificateResponse {};
 
                     Ok(result)
                 }))
@@ -23613,25 +25699,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates a dynamic thing group.</p>
-    fn update_dynamic_thing_group(
-        &self,
-        input: UpdateDynamicThingGroupRequest,
-    ) -> RusotoFuture<UpdateDynamicThingGroupResponse, UpdateDynamicThingGroupError> {
+impl ServiceRequest for UpdateDynamicThingGroupRequest {
+    type Output = UpdateDynamicThingGroupResponse;
+    type Error = UpdateDynamicThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/dynamic-thing-groups/{thing_group_name}",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23646,22 +25738,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates the event configurations.</p>
-    fn update_event_configurations(
-        &self,
-        input: UpdateEventConfigurationsRequest,
-    ) -> RusotoFuture<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError> {
+impl ServiceRequest for UpdateEventConfigurationsRequest {
+    type Output = UpdateEventConfigurationsResponse;
+    type Error = UpdateEventConfigurationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/event-configurations";
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23676,22 +25774,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates the search configuration.</p>
-    fn update_indexing_configuration(
-        &self,
-        input: UpdateIndexingConfigurationRequest,
-    ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError> {
+impl ServiceRequest for UpdateIndexingConfigurationRequest {
+    type Output = UpdateIndexingConfigurationResponse;
+    type Error = UpdateIndexingConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/indexing/config";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23706,22 +25810,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates supported fields of the specified job.</p>
-    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<(), UpdateJobError> {
-        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+impl ServiceRequest for UpdateJobRequest {
+    type Output = UpdateJobResponse;
+    type Error = UpdateJobError;
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/jobs/{job_id}", job_id = self.job_id);
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UpdateJobResponse {};
 
                     Ok(result)
                 }))
@@ -23735,22 +25848,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates a role alias.</p>
-    fn update_role_alias(
-        &self,
-        input: UpdateRoleAliasRequest,
-    ) -> RusotoFuture<UpdateRoleAliasResponse, UpdateRoleAliasError> {
-        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+impl ServiceRequest for UpdateRoleAliasRequest {
+    type Output = UpdateRoleAliasResponse;
+    type Error = UpdateRoleAliasError;
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = self.role_alias);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23768,25 +25887,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates a scheduled audit, including what checks are performed and how often the audit takes place.</p>
-    fn update_scheduled_audit(
-        &self,
-        input: UpdateScheduledAuditRequest,
-    ) -> RusotoFuture<UpdateScheduledAuditResponse, UpdateScheduledAuditError> {
+impl ServiceRequest for UpdateScheduledAuditRequest {
+    type Output = UpdateScheduledAuditResponse;
+    type Error = UpdateScheduledAuditError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/audit/scheduledaudits/{scheduled_audit_name}",
-            scheduled_audit_name = input.scheduled_audit_name
+            scheduled_audit_name = self.scheduled_audit_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23803,31 +25928,37 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates a Device Defender security profile.</p>
-    fn update_security_profile(
-        &self,
-        input: UpdateSecurityProfileRequest,
-    ) -> RusotoFuture<UpdateSecurityProfileResponse, UpdateSecurityProfileError> {
+impl ServiceRequest for UpdateSecurityProfileRequest {
+    type Output = UpdateSecurityProfileResponse;
+    type Error = UpdateSecurityProfileError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/security-profiles/{security_profile_name}",
-            security_profile_name = input.security_profile_name
+            security_profile_name = self.security_profile_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.expected_version {
+        if let Some(ref x) = self.expected_version {
             params.put("expectedVersion", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23844,22 +25975,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
-    fn update_stream(
-        &self,
-        input: UpdateStreamRequest,
-    ) -> RusotoFuture<UpdateStreamResponse, UpdateStreamError> {
-        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+impl ServiceRequest for UpdateStreamRequest {
+    type Output = UpdateStreamResponse;
+    type Error = UpdateStreamError;
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = self.stream_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23877,22 +26014,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates the data for a thing.</p>
-    fn update_thing(
-        &self,
-        input: UpdateThingRequest,
-    ) -> RusotoFuture<UpdateThingResponse, UpdateThingError> {
-        let request_uri = format!("/things/{thing_name}", thing_name = input.thing_name);
+impl ServiceRequest for UpdateThingRequest {
+    type Output = UpdateThingResponse;
+    type Error = UpdateThingError;
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/things/{thing_name}", thing_name = self.thing_name);
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23910,25 +26053,31 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Update a thing group.</p>
-    fn update_thing_group(
-        &self,
-        input: UpdateThingGroupRequest,
-    ) -> RusotoFuture<UpdateThingGroupResponse, UpdateThingGroupError> {
+impl ServiceRequest for UpdateThingGroupRequest {
+    type Output = UpdateThingGroupResponse;
+    type Error = UpdateThingGroupError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/thing-groups/{thing_group_name}",
-            thing_group_name = input.thing_group_name
+            thing_group_name = self.thing_group_name
         );
 
-        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PATCH", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23946,22 +26095,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Updates the groups to which the thing belongs.</p>
-    fn update_thing_groups_for_thing(
-        &self,
-        input: UpdateThingGroupsForThingRequest,
-    ) -> RusotoFuture<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError> {
+impl ServiceRequest for UpdateThingGroupsForThingRequest {
+    type Output = UpdateThingGroupsForThingResponse;
+    type Error = UpdateThingGroupsForThingError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/thing-groups/updateThingGroupsForThing";
 
-        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -23976,23 +26131,28 @@ impl Iot for IotClient {
             }
         })
     }
+}
 
-    /// <p>Validates a Device Defender security profile behaviors specification.</p>
-    fn validate_security_profile_behaviors(
-        &self,
-        input: ValidateSecurityProfileBehaviorsRequest,
-    ) -> RusotoFuture<ValidateSecurityProfileBehaviorsResponse, ValidateSecurityProfileBehaviorsError>
-    {
+impl ServiceRequest for ValidateSecurityProfileBehaviorsRequest {
+    type Output = ValidateSecurityProfileBehaviorsResponse;
+    type Error = ValidateSecurityProfileBehaviorsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/security-profile-behaviors/validate";
 
-        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "execute-api", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

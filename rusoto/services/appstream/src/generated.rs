@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -100,7 +101,7 @@ pub struct AssociateFleetRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AssociateFleetResult {}
+pub struct AssociateFleetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchAssociateUserStackRequest {
@@ -111,7 +112,7 @@ pub struct BatchAssociateUserStackRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchAssociateUserStackResult {
+pub struct BatchAssociateUserStackResponse {
     /// <p>The list of UserStackAssociationError objects.</p>
     #[serde(rename = "errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -127,7 +128,7 @@ pub struct BatchDisassociateUserStackRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchDisassociateUserStackResult {
+pub struct BatchDisassociateUserStackResponse {
     /// <p>The list of UserStackAssociationError objects.</p>
     #[serde(rename = "errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -204,7 +205,7 @@ pub struct CreateDirectoryConfigRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDirectoryConfigResult {
+pub struct CreateDirectoryConfigResponse {
     /// <p>Information about the directory configuration.</p>
     #[serde(rename = "DirectoryConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -274,7 +275,7 @@ pub struct CreateFleetRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateFleetResult {
+pub struct CreateFleetResponse {
     /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -329,7 +330,7 @@ pub struct CreateImageBuilderRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateImageBuilderResult {
+pub struct CreateImageBuilderResponse {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -349,7 +350,7 @@ pub struct CreateImageBuilderStreamingURLRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateImageBuilderStreamingURLResult {
+pub struct CreateImageBuilderStreamingURLResponse {
     /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
     #[serde(rename = "Expires")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -401,7 +402,7 @@ pub struct CreateStackRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateStackResult {
+pub struct CreateStackResponse {
     /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -435,7 +436,7 @@ pub struct CreateStreamingURLRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateStreamingURLResult {
+pub struct CreateStreamingURLResponse {
     /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
     #[serde(rename = "Expires")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -451,7 +452,7 @@ pub struct CreateUsageReportSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateUsageReportSubscriptionResult {
+pub struct CreateUsageReportSubscriptionResponse {
     /// <p>The Amazon S3 bucket where generated reports are stored. When a usage report subscription is enabled for the first time for an account in an AWS Region, an S3 bucket is created. The bucket is unique to the AWS account and the Region. </p>
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -486,7 +487,7 @@ pub struct CreateUserRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateUserResult {}
+pub struct CreateUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDirectoryConfigRequest {
@@ -497,7 +498,7 @@ pub struct DeleteDirectoryConfigRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDirectoryConfigResult {}
+pub struct DeleteDirectoryConfigResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteFleetRequest {
@@ -508,7 +509,7 @@ pub struct DeleteFleetRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteFleetResult {}
+pub struct DeleteFleetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteImageBuilderRequest {
@@ -519,7 +520,7 @@ pub struct DeleteImageBuilderRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteImageBuilderResult {
+pub struct DeleteImageBuilderResponse {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -538,7 +539,7 @@ pub struct DeleteImagePermissionsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteImagePermissionsResult {}
+pub struct DeleteImagePermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteImageRequest {
@@ -549,7 +550,7 @@ pub struct DeleteImageRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteImageResult {
+pub struct DeleteImageResponse {
     /// <p>Information about the image.</p>
     #[serde(rename = "Image")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -565,14 +566,14 @@ pub struct DeleteStackRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteStackResult {}
+pub struct DeleteStackResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUsageReportSubscriptionRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteUsageReportSubscriptionResult {}
+pub struct DeleteUsageReportSubscriptionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserRequest {
@@ -586,7 +587,7 @@ pub struct DeleteUserRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteUserResult {}
+pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDirectoryConfigsRequest {
@@ -606,7 +607,7 @@ pub struct DescribeDirectoryConfigsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeDirectoryConfigsResult {
+pub struct DescribeDirectoryConfigsResponse {
     /// <p>Information about the directory configurations. Note that although the response syntax in this topic includes the account password, this password is not returned in the actual response. </p>
     #[serde(rename = "DirectoryConfigs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -631,7 +632,7 @@ pub struct DescribeFleetsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeFleetsResult {
+pub struct DescribeFleetsResponse {
     /// <p>Information about the fleets.</p>
     #[serde(rename = "Fleets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -660,7 +661,7 @@ pub struct DescribeImageBuildersRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeImageBuildersResult {
+pub struct DescribeImageBuildersResponse {
     /// <p>Information about the image builders.</p>
     #[serde(rename = "ImageBuilders")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -692,7 +693,7 @@ pub struct DescribeImagePermissionsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeImagePermissionsResult {
+pub struct DescribeImagePermissionsResponse {
     /// <p>The name of the private image.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -733,7 +734,7 @@ pub struct DescribeImagesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeImagesResult {
+pub struct DescribeImagesResponse {
     /// <p>Information about the images.</p>
     #[serde(rename = "Images")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -772,7 +773,7 @@ pub struct DescribeSessionsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeSessionsResult {
+pub struct DescribeSessionsResponse {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -797,7 +798,7 @@ pub struct DescribeStacksRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeStacksResult {
+pub struct DescribeStacksResponse {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -822,7 +823,7 @@ pub struct DescribeUsageReportSubscriptionsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeUsageReportSubscriptionsResult {
+pub struct DescribeUsageReportSubscriptionsResponse {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -859,7 +860,7 @@ pub struct DescribeUserStackAssociationsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeUserStackAssociationsResult {
+pub struct DescribeUserStackAssociationsResponse {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -887,7 +888,7 @@ pub struct DescribeUsersRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeUsersResult {
+pub struct DescribeUsersResponse {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -931,7 +932,7 @@ pub struct DisableUserRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DisableUserResult {}
+pub struct DisableUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateFleetRequest {
@@ -945,7 +946,7 @@ pub struct DisassociateFleetRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DisassociateFleetResult {}
+pub struct DisassociateFleetResponse {}
 
 /// <p>Describes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -972,7 +973,7 @@ pub struct EnableUserRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct EnableUserResult {}
+pub struct EnableUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExpireSessionRequest {
@@ -983,7 +984,7 @@ pub struct ExpireSessionRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ExpireSessionResult {}
+pub struct ExpireSessionResponse {}
 
 /// <p>Describes the parameters for a fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1270,7 +1271,7 @@ pub struct ListAssociatedFleetsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListAssociatedFleetsResult {
+pub struct ListAssociatedFleetsResponse {
     /// <p>The name of the fleet.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1294,7 +1295,7 @@ pub struct ListAssociatedStacksRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListAssociatedStacksResult {
+pub struct ListAssociatedStacksResponse {
     /// <p>The name of the stack.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1489,7 +1490,7 @@ pub struct StartFleetRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartFleetResult {}
+pub struct StartFleetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartImageBuilderRequest {
@@ -1504,7 +1505,7 @@ pub struct StartImageBuilderRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartImageBuilderResult {
+pub struct StartImageBuilderResponse {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1520,7 +1521,7 @@ pub struct StopFleetRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopFleetResult {}
+pub struct StopFleetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopImageBuilderRequest {
@@ -1531,7 +1532,7 @@ pub struct StopImageBuilderRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopImageBuilderResult {
+pub struct StopImageBuilderResponse {
     /// <p>Information about the image builder.</p>
     #[serde(rename = "ImageBuilder")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1599,7 +1600,7 @@ pub struct UpdateDirectoryConfigRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateDirectoryConfigResult {
+pub struct UpdateDirectoryConfigResponse {
     /// <p>Information about the Directory Config object.</p>
     #[serde(rename = "DirectoryConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1668,7 +1669,7 @@ pub struct UpdateFleetRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateFleetResult {
+pub struct UpdateFleetResponse {
     /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1690,7 +1691,7 @@ pub struct UpdateImagePermissionsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateImagePermissionsResult {}
+pub struct UpdateImagePermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStackRequest {
@@ -1733,7 +1734,7 @@ pub struct UpdateStackRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateStackResult {
+pub struct UpdateStackResponse {
     /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4071,281 +4072,212 @@ impl Error for UpdateStackError {
 /// Trait representing the capabilities of the Amazon AppStream API. Amazon AppStream clients implement this trait.
 pub trait AppStream {
     /// <p>Associates the specified fleet with the specified stack.</p>
-    fn associate_fleet(
-        &self,
-        input: AssociateFleetRequest,
-    ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError>;
+    fn associate_fleet(&self, input: AssociateFleetRequest) -> Request<AssociateFleetRequest>;
 
     /// <p>Associates the specified users with the specified stacks. Users in a user pool cannot be assigned to stacks with fleets that are joined to an Active Directory domain.</p>
     fn batch_associate_user_stack(
         &self,
         input: BatchAssociateUserStackRequest,
-    ) -> RusotoFuture<BatchAssociateUserStackResult, BatchAssociateUserStackError>;
+    ) -> Request<BatchAssociateUserStackRequest>;
 
     /// <p>Disassociates the specified users from the specified stacks.</p>
     fn batch_disassociate_user_stack(
         &self,
         input: BatchDisassociateUserStackRequest,
-    ) -> RusotoFuture<BatchDisassociateUserStackResult, BatchDisassociateUserStackError>;
+    ) -> Request<BatchDisassociateUserStackRequest>;
 
     /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
-    fn copy_image(
-        &self,
-        input: CopyImageRequest,
-    ) -> RusotoFuture<CopyImageResponse, CopyImageError>;
+    fn copy_image(&self, input: CopyImageRequest) -> Request<CopyImageRequest>;
 
     /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
     fn create_directory_config(
         &self,
         input: CreateDirectoryConfigRequest,
-    ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
+    ) -> Request<CreateDirectoryConfigRequest>;
 
     /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
-    fn create_fleet(
-        &self,
-        input: CreateFleetRequest,
-    ) -> RusotoFuture<CreateFleetResult, CreateFleetError>;
+    fn create_fleet(&self, input: CreateFleetRequest) -> Request<CreateFleetRequest>;
 
     /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
     fn create_image_builder(
         &self,
         input: CreateImageBuilderRequest,
-    ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError>;
+    ) -> Request<CreateImageBuilderRequest>;
 
     /// <p>Creates a URL to start an image builder streaming session.</p>
     fn create_image_builder_streaming_url(
         &self,
         input: CreateImageBuilderStreamingURLRequest,
-    ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>;
+    ) -> Request<CreateImageBuilderStreamingURLRequest>;
 
     /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
-    fn create_stack(
-        &self,
-        input: CreateStackRequest,
-    ) -> RusotoFuture<CreateStackResult, CreateStackError>;
+    fn create_stack(&self, input: CreateStackRequest) -> Request<CreateStackRequest>;
 
     /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
     fn create_streaming_url(
         &self,
         input: CreateStreamingURLRequest,
-    ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError>;
+    ) -> Request<CreateStreamingURLRequest>;
 
     /// <p>Creates a usage report subscription. Usage reports are generated daily.</p>
-    fn create_usage_report_subscription(
-        &self,
-    ) -> RusotoFuture<CreateUsageReportSubscriptionResult, CreateUsageReportSubscriptionError>;
+    fn create_usage_report_subscription(&self) -> Request<CreateUsageReportSubscriptionRequest>;
 
     /// <p>Creates a new user in the user pool.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResult, CreateUserError>;
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest>;
 
     /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
     fn delete_directory_config(
         &self,
         input: DeleteDirectoryConfigRequest,
-    ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
+    ) -> Request<DeleteDirectoryConfigRequest>;
 
     /// <p>Deletes the specified fleet.</p>
-    fn delete_fleet(
-        &self,
-        input: DeleteFleetRequest,
-    ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError>;
+    fn delete_fleet(&self, input: DeleteFleetRequest) -> Request<DeleteFleetRequest>;
 
     /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
-    fn delete_image(
-        &self,
-        input: DeleteImageRequest,
-    ) -> RusotoFuture<DeleteImageResult, DeleteImageError>;
+    fn delete_image(&self, input: DeleteImageRequest) -> Request<DeleteImageRequest>;
 
     /// <p>Deletes the specified image builder and releases the capacity.</p>
     fn delete_image_builder(
         &self,
         input: DeleteImageBuilderRequest,
-    ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError>;
+    ) -> Request<DeleteImageBuilderRequest>;
 
     /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
     fn delete_image_permissions(
         &self,
         input: DeleteImagePermissionsRequest,
-    ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError>;
+    ) -> Request<DeleteImagePermissionsRequest>;
 
     /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
-    fn delete_stack(
-        &self,
-        input: DeleteStackRequest,
-    ) -> RusotoFuture<DeleteStackResult, DeleteStackError>;
+    fn delete_stack(&self, input: DeleteStackRequest) -> Request<DeleteStackRequest>;
 
     /// <p>Disables usage report generation.</p>
-    fn delete_usage_report_subscription(
-        &self,
-    ) -> RusotoFuture<DeleteUsageReportSubscriptionResult, DeleteUsageReportSubscriptionError>;
+    fn delete_usage_report_subscription(&self) -> Request<DeleteUsageReportSubscriptionRequest>;
 
     /// <p>Deletes a user from the user pool.</p>
-    fn delete_user(
-        &self,
-        input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResult, DeleteUserError>;
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest>;
 
     /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the configuration information required to join fleets and image builders to Microsoft Active Directory domains. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
     fn describe_directory_configs(
         &self,
         input: DescribeDirectoryConfigsRequest,
-    ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
+    ) -> Request<DescribeDirectoryConfigsRequest>;
 
     /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
-    fn describe_fleets(
-        &self,
-        input: DescribeFleetsRequest,
-    ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError>;
+    fn describe_fleets(&self, input: DescribeFleetsRequest) -> Request<DescribeFleetsRequest>;
 
     /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
     fn describe_image_builders(
         &self,
         input: DescribeImageBuildersRequest,
-    ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError>;
+    ) -> Request<DescribeImageBuildersRequest>;
 
     /// <p>Retrieves a list that describes the permissions for shared AWS account IDs on a private image that you own. </p>
     fn describe_image_permissions(
         &self,
         input: DescribeImagePermissionsRequest,
-    ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError>;
+    ) -> Request<DescribeImagePermissionsRequest>;
 
     /// <p>Retrieves a list that describes one or more specified images, if the image names or image ARNs are provided. Otherwise, all images in the account are described.</p>
-    fn describe_images(
-        &self,
-        input: DescribeImagesRequest,
-    ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError>;
+    fn describe_images(&self, input: DescribeImagesRequest) -> Request<DescribeImagesRequest>;
 
     /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
-    fn describe_sessions(
-        &self,
-        input: DescribeSessionsRequest,
-    ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError>;
+    fn describe_sessions(&self, input: DescribeSessionsRequest)
+        -> Request<DescribeSessionsRequest>;
 
     /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
-    fn describe_stacks(
-        &self,
-        input: DescribeStacksRequest,
-    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError>;
+    fn describe_stacks(&self, input: DescribeStacksRequest) -> Request<DescribeStacksRequest>;
 
     /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
     fn describe_usage_report_subscriptions(
         &self,
         input: DescribeUsageReportSubscriptionsRequest,
-    ) -> RusotoFuture<DescribeUsageReportSubscriptionsResult, DescribeUsageReportSubscriptionsError>;
+    ) -> Request<DescribeUsageReportSubscriptionsRequest>;
 
     /// <p><p>Retrieves a list that describes the UserStackAssociation objects. You must specify either or both of the following:</p> <ul> <li> <p>The stack name</p> </li> <li> <p>The user name (email address of the user associated with the stack) and the authentication type for the user</p> </li> </ul></p>
     fn describe_user_stack_associations(
         &self,
         input: DescribeUserStackAssociationsRequest,
-    ) -> RusotoFuture<DescribeUserStackAssociationsResult, DescribeUserStackAssociationsError>;
+    ) -> Request<DescribeUserStackAssociationsRequest>;
 
     /// <p>Retrieves a list that describes one or more specified users in the user pool.</p>
-    fn describe_users(
-        &self,
-        input: DescribeUsersRequest,
-    ) -> RusotoFuture<DescribeUsersResult, DescribeUsersError>;
+    fn describe_users(&self, input: DescribeUsersRequest) -> Request<DescribeUsersRequest>;
 
     /// <p>Disables the specified user in the user pool. Users can't sign in to AppStream 2.0 until they are re-enabled. This action does not delete the user. </p>
-    fn disable_user(
-        &self,
-        input: DisableUserRequest,
-    ) -> RusotoFuture<DisableUserResult, DisableUserError>;
+    fn disable_user(&self, input: DisableUserRequest) -> Request<DisableUserRequest>;
 
     /// <p>Disassociates the specified fleet from the specified stack.</p>
     fn disassociate_fleet(
         &self,
         input: DisassociateFleetRequest,
-    ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError>;
+    ) -> Request<DisassociateFleetRequest>;
 
     /// <p>Enables a user in the user pool. After being enabled, users can sign in to AppStream 2.0 and open applications from the stacks to which they are assigned.</p>
-    fn enable_user(
-        &self,
-        input: EnableUserRequest,
-    ) -> RusotoFuture<EnableUserResult, EnableUserError>;
+    fn enable_user(&self, input: EnableUserRequest) -> Request<EnableUserRequest>;
 
     /// <p>Immediately stops the specified streaming session.</p>
-    fn expire_session(
-        &self,
-        input: ExpireSessionRequest,
-    ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError>;
+    fn expire_session(&self, input: ExpireSessionRequest) -> Request<ExpireSessionRequest>;
 
     /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
         input: ListAssociatedFleetsRequest,
-    ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
+    ) -> Request<ListAssociatedFleetsRequest>;
 
     /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
     fn list_associated_stacks(
         &self,
         input: ListAssociatedStacksRequest,
-    ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError>;
+    ) -> Request<ListAssociatedStacksRequest>;
 
     /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Starts the specified fleet.</p>
-    fn start_fleet(
-        &self,
-        input: StartFleetRequest,
-    ) -> RusotoFuture<StartFleetResult, StartFleetError>;
+    fn start_fleet(&self, input: StartFleetRequest) -> Request<StartFleetRequest>;
 
     /// <p>Starts the specified image builder.</p>
     fn start_image_builder(
         &self,
         input: StartImageBuilderRequest,
-    ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError>;
+    ) -> Request<StartImageBuilderRequest>;
 
     /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError>;
+    fn stop_fleet(&self, input: StopFleetRequest) -> Request<StopFleetRequest>;
 
     /// <p>Stops the specified image builder.</p>
     fn stop_image_builder(
         &self,
         input: StopImageBuilderRequest,
-    ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError>;
+    ) -> Request<StopImageBuilderRequest>;
 
     /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
     fn update_directory_config(
         &self,
         input: UpdateDirectoryConfigRequest,
-    ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
+    ) -> Request<UpdateDirectoryConfigRequest>;
 
     /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
-    fn update_fleet(
-        &self,
-        input: UpdateFleetRequest,
-    ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError>;
+    fn update_fleet(&self, input: UpdateFleetRequest) -> Request<UpdateFleetRequest>;
 
     /// <p>Adds or updates permissions for the specified private image. </p>
     fn update_image_permissions(
         &self,
         input: UpdateImagePermissionsRequest,
-    ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError>;
+    ) -> Request<UpdateImagePermissionsRequest>;
 
     /// <p>Updates the specified fields for the specified stack.</p>
-    fn update_stack(
-        &self,
-        input: UpdateStackRequest,
-    ) -> RusotoFuture<UpdateStackResult, UpdateStackError>;
+    fn update_stack(&self, input: UpdateStackRequest) -> Request<UpdateStackRequest>;
 }
 /// A client for the Amazon AppStream API.
 #[derive(Clone)]
@@ -4385,22 +4317,339 @@ impl AppStreamClient {
 
 impl AppStream for AppStreamClient {
     /// <p>Associates the specified fleet with the specified stack.</p>
-    fn associate_fleet(
+    fn associate_fleet(&self, input: AssociateFleetRequest) -> Request<AssociateFleetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates the specified users with the specified stacks. Users in a user pool cannot be assigned to stacks with fleets that are joined to an Active Directory domain.</p>
+    fn batch_associate_user_stack(
         &self,
-        input: AssociateFleetRequest,
-    ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        input: BatchAssociateUserStackRequest,
+    ) -> Request<BatchAssociateUserStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the specified users from the specified stacks.</p>
+    fn batch_disassociate_user_stack(
+        &self,
+        input: BatchDisassociateUserStackRequest,
+    ) -> Request<BatchDisassociateUserStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
+    fn copy_image(&self, input: CopyImageRequest) -> Request<CopyImageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
+    fn create_directory_config(
+        &self,
+        input: CreateDirectoryConfigRequest,
+    ) -> Request<CreateDirectoryConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
+    fn create_fleet(&self, input: CreateFleetRequest) -> Request<CreateFleetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
+    fn create_image_builder(
+        &self,
+        input: CreateImageBuilderRequest,
+    ) -> Request<CreateImageBuilderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a URL to start an image builder streaming session.</p>
+    fn create_image_builder_streaming_url(
+        &self,
+        input: CreateImageBuilderStreamingURLRequest,
+    ) -> Request<CreateImageBuilderStreamingURLRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
+    fn create_stack(&self, input: CreateStackRequest) -> Request<CreateStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
+    fn create_streaming_url(
+        &self,
+        input: CreateStreamingURLRequest,
+    ) -> Request<CreateStreamingURLRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a usage report subscription. Usage reports are generated daily.</p>
+    fn create_usage_report_subscription(&self) -> Request<CreateUsageReportSubscriptionRequest> {
+        Request::new(
+            CreateUsageReportSubscriptionRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Creates a new user in the user pool.</p>
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    fn delete_directory_config(
+        &self,
+        input: DeleteDirectoryConfigRequest,
+    ) -> Request<DeleteDirectoryConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified fleet.</p>
+    fn delete_fleet(&self, input: DeleteFleetRequest) -> Request<DeleteFleetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
+    fn delete_image(&self, input: DeleteImageRequest) -> Request<DeleteImageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified image builder and releases the capacity.</p>
+    fn delete_image_builder(
+        &self,
+        input: DeleteImageBuilderRequest,
+    ) -> Request<DeleteImageBuilderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
+    fn delete_image_permissions(
+        &self,
+        input: DeleteImagePermissionsRequest,
+    ) -> Request<DeleteImagePermissionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
+    fn delete_stack(&self, input: DeleteStackRequest) -> Request<DeleteStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables usage report generation.</p>
+    fn delete_usage_report_subscription(&self) -> Request<DeleteUsageReportSubscriptionRequest> {
+        Request::new(
+            DeleteUsageReportSubscriptionRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Deletes a user from the user pool.</p>
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the configuration information required to join fleets and image builders to Microsoft Active Directory domains. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
+    fn describe_directory_configs(
+        &self,
+        input: DescribeDirectoryConfigsRequest,
+    ) -> Request<DescribeDirectoryConfigsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
+    fn describe_fleets(&self, input: DescribeFleetsRequest) -> Request<DescribeFleetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
+    fn describe_image_builders(
+        &self,
+        input: DescribeImageBuildersRequest,
+    ) -> Request<DescribeImageBuildersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes the permissions for shared AWS account IDs on a private image that you own. </p>
+    fn describe_image_permissions(
+        &self,
+        input: DescribeImagePermissionsRequest,
+    ) -> Request<DescribeImagePermissionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes one or more specified images, if the image names or image ARNs are provided. Otherwise, all images in the account are described.</p>
+    fn describe_images(&self, input: DescribeImagesRequest) -> Request<DescribeImagesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
+    fn describe_sessions(
+        &self,
+        input: DescribeSessionsRequest,
+    ) -> Request<DescribeSessionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
+    fn describe_stacks(&self, input: DescribeStacksRequest) -> Request<DescribeStacksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
+    fn describe_usage_report_subscriptions(
+        &self,
+        input: DescribeUsageReportSubscriptionsRequest,
+    ) -> Request<DescribeUsageReportSubscriptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Retrieves a list that describes the UserStackAssociation objects. You must specify either or both of the following:</p> <ul> <li> <p>The stack name</p> </li> <li> <p>The user name (email address of the user associated with the stack) and the authentication type for the user</p> </li> </ul></p>
+    fn describe_user_stack_associations(
+        &self,
+        input: DescribeUserStackAssociationsRequest,
+    ) -> Request<DescribeUserStackAssociationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list that describes one or more specified users in the user pool.</p>
+    fn describe_users(&self, input: DescribeUsersRequest) -> Request<DescribeUsersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables the specified user in the user pool. Users can't sign in to AppStream 2.0 until they are re-enabled. This action does not delete the user. </p>
+    fn disable_user(&self, input: DisableUserRequest) -> Request<DisableUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates the specified fleet from the specified stack.</p>
+    fn disassociate_fleet(
+        &self,
+        input: DisassociateFleetRequest,
+    ) -> Request<DisassociateFleetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables a user in the user pool. After being enabled, users can sign in to AppStream 2.0 and open applications from the stacks to which they are assigned.</p>
+    fn enable_user(&self, input: EnableUserRequest) -> Request<EnableUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Immediately stops the specified streaming session.</p>
+    fn expire_session(&self, input: ExpireSessionRequest) -> Request<ExpireSessionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
+    fn list_associated_fleets(
+        &self,
+        input: ListAssociatedFleetsRequest,
+    ) -> Request<ListAssociatedFleetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
+    fn list_associated_stacks(
+        &self,
+        input: ListAssociatedStacksRequest,
+    ) -> Request<ListAssociatedStacksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts the specified fleet.</p>
+    fn start_fleet(&self, input: StartFleetRequest) -> Request<StartFleetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts the specified image builder.</p>
+    fn start_image_builder(
+        &self,
+        input: StartImageBuilderRequest,
+    ) -> Request<StartImageBuilderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops the specified fleet.</p>
+    fn stop_fleet(&self, input: StopFleetRequest) -> Request<StopFleetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops the specified image builder.</p>
+    fn stop_image_builder(
+        &self,
+        input: StopImageBuilderRequest,
+    ) -> Request<StopImageBuilderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
+    fn update_directory_config(
+        &self,
+        input: UpdateDirectoryConfigRequest,
+    ) -> Request<UpdateDirectoryConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
+    fn update_fleet(&self, input: UpdateFleetRequest) -> Request<UpdateFleetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or updates permissions for the specified private image. </p>
+    fn update_image_permissions(
+        &self,
+        input: UpdateImagePermissionsRequest,
+    ) -> Request<UpdateImagePermissionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified fields for the specified stack.</p>
+    fn update_stack(&self, input: UpdateStackRequest) -> Request<UpdateStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssociateFleetRequest {
+    type Output = AssociateFleetResponse;
+    type Error = AssociateFleetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.AssociateFleet");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateFleetResult, _>()
+                        .deserialize::<AssociateFleetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4412,27 +4661,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Associates the specified users with the specified stacks. Users in a user pool cannot be assigned to stacks with fleets that are joined to an Active Directory domain.</p>
-    fn batch_associate_user_stack(
-        &self,
-        input: BatchAssociateUserStackRequest,
-    ) -> RusotoFuture<BatchAssociateUserStackResult, BatchAssociateUserStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for BatchAssociateUserStackRequest {
+    type Output = BatchAssociateUserStackResponse;
+    type Error = BatchAssociateUserStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.BatchAssociateUserStack",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchAssociateUserStackResult, _>()
+                        .deserialize::<BatchAssociateUserStackResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4441,27 +4695,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the specified users from the specified stacks.</p>
-    fn batch_disassociate_user_stack(
-        &self,
-        input: BatchDisassociateUserStackRequest,
-    ) -> RusotoFuture<BatchDisassociateUserStackResult, BatchDisassociateUserStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for BatchDisassociateUserStackRequest {
+    type Output = BatchDisassociateUserStackResponse;
+    type Error = BatchDisassociateUserStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.BatchDisassociateUserStack",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchDisassociateUserStackResult, _>()
+                        .deserialize::<BatchDisassociateUserStackResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4470,20 +4729,25 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Copies the image within the same region or to a new region within the same AWS account. Note that any tags you added to the image will not be copied.</p>
-    fn copy_image(
-        &self,
-        input: CopyImageRequest,
-    ) -> RusotoFuture<CopyImageResponse, CopyImageError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CopyImageRequest {
+    type Output = CopyImageResponse;
+    type Error = CopyImageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CopyImage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -4499,27 +4763,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
-    fn create_directory_config(
-        &self,
-        input: CreateDirectoryConfigRequest,
-    ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateDirectoryConfigRequest {
+    type Output = CreateDirectoryConfigResponse;
+    type Error = CreateDirectoryConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.CreateDirectoryConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDirectoryConfigResult, _>()
+                        .deserialize::<CreateDirectoryConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4530,24 +4799,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a fleet. A fleet consists of streaming instances that run a specified image.</p>
-    fn create_fleet(
-        &self,
-        input: CreateFleetRequest,
-    ) -> RusotoFuture<CreateFleetResult, CreateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateFleetRequest {
+    type Output = CreateFleetResponse;
+    type Error = CreateFleetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateFleet");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateFleetResult, _>()
+                        .deserialize::<CreateFleetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4559,24 +4833,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates an image builder. An image builder is a virtual machine that is used to create an image.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
-    fn create_image_builder(
-        &self,
-        input: CreateImageBuilderRequest,
-    ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateImageBuilderRequest {
+    type Output = CreateImageBuilderResponse;
+    type Error = CreateImageBuilderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateImageBuilder");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateImageBuilderResult, _>()
+                        .deserialize::<CreateImageBuilderResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4588,28 +4867,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a URL to start an image builder streaming session.</p>
-    fn create_image_builder_streaming_url(
-        &self,
-        input: CreateImageBuilderStreamingURLRequest,
-    ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>
-    {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateImageBuilderStreamingURLRequest {
+    type Output = CreateImageBuilderStreamingURLResponse;
+    type Error = CreateImageBuilderStreamingURLError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.CreateImageBuilderStreamingURL",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateImageBuilderStreamingURLResult, _>()
+                        .deserialize::<CreateImageBuilderStreamingURLResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4618,24 +4901,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a stack to start streaming applications to users. A stack consists of an associated fleet, user access policies, and storage configurations. </p>
-    fn create_stack(
-        &self,
-        input: CreateStackRequest,
-    ) -> RusotoFuture<CreateStackResult, CreateStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateStackRequest {
+    type Output = CreateStackResponse;
+    type Error = CreateStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStackResult, _>()
+                        .deserialize::<CreateStackResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4647,24 +4935,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a temporary URL to start an AppStream 2.0 streaming session for the specified user. A streaming URL enables application streaming to be tested without user setup. </p>
-    fn create_streaming_url(
-        &self,
-        input: CreateStreamingURLRequest,
-    ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateStreamingURLRequest {
+    type Output = CreateStreamingURLResponse;
+    type Error = CreateStreamingURLError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateStreamingURL");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStreamingURLResult, _>()
+                        .deserialize::<CreateStreamingURLResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4676,12 +4969,18 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a usage report subscription. Usage reports are generated daily.</p>
-    fn create_usage_report_subscription(
-        &self,
-    ) -> RusotoFuture<CreateUsageReportSubscriptionResult, CreateUsageReportSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateUsageReportSubscriptionRequest {
+    type Output = CreateUsageReportSubscriptionResponse;
+    type Error = CreateUsageReportSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
@@ -4690,11 +4989,11 @@ impl AppStream for AppStreamClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUsageReportSubscriptionResult, _>()
+                        .deserialize::<CreateUsageReportSubscriptionResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4703,24 +5002,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new user in the user pool.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResult, CreateUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for CreateUserRequest {
+    type Output = CreateUserResponse;
+    type Error = CreateUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateUser");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUserResult, _>()
+                        .deserialize::<CreateUserResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4732,27 +5036,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified Directory Config object from AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
-    fn delete_directory_config(
-        &self,
-        input: DeleteDirectoryConfigRequest,
-    ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteDirectoryConfigRequest {
+    type Output = DeleteDirectoryConfigResponse;
+    type Error = DeleteDirectoryConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DeleteDirectoryConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDirectoryConfigResult, _>()
+                        .deserialize::<DeleteDirectoryConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4763,24 +5072,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified fleet.</p>
-    fn delete_fleet(
-        &self,
-        input: DeleteFleetRequest,
-    ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteFleetRequest {
+    type Output = DeleteFleetResponse;
+    type Error = DeleteFleetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteFleet");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteFleetResult, _>()
+                        .deserialize::<DeleteFleetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4792,24 +5106,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified image. You cannot delete an image when it is in use. After you delete an image, you cannot provision new capacity using the image.</p>
-    fn delete_image(
-        &self,
-        input: DeleteImageRequest,
-    ) -> RusotoFuture<DeleteImageResult, DeleteImageError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteImageRequest {
+    type Output = DeleteImageResponse;
+    type Error = DeleteImageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteImageResult, _>()
+                        .deserialize::<DeleteImageResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4821,24 +5140,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified image builder and releases the capacity.</p>
-    fn delete_image_builder(
-        &self,
-        input: DeleteImageBuilderRequest,
-    ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteImageBuilderRequest {
+    type Output = DeleteImageBuilderResponse;
+    type Error = DeleteImageBuilderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImageBuilder");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteImageBuilderResult, _>()
+                        .deserialize::<DeleteImageBuilderResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4850,27 +5174,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes permissions for the specified private image. After you delete permissions for an image, AWS accounts to which you previously granted these permissions can no longer use the image.</p>
-    fn delete_image_permissions(
-        &self,
-        input: DeleteImagePermissionsRequest,
-    ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteImagePermissionsRequest {
+    type Output = DeleteImagePermissionsResponse;
+    type Error = DeleteImagePermissionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DeleteImagePermissions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteImagePermissionsResult, _>()
+                        .deserialize::<DeleteImagePermissionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4881,24 +5210,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified stack. After the stack is deleted, the application streaming environment provided by the stack is no longer available to users. Also, any reservations made for application streaming sessions for the stack are released.</p>
-    fn delete_stack(
-        &self,
-        input: DeleteStackRequest,
-    ) -> RusotoFuture<DeleteStackResult, DeleteStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteStackRequest {
+    type Output = DeleteStackResponse;
+    type Error = DeleteStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteStackResult, _>()
+                        .deserialize::<DeleteStackResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4910,12 +5244,18 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Disables usage report generation.</p>
-    fn delete_usage_report_subscription(
-        &self,
-    ) -> RusotoFuture<DeleteUsageReportSubscriptionResult, DeleteUsageReportSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteUsageReportSubscriptionRequest {
+    type Output = DeleteUsageReportSubscriptionResponse;
+    type Error = DeleteUsageReportSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
@@ -4924,11 +5264,11 @@ impl AppStream for AppStreamClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteUsageReportSubscriptionResult, _>()
+                        .deserialize::<DeleteUsageReportSubscriptionResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4937,24 +5277,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a user from the user pool.</p>
-    fn delete_user(
-        &self,
-        input: DeleteUserRequest,
-    ) -> RusotoFuture<DeleteUserResult, DeleteUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DeleteUserRequest {
+    type Output = DeleteUserResponse;
+    type Error = DeleteUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteUser");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteUserResult, _>()
+                        .deserialize::<DeleteUserResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -4966,27 +5311,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the configuration information required to join fleets and image builders to Microsoft Active Directory domains. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
-    fn describe_directory_configs(
-        &self,
-        input: DescribeDirectoryConfigsRequest,
-    ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeDirectoryConfigsRequest {
+    type Output = DescribeDirectoryConfigsResponse;
+    type Error = DescribeDirectoryConfigsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeDirectoryConfigs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDirectoryConfigsResult, _>()
+                        .deserialize::<DescribeDirectoryConfigsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -4995,24 +5345,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes one or more specified fleets, if the fleet names are provided. Otherwise, all fleets in the account are described.</p>
-    fn describe_fleets(
-        &self,
-        input: DescribeFleetsRequest,
-    ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeFleetsRequest {
+    type Output = DescribeFleetsResponse;
+    type Error = DescribeFleetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeFleets");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeFleetsResult, _>()
+                        .deserialize::<DescribeFleetsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5024,27 +5379,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes one or more specified image builders, if the image builder names are provided. Otherwise, all image builders in the account are described.</p>
-    fn describe_image_builders(
-        &self,
-        input: DescribeImageBuildersRequest,
-    ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeImageBuildersRequest {
+    type Output = DescribeImageBuildersResponse;
+    type Error = DescribeImageBuildersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeImageBuilders",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImageBuildersResult, _>()
+                        .deserialize::<DescribeImageBuildersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5055,27 +5415,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes the permissions for shared AWS account IDs on a private image that you own. </p>
-    fn describe_image_permissions(
-        &self,
-        input: DescribeImagePermissionsRequest,
-    ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeImagePermissionsRequest {
+    type Output = DescribeImagePermissionsResponse;
+    type Error = DescribeImagePermissionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeImagePermissions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImagePermissionsResult, _>()
+                        .deserialize::<DescribeImagePermissionsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5084,24 +5449,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes one or more specified images, if the image names or image ARNs are provided. Otherwise, all images in the account are described.</p>
-    fn describe_images(
-        &self,
-        input: DescribeImagesRequest,
-    ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeImagesRequest {
+    type Output = DescribeImagesResponse;
+    type Error = DescribeImagesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeImages");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeImagesResult, _>()
+                        .deserialize::<DescribeImagesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5113,24 +5483,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
-    fn describe_sessions(
-        &self,
-        input: DescribeSessionsRequest,
-    ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeSessionsRequest {
+    type Output = DescribeSessionsResponse;
+    type Error = DescribeSessionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeSessions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeSessionsResult, _>()
+                        .deserialize::<DescribeSessionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5142,24 +5517,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes one or more specified stacks, if the stack names are provided. Otherwise, all stacks in the account are described.</p>
-    fn describe_stacks(
-        &self,
-        input: DescribeStacksRequest,
-    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeStacksRequest {
+    type Output = DescribeStacksResponse;
+    type Error = DescribeStacksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeStacks");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStacksResult, _>()
+                        .deserialize::<DescribeStacksResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5171,28 +5551,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
-    fn describe_usage_report_subscriptions(
-        &self,
-        input: DescribeUsageReportSubscriptionsRequest,
-    ) -> RusotoFuture<DescribeUsageReportSubscriptionsResult, DescribeUsageReportSubscriptionsError>
-    {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeUsageReportSubscriptionsRequest {
+    type Output = DescribeUsageReportSubscriptionsResponse;
+    type Error = DescribeUsageReportSubscriptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeUsageReportSubscriptions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUsageReportSubscriptionsResult, _>()
+                        .deserialize::<DescribeUsageReportSubscriptionsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5203,27 +5587,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p><p>Retrieves a list that describes the UserStackAssociation objects. You must specify either or both of the following:</p> <ul> <li> <p>The stack name</p> </li> <li> <p>The user name (email address of the user associated with the stack) and the authentication type for the user</p> </li> </ul></p>
-    fn describe_user_stack_associations(
-        &self,
-        input: DescribeUserStackAssociationsRequest,
-    ) -> RusotoFuture<DescribeUserStackAssociationsResult, DescribeUserStackAssociationsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeUserStackAssociationsRequest {
+    type Output = DescribeUserStackAssociationsResponse;
+    type Error = DescribeUserStackAssociationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeUserStackAssociations",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserStackAssociationsResult, _>()
+                        .deserialize::<DescribeUserStackAssociationsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -5232,24 +5621,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list that describes one or more specified users in the user pool.</p>
-    fn describe_users(
-        &self,
-        input: DescribeUsersRequest,
-    ) -> RusotoFuture<DescribeUsersResult, DescribeUsersError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DescribeUsersRequest {
+    type Output = DescribeUsersResponse;
+    type Error = DescribeUsersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeUsers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUsersResult, _>()
+                        .deserialize::<DescribeUsersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5261,24 +5655,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Disables the specified user in the user pool. Users can't sign in to AppStream 2.0 until they are re-enabled. This action does not delete the user. </p>
-    fn disable_user(
-        &self,
-        input: DisableUserRequest,
-    ) -> RusotoFuture<DisableUserResult, DisableUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DisableUserRequest {
+    type Output = DisableUserResponse;
+    type Error = DisableUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DisableUser");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisableUserResult, _>()
+                        .deserialize::<DisableUserResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5290,24 +5689,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates the specified fleet from the specified stack.</p>
-    fn disassociate_fleet(
-        &self,
-        input: DisassociateFleetRequest,
-    ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for DisassociateFleetRequest {
+    type Output = DisassociateFleetResponse;
+    type Error = DisassociateFleetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DisassociateFleet");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateFleetResult, _>()
+                        .deserialize::<DisassociateFleetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5319,24 +5723,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Enables a user in the user pool. After being enabled, users can sign in to AppStream 2.0 and open applications from the stacks to which they are assigned.</p>
-    fn enable_user(
-        &self,
-        input: EnableUserRequest,
-    ) -> RusotoFuture<EnableUserResult, EnableUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for EnableUserRequest {
+    type Output = EnableUserResponse;
+    type Error = EnableUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.EnableUser");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EnableUserResult, _>()
+                        .deserialize::<EnableUserResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5348,24 +5757,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Immediately stops the specified streaming session.</p>
-    fn expire_session(
-        &self,
-        input: ExpireSessionRequest,
-    ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for ExpireSessionRequest {
+    type Output = ExpireSessionResponse;
+    type Error = ExpireSessionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.ExpireSession");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExpireSessionResult, _>()
+                        .deserialize::<ExpireSessionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5377,27 +5791,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the name of the fleet that is associated with the specified stack.</p>
-    fn list_associated_fleets(
-        &self,
-        input: ListAssociatedFleetsRequest,
-    ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for ListAssociatedFleetsRequest {
+    type Output = ListAssociatedFleetsResponse;
+    type Error = ListAssociatedFleetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.ListAssociatedFleets",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssociatedFleetsResult, _>()
+                        .deserialize::<ListAssociatedFleetsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5408,27 +5827,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the name of the stack with which the specified fleet is associated.</p>
-    fn list_associated_stacks(
-        &self,
-        input: ListAssociatedStacksRequest,
-    ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for ListAssociatedStacksRequest {
+    type Output = ListAssociatedStacksResponse;
+    type Error = ListAssociatedStacksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.ListAssociatedStacks",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAssociatedStacksResult, _>()
+                        .deserialize::<ListAssociatedStacksResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5439,23 +5863,28 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves a list of all tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.ListTagsForResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5470,24 +5899,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Starts the specified fleet.</p>
-    fn start_fleet(
-        &self,
-        input: StartFleetRequest,
-    ) -> RusotoFuture<StartFleetResult, StartFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for StartFleetRequest {
+    type Output = StartFleetResponse;
+    type Error = StartFleetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StartFleet");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartFleetResult, _>()
+                        .deserialize::<StartFleetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5499,24 +5933,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Starts the specified image builder.</p>
-    fn start_image_builder(
-        &self,
-        input: StartImageBuilderRequest,
-    ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for StartImageBuilderRequest {
+    type Output = StartImageBuilderResponse;
+    type Error = StartImageBuilderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StartImageBuilder");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartImageBuilderResult, _>()
+                        .deserialize::<StartImageBuilderResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5528,20 +5967,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for StopFleetRequest {
+    type Output = StopFleetResponse;
+    type Error = StopFleetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StopFleet");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<StopFleetResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopFleetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5553,24 +6001,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Stops the specified image builder.</p>
-    fn stop_image_builder(
-        &self,
-        input: StopImageBuilderRequest,
-    ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for StopImageBuilderRequest {
+    type Output = StopImageBuilderResponse;
+    type Error = StopImageBuilderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StopImageBuilder");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopImageBuilderResult, _>()
+                        .deserialize::<StopImageBuilderResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5582,20 +6035,25 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5611,20 +6069,25 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates one or more specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5640,27 +6103,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
-    fn update_directory_config(
-        &self,
-        input: UpdateDirectoryConfigRequest,
-    ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for UpdateDirectoryConfigRequest {
+    type Output = UpdateDirectoryConfigResponse;
+    type Error = UpdateDirectoryConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.UpdateDirectoryConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDirectoryConfigResult, _>()
+                        .deserialize::<UpdateDirectoryConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5671,24 +6139,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
-    fn update_fleet(
-        &self,
-        input: UpdateFleetRequest,
-    ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for UpdateFleetRequest {
+    type Output = UpdateFleetResponse;
+    type Error = UpdateFleetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UpdateFleet");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateFleetResult, _>()
+                        .deserialize::<UpdateFleetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5700,27 +6173,32 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Adds or updates permissions for the specified private image. </p>
-    fn update_image_permissions(
-        &self,
-        input: UpdateImagePermissionsRequest,
-    ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for UpdateImagePermissionsRequest {
+    type Output = UpdateImagePermissionsResponse;
+    type Error = UpdateImagePermissionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.UpdateImagePermissions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateImagePermissionsResult, _>()
+                        .deserialize::<UpdateImagePermissionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -5731,24 +6209,29 @@ impl AppStream for AppStreamClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified fields for the specified stack.</p>
-    fn update_stack(
-        &self,
-        input: UpdateStackRequest,
-    ) -> RusotoFuture<UpdateStackResult, UpdateStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+impl ServiceRequest for UpdateStackRequest {
+    type Output = UpdateStackResponse;
+    type Error = UpdateStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "appstream", region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UpdateStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateStackResult, _>()
+                        .deserialize::<UpdateStackResponse, _>()
                 }))
             } else {
                 Box::new(

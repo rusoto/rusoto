@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -451,16 +452,13 @@ impl Error for UploadDocumentsError {
 /// Trait representing the capabilities of the Amazon CloudSearch Domain API. Amazon CloudSearch Domain clients implement this trait.
 pub trait CloudSearchDomain {
     /// <p>Retrieves a list of documents that match the specified search criteria. How you specify the search criteria depends on which query parser you use. Amazon CloudSearch supports four query parsers:</p> <ul> <li><code>simple</code>: search all <code>text</code> and <code>text-array</code> fields for the specified string. Search for phrases, individual terms, and prefixes. </li> <li><code>structured</code>: search specific fields, construct compound queries using Boolean operators, and use advanced features such as term boosting and proximity searching.</li> <li><code>lucene</code>: specify search criteria using the Apache Lucene query parser syntax.</li> <li><code>dismax</code>: specify search criteria using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching.html">Searching Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p> <p>The endpoint for submitting <code>Search</code> requests is domain-specific. You submit search requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn search(&self, input: SearchRequest) -> RusotoFuture<SearchResponse, SearchError>;
+    fn search(&self, input: SearchRequest) -> Request<SearchRequest>;
 
     /// <p>Retrieves autocomplete suggestions for a partial query string. You can use suggestions enable you to display likely matches before users finish typing. In Amazon CloudSearch, suggestions are based on the contents of a particular text field. When you request suggestions, Amazon CloudSearch finds all of the documents whose values in the suggester field start with the specified query string. The beginning of the field must match the query string to be considered a match. </p> <p>For more information about configuring suggesters and retrieving suggestions, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html">Getting Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p> <p>The endpoint for submitting <code>Suggest</code> requests is domain-specific. You submit suggest requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn suggest(&self, input: SuggestRequest) -> RusotoFuture<SuggestResponse, SuggestError>;
+    fn suggest(&self, input: SuggestRequest) -> Request<SuggestRequest>;
 
     /// <p>Posts a batch of documents to a search domain for indexing. A document batch is a collection of add and delete operations that represent the documents you want to add, update, or delete from your domain. Batches can be described in either JSON or XML. Each item that you want Amazon CloudSearch to return as a search result (such as a product) is represented as a document. Every document has a unique ID and one or more fields that contain the data that you want to search and return in results. Individual documents cannot contain more than 1 MB of data. The entire batch cannot exceed 5 MB. To get the best possible upload performance, group add and delete operations in batches that are close the 5 MB limit. Submitting a large volume of single-document batches can overload a domain's document service. </p> <p>The endpoint for submitting <code>UploadDocuments</code> requests is domain-specific. To get the document endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p> <p>For more information about formatting your data for Amazon CloudSearch, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/preparing-data.html">Preparing Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. For more information about uploading data for indexing, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/uploading-data.html">Uploading Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn upload_documents(
-        &self,
-        input: UploadDocumentsRequest,
-    ) -> RusotoFuture<UploadDocumentsResponse, UploadDocumentsError>;
+    fn upload_documents(&self, input: UploadDocumentsRequest) -> Request<UploadDocumentsRequest>;
 }
 /// A client for the Amazon CloudSearch Domain API.
 #[derive(Clone)]
@@ -500,59 +498,83 @@ impl CloudSearchDomainClient {
 
 impl CloudSearchDomain for CloudSearchDomainClient {
     /// <p>Retrieves a list of documents that match the specified search criteria. How you specify the search criteria depends on which query parser you use. Amazon CloudSearch supports four query parsers:</p> <ul> <li><code>simple</code>: search all <code>text</code> and <code>text-array</code> fields for the specified string. Search for phrases, individual terms, and prefixes. </li> <li><code>structured</code>: search specific fields, construct compound queries using Boolean operators, and use advanced features such as term boosting and proximity searching.</li> <li><code>lucene</code>: specify search criteria using the Apache Lucene query parser syntax.</li> <li><code>dismax</code>: specify search criteria using the simplified subset of the Apache Lucene query parser syntax defined by the DisMax query parser.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/searching.html">Searching Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p> <p>The endpoint for submitting <code>Search</code> requests is domain-specific. You submit search requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn search(&self, input: SearchRequest) -> RusotoFuture<SearchResponse, SearchError> {
+    fn search(&self, input: SearchRequest) -> Request<SearchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves autocomplete suggestions for a partial query string. You can use suggestions enable you to display likely matches before users finish typing. In Amazon CloudSearch, suggestions are based on the contents of a particular text field. When you request suggestions, Amazon CloudSearch finds all of the documents whose values in the suggester field start with the specified query string. The beginning of the field must match the query string to be considered a match. </p> <p>For more information about configuring suggesters and retrieving suggestions, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html">Getting Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p> <p>The endpoint for submitting <code>Suggest</code> requests is domain-specific. You submit suggest requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
+    fn suggest(&self, input: SuggestRequest) -> Request<SuggestRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Posts a batch of documents to a search domain for indexing. A document batch is a collection of add and delete operations that represent the documents you want to add, update, or delete from your domain. Batches can be described in either JSON or XML. Each item that you want Amazon CloudSearch to return as a search result (such as a product) is represented as a document. Every document has a unique ID and one or more fields that contain the data that you want to search and return in results. Individual documents cannot contain more than 1 MB of data. The entire batch cannot exceed 5 MB. To get the best possible upload performance, group add and delete operations in batches that are close the 5 MB limit. Submitting a large volume of single-document batches can overload a domain's document service. </p> <p>The endpoint for submitting <code>UploadDocuments</code> requests is domain-specific. To get the document endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p> <p>For more information about formatting your data for Amazon CloudSearch, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/preparing-data.html">Preparing Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. For more information about uploading data for indexing, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/uploading-data.html">Uploading Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
+    fn upload_documents(&self, input: UploadDocumentsRequest) -> Request<UploadDocumentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for SearchRequest {
+    type Output = SearchResponse;
+    type Error = SearchError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2013-01-01/search";
 
-        let mut request = SignedRequest::new("GET", "cloudsearch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudsearch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("cloudsearchdomain".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.cursor {
+        if let Some(ref x) = self.cursor {
             params.put("cursor", x);
         }
-        if let Some(ref x) = input.expr {
+        if let Some(ref x) = self.expr {
             params.put("expr", x);
         }
-        if let Some(ref x) = input.facet {
+        if let Some(ref x) = self.facet {
             params.put("facet", x);
         }
-        if let Some(ref x) = input.filter_query {
+        if let Some(ref x) = self.filter_query {
             params.put("fq", x);
         }
-        if let Some(ref x) = input.highlight {
+        if let Some(ref x) = self.highlight {
             params.put("highlight", x);
         }
-        if let Some(ref x) = input.partial {
+        if let Some(ref x) = self.partial {
             params.put("partial", x);
         }
-        params.put("q", &input.query);
-        if let Some(ref x) = input.query_options {
+        params.put("q", &self.query);
+        if let Some(ref x) = self.query_options {
             params.put("q.options", x);
         }
-        if let Some(ref x) = input.query_parser {
+        if let Some(ref x) = self.query_parser {
             params.put("q.parser", x);
         }
-        if let Some(ref x) = input.return_ {
+        if let Some(ref x) = self.return_ {
             params.put("return", x);
         }
-        if let Some(ref x) = input.size {
+        if let Some(ref x) = self.size {
             params.put("size", x);
         }
-        if let Some(ref x) = input.sort {
+        if let Some(ref x) = self.sort {
             params.put("sort", x);
         }
-        if let Some(ref x) = input.start {
+        if let Some(ref x) = self.start {
             params.put("start", x);
         }
-        if let Some(ref x) = input.stats {
+        if let Some(ref x) = self.stats {
             params.put("stats", x);
         }
         params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -570,26 +592,35 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves autocomplete suggestions for a partial query string. You can use suggestions enable you to display likely matches before users finish typing. In Amazon CloudSearch, suggestions are based on the contents of a particular text field. When you request suggestions, Amazon CloudSearch finds all of the documents whose values in the suggester field start with the specified query string. The beginning of the field must match the query string to be considered a match. </p> <p>For more information about configuring suggesters and retrieving suggestions, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html">Getting Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p> <p>The endpoint for submitting <code>Suggest</code> requests is domain-specific. You submit suggest requests to a domain's search endpoint. To get the search endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p>
-    fn suggest(&self, input: SuggestRequest) -> RusotoFuture<SuggestResponse, SuggestError> {
+impl ServiceRequest for SuggestRequest {
+    type Output = SuggestResponse;
+    type Error = SuggestError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2013-01-01/suggest";
 
-        let mut request = SignedRequest::new("GET", "cloudsearch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudsearch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("cloudsearchdomain".to_string());
 
         let mut params = Params::new();
-        params.put("q", &input.query);
-        if let Some(ref x) = input.size {
+        params.put("q", &self.query);
+        if let Some(ref x) = self.size {
             params.put("size", x);
         }
-        params.put("suggester", &input.suggester);
+        params.put("suggester", &self.suggester);
         params.put("format", "sdk&pretty");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -607,26 +638,32 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             }
         })
     }
+}
 
-    /// <p>Posts a batch of documents to a search domain for indexing. A document batch is a collection of add and delete operations that represent the documents you want to add, update, or delete from your domain. Batches can be described in either JSON or XML. Each item that you want Amazon CloudSearch to return as a search result (such as a product) is represented as a document. Every document has a unique ID and one or more fields that contain the data that you want to search and return in results. Individual documents cannot contain more than 1 MB of data. The entire batch cannot exceed 5 MB. To get the best possible upload performance, group add and delete operations in batches that are close the 5 MB limit. Submitting a large volume of single-document batches can overload a domain's document service. </p> <p>The endpoint for submitting <code>UploadDocuments</code> requests is domain-specific. To get the document endpoint for your domain, use the Amazon CloudSearch configuration service <code>DescribeDomains</code> action. A domain's endpoints are also displayed on the domain dashboard in the Amazon CloudSearch console. </p> <p>For more information about formatting your data for Amazon CloudSearch, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/preparing-data.html">Preparing Your Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. For more information about uploading data for indexing, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/uploading-data.html">Uploading Data</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn upload_documents(
-        &self,
-        input: UploadDocumentsRequest,
-    ) -> RusotoFuture<UploadDocumentsResponse, UploadDocumentsError> {
+impl ServiceRequest for UploadDocumentsRequest {
+    type Output = UploadDocumentsResponse;
+    type Error = UploadDocumentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2013-01-01/documents/batch";
 
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("cloudsearchdomain".to_string());
-        let encoded = Some(input.documents.to_owned());
+        let encoded = Some(self.documents.to_owned());
         request.set_payload(encoded);
-        request.add_header("Content-Type", &input.content_type);
+        request.add_header("Content-Type", &self.content_type);
         let mut params = Params::new();
         params.put("format", "sdk");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

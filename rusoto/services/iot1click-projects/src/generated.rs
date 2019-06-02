@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -1220,97 +1221,64 @@ pub trait Iot1ClickProjects {
     fn associate_device_with_placement(
         &self,
         input: AssociateDeviceWithPlacementRequest,
-    ) -> RusotoFuture<AssociateDeviceWithPlacementResponse, AssociateDeviceWithPlacementError>;
+    ) -> Request<AssociateDeviceWithPlacementRequest>;
 
     /// <p>Creates an empty placement.</p>
-    fn create_placement(
-        &self,
-        input: CreatePlacementRequest,
-    ) -> RusotoFuture<CreatePlacementResponse, CreatePlacementError>;
+    fn create_placement(&self, input: CreatePlacementRequest) -> Request<CreatePlacementRequest>;
 
     /// <p>Creates an empty project with a placement template. A project contains zero or more placements that adhere to the placement template defined in the project.</p>
-    fn create_project(
-        &self,
-        input: CreateProjectRequest,
-    ) -> RusotoFuture<CreateProjectResponse, CreateProjectError>;
+    fn create_project(&self, input: CreateProjectRequest) -> Request<CreateProjectRequest>;
 
     /// <p><p>Deletes a placement. To delete a placement, it must not have any devices associated with it.</p> <note> <p>When you delete a placement, all associated data becomes irretrievable.</p> </note></p>
-    fn delete_placement(
-        &self,
-        input: DeletePlacementRequest,
-    ) -> RusotoFuture<DeletePlacementResponse, DeletePlacementError>;
+    fn delete_placement(&self, input: DeletePlacementRequest) -> Request<DeletePlacementRequest>;
 
     /// <p><p>Deletes a project. To delete a project, it must not have any placements associated with it.</p> <note> <p>When you delete a project, all associated data becomes irretrievable.</p> </note></p>
-    fn delete_project(
-        &self,
-        input: DeleteProjectRequest,
-    ) -> RusotoFuture<DeleteProjectResponse, DeleteProjectError>;
+    fn delete_project(&self, input: DeleteProjectRequest) -> Request<DeleteProjectRequest>;
 
     /// <p>Describes a placement in a project.</p>
     fn describe_placement(
         &self,
         input: DescribePlacementRequest,
-    ) -> RusotoFuture<DescribePlacementResponse, DescribePlacementError>;
+    ) -> Request<DescribePlacementRequest>;
 
     /// <p>Returns an object describing a project.</p>
-    fn describe_project(
-        &self,
-        input: DescribeProjectRequest,
-    ) -> RusotoFuture<DescribeProjectResponse, DescribeProjectError>;
+    fn describe_project(&self, input: DescribeProjectRequest) -> Request<DescribeProjectRequest>;
 
     /// <p>Removes a physical device from a placement.</p>
     fn disassociate_device_from_placement(
         &self,
         input: DisassociateDeviceFromPlacementRequest,
-    ) -> RusotoFuture<DisassociateDeviceFromPlacementResponse, DisassociateDeviceFromPlacementError>;
+    ) -> Request<DisassociateDeviceFromPlacementRequest>;
 
     /// <p>Returns an object enumerating the devices in a placement.</p>
     fn get_devices_in_placement(
         &self,
         input: GetDevicesInPlacementRequest,
-    ) -> RusotoFuture<GetDevicesInPlacementResponse, GetDevicesInPlacementError>;
+    ) -> Request<GetDevicesInPlacementRequest>;
 
     /// <p>Lists the placement(s) of a project.</p>
-    fn list_placements(
-        &self,
-        input: ListPlacementsRequest,
-    ) -> RusotoFuture<ListPlacementsResponse, ListPlacementsError>;
+    fn list_placements(&self, input: ListPlacementsRequest) -> Request<ListPlacementsRequest>;
 
     /// <p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>
-    fn list_projects(
-        &self,
-        input: ListProjectsRequest,
-    ) -> RusotoFuture<ListProjectsResponse, ListProjectsError>;
+    fn list_projects(&self, input: ListProjectsRequest) -> Request<ListProjectsRequest>;
 
     /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Creates or modifies tags for a resource. Tags are key/value pairs (metadata) that can be used to manage a resource. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes one or more tags (metadata key/value pairs) from a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates a placement with the given attributes. To clear an attribute, pass an empty value (i.e., "").</p>
-    fn update_placement(
-        &self,
-        input: UpdatePlacementRequest,
-    ) -> RusotoFuture<UpdatePlacementResponse, UpdatePlacementError>;
+    fn update_placement(&self, input: UpdatePlacementRequest) -> Request<UpdatePlacementRequest>;
 
     /// <p>Updates a project associated with your AWS account and region. With the exception of device template names, you can pass just the values that need to be updated because the update request will change only the values that are provided. To clear a value, pass the empty string (i.e., <code>""</code>).</p>
-    fn update_project(
-        &self,
-        input: UpdateProjectRequest,
-    ) -> RusotoFuture<UpdateProjectResponse, UpdateProjectError>;
+    fn update_project(&self, input: UpdateProjectRequest) -> Request<UpdateProjectRequest>;
 }
 /// A client for the AWS IoT 1-Click Projects API.
 #[derive(Clone)]
@@ -1353,22 +1321,123 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
     fn associate_device_with_placement(
         &self,
         input: AssociateDeviceWithPlacementRequest,
-    ) -> RusotoFuture<AssociateDeviceWithPlacementResponse, AssociateDeviceWithPlacementError> {
+    ) -> Request<AssociateDeviceWithPlacementRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an empty placement.</p>
+    fn create_placement(&self, input: CreatePlacementRequest) -> Request<CreatePlacementRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an empty project with a placement template. A project contains zero or more placements that adhere to the placement template defined in the project.</p>
+    fn create_project(&self, input: CreateProjectRequest) -> Request<CreateProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a placement. To delete a placement, it must not have any devices associated with it.</p> <note> <p>When you delete a placement, all associated data becomes irretrievable.</p> </note></p>
+    fn delete_placement(&self, input: DeletePlacementRequest) -> Request<DeletePlacementRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a project. To delete a project, it must not have any placements associated with it.</p> <note> <p>When you delete a project, all associated data becomes irretrievable.</p> </note></p>
+    fn delete_project(&self, input: DeleteProjectRequest) -> Request<DeleteProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a placement in a project.</p>
+    fn describe_placement(
+        &self,
+        input: DescribePlacementRequest,
+    ) -> Request<DescribePlacementRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an object describing a project.</p>
+    fn describe_project(&self, input: DescribeProjectRequest) -> Request<DescribeProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes a physical device from a placement.</p>
+    fn disassociate_device_from_placement(
+        &self,
+        input: DisassociateDeviceFromPlacementRequest,
+    ) -> Request<DisassociateDeviceFromPlacementRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an object enumerating the devices in a placement.</p>
+    fn get_devices_in_placement(
+        &self,
+        input: GetDevicesInPlacementRequest,
+    ) -> Request<GetDevicesInPlacementRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the placement(s) of a project.</p>
+    fn list_placements(&self, input: ListPlacementsRequest) -> Request<ListPlacementsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>
+    fn list_projects(&self, input: ListProjectsRequest) -> Request<ListProjectsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or modifies tags for a resource. Tags are key/value pairs (metadata) that can be used to manage a resource. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes one or more tags (metadata key/value pairs) from a resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a placement with the given attributes. To clear an attribute, pass an empty value (i.e., "").</p>
+    fn update_placement(&self, input: UpdatePlacementRequest) -> Request<UpdatePlacementRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a project associated with your AWS account and region. With the exception of device template names, you can pass just the values that need to be updated because the update request will change only the values that are provided. To clear a value, pass the empty string (i.e., <code>""</code>).</p>
+    fn update_project(&self, input: UpdateProjectRequest) -> Request<UpdateProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssociateDeviceWithPlacementRequest {
+    type Output = AssociateDeviceWithPlacementResponse;
+    type Error = AssociateDeviceWithPlacementError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}/devices/{device_template_name}",
-            device_template_name = input.device_template_name,
-            placement_name = input.placement_name,
-            project_name = input.project_name
+            device_template_name = self.device_template_name,
+            placement_name = self.placement_name,
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1383,25 +1452,31 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Creates an empty placement.</p>
-    fn create_placement(
-        &self,
-        input: CreatePlacementRequest,
-    ) -> RusotoFuture<CreatePlacementResponse, CreatePlacementError> {
+impl ServiceRequest for CreatePlacementRequest {
+    type Output = CreatePlacementResponse;
+    type Error = CreatePlacementError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements",
-            project_name = input.project_name
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1419,22 +1494,28 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Creates an empty project with a placement template. A project contains zero or more placements that adhere to the placement template defined in the project.</p>
-    fn create_project(
-        &self,
-        input: CreateProjectRequest,
-    ) -> RusotoFuture<CreateProjectResponse, CreateProjectError> {
+impl ServiceRequest for CreateProjectRequest {
+    type Output = CreateProjectResponse;
+    type Error = CreateProjectError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/projects";
 
-        let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1452,24 +1533,30 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a placement. To delete a placement, it must not have any devices associated with it.</p> <note> <p>When you delete a placement, all associated data becomes irretrievable.</p> </note></p>
-    fn delete_placement(
-        &self,
-        input: DeletePlacementRequest,
-    ) -> RusotoFuture<DeletePlacementResponse, DeletePlacementError> {
+impl ServiceRequest for DeletePlacementRequest {
+    type Output = DeletePlacementResponse;
+    type Error = DeletePlacementError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}",
-            placement_name = input.placement_name,
-            project_name = input.project_name
+            placement_name = self.placement_name,
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1487,23 +1574,26 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a project. To delete a project, it must not have any placements associated with it.</p> <note> <p>When you delete a project, all associated data becomes irretrievable.</p> </note></p>
-    fn delete_project(
-        &self,
-        input: DeleteProjectRequest,
-    ) -> RusotoFuture<DeleteProjectResponse, DeleteProjectError> {
-        let request_uri = format!(
-            "/projects/{project_name}",
-            project_name = input.project_name
-        );
+impl ServiceRequest for DeleteProjectRequest {
+    type Output = DeleteProjectResponse;
+    type Error = DeleteProjectError;
 
-        let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/projects/{project_name}", project_name = self.project_name);
+
+        let mut request = SignedRequest::new("DELETE", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1521,24 +1611,30 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Describes a placement in a project.</p>
-    fn describe_placement(
-        &self,
-        input: DescribePlacementRequest,
-    ) -> RusotoFuture<DescribePlacementResponse, DescribePlacementError> {
+impl ServiceRequest for DescribePlacementRequest {
+    type Output = DescribePlacementResponse;
+    type Error = DescribePlacementError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}",
-            placement_name = input.placement_name,
-            project_name = input.project_name
+            placement_name = self.placement_name,
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1556,23 +1652,26 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Returns an object describing a project.</p>
-    fn describe_project(
-        &self,
-        input: DescribeProjectRequest,
-    ) -> RusotoFuture<DescribeProjectResponse, DescribeProjectError> {
-        let request_uri = format!(
-            "/projects/{project_name}",
-            project_name = input.project_name
-        );
+impl ServiceRequest for DescribeProjectRequest {
+    type Output = DescribeProjectResponse;
+    type Error = DescribeProjectError;
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/projects/{project_name}", project_name = self.project_name);
+
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1590,26 +1689,31 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Removes a physical device from a placement.</p>
-    fn disassociate_device_from_placement(
-        &self,
-        input: DisassociateDeviceFromPlacementRequest,
-    ) -> RusotoFuture<DisassociateDeviceFromPlacementResponse, DisassociateDeviceFromPlacementError>
-    {
+impl ServiceRequest for DisassociateDeviceFromPlacementRequest {
+    type Output = DisassociateDeviceFromPlacementResponse;
+    type Error = DisassociateDeviceFromPlacementError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}/devices/{device_template_name}",
-            device_template_name = input.device_template_name,
-            placement_name = input.placement_name,
-            project_name = input.project_name
+            device_template_name = self.device_template_name,
+            placement_name = self.placement_name,
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1626,24 +1730,30 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Returns an object enumerating the devices in a placement.</p>
-    fn get_devices_in_placement(
-        &self,
-        input: GetDevicesInPlacementRequest,
-    ) -> RusotoFuture<GetDevicesInPlacementResponse, GetDevicesInPlacementError> {
+impl ServiceRequest for GetDevicesInPlacementRequest {
+    type Output = GetDevicesInPlacementResponse;
+    type Error = GetDevicesInPlacementError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}/devices",
-            placement_name = input.placement_name,
-            project_name = input.project_name
+            placement_name = self.placement_name,
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1660,32 +1770,38 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the placement(s) of a project.</p>
-    fn list_placements(
-        &self,
-        input: ListPlacementsRequest,
-    ) -> RusotoFuture<ListPlacementsResponse, ListPlacementsError> {
+impl ServiceRequest for ListPlacementsRequest {
+    type Output = ListPlacementsResponse;
+    type Error = ListPlacementsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements",
-            project_name = input.project_name
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1703,29 +1819,35 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>
-    fn list_projects(
-        &self,
-        input: ListProjectsRequest,
-    ) -> RusotoFuture<ListProjectsResponse, ListProjectsError> {
+impl ServiceRequest for ListProjectsRequest {
+    type Output = ListProjectsResponse;
+    type Error = ListProjectsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/projects";
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1743,20 +1865,26 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
 
-        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1773,22 +1901,28 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Creates or modifies tags for a resource. Tags are key/value pairs (metadata) that can be used to manage a resource. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1806,26 +1940,32 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Removes one or more tags (metadata key/value pairs) from a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1843,26 +1983,32 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Updates a placement with the given attributes. To clear an attribute, pass an empty value (i.e., "").</p>
-    fn update_placement(
-        &self,
-        input: UpdatePlacementRequest,
-    ) -> RusotoFuture<UpdatePlacementResponse, UpdatePlacementError> {
+impl ServiceRequest for UpdatePlacementRequest {
+    type Output = UpdatePlacementResponse;
+    type Error = UpdatePlacementError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/projects/{project_name}/placements/{placement_name}",
-            placement_name = input.placement_name,
-            project_name = input.project_name
+            placement_name = self.placement_name,
+            project_name = self.project_name
         );
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -1880,25 +2026,28 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             }
         })
     }
+}
 
-    /// <p>Updates a project associated with your AWS account and region. With the exception of device template names, you can pass just the values that need to be updated because the update request will change only the values that are provided. To clear a value, pass the empty string (i.e., <code>""</code>).</p>
-    fn update_project(
-        &self,
-        input: UpdateProjectRequest,
-    ) -> RusotoFuture<UpdateProjectResponse, UpdateProjectError> {
-        let request_uri = format!(
-            "/projects/{project_name}",
-            project_name = input.project_name
-        );
+impl ServiceRequest for UpdateProjectRequest {
+    type Output = UpdateProjectResponse;
+    type Error = UpdateProjectError;
 
-        let mut request = SignedRequest::new("PUT", "iot1click", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/projects/{project_name}", project_name = self.project_name);
+
+        let mut request = SignedRequest::new("PUT", "iot1click", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("projects.iot1click".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

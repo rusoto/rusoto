@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -26,7 +27,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Contains the parameters for ActivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ActivatePipelineInput {
+pub struct ActivatePipelineRequest {
     /// <p>A list of parameter values to pass to the pipeline at activation.</p>
     #[serde(rename = "parameterValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -43,11 +44,11 @@ pub struct ActivatePipelineInput {
 /// <p>Contains the output of ActivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ActivatePipelineOutput {}
+pub struct ActivatePipelineResponse {}
 
 /// <p>Contains the parameters for AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AddTagsInput {
+pub struct AddTagsRequest {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
     pub pipeline_id: String,
@@ -59,11 +60,11 @@ pub struct AddTagsInput {
 /// <p>Contains the output of AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AddTagsOutput {}
+pub struct AddTagsResponse {}
 
 /// <p>Contains the parameters for CreatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreatePipelineInput {
+pub struct CreatePipelineRequest {
     /// <p>The description for the pipeline.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,7 +84,7 @@ pub struct CreatePipelineInput {
 /// <p>Contains the output of CreatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreatePipelineOutput {
+pub struct CreatePipelineResponse {
     /// <p>The ID that AWS Data Pipeline assigns the newly created pipeline. For example, <code>df-06372391ZG65EXAMPLE</code>.</p>
     #[serde(rename = "pipelineId")]
     pub pipeline_id: String,
@@ -91,7 +92,7 @@ pub struct CreatePipelineOutput {
 
 /// <p>Contains the parameters for DeactivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeactivatePipelineInput {
+pub struct DeactivatePipelineRequest {
     /// <p>Indicates whether to cancel any running objects. The default is true, which sets the state of any running objects to <code>CANCELED</code>. If this value is false, the pipeline is deactivated after all running objects finish.</p>
     #[serde(rename = "cancelActive")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -104,19 +105,23 @@ pub struct DeactivatePipelineInput {
 /// <p>Contains the output of DeactivatePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeactivatePipelineOutput {}
+pub struct DeactivatePipelineResponse {}
 
 /// <p>Contains the parameters for DeletePipeline.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeletePipelineInput {
+pub struct DeletePipelineRequest {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
     pub pipeline_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeletePipelineResponse {}
+
 /// <p>Contains the parameters for DescribeObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeObjectsInput {
+pub struct DescribeObjectsRequest {
     /// <p>Indicates whether any expressions in the object should be evaluated when the object descriptions are returned.</p>
     #[serde(rename = "evaluateExpressions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -136,7 +141,7 @@ pub struct DescribeObjectsInput {
 /// <p>Contains the output of DescribeObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeObjectsOutput {
+pub struct DescribeObjectsResponse {
     /// <p>Indicates whether there are more results to return.</p>
     #[serde(rename = "hasMoreResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -152,7 +157,7 @@ pub struct DescribeObjectsOutput {
 
 /// <p>Contains the parameters for DescribePipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribePipelinesInput {
+pub struct DescribePipelinesRequest {
     /// <p>The IDs of the pipelines to describe. You can pass as many as 25 identifiers in a single call. To obtain pipeline IDs, call <a>ListPipelines</a>.</p>
     #[serde(rename = "pipelineIds")]
     pub pipeline_ids: Vec<String>,
@@ -161,7 +166,7 @@ pub struct DescribePipelinesInput {
 /// <p>Contains the output of DescribePipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribePipelinesOutput {
+pub struct DescribePipelinesResponse {
     /// <p>An array of descriptions for the specified pipelines.</p>
     #[serde(rename = "pipelineDescriptionList")]
     pub pipeline_description_list: Vec<PipelineDescription>,
@@ -169,7 +174,7 @@ pub struct DescribePipelinesOutput {
 
 /// <p>Contains the parameters for EvaluateExpression.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct EvaluateExpressionInput {
+pub struct EvaluateExpressionRequest {
     /// <p>The expression to evaluate.</p>
     #[serde(rename = "expression")]
     pub expression: String,
@@ -184,7 +189,7 @@ pub struct EvaluateExpressionInput {
 /// <p>Contains the output of EvaluateExpression.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct EvaluateExpressionOutput {
+pub struct EvaluateExpressionResponse {
     /// <p>The evaluated expression.</p>
     #[serde(rename = "evaluatedExpression")]
     pub evaluated_expression: String,
@@ -208,7 +213,7 @@ pub struct Field {
 
 /// <p>Contains the parameters for GetPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetPipelineDefinitionInput {
+pub struct GetPipelineDefinitionRequest {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
     pub pipeline_id: String,
@@ -221,7 +226,7 @@ pub struct GetPipelineDefinitionInput {
 /// <p>Contains the output of GetPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetPipelineDefinitionOutput {
+pub struct GetPipelineDefinitionResponse {
     /// <p>The parameter objects used in the pipeline definition.</p>
     #[serde(rename = "parameterObjects")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -251,7 +256,7 @@ pub struct InstanceIdentity {
 
 /// <p>Contains the parameters for ListPipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListPipelinesInput {
+pub struct ListPipelinesRequest {
     /// <p>The starting point for the results to be returned. For the first call, this value should be empty. As long as there are more results, continue to call <code>ListPipelines</code> with the marker value from the previous call to retrieve the next set of results.</p>
     #[serde(rename = "marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -261,7 +266,7 @@ pub struct ListPipelinesInput {
 /// <p>Contains the output of ListPipelines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListPipelinesOutput {
+pub struct ListPipelinesResponse {
     /// <p>Indicates whether there are more results that can be obtained by a subsequent call.</p>
     #[serde(rename = "hasMoreResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -374,7 +379,7 @@ pub struct PipelineObject {
 
 /// <p>Contains the parameters for PollForTask.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PollForTaskInput {
+pub struct PollForTaskRequest {
     /// <p>The public DNS name of the calling task runner.</p>
     #[serde(rename = "hostname")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -391,7 +396,7 @@ pub struct PollForTaskInput {
 /// <p>Contains the output of PollForTask.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PollForTaskOutput {
+pub struct PollForTaskResponse {
     /// <p>The information needed to complete the task that is being assigned to the task runner. One of the fields returned in this object is <code>taskId</code>, which contains an identifier for the task being assigned. The calling task runner uses <code>taskId</code> in subsequent calls to <a>ReportTaskProgress</a> and <a>SetTaskStatus</a>.</p>
     #[serde(rename = "taskObject")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -400,7 +405,7 @@ pub struct PollForTaskOutput {
 
 /// <p>Contains the parameters for PutPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutPipelineDefinitionInput {
+pub struct PutPipelineDefinitionRequest {
     /// <p>The parameter objects used with the pipeline.</p>
     #[serde(rename = "parameterObjects")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -420,7 +425,7 @@ pub struct PutPipelineDefinitionInput {
 /// <p>Contains the output of PutPipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutPipelineDefinitionOutput {
+pub struct PutPipelineDefinitionResponse {
     /// <p>Indicates whether there were validation errors, and the pipeline definition is stored but cannot be activated until you correct the pipeline and call <code>PutPipelineDefinition</code> to commit the corrected pipeline.</p>
     #[serde(rename = "errored")]
     pub errored: bool,
@@ -445,7 +450,7 @@ pub struct Query {
 
 /// <p>Contains the parameters for QueryObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct QueryObjectsInput {
+pub struct QueryObjectsRequest {
     /// <p>The maximum number of object names that <code>QueryObjects</code> will return in a single call. The default value is 100. </p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -469,7 +474,7 @@ pub struct QueryObjectsInput {
 /// <p>Contains the output of QueryObjects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct QueryObjectsOutput {
+pub struct QueryObjectsResponse {
     /// <p>Indicates whether there are more results that can be obtained by a subsequent call.</p>
     #[serde(rename = "hasMoreResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -486,7 +491,7 @@ pub struct QueryObjectsOutput {
 
 /// <p>Contains the parameters for RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RemoveTagsInput {
+pub struct RemoveTagsRequest {
     /// <p>The ID of the pipeline.</p>
     #[serde(rename = "pipelineId")]
     pub pipeline_id: String,
@@ -498,11 +503,11 @@ pub struct RemoveTagsInput {
 /// <p>Contains the output of RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RemoveTagsOutput {}
+pub struct RemoveTagsResponse {}
 
 /// <p>Contains the parameters for ReportTaskProgress.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ReportTaskProgressInput {
+pub struct ReportTaskProgressRequest {
     /// <p>Key-value pairs that define the properties of the ReportTaskProgressInput object.</p>
     #[serde(rename = "fields")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -515,7 +520,7 @@ pub struct ReportTaskProgressInput {
 /// <p>Contains the output of ReportTaskProgress.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ReportTaskProgressOutput {
+pub struct ReportTaskProgressResponse {
     /// <p>If true, the calling task runner should cancel processing of the task. The task runner does not need to call <a>SetTaskStatus</a> for canceled tasks.</p>
     #[serde(rename = "canceled")]
     pub canceled: bool,
@@ -523,7 +528,7 @@ pub struct ReportTaskProgressOutput {
 
 /// <p>Contains the parameters for ReportTaskRunnerHeartbeat.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ReportTaskRunnerHeartbeatInput {
+pub struct ReportTaskRunnerHeartbeatRequest {
     /// <p>The public DNS name of the task runner.</p>
     #[serde(rename = "hostname")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -540,7 +545,7 @@ pub struct ReportTaskRunnerHeartbeatInput {
 /// <p>Contains the output of ReportTaskRunnerHeartbeat.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ReportTaskRunnerHeartbeatOutput {
+pub struct ReportTaskRunnerHeartbeatResponse {
     /// <p>Indicates whether the calling task runner should terminate.</p>
     #[serde(rename = "terminate")]
     pub terminate: bool,
@@ -560,7 +565,7 @@ pub struct Selector {
 
 /// <p>Contains the parameters for SetStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SetStatusInput {
+pub struct SetStatusRequest {
     /// <p>The IDs of the objects. The corresponding objects can be either physical or components, but not a mix of both types.</p>
     #[serde(rename = "objectIds")]
     pub object_ids: Vec<String>,
@@ -572,9 +577,13 @@ pub struct SetStatusInput {
     pub status: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetStatusResponse {}
+
 /// <p>Contains the parameters for SetTaskStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SetTaskStatusInput {
+pub struct SetTaskStatusRequest {
     /// <p>If an error occurred during the task, this value specifies the error code. This value is set on the physical attempt object. It is used to display error information to the user. It should not start with string "Service_" which is reserved by the system.</p>
     #[serde(rename = "errorId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -598,7 +607,7 @@ pub struct SetTaskStatusInput {
 /// <p>Contains the output of SetTaskStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct SetTaskStatusOutput {}
+pub struct SetTaskStatusResponse {}
 
 /// <p>Tags are key/value pairs defined by a user and associated with a pipeline to control access. AWS Data Pipeline allows you to associate ten tags per pipeline. For more information, see <a href="http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-control-access.html">Controlling User Access to Pipelines</a> in the <i>AWS Data Pipeline Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -635,7 +644,7 @@ pub struct TaskObject {
 
 /// <p>Contains the parameters for ValidatePipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ValidatePipelineDefinitionInput {
+pub struct ValidatePipelineDefinitionRequest {
     /// <p>The parameter objects used with the pipeline.</p>
     #[serde(rename = "parameterObjects")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -655,7 +664,7 @@ pub struct ValidatePipelineDefinitionInput {
 /// <p>Contains the output of ValidatePipelineDefinition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ValidatePipelineDefinitionOutput {
+pub struct ValidatePipelineDefinitionResponse {
     /// <p>Indicates whether there were validation errors.</p>
     #[serde(rename = "errored")]
     pub errored: bool,
@@ -1681,109 +1690,86 @@ impl Error for ValidatePipelineDefinitionError {
 /// Trait representing the capabilities of the AWS Data Pipeline API. AWS Data Pipeline clients implement this trait.
 pub trait DataPipeline {
     /// <p>Validates the specified pipeline and starts processing pipeline tasks. If the pipeline does not pass validation, activation fails.</p> <p>If you need to pause the pipeline to investigate an issue with a component, such as a data source or script, call <a>DeactivatePipeline</a>.</p> <p>To activate a finished pipeline, modify the end date for the pipeline and then activate it.</p>
-    fn activate_pipeline(
-        &self,
-        input: ActivatePipelineInput,
-    ) -> RusotoFuture<ActivatePipelineOutput, ActivatePipelineError>;
+    fn activate_pipeline(&self, input: ActivatePipelineRequest)
+        -> Request<ActivatePipelineRequest>;
 
     /// <p>Adds or modifies tags for the specified pipeline.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest>;
 
     /// <p>Creates a new, empty pipeline. Use <a>PutPipelineDefinition</a> to populate the pipeline.</p>
-    fn create_pipeline(
-        &self,
-        input: CreatePipelineInput,
-    ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError>;
+    fn create_pipeline(&self, input: CreatePipelineRequest) -> Request<CreatePipelineRequest>;
 
     /// <p>Deactivates the specified running pipeline. The pipeline is set to the <code>DEACTIVATING</code> state until the deactivation process completes.</p> <p>To resume a deactivated pipeline, use <a>ActivatePipeline</a>. By default, the pipeline resumes from the last completed execution. Optionally, you can specify the date and time to resume the pipeline.</p>
     fn deactivate_pipeline(
         &self,
-        input: DeactivatePipelineInput,
-    ) -> RusotoFuture<DeactivatePipelineOutput, DeactivatePipelineError>;
+        input: DeactivatePipelineRequest,
+    ) -> Request<DeactivatePipelineRequest>;
 
     /// <p>Deletes a pipeline, its pipeline definition, and its run history. AWS Data Pipeline attempts to cancel instances associated with the pipeline that are currently being processed by task runners.</p> <p>Deleting a pipeline cannot be undone. You cannot query or restore a deleted pipeline. To temporarily pause a pipeline instead of deleting it, call <a>SetStatus</a> with the status set to <code>PAUSE</code> on individual components. Components that are paused by <a>SetStatus</a> can be resumed.</p>
-    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError>;
+    fn delete_pipeline(&self, input: DeletePipelineRequest) -> Request<DeletePipelineRequest>;
 
     /// <p>Gets the object definitions for a set of objects associated with the pipeline. Object definitions are composed of a set of fields that define the properties of the object.</p>
-    fn describe_objects(
-        &self,
-        input: DescribeObjectsInput,
-    ) -> RusotoFuture<DescribeObjectsOutput, DescribeObjectsError>;
+    fn describe_objects(&self, input: DescribeObjectsRequest) -> Request<DescribeObjectsRequest>;
 
     /// <p>Retrieves metadata about one or more pipelines. The information retrieved includes the name of the pipeline, the pipeline identifier, its current state, and the user account that owns the pipeline. Using account credentials, you can retrieve metadata about pipelines that you or your IAM users have created. If you are using an IAM user account, you can retrieve metadata about only those pipelines for which you have read permissions.</p> <p>To retrieve the full pipeline definition instead of metadata about the pipeline, call <a>GetPipelineDefinition</a>.</p>
     fn describe_pipelines(
         &self,
-        input: DescribePipelinesInput,
-    ) -> RusotoFuture<DescribePipelinesOutput, DescribePipelinesError>;
+        input: DescribePipelinesRequest,
+    ) -> Request<DescribePipelinesRequest>;
 
     /// <p>Task runners call <code>EvaluateExpression</code> to evaluate a string in the context of the specified object. For example, a task runner can evaluate SQL queries stored in Amazon S3.</p>
     fn evaluate_expression(
         &self,
-        input: EvaluateExpressionInput,
-    ) -> RusotoFuture<EvaluateExpressionOutput, EvaluateExpressionError>;
+        input: EvaluateExpressionRequest,
+    ) -> Request<EvaluateExpressionRequest>;
 
     /// <p>Gets the definition of the specified pipeline. You can call <code>GetPipelineDefinition</code> to retrieve the pipeline definition that you provided using <a>PutPipelineDefinition</a>.</p>
     fn get_pipeline_definition(
         &self,
-        input: GetPipelineDefinitionInput,
-    ) -> RusotoFuture<GetPipelineDefinitionOutput, GetPipelineDefinitionError>;
+        input: GetPipelineDefinitionRequest,
+    ) -> Request<GetPipelineDefinitionRequest>;
 
     /// <p>Lists the pipeline identifiers for all active pipelines that you have permission to access.</p>
-    fn list_pipelines(
-        &self,
-        input: ListPipelinesInput,
-    ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError>;
+    fn list_pipelines(&self, input: ListPipelinesRequest) -> Request<ListPipelinesRequest>;
 
     /// <p>Task runners call <code>PollForTask</code> to receive a task to perform from AWS Data Pipeline. The task runner specifies which tasks it can perform by setting a value for the <code>workerGroup</code> parameter. The task returned can come from any of the pipelines that match the <code>workerGroup</code> value passed in by the task runner and that was launched using the IAM user credentials specified by the task runner.</p> <p>If tasks are ready in the work queue, <code>PollForTask</code> returns a response immediately. If no tasks are available in the queue, <code>PollForTask</code> uses long-polling and holds on to a poll connection for up to a 90 seconds, during which time the first newly scheduled task is handed to the task runner. To accomodate this, set the socket timeout in your task runner to 90 seconds. The task runner should not call <code>PollForTask</code> again on the same <code>workerGroup</code> until it receives a response, and this can take up to 90 seconds. </p>
-    fn poll_for_task(
-        &self,
-        input: PollForTaskInput,
-    ) -> RusotoFuture<PollForTaskOutput, PollForTaskError>;
+    fn poll_for_task(&self, input: PollForTaskRequest) -> Request<PollForTaskRequest>;
 
     /// <p>Adds tasks, schedules, and preconditions to the specified pipeline. You can use <code>PutPipelineDefinition</code> to populate a new pipeline.</p> <p> <code>PutPipelineDefinition</code> also validates the configuration as it adds it to the pipeline. Changes to the pipeline are saved unless one of the following three validation errors exists in the pipeline. </p> <ol> <li>An object is missing a name or identifier field.</li> <li>A string or reference field is empty.</li> <li>The number of objects in the pipeline exceeds the maximum allowed objects.</li> <li>The pipeline is in a FINISHED state.</li> </ol> <p> Pipeline object definitions are passed to the <code>PutPipelineDefinition</code> action and returned by the <a>GetPipelineDefinition</a> action. </p>
     fn put_pipeline_definition(
         &self,
-        input: PutPipelineDefinitionInput,
-    ) -> RusotoFuture<PutPipelineDefinitionOutput, PutPipelineDefinitionError>;
+        input: PutPipelineDefinitionRequest,
+    ) -> Request<PutPipelineDefinitionRequest>;
 
     /// <p>Queries the specified pipeline for the names of objects that match the specified set of conditions.</p>
-    fn query_objects(
-        &self,
-        input: QueryObjectsInput,
-    ) -> RusotoFuture<QueryObjectsOutput, QueryObjectsError>;
+    fn query_objects(&self, input: QueryObjectsRequest) -> Request<QueryObjectsRequest>;
 
     /// <p>Removes existing tags from the specified pipeline.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest>;
 
     /// <p>Task runners call <code>ReportTaskProgress</code> when assigned a task to acknowledge that it has the task. If the web service does not receive this acknowledgement within 2 minutes, it assigns the task in a subsequent <a>PollForTask</a> call. After this initial acknowledgement, the task runner only needs to report progress every 15 minutes to maintain its ownership of the task. You can change this reporting time from 15 minutes by specifying a <code>reportProgressTimeout</code> field in your pipeline.</p> <p>If a task runner does not report its status after 5 minutes, AWS Data Pipeline assumes that the task runner is unable to process the task and reassigns the task in a subsequent response to <a>PollForTask</a>. Task runners should call <code>ReportTaskProgress</code> every 60 seconds.</p>
     fn report_task_progress(
         &self,
-        input: ReportTaskProgressInput,
-    ) -> RusotoFuture<ReportTaskProgressOutput, ReportTaskProgressError>;
+        input: ReportTaskProgressRequest,
+    ) -> Request<ReportTaskProgressRequest>;
 
     /// <p>Task runners call <code>ReportTaskRunnerHeartbeat</code> every 15 minutes to indicate that they are operational. If the AWS Data Pipeline Task Runner is launched on a resource managed by AWS Data Pipeline, the web service can use this call to detect when the task runner application has failed and restart a new instance.</p>
     fn report_task_runner_heartbeat(
         &self,
-        input: ReportTaskRunnerHeartbeatInput,
-    ) -> RusotoFuture<ReportTaskRunnerHeartbeatOutput, ReportTaskRunnerHeartbeatError>;
+        input: ReportTaskRunnerHeartbeatRequest,
+    ) -> Request<ReportTaskRunnerHeartbeatRequest>;
 
     /// <p>Requests that the status of the specified physical or logical pipeline objects be updated in the specified pipeline. This update might not occur immediately, but is eventually consistent. The status that can be set depends on the type of object (for example, DataNode or Activity). You cannot perform this operation on <code>FINISHED</code> pipelines and attempting to do so returns <code>InvalidRequestException</code>.</p>
-    fn set_status(&self, input: SetStatusInput) -> RusotoFuture<(), SetStatusError>;
+    fn set_status(&self, input: SetStatusRequest) -> Request<SetStatusRequest>;
 
     /// <p>Task runners call <code>SetTaskStatus</code> to notify AWS Data Pipeline that a task is completed and provide information about the final status. A task runner makes this call regardless of whether the task was sucessful. A task runner does not need to call <code>SetTaskStatus</code> for tasks that are canceled by the web service during a call to <a>ReportTaskProgress</a>.</p>
-    fn set_task_status(
-        &self,
-        input: SetTaskStatusInput,
-    ) -> RusotoFuture<SetTaskStatusOutput, SetTaskStatusError>;
+    fn set_task_status(&self, input: SetTaskStatusRequest) -> Request<SetTaskStatusRequest>;
 
     /// <p>Validates the specified pipeline definition to ensure that it is well formed and can be run without error.</p>
     fn validate_pipeline_definition(
         &self,
-        input: ValidatePipelineDefinitionInput,
-    ) -> RusotoFuture<ValidatePipelineDefinitionOutput, ValidatePipelineDefinitionError>;
+        input: ValidatePipelineDefinitionRequest,
+    ) -> Request<ValidatePipelineDefinitionRequest>;
 }
 /// A client for the AWS Data Pipeline API.
 #[derive(Clone)]
@@ -1825,20 +1811,147 @@ impl DataPipeline for DataPipelineClient {
     /// <p>Validates the specified pipeline and starts processing pipeline tasks. If the pipeline does not pass validation, activation fails.</p> <p>If you need to pause the pipeline to investigate an issue with a component, such as a data source or script, call <a>DeactivatePipeline</a>.</p> <p>To activate a finished pipeline, modify the end date for the pipeline and then activate it.</p>
     fn activate_pipeline(
         &self,
-        input: ActivatePipelineInput,
-    ) -> RusotoFuture<ActivatePipelineOutput, ActivatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        input: ActivatePipelineRequest,
+    ) -> Request<ActivatePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or modifies tags for the specified pipeline.</p>
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new, empty pipeline. Use <a>PutPipelineDefinition</a> to populate the pipeline.</p>
+    fn create_pipeline(&self, input: CreatePipelineRequest) -> Request<CreatePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deactivates the specified running pipeline. The pipeline is set to the <code>DEACTIVATING</code> state until the deactivation process completes.</p> <p>To resume a deactivated pipeline, use <a>ActivatePipeline</a>. By default, the pipeline resumes from the last completed execution. Optionally, you can specify the date and time to resume the pipeline.</p>
+    fn deactivate_pipeline(
+        &self,
+        input: DeactivatePipelineRequest,
+    ) -> Request<DeactivatePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a pipeline, its pipeline definition, and its run history. AWS Data Pipeline attempts to cancel instances associated with the pipeline that are currently being processed by task runners.</p> <p>Deleting a pipeline cannot be undone. You cannot query or restore a deleted pipeline. To temporarily pause a pipeline instead of deleting it, call <a>SetStatus</a> with the status set to <code>PAUSE</code> on individual components. Components that are paused by <a>SetStatus</a> can be resumed.</p>
+    fn delete_pipeline(&self, input: DeletePipelineRequest) -> Request<DeletePipelineRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the object definitions for a set of objects associated with the pipeline. Object definitions are composed of a set of fields that define the properties of the object.</p>
+    fn describe_objects(&self, input: DescribeObjectsRequest) -> Request<DescribeObjectsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves metadata about one or more pipelines. The information retrieved includes the name of the pipeline, the pipeline identifier, its current state, and the user account that owns the pipeline. Using account credentials, you can retrieve metadata about pipelines that you or your IAM users have created. If you are using an IAM user account, you can retrieve metadata about only those pipelines for which you have read permissions.</p> <p>To retrieve the full pipeline definition instead of metadata about the pipeline, call <a>GetPipelineDefinition</a>.</p>
+    fn describe_pipelines(
+        &self,
+        input: DescribePipelinesRequest,
+    ) -> Request<DescribePipelinesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Task runners call <code>EvaluateExpression</code> to evaluate a string in the context of the specified object. For example, a task runner can evaluate SQL queries stored in Amazon S3.</p>
+    fn evaluate_expression(
+        &self,
+        input: EvaluateExpressionRequest,
+    ) -> Request<EvaluateExpressionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the definition of the specified pipeline. You can call <code>GetPipelineDefinition</code> to retrieve the pipeline definition that you provided using <a>PutPipelineDefinition</a>.</p>
+    fn get_pipeline_definition(
+        &self,
+        input: GetPipelineDefinitionRequest,
+    ) -> Request<GetPipelineDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the pipeline identifiers for all active pipelines that you have permission to access.</p>
+    fn list_pipelines(&self, input: ListPipelinesRequest) -> Request<ListPipelinesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Task runners call <code>PollForTask</code> to receive a task to perform from AWS Data Pipeline. The task runner specifies which tasks it can perform by setting a value for the <code>workerGroup</code> parameter. The task returned can come from any of the pipelines that match the <code>workerGroup</code> value passed in by the task runner and that was launched using the IAM user credentials specified by the task runner.</p> <p>If tasks are ready in the work queue, <code>PollForTask</code> returns a response immediately. If no tasks are available in the queue, <code>PollForTask</code> uses long-polling and holds on to a poll connection for up to a 90 seconds, during which time the first newly scheduled task is handed to the task runner. To accomodate this, set the socket timeout in your task runner to 90 seconds. The task runner should not call <code>PollForTask</code> again on the same <code>workerGroup</code> until it receives a response, and this can take up to 90 seconds. </p>
+    fn poll_for_task(&self, input: PollForTaskRequest) -> Request<PollForTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds tasks, schedules, and preconditions to the specified pipeline. You can use <code>PutPipelineDefinition</code> to populate a new pipeline.</p> <p> <code>PutPipelineDefinition</code> also validates the configuration as it adds it to the pipeline. Changes to the pipeline are saved unless one of the following three validation errors exists in the pipeline. </p> <ol> <li>An object is missing a name or identifier field.</li> <li>A string or reference field is empty.</li> <li>The number of objects in the pipeline exceeds the maximum allowed objects.</li> <li>The pipeline is in a FINISHED state.</li> </ol> <p> Pipeline object definitions are passed to the <code>PutPipelineDefinition</code> action and returned by the <a>GetPipelineDefinition</a> action. </p>
+    fn put_pipeline_definition(
+        &self,
+        input: PutPipelineDefinitionRequest,
+    ) -> Request<PutPipelineDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Queries the specified pipeline for the names of objects that match the specified set of conditions.</p>
+    fn query_objects(&self, input: QueryObjectsRequest) -> Request<QueryObjectsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes existing tags from the specified pipeline.</p>
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Task runners call <code>ReportTaskProgress</code> when assigned a task to acknowledge that it has the task. If the web service does not receive this acknowledgement within 2 minutes, it assigns the task in a subsequent <a>PollForTask</a> call. After this initial acknowledgement, the task runner only needs to report progress every 15 minutes to maintain its ownership of the task. You can change this reporting time from 15 minutes by specifying a <code>reportProgressTimeout</code> field in your pipeline.</p> <p>If a task runner does not report its status after 5 minutes, AWS Data Pipeline assumes that the task runner is unable to process the task and reassigns the task in a subsequent response to <a>PollForTask</a>. Task runners should call <code>ReportTaskProgress</code> every 60 seconds.</p>
+    fn report_task_progress(
+        &self,
+        input: ReportTaskProgressRequest,
+    ) -> Request<ReportTaskProgressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Task runners call <code>ReportTaskRunnerHeartbeat</code> every 15 minutes to indicate that they are operational. If the AWS Data Pipeline Task Runner is launched on a resource managed by AWS Data Pipeline, the web service can use this call to detect when the task runner application has failed and restart a new instance.</p>
+    fn report_task_runner_heartbeat(
+        &self,
+        input: ReportTaskRunnerHeartbeatRequest,
+    ) -> Request<ReportTaskRunnerHeartbeatRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Requests that the status of the specified physical or logical pipeline objects be updated in the specified pipeline. This update might not occur immediately, but is eventually consistent. The status that can be set depends on the type of object (for example, DataNode or Activity). You cannot perform this operation on <code>FINISHED</code> pipelines and attempting to do so returns <code>InvalidRequestException</code>.</p>
+    fn set_status(&self, input: SetStatusRequest) -> Request<SetStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Task runners call <code>SetTaskStatus</code> to notify AWS Data Pipeline that a task is completed and provide information about the final status. A task runner makes this call regardless of whether the task was sucessful. A task runner does not need to call <code>SetTaskStatus</code> for tasks that are canceled by the web service during a call to <a>ReportTaskProgress</a>.</p>
+    fn set_task_status(&self, input: SetTaskStatusRequest) -> Request<SetTaskStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Validates the specified pipeline definition to ensure that it is well formed and can be run without error.</p>
+    fn validate_pipeline_definition(
+        &self,
+        input: ValidatePipelineDefinitionRequest,
+    ) -> Request<ValidatePipelineDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for ActivatePipelineRequest {
+    type Output = ActivatePipelineResponse;
+    type Error = ActivatePipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ActivatePipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ActivatePipelineOutput, _>()
+                        .deserialize::<ActivatePipelineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1850,20 +1963,28 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Adds or modifies tags for the specified pipeline.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for AddTagsRequest {
+    type Output = AddTagsResponse;
+    type Error = AddTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.AddTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1875,24 +1996,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new, empty pipeline. Use <a>PutPipelineDefinition</a> to populate the pipeline.</p>
-    fn create_pipeline(
-        &self,
-        input: CreatePipelineInput,
-    ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for CreatePipelineRequest {
+    type Output = CreatePipelineResponse;
+    type Error = CreatePipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.CreatePipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePipelineOutput, _>()
+                        .deserialize::<CreatePipelineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1904,24 +2030,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Deactivates the specified running pipeline. The pipeline is set to the <code>DEACTIVATING</code> state until the deactivation process completes.</p> <p>To resume a deactivated pipeline, use <a>ActivatePipeline</a>. By default, the pipeline resumes from the last completed execution. Optionally, you can specify the date and time to resume the pipeline.</p>
-    fn deactivate_pipeline(
-        &self,
-        input: DeactivatePipelineInput,
-    ) -> RusotoFuture<DeactivatePipelineOutput, DeactivatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for DeactivatePipelineRequest {
+    type Output = DeactivatePipelineResponse;
+    type Error = DeactivatePipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DeactivatePipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeactivatePipelineOutput, _>()
+                        .deserialize::<DeactivatePipelineResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1933,19 +2064,30 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a pipeline, its pipeline definition, and its run history. AWS Data Pipeline attempts to cancel instances associated with the pipeline that are currently being processed by task runners.</p> <p>Deleting a pipeline cannot be undone. You cannot query or restore a deleted pipeline. To temporarily pause a pipeline instead of deleting it, call <a>SetStatus</a> with the status set to <code>PAUSE</code> on individual components. Components that are paused by <a>SetStatus</a> can be resumed.</p>
-    fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for DeletePipelineRequest {
+    type Output = DeletePipelineResponse;
+    type Error = DeletePipelineError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DeletePipeline");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeletePipelineResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -1956,24 +2098,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Gets the object definitions for a set of objects associated with the pipeline. Object definitions are composed of a set of fields that define the properties of the object.</p>
-    fn describe_objects(
-        &self,
-        input: DescribeObjectsInput,
-    ) -> RusotoFuture<DescribeObjectsOutput, DescribeObjectsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for DescribeObjectsRequest {
+    type Output = DescribeObjectsResponse;
+    type Error = DescribeObjectsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DescribeObjects");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeObjectsOutput, _>()
+                        .deserialize::<DescribeObjectsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1985,24 +2132,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves metadata about one or more pipelines. The information retrieved includes the name of the pipeline, the pipeline identifier, its current state, and the user account that owns the pipeline. Using account credentials, you can retrieve metadata about pipelines that you or your IAM users have created. If you are using an IAM user account, you can retrieve metadata about only those pipelines for which you have read permissions.</p> <p>To retrieve the full pipeline definition instead of metadata about the pipeline, call <a>GetPipelineDefinition</a>.</p>
-    fn describe_pipelines(
-        &self,
-        input: DescribePipelinesInput,
-    ) -> RusotoFuture<DescribePipelinesOutput, DescribePipelinesError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for DescribePipelinesRequest {
+    type Output = DescribePipelinesResponse;
+    type Error = DescribePipelinesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DescribePipelines");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePipelinesOutput, _>()
+                        .deserialize::<DescribePipelinesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2014,24 +2166,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Task runners call <code>EvaluateExpression</code> to evaluate a string in the context of the specified object. For example, a task runner can evaluate SQL queries stored in Amazon S3.</p>
-    fn evaluate_expression(
-        &self,
-        input: EvaluateExpressionInput,
-    ) -> RusotoFuture<EvaluateExpressionOutput, EvaluateExpressionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for EvaluateExpressionRequest {
+    type Output = EvaluateExpressionResponse;
+    type Error = EvaluateExpressionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.EvaluateExpression");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<EvaluateExpressionOutput, _>()
+                        .deserialize::<EvaluateExpressionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2043,24 +2200,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Gets the definition of the specified pipeline. You can call <code>GetPipelineDefinition</code> to retrieve the pipeline definition that you provided using <a>PutPipelineDefinition</a>.</p>
-    fn get_pipeline_definition(
-        &self,
-        input: GetPipelineDefinitionInput,
-    ) -> RusotoFuture<GetPipelineDefinitionOutput, GetPipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for GetPipelineDefinitionRequest {
+    type Output = GetPipelineDefinitionResponse;
+    type Error = GetPipelineDefinitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.GetPipelineDefinition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPipelineDefinitionOutput, _>()
+                        .deserialize::<GetPipelineDefinitionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2071,24 +2233,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Lists the pipeline identifiers for all active pipelines that you have permission to access.</p>
-    fn list_pipelines(
-        &self,
-        input: ListPipelinesInput,
-    ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for ListPipelinesRequest {
+    type Output = ListPipelinesResponse;
+    type Error = ListPipelinesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ListPipelines");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPipelinesOutput, _>()
+                        .deserialize::<ListPipelinesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2100,24 +2267,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Task runners call <code>PollForTask</code> to receive a task to perform from AWS Data Pipeline. The task runner specifies which tasks it can perform by setting a value for the <code>workerGroup</code> parameter. The task returned can come from any of the pipelines that match the <code>workerGroup</code> value passed in by the task runner and that was launched using the IAM user credentials specified by the task runner.</p> <p>If tasks are ready in the work queue, <code>PollForTask</code> returns a response immediately. If no tasks are available in the queue, <code>PollForTask</code> uses long-polling and holds on to a poll connection for up to a 90 seconds, during which time the first newly scheduled task is handed to the task runner. To accomodate this, set the socket timeout in your task runner to 90 seconds. The task runner should not call <code>PollForTask</code> again on the same <code>workerGroup</code> until it receives a response, and this can take up to 90 seconds. </p>
-    fn poll_for_task(
-        &self,
-        input: PollForTaskInput,
-    ) -> RusotoFuture<PollForTaskOutput, PollForTaskError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for PollForTaskRequest {
+    type Output = PollForTaskResponse;
+    type Error = PollForTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.PollForTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PollForTaskOutput, _>()
+                        .deserialize::<PollForTaskResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2129,24 +2301,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Adds tasks, schedules, and preconditions to the specified pipeline. You can use <code>PutPipelineDefinition</code> to populate a new pipeline.</p> <p> <code>PutPipelineDefinition</code> also validates the configuration as it adds it to the pipeline. Changes to the pipeline are saved unless one of the following three validation errors exists in the pipeline. </p> <ol> <li>An object is missing a name or identifier field.</li> <li>A string or reference field is empty.</li> <li>The number of objects in the pipeline exceeds the maximum allowed objects.</li> <li>The pipeline is in a FINISHED state.</li> </ol> <p> Pipeline object definitions are passed to the <code>PutPipelineDefinition</code> action and returned by the <a>GetPipelineDefinition</a> action. </p>
-    fn put_pipeline_definition(
-        &self,
-        input: PutPipelineDefinitionInput,
-    ) -> RusotoFuture<PutPipelineDefinitionOutput, PutPipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for PutPipelineDefinitionRequest {
+    type Output = PutPipelineDefinitionResponse;
+    type Error = PutPipelineDefinitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.PutPipelineDefinition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutPipelineDefinitionOutput, _>()
+                        .deserialize::<PutPipelineDefinitionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2157,24 +2334,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Queries the specified pipeline for the names of objects that match the specified set of conditions.</p>
-    fn query_objects(
-        &self,
-        input: QueryObjectsInput,
-    ) -> RusotoFuture<QueryObjectsOutput, QueryObjectsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for QueryObjectsRequest {
+    type Output = QueryObjectsResponse;
+    type Error = QueryObjectsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.QueryObjects");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<QueryObjectsOutput, _>()
+                        .deserialize::<QueryObjectsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2186,24 +2368,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Removes existing tags from the specified pipeline.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for RemoveTagsRequest {
+    type Output = RemoveTagsResponse;
+    type Error = RemoveTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.RemoveTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RemoveTagsOutput, _>()
+                        .deserialize::<RemoveTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2215,24 +2402,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Task runners call <code>ReportTaskProgress</code> when assigned a task to acknowledge that it has the task. If the web service does not receive this acknowledgement within 2 minutes, it assigns the task in a subsequent <a>PollForTask</a> call. After this initial acknowledgement, the task runner only needs to report progress every 15 minutes to maintain its ownership of the task. You can change this reporting time from 15 minutes by specifying a <code>reportProgressTimeout</code> field in your pipeline.</p> <p>If a task runner does not report its status after 5 minutes, AWS Data Pipeline assumes that the task runner is unable to process the task and reassigns the task in a subsequent response to <a>PollForTask</a>. Task runners should call <code>ReportTaskProgress</code> every 60 seconds.</p>
-    fn report_task_progress(
-        &self,
-        input: ReportTaskProgressInput,
-    ) -> RusotoFuture<ReportTaskProgressOutput, ReportTaskProgressError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for ReportTaskProgressRequest {
+    type Output = ReportTaskProgressResponse;
+    type Error = ReportTaskProgressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ReportTaskProgress");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ReportTaskProgressOutput, _>()
+                        .deserialize::<ReportTaskProgressResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2244,24 +2436,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Task runners call <code>ReportTaskRunnerHeartbeat</code> every 15 minutes to indicate that they are operational. If the AWS Data Pipeline Task Runner is launched on a resource managed by AWS Data Pipeline, the web service can use this call to detect when the task runner application has failed and restart a new instance.</p>
-    fn report_task_runner_heartbeat(
-        &self,
-        input: ReportTaskRunnerHeartbeatInput,
-    ) -> RusotoFuture<ReportTaskRunnerHeartbeatOutput, ReportTaskRunnerHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for ReportTaskRunnerHeartbeatRequest {
+    type Output = ReportTaskRunnerHeartbeatResponse;
+    type Error = ReportTaskRunnerHeartbeatError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ReportTaskRunnerHeartbeat");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ReportTaskRunnerHeartbeatOutput, _>()
+                        .deserialize::<ReportTaskRunnerHeartbeatResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -2270,19 +2467,30 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Requests that the status of the specified physical or logical pipeline objects be updated in the specified pipeline. This update might not occur immediately, but is eventually consistent. The status that can be set depends on the type of object (for example, DataNode or Activity). You cannot perform this operation on <code>FINISHED</code> pipelines and attempting to do so returns <code>InvalidRequestException</code>.</p>
-    fn set_status(&self, input: SetStatusInput) -> RusotoFuture<(), SetStatusError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for SetStatusRequest {
+    type Output = SetStatusResponse;
+    type Error = SetStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.SetStatus");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SetStatusResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -2293,24 +2501,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Task runners call <code>SetTaskStatus</code> to notify AWS Data Pipeline that a task is completed and provide information about the final status. A task runner makes this call regardless of whether the task was sucessful. A task runner does not need to call <code>SetTaskStatus</code> for tasks that are canceled by the web service during a call to <a>ReportTaskProgress</a>.</p>
-    fn set_task_status(
-        &self,
-        input: SetTaskStatusInput,
-    ) -> RusotoFuture<SetTaskStatusOutput, SetTaskStatusError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for SetTaskStatusRequest {
+    type Output = SetTaskStatusResponse;
+    type Error = SetTaskStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.SetTaskStatus");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<SetTaskStatusOutput, _>()
+                        .deserialize::<SetTaskStatusResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2322,24 +2535,29 @@ impl DataPipeline for DataPipelineClient {
             }
         })
     }
+}
 
-    /// <p>Validates the specified pipeline definition to ensure that it is well formed and can be run without error.</p>
-    fn validate_pipeline_definition(
-        &self,
-        input: ValidatePipelineDefinitionInput,
-    ) -> RusotoFuture<ValidatePipelineDefinitionOutput, ValidatePipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+impl ServiceRequest for ValidatePipelineDefinitionRequest {
+    type Output = ValidatePipelineDefinitionResponse;
+    type Error = ValidatePipelineDefinitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "datapipeline", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ValidatePipelineDefinition");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ValidatePipelineDefinitionOutput, _>()
+                        .deserialize::<ValidatePipelineDefinitionResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

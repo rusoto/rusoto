@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -43,7 +44,7 @@ pub struct CognitoIdentityProvider {
 
 /// <p>Input to the CreateIdentityPool action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateIdentityPoolInput {
+pub struct CreateIdentityPoolRequest {
     /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
     #[serde(rename = "AllowUnauthenticatedIdentities")]
     pub allow_unauthenticated_identities: bool,
@@ -59,6 +60,45 @@ pub struct CreateIdentityPoolInput {
     #[serde(rename = "IdentityPoolName")]
     pub identity_pool_name: String,
     /// <p>Tags to assign to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>
+    #[serde(rename = "IdentityPoolTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of OpendID Connect provider ARNs.</p>
+    #[serde(rename = "OpenIdConnectProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_id_connect_provider_ar_ns: Option<Vec<String>>,
+    /// <p>An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.</p>
+    #[serde(rename = "SamlProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_provider_ar_ns: Option<Vec<String>>,
+    /// <p>Optional key:value pairs mapping provider names to provider app IDs.</p>
+    #[serde(rename = "SupportedLoginProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_login_providers: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>An object representing an Amazon Cognito identity pool.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateIdentityPoolResponse {
+    /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
+    #[serde(rename = "AllowUnauthenticatedIdentities")]
+    pub allow_unauthenticated_identities: bool,
+    /// <p>A list representing an Amazon Cognito user pool and its client ID.</p>
+    #[serde(rename = "CognitoIdentityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_identity_providers: Option<Vec<CognitoIdentityProvider>>,
+    /// <p>The "domain" by which Cognito will refer to your users.</p>
+    #[serde(rename = "DeveloperProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub developer_provider_name: Option<String>,
+    /// <p>An identity pool ID in the format REGION:GUID.</p>
+    #[serde(rename = "IdentityPoolId")]
+    pub identity_pool_id: String,
+    /// <p>A string that you provide.</p>
+    #[serde(rename = "IdentityPoolName")]
+    pub identity_pool_name: String,
+    /// <p>The tags that are assigned to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>
     #[serde(rename = "IdentityPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
@@ -100,7 +140,7 @@ pub struct Credentials {
 
 /// <p>Input to the <code>DeleteIdentities</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteIdentitiesInput {
+pub struct DeleteIdentitiesRequest {
     /// <p>A list of 1-60 identities that you want to delete.</p>
     #[serde(rename = "IdentityIdsToDelete")]
     pub identity_ids_to_delete: Vec<String>,
@@ -118,31 +158,96 @@ pub struct DeleteIdentitiesResponse {
 
 /// <p>Input to the DeleteIdentityPool action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteIdentityPoolInput {
+pub struct DeleteIdentityPoolRequest {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIdentityPoolResponse {}
+
+/// <p>Input to the DescribeIdentityPool action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeIdentityPoolRequest {
+    /// <p>An identity pool ID in the format REGION:GUID.</p>
+    #[serde(rename = "IdentityPoolId")]
+    pub identity_pool_id: String,
+}
+
+/// <p>An object representing an Amazon Cognito identity pool.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeIdentityPoolResponse {
+    /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
+    #[serde(rename = "AllowUnauthenticatedIdentities")]
+    pub allow_unauthenticated_identities: bool,
+    /// <p>A list representing an Amazon Cognito user pool and its client ID.</p>
+    #[serde(rename = "CognitoIdentityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_identity_providers: Option<Vec<CognitoIdentityProvider>>,
+    /// <p>The "domain" by which Cognito will refer to your users.</p>
+    #[serde(rename = "DeveloperProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub developer_provider_name: Option<String>,
+    /// <p>An identity pool ID in the format REGION:GUID.</p>
+    #[serde(rename = "IdentityPoolId")]
+    pub identity_pool_id: String,
+    /// <p>A string that you provide.</p>
+    #[serde(rename = "IdentityPoolName")]
+    pub identity_pool_name: String,
+    /// <p>The tags that are assigned to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>
+    #[serde(rename = "IdentityPoolTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of OpendID Connect provider ARNs.</p>
+    #[serde(rename = "OpenIdConnectProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_id_connect_provider_ar_ns: Option<Vec<String>>,
+    /// <p>An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.</p>
+    #[serde(rename = "SamlProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_provider_ar_ns: Option<Vec<String>>,
+    /// <p>Optional key:value pairs mapping provider names to provider app IDs.</p>
+    #[serde(rename = "SupportedLoginProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_login_providers: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Input to the <code>DescribeIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeIdentityInput {
+pub struct DescribeIdentityRequest {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
 }
 
-/// <p>Input to the DescribeIdentityPool action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeIdentityPoolInput {
-    /// <p>An identity pool ID in the format REGION:GUID.</p>
-    #[serde(rename = "IdentityPoolId")]
-    pub identity_pool_id: String,
+/// <p>A description of the identity.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeIdentityResponse {
+    /// <p>Date on which the identity was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>A unique identifier in the format REGION:GUID.</p>
+    #[serde(rename = "IdentityId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_id: Option<String>,
+    /// <p>Date on which the identity was last modified.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The provider names.</p>
+    #[serde(rename = "Logins")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logins: Option<Vec<String>>,
 }
 
 /// <p>Input to the <code>GetCredentialsForIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetCredentialsForIdentityInput {
+pub struct GetCredentialsForIdentityRequest {
     /// <p>The Amazon Resource Name (ARN) of the role to be assumed when multiple roles were received in the token from the identity provider. For example, a SAML-based identity provider. This parameter is optional for identity providers that do not support role customization.</p>
     #[serde(rename = "CustomRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -172,7 +277,7 @@ pub struct GetCredentialsForIdentityResponse {
 
 /// <p>Input to the GetId action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetIdInput {
+pub struct GetIdRequest {
     /// <p>A standard AWS account ID (9+ digits).</p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -198,7 +303,7 @@ pub struct GetIdResponse {
 
 /// <p>Input to the <code>GetIdentityPoolRoles</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetIdentityPoolRolesInput {
+pub struct GetIdentityPoolRolesRequest {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
@@ -224,7 +329,7 @@ pub struct GetIdentityPoolRolesResponse {
 
 /// <p>Input to the <code>GetOpenIdTokenForDeveloperIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetOpenIdTokenForDeveloperIdentityInput {
+pub struct GetOpenIdTokenForDeveloperIdentityRequest {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -257,7 +362,7 @@ pub struct GetOpenIdTokenForDeveloperIdentityResponse {
 
 /// <p>Input to the GetOpenIdToken action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetOpenIdTokenInput {
+pub struct GetOpenIdTokenRequest {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
@@ -303,44 +408,6 @@ pub struct IdentityDescription {
     pub logins: Option<Vec<String>>,
 }
 
-/// <p>An object representing an Amazon Cognito identity pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct IdentityPool {
-    /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
-    #[serde(rename = "AllowUnauthenticatedIdentities")]
-    pub allow_unauthenticated_identities: bool,
-    /// <p>A list representing an Amazon Cognito user pool and its client ID.</p>
-    #[serde(rename = "CognitoIdentityProviders")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub cognito_identity_providers: Option<Vec<CognitoIdentityProvider>>,
-    /// <p>The "domain" by which Cognito will refer to your users.</p>
-    #[serde(rename = "DeveloperProviderName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub developer_provider_name: Option<String>,
-    /// <p>An identity pool ID in the format REGION:GUID.</p>
-    #[serde(rename = "IdentityPoolId")]
-    pub identity_pool_id: String,
-    /// <p>A string that you provide.</p>
-    #[serde(rename = "IdentityPoolName")]
-    pub identity_pool_name: String,
-    /// <p>The tags that are assigned to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>
-    #[serde(rename = "IdentityPoolTags")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of OpendID Connect provider ARNs.</p>
-    #[serde(rename = "OpenIdConnectProviderARNs")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub open_id_connect_provider_ar_ns: Option<Vec<String>>,
-    /// <p>An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.</p>
-    #[serde(rename = "SamlProviderARNs")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub saml_provider_ar_ns: Option<Vec<String>>,
-    /// <p>Optional key:value pairs mapping provider names to provider app IDs.</p>
-    #[serde(rename = "SupportedLoginProviders")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub supported_login_providers: Option<::std::collections::HashMap<String, String>>,
-}
-
 /// <p>A description of the identity pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -357,7 +424,7 @@ pub struct IdentityPoolShortDescription {
 
 /// <p>Input to the ListIdentities action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListIdentitiesInput {
+pub struct ListIdentitiesRequest {
     /// <p>An optional boolean parameter that allows you to hide disabled identities. If omitted, the ListIdentities API will include disabled identities in the response.</p>
     #[serde(rename = "HideDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -394,7 +461,7 @@ pub struct ListIdentitiesResponse {
 
 /// <p>Input to the ListIdentityPools action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListIdentityPoolsInput {
+pub struct ListIdentityPoolsRequest {
     /// <p>The maximum number of identities to return.</p>
     #[serde(rename = "MaxResults")]
     pub max_results: i64,
@@ -419,7 +486,7 @@ pub struct ListIdentityPoolsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForResourceInput {
+pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the identity pool that the tags are assigned to.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -436,7 +503,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p>Input to the <code>LookupDeveloperIdentityInput</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct LookupDeveloperIdentityInput {
+pub struct LookupDeveloperIdentityRequest {
     /// <p>A unique ID used by your backend authentication process to identify a user. Typically, a developer identity provider would issue many developer user identifiers, in keeping with the number of users.</p>
     #[serde(rename = "DeveloperUserIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -495,7 +562,7 @@ pub struct MappingRule {
 
 /// <p>Input to the <code>MergeDeveloperIdentities</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct MergeDeveloperIdentitiesInput {
+pub struct MergeDeveloperIdentitiesRequest {
     /// <p>User identifier for the destination user. The value should be a <code>DeveloperUserIdentifier</code>.</p>
     #[serde(rename = "DestinationUserIdentifier")]
     pub destination_user_identifier: String,
@@ -546,7 +613,7 @@ pub struct RulesConfigurationType {
 
 /// <p>Input to the <code>SetIdentityPoolRoles</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SetIdentityPoolRolesInput {
+pub struct SetIdentityPoolRolesRequest {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
@@ -559,8 +626,12 @@ pub struct SetIdentityPoolRolesInput {
     pub roles: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetIdentityPoolRolesResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagResourceInput {
+pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the identity pool to assign the tags to.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -576,7 +647,7 @@ pub struct TagResourceResponse {}
 
 /// <p>Input to the <code>UnlinkDeveloperIdentity</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UnlinkDeveloperIdentityInput {
+pub struct UnlinkDeveloperIdentityRequest {
     /// <p>The "domain" by which Cognito will refer to your users.</p>
     #[serde(rename = "DeveloperProviderName")]
     pub developer_provider_name: String,
@@ -591,9 +662,13 @@ pub struct UnlinkDeveloperIdentityInput {
     pub identity_pool_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UnlinkDeveloperIdentityResponse {}
+
 /// <p>Input to the UnlinkIdentity action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UnlinkIdentityInput {
+pub struct UnlinkIdentityRequest {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
@@ -604,6 +679,10 @@ pub struct UnlinkIdentityInput {
     #[serde(rename = "LoginsToRemove")]
     pub logins_to_remove: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UnlinkIdentityResponse {}
 
 /// <p>An array of UnprocessedIdentityId objects, each of which contains an ErrorCode and IdentityId.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -620,7 +699,7 @@ pub struct UnprocessedIdentityId {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagResourceInput {
+pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the identity pool that the tags are assigned to.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -633,6 +712,83 @@ pub struct UntagResourceInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
+
+/// <p>An object representing an Amazon Cognito identity pool.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateIdentityPoolRequest {
+    /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
+    #[serde(rename = "AllowUnauthenticatedIdentities")]
+    pub allow_unauthenticated_identities: bool,
+    /// <p>A list representing an Amazon Cognito user pool and its client ID.</p>
+    #[serde(rename = "CognitoIdentityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_identity_providers: Option<Vec<CognitoIdentityProvider>>,
+    /// <p>The "domain" by which Cognito will refer to your users.</p>
+    #[serde(rename = "DeveloperProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub developer_provider_name: Option<String>,
+    /// <p>An identity pool ID in the format REGION:GUID.</p>
+    #[serde(rename = "IdentityPoolId")]
+    pub identity_pool_id: String,
+    /// <p>A string that you provide.</p>
+    #[serde(rename = "IdentityPoolName")]
+    pub identity_pool_name: String,
+    /// <p>The tags that are assigned to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>
+    #[serde(rename = "IdentityPoolTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of OpendID Connect provider ARNs.</p>
+    #[serde(rename = "OpenIdConnectProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_id_connect_provider_ar_ns: Option<Vec<String>>,
+    /// <p>An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.</p>
+    #[serde(rename = "SamlProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_provider_ar_ns: Option<Vec<String>>,
+    /// <p>Optional key:value pairs mapping provider names to provider app IDs.</p>
+    #[serde(rename = "SupportedLoginProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_login_providers: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>An object representing an Amazon Cognito identity pool.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateIdentityPoolResponse {
+    /// <p>TRUE if the identity pool supports unauthenticated logins.</p>
+    #[serde(rename = "AllowUnauthenticatedIdentities")]
+    pub allow_unauthenticated_identities: bool,
+    /// <p>A list representing an Amazon Cognito user pool and its client ID.</p>
+    #[serde(rename = "CognitoIdentityProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_identity_providers: Option<Vec<CognitoIdentityProvider>>,
+    /// <p>The "domain" by which Cognito will refer to your users.</p>
+    #[serde(rename = "DeveloperProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub developer_provider_name: Option<String>,
+    /// <p>An identity pool ID in the format REGION:GUID.</p>
+    #[serde(rename = "IdentityPoolId")]
+    pub identity_pool_id: String,
+    /// <p>A string that you provide.</p>
+    #[serde(rename = "IdentityPoolName")]
+    pub identity_pool_name: String,
+    /// <p>The tags that are assigned to the identity pool. A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>
+    #[serde(rename = "IdentityPoolTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A list of OpendID Connect provider ARNs.</p>
+    #[serde(rename = "OpenIdConnectProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_id_connect_provider_ar_ns: Option<Vec<String>>,
+    /// <p>An array of Amazon Resource Names (ARNs) of the SAML provider for your identity pool.</p>
+    #[serde(rename = "SamlProviderARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_provider_ar_ns: Option<Vec<String>>,
+    /// <p>Optional key:value pairs mapping provider names to provider app IDs.</p>
+    #[serde(rename = "SupportedLoginProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_login_providers: Option<::std::collections::HashMap<String, String>>,
+}
 
 /// Errors returned by CreateIdentityPool
 #[derive(Debug, PartialEq)]
@@ -2058,125 +2214,106 @@ pub trait CognitoIdentity {
     /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     fn create_identity_pool(
         &self,
-        input: CreateIdentityPoolInput,
-    ) -> RusotoFuture<IdentityPool, CreateIdentityPoolError>;
+        input: CreateIdentityPoolRequest,
+    ) -> Request<CreateIdentityPoolRequest>;
 
     /// <p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn delete_identities(
-        &self,
-        input: DeleteIdentitiesInput,
-    ) -> RusotoFuture<DeleteIdentitiesResponse, DeleteIdentitiesError>;
+    fn delete_identities(&self, input: DeleteIdentitiesRequest)
+        -> Request<DeleteIdentitiesRequest>;
 
     /// <p>Deletes an identity pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn delete_identity_pool(
         &self,
-        input: DeleteIdentityPoolInput,
-    ) -> RusotoFuture<(), DeleteIdentityPoolError>;
+        input: DeleteIdentityPoolRequest,
+    ) -> Request<DeleteIdentityPoolRequest>;
 
     /// <p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn describe_identity(
-        &self,
-        input: DescribeIdentityInput,
-    ) -> RusotoFuture<IdentityDescription, DescribeIdentityError>;
+    fn describe_identity(&self, input: DescribeIdentityRequest)
+        -> Request<DescribeIdentityRequest>;
 
     /// <p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn describe_identity_pool(
         &self,
-        input: DescribeIdentityPoolInput,
-    ) -> RusotoFuture<IdentityPool, DescribeIdentityPoolError>;
+        input: DescribeIdentityPoolRequest,
+    ) -> Request<DescribeIdentityPoolRequest>;
 
     /// <p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_credentials_for_identity(
         &self,
-        input: GetCredentialsForIdentityInput,
-    ) -> RusotoFuture<GetCredentialsForIdentityResponse, GetCredentialsForIdentityError>;
+        input: GetCredentialsForIdentityRequest,
+    ) -> Request<GetCredentialsForIdentityRequest>;
 
     /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn get_id(&self, input: GetIdInput) -> RusotoFuture<GetIdResponse, GetIdError>;
+    fn get_id(&self, input: GetIdRequest) -> Request<GetIdRequest>;
 
     /// <p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_identity_pool_roles(
         &self,
-        input: GetIdentityPoolRolesInput,
-    ) -> RusotoFuture<GetIdentityPoolRolesResponse, GetIdentityPoolRolesError>;
+        input: GetIdentityPoolRolesRequest,
+    ) -> Request<GetIdentityPoolRolesRequest>;
 
     /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 10 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn get_open_id_token(
-        &self,
-        input: GetOpenIdTokenInput,
-    ) -> RusotoFuture<GetOpenIdTokenResponse, GetOpenIdTokenError>;
+    fn get_open_id_token(&self, input: GetOpenIdTokenRequest) -> Request<GetOpenIdTokenRequest>;
 
     /// <p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn get_open_id_token_for_developer_identity(
         &self,
-        input: GetOpenIdTokenForDeveloperIdentityInput,
-    ) -> RusotoFuture<
-        GetOpenIdTokenForDeveloperIdentityResponse,
-        GetOpenIdTokenForDeveloperIdentityError,
-    >;
+        input: GetOpenIdTokenForDeveloperIdentityRequest,
+    ) -> Request<GetOpenIdTokenForDeveloperIdentityRequest>;
 
     /// <p>Lists the identities in an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn list_identities(
-        &self,
-        input: ListIdentitiesInput,
-    ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError>;
+    fn list_identities(&self, input: ListIdentitiesRequest) -> Request<ListIdentitiesRequest>;
 
     /// <p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn list_identity_pools(
         &self,
-        input: ListIdentityPoolsInput,
-    ) -> RusotoFuture<ListIdentityPoolsResponse, ListIdentityPoolsError>;
+        input: ListIdentityPoolsRequest,
+    ) -> Request<ListIdentityPoolsRequest>;
 
     /// <p>Lists the tags that are assigned to an Amazon Cognito identity pool.</p> <p>A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code> values associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p> <code>LookupDeveloperIdentity</code> is intended for low-throughput control plane operations: for example, to enable customer service to locate an identity ID by username. If you are using it for higher-volume operations such as user authentication, your requests are likely to be throttled. <a>GetOpenIdTokenForDeveloperIdentity</a> is a better option for higher-volume operations for user authentication.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn lookup_developer_identity(
         &self,
-        input: LookupDeveloperIdentityInput,
-    ) -> RusotoFuture<LookupDeveloperIdentityResponse, LookupDeveloperIdentityError>;
+        input: LookupDeveloperIdentityRequest,
+    ) -> Request<LookupDeveloperIdentityRequest>;
 
     /// <p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>The number of linked logins is limited to 20. So, the number of linked logins for the source user, <code>SourceUserIdentifier</code>, and the destination user, <code>DestinationUserIdentifier</code>, together should not be larger than 20. Otherwise, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn merge_developer_identities(
         &self,
-        input: MergeDeveloperIdentitiesInput,
-    ) -> RusotoFuture<MergeDeveloperIdentitiesResponse, MergeDeveloperIdentitiesError>;
+        input: MergeDeveloperIdentitiesRequest,
+    ) -> Request<MergeDeveloperIdentitiesRequest>;
 
     /// <p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn set_identity_pool_roles(
         &self,
-        input: SetIdentityPoolRolesInput,
-    ) -> RusotoFuture<(), SetIdentityPoolRolesError>;
+        input: SetIdentityPoolRolesRequest,
+    ) -> Request<SetIdentityPoolRolesRequest>;
 
     /// <p>Assigns a set of tags to an Amazon Cognito identity pool. A tag is a label that you can use to categorize and manage identity pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of an identity pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both identity pools. The value of this key might be <code>Test</code> for one identity pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your identity pools. In an IAM policy, you can constrain permissions for identity pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. An identity pool can have as many as 50 tags.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn unlink_developer_identity(
         &self,
-        input: UnlinkDeveloperIdentityInput,
-    ) -> RusotoFuture<(), UnlinkDeveloperIdentityError>;
+        input: UnlinkDeveloperIdentityRequest,
+    ) -> Request<UnlinkDeveloperIdentityRequest>;
 
     /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn unlink_identity(&self, input: UnlinkIdentityInput) -> RusotoFuture<(), UnlinkIdentityError>;
+    fn unlink_identity(&self, input: UnlinkIdentityRequest) -> Request<UnlinkIdentityRequest>;
 
     /// <p>Removes the specified tags from an Amazon Cognito identity pool. You can use this action up to 5 times per second, per account</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     fn update_identity_pool(
         &self,
-        input: IdentityPool,
-    ) -> RusotoFuture<IdentityPool, UpdateIdentityPoolError>;
+        input: UpdateIdentityPoolRequest,
+    ) -> Request<UpdateIdentityPoolRequest>;
 }
 /// A client for the Amazon Cognito Identity API.
 #[derive(Clone)]
@@ -2218,22 +2355,178 @@ impl CognitoIdentity for CognitoIdentityClient {
     /// <p>Creates a new identity pool. The identity pool is a store of user identity information that is specific to your AWS account. The limit on identity pools is 60 per account. The keys for <code>SupportedLoginProviders</code> are as follows:</p> <ul> <li> <p>Facebook: <code>graph.facebook.com</code> </p> </li> <li> <p>Google: <code>accounts.google.com</code> </p> </li> <li> <p>Amazon: <code>www.amazon.com</code> </p> </li> <li> <p>Twitter: <code>api.twitter.com</code> </p> </li> <li> <p>Digits: <code>www.digits.com</code> </p> </li> </ul> <p>You must use AWS Developer credentials to call this API.</p>
     fn create_identity_pool(
         &self,
-        input: CreateIdentityPoolInput,
-    ) -> RusotoFuture<IdentityPool, CreateIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        input: CreateIdentityPoolRequest,
+    ) -> Request<CreateIdentityPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn delete_identities(
+        &self,
+        input: DeleteIdentitiesRequest,
+    ) -> Request<DeleteIdentitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an identity pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn delete_identity_pool(
+        &self,
+        input: DeleteIdentityPoolRequest,
+    ) -> Request<DeleteIdentityPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn describe_identity(
+        &self,
+        input: DescribeIdentityRequest,
+    ) -> Request<DescribeIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn describe_identity_pool(
+        &self,
+        input: DescribeIdentityPoolRequest,
+    ) -> Request<DescribeIdentityPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
+    fn get_credentials_for_identity(
+        &self,
+        input: GetCredentialsForIdentityRequest,
+    ) -> Request<GetCredentialsForIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
+    fn get_id(&self, input: GetIdRequest) -> Request<GetIdRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn get_identity_pool_roles(
+        &self,
+        input: GetIdentityPoolRolesRequest,
+    ) -> Request<GetIdentityPoolRolesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 10 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
+    fn get_open_id_token(&self, input: GetOpenIdTokenRequest) -> Request<GetOpenIdTokenRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn get_open_id_token_for_developer_identity(
+        &self,
+        input: GetOpenIdTokenForDeveloperIdentityRequest,
+    ) -> Request<GetOpenIdTokenForDeveloperIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the identities in an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn list_identities(&self, input: ListIdentitiesRequest) -> Request<ListIdentitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn list_identity_pools(
+        &self,
+        input: ListIdentityPoolsRequest,
+    ) -> Request<ListIdentityPoolsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags that are assigned to an Amazon Cognito identity pool.</p> <p>A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code> values associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p> <code>LookupDeveloperIdentity</code> is intended for low-throughput control plane operations: for example, to enable customer service to locate an identity ID by username. If you are using it for higher-volume operations such as user authentication, your requests are likely to be throttled. <a>GetOpenIdTokenForDeveloperIdentity</a> is a better option for higher-volume operations for user authentication.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn lookup_developer_identity(
+        &self,
+        input: LookupDeveloperIdentityRequest,
+    ) -> Request<LookupDeveloperIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>The number of linked logins is limited to 20. So, the number of linked logins for the source user, <code>SourceUserIdentifier</code>, and the destination user, <code>DestinationUserIdentifier</code>, together should not be larger than 20. Otherwise, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn merge_developer_identities(
+        &self,
+        input: MergeDeveloperIdentitiesRequest,
+    ) -> Request<MergeDeveloperIdentitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn set_identity_pool_roles(
+        &self,
+        input: SetIdentityPoolRolesRequest,
+    ) -> Request<SetIdentityPoolRolesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns a set of tags to an Amazon Cognito identity pool. A tag is a label that you can use to categorize and manage identity pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of an identity pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both identity pools. The value of this key might be <code>Test</code> for one identity pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your identity pools. In an IAM policy, you can constrain permissions for identity pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. An identity pool can have as many as 50 tags.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn unlink_developer_identity(
+        &self,
+        input: UnlinkDeveloperIdentityRequest,
+    ) -> Request<UnlinkDeveloperIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
+    fn unlink_identity(&self, input: UnlinkIdentityRequest) -> Request<UnlinkIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from an Amazon Cognito identity pool. You can use this action up to 5 times per second, per account</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
+    fn update_identity_pool(
+        &self,
+        input: UpdateIdentityPoolRequest,
+    ) -> Request<UpdateIdentityPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateIdentityPoolRequest {
+    type Output = CreateIdentityPoolResponse;
+    type Error = CreateIdentityPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.CreateIdentityPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<IdentityPool, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateIdentityPoolResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2245,20 +2538,25 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Deletes identities from an identity pool. You can specify a list of 1-60 identities that you want to delete.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn delete_identities(
-        &self,
-        input: DeleteIdentitiesInput,
-    ) -> RusotoFuture<DeleteIdentitiesResponse, DeleteIdentitiesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for DeleteIdentitiesRequest {
+    type Output = DeleteIdentitiesResponse;
+    type Error = DeleteIdentitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.DeleteIdentities");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2274,25 +2572,33 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an identity pool. Once a pool is deleted, users will not be able to authenticate with the pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn delete_identity_pool(
-        &self,
-        input: DeleteIdentityPoolInput,
-    ) -> RusotoFuture<(), DeleteIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for DeleteIdentityPoolRequest {
+    type Output = DeleteIdentityPoolResponse;
+    type Error = DeleteIdentityPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.DeleteIdentityPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteIdentityPoolResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -2303,24 +2609,29 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Returns metadata related to the given identity, including when the identity was created and any associated linked logins.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn describe_identity(
-        &self,
-        input: DescribeIdentityInput,
-    ) -> RusotoFuture<IdentityDescription, DescribeIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for DescribeIdentityRequest {
+    type Output = DescribeIdentityResponse;
+    type Error = DescribeIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.DescribeIdentity");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<IdentityDescription, _>()
+                        .deserialize::<DescribeIdentityResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2332,26 +2643,32 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Gets details about a particular identity pool, including the pool name, ID description, creation date, and current number of users.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn describe_identity_pool(
-        &self,
-        input: DescribeIdentityPoolInput,
-    ) -> RusotoFuture<IdentityPool, DescribeIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for DescribeIdentityPoolRequest {
+    type Output = DescribeIdentityPoolResponse;
+    type Error = DescribeIdentityPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.DescribeIdentityPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<IdentityPool, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeIdentityPoolResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2362,23 +2679,28 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Returns credentials for the provided identity ID. Any provided logins will be validated against supported login providers. If the token is for cognito-identity.amazonaws.com, it will be passed through to AWS Security Token Service with the appropriate role for the token.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn get_credentials_for_identity(
-        &self,
-        input: GetCredentialsForIdentityInput,
-    ) -> RusotoFuture<GetCredentialsForIdentityResponse, GetCredentialsForIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for GetCredentialsForIdentityRequest {
+    type Output = GetCredentialsForIdentityResponse;
+    type Error = GetCredentialsForIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.GetCredentialsForIdentity",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2391,17 +2713,25 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn get_id(&self, input: GetIdInput) -> RusotoFuture<GetIdResponse, GetIdError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for GetIdRequest {
+    type Output = GetIdResponse;
+    type Error = GetIdError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.GetId");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<GetIdResponse, _>()
@@ -2416,23 +2746,28 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Gets the roles for an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn get_identity_pool_roles(
-        &self,
-        input: GetIdentityPoolRolesInput,
-    ) -> RusotoFuture<GetIdentityPoolRolesResponse, GetIdentityPoolRolesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for GetIdentityPoolRolesRequest {
+    type Output = GetIdentityPoolRolesResponse;
+    type Error = GetIdentityPoolRolesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.GetIdentityPoolRoles",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2447,20 +2782,25 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 10 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn get_open_id_token(
-        &self,
-        input: GetOpenIdTokenInput,
-    ) -> RusotoFuture<GetOpenIdTokenResponse, GetOpenIdTokenError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for GetOpenIdTokenRequest {
+    type Output = GetOpenIdTokenResponse;
+    type Error = GetOpenIdTokenError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.GetOpenIdToken");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2476,26 +2816,28 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Registers (or retrieves) a Cognito <code>IdentityId</code> and an OpenID Connect token for a user authenticated by your backend authentication process. Supplying multiple logins will create an implicit linked account. You can only specify one developer provider as part of the <code>Logins</code> map, which is linked to the identity pool. The developer provider is the "domain" by which Cognito will refer to your users.</p> <p>You can use <code>GetOpenIdTokenForDeveloperIdentity</code> to create a new identity and to link new logins (that is, user credentials issued by a public provider or developer provider) to an existing identity. When you want to create a new identity, the <code>IdentityId</code> should be null. When you want to associate a new login with an existing authenticated/unauthenticated identity, you can do so by providing the existing <code>IdentityId</code>. This API will create the identity in the specified <code>IdentityPoolId</code>.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn get_open_id_token_for_developer_identity(
-        &self,
-        input: GetOpenIdTokenForDeveloperIdentityInput,
-    ) -> RusotoFuture<
-        GetOpenIdTokenForDeveloperIdentityResponse,
-        GetOpenIdTokenForDeveloperIdentityError,
-    > {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for GetOpenIdTokenForDeveloperIdentityRequest {
+    type Output = GetOpenIdTokenForDeveloperIdentityResponse;
+    type Error = GetOpenIdTokenForDeveloperIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.GetOpenIdTokenForDeveloperIdentity",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2510,20 +2852,25 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Lists the identities in an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn list_identities(
-        &self,
-        input: ListIdentitiesInput,
-    ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for ListIdentitiesRequest {
+    type Output = ListIdentitiesResponse;
+    type Error = ListIdentitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.ListIdentities");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2539,23 +2886,28 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Lists all of the Cognito identity pools registered for your account.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn list_identity_pools(
-        &self,
-        input: ListIdentityPoolsInput,
-    ) -> RusotoFuture<ListIdentityPoolsResponse, ListIdentityPoolsError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for ListIdentityPoolsRequest {
+    type Output = ListIdentityPoolsResponse;
+    type Error = ListIdentityPoolsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.ListIdentityPools",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2571,23 +2923,28 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags that are assigned to an Amazon Cognito identity pool.</p> <p>A tag is a label that you can apply to identity pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.ListTagsForResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2602,23 +2959,28 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Retrieves the <code>IdentityID</code> associated with a <code>DeveloperUserIdentifier</code> or the list of <code>DeveloperUserIdentifier</code> values associated with an <code>IdentityId</code> for an existing identity. Either <code>IdentityID</code> or <code>DeveloperUserIdentifier</code> must not be null. If you supply only one of these values, the other value will be searched in the database and returned as a part of the response. If you supply both, <code>DeveloperUserIdentifier</code> will be matched against <code>IdentityID</code>. If the values are verified against the database, the response returns both values and is the same as the request. Otherwise a <code>ResourceConflictException</code> is thrown.</p> <p> <code>LookupDeveloperIdentity</code> is intended for low-throughput control plane operations: for example, to enable customer service to locate an identity ID by username. If you are using it for higher-volume operations such as user authentication, your requests are likely to be throttled. <a>GetOpenIdTokenForDeveloperIdentity</a> is a better option for higher-volume operations for user authentication.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn lookup_developer_identity(
-        &self,
-        input: LookupDeveloperIdentityInput,
-    ) -> RusotoFuture<LookupDeveloperIdentityResponse, LookupDeveloperIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for LookupDeveloperIdentityRequest {
+    type Output = LookupDeveloperIdentityResponse;
+    type Error = LookupDeveloperIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.LookupDeveloperIdentity",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2631,23 +2993,28 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Merges two users having different <code>IdentityId</code>s, existing in the same identity pool, and identified by the same developer provider. You can use this action to request that discrete users be merged and identified as a single user in the Cognito environment. Cognito associates the given source user (<code>SourceUserIdentifier</code>) with the <code>IdentityId</code> of the <code>DestinationUserIdentifier</code>. Only developer-authenticated users can be merged. If the users to be merged are associated with the same public provider, but as two different users, an exception will be thrown.</p> <p>The number of linked logins is limited to 20. So, the number of linked logins for the source user, <code>SourceUserIdentifier</code>, and the destination user, <code>DestinationUserIdentifier</code>, together should not be larger than 20. Otherwise, an exception will be thrown.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn merge_developer_identities(
-        &self,
-        input: MergeDeveloperIdentitiesInput,
-    ) -> RusotoFuture<MergeDeveloperIdentitiesResponse, MergeDeveloperIdentitiesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for MergeDeveloperIdentitiesRequest {
+    type Output = MergeDeveloperIdentitiesResponse;
+    type Error = MergeDeveloperIdentitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.MergeDeveloperIdentities",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2660,25 +3027,33 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Sets the roles for an identity pool. These roles are used when making calls to <a>GetCredentialsForIdentity</a> action.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn set_identity_pool_roles(
-        &self,
-        input: SetIdentityPoolRolesInput,
-    ) -> RusotoFuture<(), SetIdentityPoolRolesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for SetIdentityPoolRolesRequest {
+    type Output = SetIdentityPoolRolesResponse;
+    type Error = SetIdentityPoolRolesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.SetIdentityPoolRoles",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SetIdentityPoolRolesResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -2688,20 +3063,25 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Assigns a set of tags to an Amazon Cognito identity pool. A tag is a label that you can use to categorize and manage identity pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of an identity pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both identity pools. The value of this key might be <code>Test</code> for one identity pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your identity pools. In an IAM policy, you can constrain permissions for identity pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. An identity pool can have as many as 50 tags.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2717,25 +3097,33 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Unlinks a <code>DeveloperUserIdentifier</code> from an existing identity. Unlinked developer users will be considered new identities next time they are seen. If, for a given Cognito identity, you remove all federated identities as well as the developer user identifier, the Cognito identity becomes inaccessible.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn unlink_developer_identity(
-        &self,
-        input: UnlinkDeveloperIdentityInput,
-    ) -> RusotoFuture<(), UnlinkDeveloperIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for UnlinkDeveloperIdentityRequest {
+    type Output = UnlinkDeveloperIdentityResponse;
+    type Error = UnlinkDeveloperIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.UnlinkDeveloperIdentity",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UnlinkDeveloperIdentityResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UnlinkDeveloperIdentityError::from_response(response))
@@ -2743,19 +3131,30 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
-    fn unlink_identity(&self, input: UnlinkIdentityInput) -> RusotoFuture<(), UnlinkIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for UnlinkIdentityRequest {
+    type Output = UnlinkIdentityResponse;
+    type Error = UnlinkIdentityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.UnlinkIdentity");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UnlinkIdentityResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -2766,20 +3165,25 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified tags from an Amazon Cognito identity pool. You can use this action up to 5 times per second, per account</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2795,26 +3199,32 @@ impl CognitoIdentity for CognitoIdentityClient {
             }
         })
     }
+}
 
-    /// <p>Updates an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
-    fn update_identity_pool(
-        &self,
-        input: IdentityPool,
-    ) -> RusotoFuture<IdentityPool, UpdateIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+impl ServiceRequest for UpdateIdentityPoolRequest {
+    type Output = UpdateIdentityPoolResponse;
+    type Error = UpdateIdentityPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-identity", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.UpdateIdentityPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<IdentityPool, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateIdentityPoolResponse, _>()
                 }))
             } else {
                 Box::new(

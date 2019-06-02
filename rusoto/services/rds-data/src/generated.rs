@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -284,10 +285,7 @@ impl Error for ExecuteSqlError {
 /// Trait representing the capabilities of the AWS RDS DataService API. AWS RDS DataService clients implement this trait.
 pub trait RdsData {
     /// <p>Executes any SQL statement on the target database synchronously</p>
-    fn execute_sql(
-        &self,
-        input: ExecuteSqlRequest,
-    ) -> RusotoFuture<ExecuteSqlResponse, ExecuteSqlError>;
+    fn execute_sql(&self, input: ExecuteSqlRequest) -> Request<ExecuteSqlRequest>;
 }
 /// A client for the AWS RDS DataService API.
 #[derive(Clone)]
@@ -327,19 +325,30 @@ impl RdsDataClient {
 
 impl RdsData for RdsDataClient {
     /// <p>Executes any SQL statement on the target database synchronously</p>
-    fn execute_sql(
-        &self,
-        input: ExecuteSqlRequest,
-    ) -> RusotoFuture<ExecuteSqlResponse, ExecuteSqlError> {
+    fn execute_sql(&self, input: ExecuteSqlRequest) -> Request<ExecuteSqlRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for ExecuteSqlRequest {
+    type Output = ExecuteSqlResponse;
+    type Error = ExecuteSqlError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/ExecuteSql";
 
-        let mut request = SignedRequest::new("POST", "rds-data", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "rds-data", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

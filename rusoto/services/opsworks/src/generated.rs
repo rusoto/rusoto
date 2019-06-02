@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -110,6 +111,10 @@ pub struct AssignInstanceRequest {
     pub layer_ids: Vec<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssignInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssignVolumeRequest {
     /// <p>The instance ID.</p>
@@ -120,6 +125,10 @@ pub struct AssignVolumeRequest {
     #[serde(rename = "VolumeId")]
     pub volume_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssignVolumeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateElasticIpRequest {
@@ -132,6 +141,10 @@ pub struct AssociateElasticIpRequest {
     pub instance_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateElasticIpResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AttachElasticLoadBalancerRequest {
     /// <p>The Elastic Load Balancing instance's name.</p>
@@ -141,6 +154,10 @@ pub struct AttachElasticLoadBalancerRequest {
     #[serde(rename = "LayerId")]
     pub layer_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AttachElasticLoadBalancerResponse {}
 
 /// <p>Describes a load-based auto scaling upscaling or downscaling threshold configuration, which specifies when AWS OpsWorks Stacks starts or stops load-based instances.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -301,7 +318,7 @@ pub struct CloneStackRequest {
 /// <p>Contains the response to a <code>CloneStack</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CloneStackResult {
+pub struct CloneStackResponse {
     /// <p>The cloned stack ID.</p>
     #[serde(rename = "StackId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -468,7 +485,7 @@ pub struct CreateAppRequest {
 /// <p>Contains the response to a <code>CreateApp</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateAppResult {
+pub struct CreateAppResponse {
     /// <p>The app ID.</p>
     #[serde(rename = "AppId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -508,7 +525,7 @@ pub struct CreateDeploymentRequest {
 /// <p>Contains the response to a <code>CreateDeployment</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDeploymentResult {
+pub struct CreateDeploymentResponse {
     /// <p>The deployment ID, which can be used with other requests to identify the deployment.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -591,7 +608,7 @@ pub struct CreateInstanceRequest {
 /// <p>Contains the response to a <code>CreateInstance</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateInstanceResult {
+pub struct CreateInstanceResponse {
     /// <p>The instance ID.</p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -673,7 +690,7 @@ pub struct CreateLayerRequest {
 /// <p>Contains the response to a <code>CreateLayer</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateLayerResult {
+pub struct CreateLayerResponse {
     /// <p>The layer ID.</p>
     #[serde(rename = "LayerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -758,7 +775,7 @@ pub struct CreateStackRequest {
 /// <p>Contains the response to a <code>CreateStack</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateStackResult {
+pub struct CreateStackResponse {
     /// <p>The stack ID, which is an opaque string that you use to identify the stack when performing actions such as <code>DescribeStacks</code>.</p>
     #[serde(rename = "StackId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -787,7 +804,7 @@ pub struct CreateUserProfileRequest {
 /// <p>Contains the response to a <code>CreateUserProfile</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateUserProfileResult {
+pub struct CreateUserProfileResponse {
     /// <p>The user's IAM ARN.</p>
     #[serde(rename = "IamUserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -818,6 +835,10 @@ pub struct DeleteAppRequest {
     pub app_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteAppResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteInstanceRequest {
     /// <p>Whether to delete the instance Elastic IP address.</p>
@@ -833,12 +854,20 @@ pub struct DeleteInstanceRequest {
     pub instance_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLayerRequest {
     /// <p>The layer ID.</p>
     #[serde(rename = "LayerId")]
     pub layer_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteLayerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteStackRequest {
@@ -847,12 +876,20 @@ pub struct DeleteStackRequest {
     pub stack_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteStackResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserProfileRequest {
     /// <p>The user's IAM ARN. This can also be a federated user's ARN.</p>
     #[serde(rename = "IamUserArn")]
     pub iam_user_arn: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUserProfileResponse {}
 
 /// <p>Describes a deployment of a stack or app.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -926,12 +963,20 @@ pub struct DeregisterEcsClusterRequest {
     pub ecs_cluster_arn: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeregisterEcsClusterResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterElasticIpRequest {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
     pub elastic_ip: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeregisterElasticIpResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterInstanceRequest {
@@ -940,6 +985,10 @@ pub struct DeregisterInstanceRequest {
     pub instance_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeregisterInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterRdsDbInstanceRequest {
     /// <p>The Amazon RDS instance's ARN.</p>
@@ -947,12 +996,20 @@ pub struct DeregisterRdsDbInstanceRequest {
     pub rds_db_instance_arn: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeregisterRdsDbInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterVolumeRequest {
     /// <p>The AWS OpsWorks Stacks volume ID, which is the GUID that AWS OpsWorks Stacks assigned to the instance when you registered the volume with the stack, not the Amazon EC2 volume ID.</p>
     #[serde(rename = "VolumeId")]
     pub volume_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeregisterVolumeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAgentVersionsRequest {
@@ -969,7 +1026,7 @@ pub struct DescribeAgentVersionsRequest {
 /// <p>Contains the response to a <code>DescribeAgentVersions</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeAgentVersionsResult {
+pub struct DescribeAgentVersionsResponse {
     /// <p>The agent versions for the specified stack or configuration manager. Note that this value is the complete version number, not the abbreviated number used by the console.</p>
     #[serde(rename = "AgentVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -991,7 +1048,7 @@ pub struct DescribeAppsRequest {
 /// <p>Contains the response to a <code>DescribeApps</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeAppsResult {
+pub struct DescribeAppsResponse {
     /// <p>An array of <code>App</code> objects that describe the specified apps. </p>
     #[serde(rename = "Apps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1017,7 +1074,7 @@ pub struct DescribeCommandsRequest {
 /// <p>Contains the response to a <code>DescribeCommands</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeCommandsResult {
+pub struct DescribeCommandsResponse {
     /// <p>An array of <code>Command</code> objects that describe each of the specified commands.</p>
     #[serde(rename = "Commands")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1043,7 +1100,7 @@ pub struct DescribeDeploymentsRequest {
 /// <p>Contains the response to a <code>DescribeDeployments</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeDeploymentsResult {
+pub struct DescribeDeploymentsResponse {
     /// <p>An array of <code>Deployment</code> objects that describe the deployments.</p>
     #[serde(rename = "Deployments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1073,7 +1130,7 @@ pub struct DescribeEcsClustersRequest {
 /// <p>Contains the response to a <code>DescribeEcsClusters</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeEcsClustersResult {
+pub struct DescribeEcsClustersResponse {
     /// <p>A list of <code>EcsCluster</code> objects containing the cluster descriptions.</p>
     #[serde(rename = "EcsClusters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1103,7 +1160,7 @@ pub struct DescribeElasticIpsRequest {
 /// <p>Contains the response to a <code>DescribeElasticIps</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeElasticIpsResult {
+pub struct DescribeElasticIpsResponse {
     /// <p>An <code>ElasticIps</code> object that describes the specified Elastic IP addresses.</p>
     #[serde(rename = "ElasticIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1125,7 +1182,7 @@ pub struct DescribeElasticLoadBalancersRequest {
 /// <p>Contains the response to a <code>DescribeElasticLoadBalancers</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeElasticLoadBalancersResult {
+pub struct DescribeElasticLoadBalancersResponse {
     /// <p>A list of <code>ElasticLoadBalancer</code> objects that describe the specified Elastic Load Balancing instances.</p>
     #[serde(rename = "ElasticLoadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1151,7 +1208,7 @@ pub struct DescribeInstancesRequest {
 /// <p>Contains the response to a <code>DescribeInstances</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeInstancesResult {
+pub struct DescribeInstancesResponse {
     /// <p>An array of <code>Instance</code> objects that describe the instances.</p>
     #[serde(rename = "Instances")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1173,7 +1230,7 @@ pub struct DescribeLayersRequest {
 /// <p>Contains the response to a <code>DescribeLayers</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeLayersResult {
+pub struct DescribeLayersResponse {
     /// <p>An array of <code>Layer</code> objects that describe the layers.</p>
     #[serde(rename = "Layers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1190,22 +1247,28 @@ pub struct DescribeLoadBasedAutoScalingRequest {
 /// <p>Contains the response to a <code>DescribeLoadBasedAutoScaling</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeLoadBasedAutoScalingResult {
+pub struct DescribeLoadBasedAutoScalingResponse {
     /// <p>An array of <code>LoadBasedAutoScalingConfiguration</code> objects that describe each layer's configuration.</p>
     #[serde(rename = "LoadBasedAutoScalingConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_based_auto_scaling_configurations: Option<Vec<LoadBasedAutoScalingConfiguration>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeMyUserProfileRequest {}
+
 /// <p>Contains the response to a <code>DescribeMyUserProfile</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeMyUserProfileResult {
+pub struct DescribeMyUserProfileResponse {
     /// <p>A <code>UserProfile</code> object that describes the user's SSH information.</p>
     #[serde(rename = "UserProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_profile: Option<SelfUserProfile>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeOperatingSystemsRequest {}
 
 /// <p>The response to a <code>DescribeOperatingSystems</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1232,7 +1295,7 @@ pub struct DescribePermissionsRequest {
 /// <p>Contains the response to a <code>DescribePermissions</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribePermissionsResult {
+pub struct DescribePermissionsResponse {
     /// <p><p>An array of <code>Permission</code> objects that describe the stack permissions.</p> <ul> <li> <p>If the request object contains only a stack ID, the array contains a <code>Permission</code> object with permissions for each of the stack IAM ARNs.</p> </li> <li> <p>If the request object contains only an IAM ARN, the array contains a <code>Permission</code> object with permissions for each of the user&#39;s stack IDs.</p> </li> <li> <p>If the request contains a stack ID and an IAM ARN, the array contains a single <code>Permission</code> object with permissions for the specified stack and IAM ARN.</p> </li> </ul></p>
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1258,7 +1321,7 @@ pub struct DescribeRaidArraysRequest {
 /// <p>Contains the response to a <code>DescribeRaidArrays</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeRaidArraysResult {
+pub struct DescribeRaidArraysResponse {
     /// <p>A <code>RaidArrays</code> object that describes the specified RAID arrays.</p>
     #[serde(rename = "RaidArrays")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1279,7 +1342,7 @@ pub struct DescribeRdsDbInstancesRequest {
 /// <p>Contains the response to a <code>DescribeRdsDbInstances</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeRdsDbInstancesResult {
+pub struct DescribeRdsDbInstancesResponse {
     /// <p>An a array of <code>RdsDbInstance</code> objects that describe the instances.</p>
     #[serde(rename = "RdsDbInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1305,7 +1368,7 @@ pub struct DescribeServiceErrorsRequest {
 /// <p>Contains the response to a <code>DescribeServiceErrors</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeServiceErrorsResult {
+pub struct DescribeServiceErrorsResponse {
     /// <p>An array of <code>ServiceError</code> objects that describe the specified service errors.</p>
     #[serde(rename = "ServiceErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1322,7 +1385,7 @@ pub struct DescribeStackProvisioningParametersRequest {
 /// <p>Contains the response to a <code>DescribeStackProvisioningParameters</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeStackProvisioningParametersResult {
+pub struct DescribeStackProvisioningParametersResponse {
     /// <p>The AWS OpsWorks Stacks agent installer's URL.</p>
     #[serde(rename = "AgentInstallerUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1343,7 +1406,7 @@ pub struct DescribeStackSummaryRequest {
 /// <p>Contains the response to a <code>DescribeStackSummary</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeStackSummaryResult {
+pub struct DescribeStackSummaryResponse {
     /// <p>A <code>StackSummary</code> object that contains the results.</p>
     #[serde(rename = "StackSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1361,7 +1424,7 @@ pub struct DescribeStacksRequest {
 /// <p>Contains the response to a <code>DescribeStacks</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeStacksResult {
+pub struct DescribeStacksResponse {
     /// <p>An array of <code>Stack</code> objects that describe the stacks.</p>
     #[serde(rename = "Stacks")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1378,7 +1441,7 @@ pub struct DescribeTimeBasedAutoScalingRequest {
 /// <p>Contains the response to a <code>DescribeTimeBasedAutoScaling</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeTimeBasedAutoScalingResult {
+pub struct DescribeTimeBasedAutoScalingResponse {
     /// <p>An array of <code>TimeBasedAutoScalingConfiguration</code> objects that describe the configuration for the specified instances.</p>
     #[serde(rename = "TimeBasedAutoScalingConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1396,7 +1459,7 @@ pub struct DescribeUserProfilesRequest {
 /// <p>Contains the response to a <code>DescribeUserProfiles</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeUserProfilesResult {
+pub struct DescribeUserProfilesResponse {
     /// <p>A <code>Users</code> object that describes the specified users.</p>
     #[serde(rename = "UserProfiles")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1426,7 +1489,7 @@ pub struct DescribeVolumesRequest {
 /// <p>Contains the response to a <code>DescribeVolumes</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeVolumesResult {
+pub struct DescribeVolumesResponse {
     /// <p>An array of volume IDs.</p>
     #[serde(rename = "Volumes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1443,12 +1506,20 @@ pub struct DetachElasticLoadBalancerRequest {
     pub layer_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DetachElasticLoadBalancerResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateElasticIpRequest {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
     pub elastic_ip: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateElasticIpResponse {}
 
 /// <p>Describes an Amazon EBS volume. This data type maps directly to the Amazon EC2 <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_EbsBlockDevice.html">EbsBlockDevice</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1590,7 +1661,7 @@ pub struct GetHostnameSuggestionRequest {
 /// <p>Contains the response to a <code>GetHostnameSuggestion</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetHostnameSuggestionResult {
+pub struct GetHostnameSuggestionResponse {
     /// <p>The generated host name.</p>
     #[serde(rename = "Hostname")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1615,7 +1686,7 @@ pub struct GrantAccessRequest {
 /// <p>Contains the response to a <code>GrantAccess</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GrantAccessResult {
+pub struct GrantAccessResponse {
     /// <p>A <code>TemporaryCredential</code> object that contains the data needed to log in to the instance by RDP clients, such as the Microsoft Remote Desktop Connection.</p>
     #[serde(rename = "TemporaryCredential")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2015,7 +2086,7 @@ pub struct ListTagsRequest {
 /// <p>Contains the response to a <code>ListTags</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsResult {
+pub struct ListTagsResponse {
     /// <p>If a paginated request does not return all of the remaining results, this parameter is set to a token that you can assign to the request object's <code>NextToken</code> parameter to get the next set of results. If the previous paginated request returned all of the remaining results, this parameter is set to <code>null</code>. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2229,6 +2300,10 @@ pub struct RebootInstanceRequest {
     pub instance_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RebootInstanceResponse {}
+
 /// <p>AWS OpsWorks Stacks supports five lifecycle events: <b>setup</b>, <b>configuration</b>, <b>deploy</b>, <b>undeploy</b>, and <b>shutdown</b>. For each layer, AWS OpsWorks Stacks runs a set of standard recipes for each event. In addition, you can provide custom recipes for any or all layers and events. AWS OpsWorks Stacks runs custom event recipes after the standard recipes. <code>LayerCustomRecipes</code> specifies the custom recipes for a particular layer to be run in response to each of the five events. </p> <p>To specify a recipe, use the cookbook's directory name in the repository followed by two colons and the recipe name, which is the recipe's file name without the .rb extension. For example: phpapp2::dbsetup specifies the dbsetup.rb recipe in the repository's phpapp2 folder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Recipes {
@@ -2267,7 +2342,7 @@ pub struct RegisterEcsClusterRequest {
 /// <p>Contains the response to a <code>RegisterEcsCluster</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RegisterEcsClusterResult {
+pub struct RegisterEcsClusterResponse {
     /// <p>The cluster's ARN.</p>
     #[serde(rename = "EcsClusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2287,7 +2362,7 @@ pub struct RegisterElasticIpRequest {
 /// <p>Contains the response to a <code>RegisterElasticIp</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RegisterElasticIpResult {
+pub struct RegisterElasticIpResponse {
     /// <p>The Elastic IP address.</p>
     #[serde(rename = "ElasticIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2328,7 +2403,7 @@ pub struct RegisterInstanceRequest {
 /// <p>Contains the response to a <code>RegisterInstanceResult</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RegisterInstanceResult {
+pub struct RegisterInstanceResponse {
     /// <p>The registered instance's AWS OpsWorks Stacks ID.</p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2351,6 +2426,10 @@ pub struct RegisterRdsDbInstanceRequest {
     pub stack_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RegisterRdsDbInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterVolumeRequest {
     /// <p>The Amazon EBS volume ID.</p>
@@ -2365,7 +2444,7 @@ pub struct RegisterVolumeRequest {
 /// <p>Contains the response to a <code>RegisterVolume</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RegisterVolumeResult {
+pub struct RegisterVolumeResponse {
     /// <p>The volume ID.</p>
     #[serde(rename = "VolumeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2461,6 +2540,10 @@ pub struct SetLoadBasedAutoScalingRequest {
     pub up_scaling: Option<AutoScalingThresholds>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetLoadBasedAutoScalingResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetPermissionRequest {
     /// <p>The user is allowed to use SSH to communicate with the instance.</p>
@@ -2483,6 +2566,10 @@ pub struct SetPermissionRequest {
     pub stack_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetPermissionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SetTimeBasedAutoScalingRequest {
     /// <p>An <code>AutoScalingSchedule</code> with the instance schedule.</p>
@@ -2493,6 +2580,10 @@ pub struct SetTimeBasedAutoScalingRequest {
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SetTimeBasedAutoScalingResponse {}
 
 /// <p>The Shutdown event configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2694,12 +2785,20 @@ pub struct StartInstanceRequest {
     pub instance_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartStackRequest {
     /// <p>The stack ID.</p>
     #[serde(rename = "StackId")]
     pub stack_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartStackResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopInstanceRequest {
@@ -2712,12 +2811,20 @@ pub struct StopInstanceRequest {
     pub instance_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopStackRequest {
     /// <p>The stack ID.</p>
     #[serde(rename = "StackId")]
     pub stack_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopStackResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
@@ -2728,6 +2835,10 @@ pub struct TagResourceRequest {
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
 
 /// <p>Contains the data needed by RDP clients such as the Microsoft Remote Desktop Connection to log in to the instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2772,12 +2883,20 @@ pub struct UnassignInstanceRequest {
     pub instance_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UnassignInstanceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnassignVolumeRequest {
     /// <p>The volume ID.</p>
     #[serde(rename = "VolumeId")]
     pub volume_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UnassignVolumeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
@@ -2788,6 +2907,10 @@ pub struct UntagResourceRequest {
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAppRequest {
@@ -2836,6 +2959,10 @@ pub struct UpdateAppRequest {
     pub type_: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateAppResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateElasticIpRequest {
     /// <p>The IP address for which you want to update the name.</p>
@@ -2846,6 +2973,10 @@ pub struct UpdateElasticIpRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateElasticIpResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateInstanceRequest {
@@ -2897,6 +3028,10 @@ pub struct UpdateInstanceRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_key_name: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateInstanceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateLayerRequest {
@@ -2969,6 +3104,10 @@ pub struct UpdateLayerRequest {
     pub volume_configurations: Option<Vec<VolumeConfiguration>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateLayerResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateMyUserProfileRequest {
     /// <p>The user's SSH public key.</p>
@@ -2976,6 +3115,10 @@ pub struct UpdateMyUserProfileRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssh_public_key: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMyUserProfileResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRdsDbInstanceRequest {
@@ -2991,6 +3134,10 @@ pub struct UpdateRdsDbInstanceRequest {
     #[serde(rename = "RdsDbInstanceArn")]
     pub rds_db_instance_arn: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRdsDbInstanceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStackRequest {
@@ -3066,6 +3213,10 @@ pub struct UpdateStackRequest {
     pub use_opsworks_security_groups: Option<bool>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateStackResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserProfileRequest {
     /// <p>Whether users can specify their own SSH public key through the My Settings page. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/security-settingsshkey.html">Managing User Permissions</a>.</p>
@@ -3085,6 +3236,10 @@ pub struct UpdateUserProfileRequest {
     pub ssh_username: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserProfileResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateVolumeRequest {
     /// <p>The new mount point.</p>
@@ -3099,6 +3254,10 @@ pub struct UpdateVolumeRequest {
     #[serde(rename = "VolumeId")]
     pub volume_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateVolumeResponse {}
 
 /// <p>Describes a user's SSH information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5710,398 +5869,333 @@ impl Error for UpdateVolumeError {
 /// Trait representing the capabilities of the AWS OpsWorks API. AWS OpsWorks clients implement this trait.
 pub trait OpsWorks {
     /// <p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn assign_instance(
-        &self,
-        input: AssignInstanceRequest,
-    ) -> RusotoFuture<(), AssignInstanceError>;
+    fn assign_instance(&self, input: AssignInstanceRequest) -> Request<AssignInstanceRequest>;
 
     /// <p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn assign_volume(&self, input: AssignVolumeRequest) -> RusotoFuture<(), AssignVolumeError>;
+    fn assign_volume(&self, input: AssignVolumeRequest) -> Request<AssignVolumeRequest>;
 
     /// <p>Associates one of the stack's registered Elastic IP addresses with a specified instance. The address must first be registered with the stack by calling <a>RegisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn associate_elastic_ip(
         &self,
         input: AssociateElasticIpRequest,
-    ) -> RusotoFuture<(), AssociateElasticIpError>;
+    ) -> Request<AssociateElasticIpRequest>;
 
     /// <p>Attaches an Elastic Load Balancing load balancer to a specified layer. AWS OpsWorks Stacks does not support Application Load Balancer. You can only use Classic Load Balancer with AWS OpsWorks Stacks. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/layers-elb.html">Elastic Load Balancing</a>.</p> <note> <p>You must create the Elastic Load Balancing instance separately, by using the Elastic Load Balancing console, API, or CLI. For more information, see <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/Welcome.html"> Elastic Load Balancing Developer Guide</a>.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn attach_elastic_load_balancer(
         &self,
         input: AttachElasticLoadBalancerRequest,
-    ) -> RusotoFuture<(), AttachElasticLoadBalancerError>;
+    ) -> Request<AttachElasticLoadBalancerRequest>;
 
     /// <p>Creates a clone of a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-cloning.html">Clone a Stack</a>. By default, all parameters are set to the values used by the parent stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn clone_stack(
-        &self,
-        input: CloneStackRequest,
-    ) -> RusotoFuture<CloneStackResult, CloneStackError>;
+    fn clone_stack(&self, input: CloneStackRequest) -> Request<CloneStackRequest>;
 
     /// <p>Creates an app for a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError>;
+    fn create_app(&self, input: CreateAppRequest) -> Request<CreateAppRequest>;
 
     /// <p>Runs deployment or stack commands. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-deploying.html">Deploying Apps</a> and <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-commands.html">Run Stack Commands</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError>;
+    fn create_deployment(&self, input: CreateDeploymentRequest)
+        -> Request<CreateDeploymentRequest>;
 
     /// <p>Creates an instance in a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html">Adding an Instance to a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_instance(
-        &self,
-        input: CreateInstanceRequest,
-    ) -> RusotoFuture<CreateInstanceResult, CreateInstanceError>;
+    fn create_instance(&self, input: CreateInstanceRequest) -> Request<CreateInstanceRequest>;
 
     /// <p>Creates a layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-create.html">How to Create a Layer</a>.</p> <note> <p>You should use <b>CreateLayer</b> for noncustom layer types such as PHP App Server only if the stack does not have an existing layer of that type. A stack can have at most one instance of each noncustom layer; if you attempt to create a second instance, <b>CreateLayer</b> fails. A stack can have an arbitrary number of custom layers, so you can call <b>CreateLayer</b> as many times as you like for that layer type.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_layer(
-        &self,
-        input: CreateLayerRequest,
-    ) -> RusotoFuture<CreateLayerResult, CreateLayerError>;
+    fn create_layer(&self, input: CreateLayerRequest) -> Request<CreateLayerRequest>;
 
     /// <p>Creates a new stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-edit.html">Create a New Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_stack(
-        &self,
-        input: CreateStackRequest,
-    ) -> RusotoFuture<CreateStackResult, CreateStackError>;
+    fn create_stack(&self, input: CreateStackRequest) -> Request<CreateStackRequest>;
 
     /// <p>Creates a new user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn create_user_profile(
         &self,
         input: CreateUserProfileRequest,
-    ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError>;
+    ) -> Request<CreateUserProfileRequest>;
 
     /// <p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<(), DeleteAppError>;
+    fn delete_app(&self, input: DeleteAppRequest) -> Request<DeleteAppRequest>;
 
     /// <p>Deletes a specified instance, which terminates the associated Amazon EC2 instance. You must stop an instance before you can delete it.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-delete.html">Deleting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_instance(
-        &self,
-        input: DeleteInstanceRequest,
-    ) -> RusotoFuture<(), DeleteInstanceError>;
+    fn delete_instance(&self, input: DeleteInstanceRequest) -> Request<DeleteInstanceRequest>;
 
     /// <p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_layer(&self, input: DeleteLayerRequest) -> RusotoFuture<(), DeleteLayerError>;
+    fn delete_layer(&self, input: DeleteLayerRequest) -> Request<DeleteLayerRequest>;
 
     /// <p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_stack(&self, input: DeleteStackRequest) -> RusotoFuture<(), DeleteStackError>;
+    fn delete_stack(&self, input: DeleteStackRequest) -> Request<DeleteStackRequest>;
 
     /// <p>Deletes a user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn delete_user_profile(
         &self,
         input: DeleteUserProfileRequest,
-    ) -> RusotoFuture<(), DeleteUserProfileError>;
+    ) -> Request<DeleteUserProfileRequest>;
 
     /// <p>Deregisters a specified Amazon ECS cluster from a stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html#workinglayers-ecscluster-delete"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html</a>.</p>
     fn deregister_ecs_cluster(
         &self,
         input: DeregisterEcsClusterRequest,
-    ) -> RusotoFuture<(), DeregisterEcsClusterError>;
+    ) -> Request<DeregisterEcsClusterRequest>;
 
     /// <p>Deregisters a specified Elastic IP address. The address can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn deregister_elastic_ip(
         &self,
         input: DeregisterElasticIpRequest,
-    ) -> RusotoFuture<(), DeregisterElasticIpError>;
+    ) -> Request<DeregisterElasticIpRequest>;
 
     /// <p>Deregister a registered Amazon EC2 or on-premises instance. This action removes the instance from the stack and returns it to your control. This action cannot be used with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn deregister_instance(
         &self,
         input: DeregisterInstanceRequest,
-    ) -> RusotoFuture<(), DeregisterInstanceError>;
+    ) -> Request<DeregisterInstanceRequest>;
 
     /// <p>Deregisters an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn deregister_rds_db_instance(
         &self,
         input: DeregisterRdsDbInstanceRequest,
-    ) -> RusotoFuture<(), DeregisterRdsDbInstanceError>;
+    ) -> Request<DeregisterRdsDbInstanceRequest>;
 
     /// <p>Deregisters an Amazon EBS volume. The volume can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn deregister_volume(
-        &self,
-        input: DeregisterVolumeRequest,
-    ) -> RusotoFuture<(), DeregisterVolumeError>;
+    fn deregister_volume(&self, input: DeregisterVolumeRequest)
+        -> Request<DeregisterVolumeRequest>;
 
     /// <p>Describes the available AWS OpsWorks Stacks agent versions. You must specify a stack ID or a configuration manager. <code>DescribeAgentVersions</code> returns a list of available agent versions for the specified stack or configuration manager.</p>
     fn describe_agent_versions(
         &self,
         input: DescribeAgentVersionsRequest,
-    ) -> RusotoFuture<DescribeAgentVersionsResult, DescribeAgentVersionsError>;
+    ) -> Request<DescribeAgentVersionsRequest>;
 
     /// <p>Requests a description of a specified set of apps.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_apps(
-        &self,
-        input: DescribeAppsRequest,
-    ) -> RusotoFuture<DescribeAppsResult, DescribeAppsError>;
+    fn describe_apps(&self, input: DescribeAppsRequest) -> Request<DescribeAppsRequest>;
 
     /// <p>Describes the results of specified commands.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_commands(
-        &self,
-        input: DescribeCommandsRequest,
-    ) -> RusotoFuture<DescribeCommandsResult, DescribeCommandsError>;
+    fn describe_commands(&self, input: DescribeCommandsRequest)
+        -> Request<DescribeCommandsRequest>;
 
     /// <p>Requests a description of a specified set of deployments.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_deployments(
         &self,
         input: DescribeDeploymentsRequest,
-    ) -> RusotoFuture<DescribeDeploymentsResult, DescribeDeploymentsError>;
+    ) -> Request<DescribeDeploymentsRequest>;
 
     /// <p>Describes Amazon ECS clusters that are registered with a stack. If you specify only a stack ID, you can use the <code>MaxResults</code> and <code>NextToken</code> parameters to paginate the response. However, AWS OpsWorks Stacks currently supports only one cluster per layer, so the result set has a maximum of one element.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permission. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
     fn describe_ecs_clusters(
         &self,
         input: DescribeEcsClustersRequest,
-    ) -> RusotoFuture<DescribeEcsClustersResult, DescribeEcsClustersError>;
+    ) -> Request<DescribeEcsClustersRequest>;
 
     /// <p>Describes <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_elastic_ips(
         &self,
         input: DescribeElasticIpsRequest,
-    ) -> RusotoFuture<DescribeElasticIpsResult, DescribeElasticIpsError>;
+    ) -> Request<DescribeElasticIpsRequest>;
 
     /// <p>Describes a stack's Elastic Load Balancing instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_elastic_load_balancers(
         &self,
         input: DescribeElasticLoadBalancersRequest,
-    ) -> RusotoFuture<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError>;
+    ) -> Request<DescribeElasticLoadBalancersRequest>;
 
     /// <p>Requests a description of a set of instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_instances(
         &self,
         input: DescribeInstancesRequest,
-    ) -> RusotoFuture<DescribeInstancesResult, DescribeInstancesError>;
+    ) -> Request<DescribeInstancesRequest>;
 
     /// <p>Requests a description of one or more layers in a specified stack.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_layers(
-        &self,
-        input: DescribeLayersRequest,
-    ) -> RusotoFuture<DescribeLayersResult, DescribeLayersError>;
+    fn describe_layers(&self, input: DescribeLayersRequest) -> Request<DescribeLayersRequest>;
 
     /// <p>Describes load-based auto scaling configurations for specified layers.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_load_based_auto_scaling(
         &self,
         input: DescribeLoadBasedAutoScalingRequest,
-    ) -> RusotoFuture<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError>;
+    ) -> Request<DescribeLoadBasedAutoScalingRequest>;
 
     /// <p>Describes a user's SSH information.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_my_user_profile(
-        &self,
-    ) -> RusotoFuture<DescribeMyUserProfileResult, DescribeMyUserProfileError>;
+    fn describe_my_user_profile(&self) -> Request<DescribeMyUserProfileRequest>;
 
     /// <p>Describes the operating systems that are supported by AWS OpsWorks Stacks.</p>
-    fn describe_operating_systems(
-        &self,
-    ) -> RusotoFuture<DescribeOperatingSystemsResponse, DescribeOperatingSystemsError>;
+    fn describe_operating_systems(&self) -> Request<DescribeOperatingSystemsRequest>;
 
     /// <p>Describes the permissions for a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_permissions(
         &self,
         input: DescribePermissionsRequest,
-    ) -> RusotoFuture<DescribePermissionsResult, DescribePermissionsError>;
+    ) -> Request<DescribePermissionsRequest>;
 
     /// <p>Describe an instance's RAID arrays.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_raid_arrays(
         &self,
         input: DescribeRaidArraysRequest,
-    ) -> RusotoFuture<DescribeRaidArraysResult, DescribeRaidArraysError>;
+    ) -> Request<DescribeRaidArraysRequest>;
 
     /// <p>Describes Amazon RDS instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
     fn describe_rds_db_instances(
         &self,
         input: DescribeRdsDbInstancesRequest,
-    ) -> RusotoFuture<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError>;
+    ) -> Request<DescribeRdsDbInstancesRequest>;
 
     /// <p>Describes AWS OpsWorks Stacks service errors.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
     fn describe_service_errors(
         &self,
         input: DescribeServiceErrorsRequest,
-    ) -> RusotoFuture<DescribeServiceErrorsResult, DescribeServiceErrorsError>;
+    ) -> Request<DescribeServiceErrorsRequest>;
 
     /// <p>Requests a description of a stack's provisioning parameters.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_stack_provisioning_parameters(
         &self,
         input: DescribeStackProvisioningParametersRequest,
-    ) -> RusotoFuture<
-        DescribeStackProvisioningParametersResult,
-        DescribeStackProvisioningParametersError,
-    >;
+    ) -> Request<DescribeStackProvisioningParametersRequest>;
 
     /// <p>Describes the number of layers and apps in a specified stack, and the number of instances in each state, such as <code>running_setup</code> or <code>online</code>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_stack_summary(
         &self,
         input: DescribeStackSummaryRequest,
-    ) -> RusotoFuture<DescribeStackSummaryResult, DescribeStackSummaryError>;
+    ) -> Request<DescribeStackSummaryRequest>;
 
     /// <p>Requests a description of one or more stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_stacks(
-        &self,
-        input: DescribeStacksRequest,
-    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError>;
+    fn describe_stacks(&self, input: DescribeStacksRequest) -> Request<DescribeStacksRequest>;
 
     /// <p>Describes time-based auto scaling configurations for specified instances.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_time_based_auto_scaling(
         &self,
         input: DescribeTimeBasedAutoScalingRequest,
-    ) -> RusotoFuture<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError>;
+    ) -> Request<DescribeTimeBasedAutoScalingRequest>;
 
     /// <p>Describe specified users.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn describe_user_profiles(
         &self,
         input: DescribeUserProfilesRequest,
-    ) -> RusotoFuture<DescribeUserProfilesResult, DescribeUserProfilesError>;
+    ) -> Request<DescribeUserProfilesRequest>;
 
     /// <p>Describes an instance's Amazon EBS volumes.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_volumes(
-        &self,
-        input: DescribeVolumesRequest,
-    ) -> RusotoFuture<DescribeVolumesResult, DescribeVolumesError>;
+    fn describe_volumes(&self, input: DescribeVolumesRequest) -> Request<DescribeVolumesRequest>;
 
     /// <p>Detaches a specified Elastic Load Balancing instance from its layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn detach_elastic_load_balancer(
         &self,
         input: DetachElasticLoadBalancerRequest,
-    ) -> RusotoFuture<(), DetachElasticLoadBalancerError>;
+    ) -> Request<DetachElasticLoadBalancerRequest>;
 
     /// <p>Disassociates an Elastic IP address from its instance. The address remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn disassociate_elastic_ip(
         &self,
         input: DisassociateElasticIpRequest,
-    ) -> RusotoFuture<(), DisassociateElasticIpError>;
+    ) -> Request<DisassociateElasticIpRequest>;
 
     /// <p>Gets a generated host name for the specified layer, based on the current host name theme.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn get_hostname_suggestion(
         &self,
         input: GetHostnameSuggestionRequest,
-    ) -> RusotoFuture<GetHostnameSuggestionResult, GetHostnameSuggestionError>;
+    ) -> Request<GetHostnameSuggestionRequest>;
 
     /// <p><note> <p>This action can be used only with Windows stacks.</p> </note> <p>Grants RDP access to a Windows instance for a specified time period.</p></p>
-    fn grant_access(
-        &self,
-        input: GrantAccessRequest,
-    ) -> RusotoFuture<GrantAccessResult, GrantAccessError>;
+    fn grant_access(&self, input: GrantAccessRequest) -> Request<GrantAccessRequest>;
 
     /// <p>Returns a list of tags that are applied to the specified stack or layer.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResult, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest>;
 
     /// <p>Reboots a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn reboot_instance(
-        &self,
-        input: RebootInstanceRequest,
-    ) -> RusotoFuture<(), RebootInstanceError>;
+    fn reboot_instance(&self, input: RebootInstanceRequest) -> Request<RebootInstanceRequest>;
 
     /// <p>Registers a specified Amazon ECS cluster with a stack. You can register only one cluster with a stack. A cluster can be registered with only one stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html"> Managing User Permissions</a>.</p>
     fn register_ecs_cluster(
         &self,
         input: RegisterEcsClusterRequest,
-    ) -> RusotoFuture<RegisterEcsClusterResult, RegisterEcsClusterError>;
+    ) -> Request<RegisterEcsClusterRequest>;
 
     /// <p>Registers an Elastic IP address with a specified stack. An address can be registered with only one stack at a time. If the address is already registered, you must first deregister it by calling <a>DeregisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn register_elastic_ip(
         &self,
         input: RegisterElasticIpRequest,
-    ) -> RusotoFuture<RegisterElasticIpResult, RegisterElasticIpError>;
+    ) -> Request<RegisterElasticIpRequest>;
 
     /// <p>Registers instances that were created outside of AWS OpsWorks Stacks with a specified stack.</p> <note> <p>We do not recommend using this action to register instances. The complete registration operation includes two tasks: installing the AWS OpsWorks Stacks agent on the instance, and registering the instance with the stack. <code>RegisterInstance</code> handles only the second step. You should instead use the AWS CLI <code>register</code> command, which performs the entire registration operation. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register.html"> Registering an Instance with an AWS OpsWorks Stacks Stack</a>.</p> </note> <p>Registered instances have the same requirements as instances that are created by using the <a>CreateInstance</a> API. For example, registered instances must be running a supported Linux-based operating system, and they must have a supported instance type. For more information about requirements for instances that you want to register, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register-registering-preparer.html"> Preparing the Instance</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn register_instance(
-        &self,
-        input: RegisterInstanceRequest,
-    ) -> RusotoFuture<RegisterInstanceResult, RegisterInstanceError>;
+    fn register_instance(&self, input: RegisterInstanceRequest)
+        -> Request<RegisterInstanceRequest>;
 
     /// <p>Registers an Amazon RDS instance with a stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn register_rds_db_instance(
         &self,
         input: RegisterRdsDbInstanceRequest,
-    ) -> RusotoFuture<(), RegisterRdsDbInstanceError>;
+    ) -> Request<RegisterRdsDbInstanceRequest>;
 
     /// <p>Registers an Amazon EBS volume with a specified stack. A volume can be registered with only one stack at a time. If the volume is already registered, you must first deregister it by calling <a>DeregisterVolume</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn register_volume(
-        &self,
-        input: RegisterVolumeRequest,
-    ) -> RusotoFuture<RegisterVolumeResult, RegisterVolumeError>;
+    fn register_volume(&self, input: RegisterVolumeRequest) -> Request<RegisterVolumeRequest>;
 
     /// <p>Specify the load-based auto scaling configuration for a specified layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <note> <p>To use load-based auto scaling, you must create a set of load-based auto scaling instances. Load-based auto scaling operates only on the instances from that set, so you must ensure that you have created enough instances to handle the maximum anticipated load.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn set_load_based_auto_scaling(
         &self,
         input: SetLoadBasedAutoScalingRequest,
-    ) -> RusotoFuture<(), SetLoadBasedAutoScalingError>;
+    ) -> Request<SetLoadBasedAutoScalingRequest>;
 
     /// <p>Specifies a user's permissions. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn set_permission(&self, input: SetPermissionRequest) -> RusotoFuture<(), SetPermissionError>;
+    fn set_permission(&self, input: SetPermissionRequest) -> Request<SetPermissionRequest>;
 
     /// <p>Specify the time-based auto scaling configuration for a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn set_time_based_auto_scaling(
         &self,
         input: SetTimeBasedAutoScalingRequest,
-    ) -> RusotoFuture<(), SetTimeBasedAutoScalingError>;
+    ) -> Request<SetTimeBasedAutoScalingRequest>;
 
     /// <p>Starts a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn start_instance(&self, input: StartInstanceRequest) -> RusotoFuture<(), StartInstanceError>;
+    fn start_instance(&self, input: StartInstanceRequest) -> Request<StartInstanceRequest>;
 
     /// <p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn start_stack(&self, input: StartStackRequest) -> RusotoFuture<(), StartStackError>;
+    fn start_stack(&self, input: StartStackRequest) -> Request<StartStackRequest>;
 
     /// <p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn stop_instance(&self, input: StopInstanceRequest) -> RusotoFuture<(), StopInstanceError>;
+    fn stop_instance(&self, input: StopInstanceRequest) -> Request<StopInstanceRequest>;
 
     /// <p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn stop_stack(&self, input: StopStackRequest) -> RusotoFuture<(), StopStackError>;
+    fn stop_stack(&self, input: StopStackRequest) -> Request<StopStackRequest>;
 
     /// <p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html">Tags</a> in the AWS OpsWorks User Guide.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Unassigns a registered instance from all layers that are using the instance. The instance remains in the stack as an unassigned instance, and can be assigned to another layer as needed. You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn unassign_instance(
-        &self,
-        input: UnassignInstanceRequest,
-    ) -> RusotoFuture<(), UnassignInstanceError>;
+    fn unassign_instance(&self, input: UnassignInstanceRequest)
+        -> Request<UnassignInstanceRequest>;
 
     /// <p>Unassigns an assigned Amazon EBS volume. The volume remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn unassign_volume(
-        &self,
-        input: UnassignVolumeRequest,
-    ) -> RusotoFuture<(), UnassignVolumeError>;
+    fn unassign_volume(&self, input: UnassignVolumeRequest) -> Request<UnassignVolumeRequest>;
 
     /// <p>Removes tags from a specified stack or layer.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_app(&self, input: UpdateAppRequest) -> RusotoFuture<(), UpdateAppError>;
+    fn update_app(&self, input: UpdateAppRequest) -> Request<UpdateAppRequest>;
 
     /// <p>Updates a registered Elastic IP address's name. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_elastic_ip(
-        &self,
-        input: UpdateElasticIpRequest,
-    ) -> RusotoFuture<(), UpdateElasticIpError>;
+    fn update_elastic_ip(&self, input: UpdateElasticIpRequest) -> Request<UpdateElasticIpRequest>;
 
     /// <p>Updates a specified instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_instance(
-        &self,
-        input: UpdateInstanceRequest,
-    ) -> RusotoFuture<(), UpdateInstanceError>;
+    fn update_instance(&self, input: UpdateInstanceRequest) -> Request<UpdateInstanceRequest>;
 
     /// <p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_layer(&self, input: UpdateLayerRequest) -> RusotoFuture<(), UpdateLayerError>;
+    fn update_layer(&self, input: UpdateLayerRequest) -> Request<UpdateLayerRequest>;
 
     /// <p>Updates a user's SSH public key.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn update_my_user_profile(
         &self,
         input: UpdateMyUserProfileRequest,
-    ) -> RusotoFuture<(), UpdateMyUserProfileError>;
+    ) -> Request<UpdateMyUserProfileRequest>;
 
     /// <p>Updates an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn update_rds_db_instance(
         &self,
         input: UpdateRdsDbInstanceRequest,
-    ) -> RusotoFuture<(), UpdateRdsDbInstanceError>;
+    ) -> Request<UpdateRdsDbInstanceRequest>;
 
     /// <p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_stack(&self, input: UpdateStackRequest) -> RusotoFuture<(), UpdateStackError>;
+    fn update_stack(&self, input: UpdateStackRequest) -> Request<UpdateStackRequest>;
 
     /// <p>Updates a specified user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn update_user_profile(
         &self,
         input: UpdateUserProfileRequest,
-    ) -> RusotoFuture<(), UpdateUserProfileError>;
+    ) -> Request<UpdateUserProfileRequest>;
 
     /// <p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_volume(&self, input: UpdateVolumeRequest) -> RusotoFuture<(), UpdateVolumeError>;
+    fn update_volume(&self, input: UpdateVolumeRequest) -> Request<UpdateVolumeRequest>;
 }
 /// A client for the AWS OpsWorks API.
 #[derive(Clone)]
@@ -6141,20 +6235,523 @@ impl OpsWorksClient {
 
 impl OpsWorks for OpsWorksClient {
     /// <p>Assign a registered instance to a layer.</p> <ul> <li> <p>You can assign registered on-premises instances to any layer type.</p> </li> <li> <p>You can assign registered Amazon EC2 instances only to custom layers.</p> </li> <li> <p>You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> </li> </ul> <p> <b>Required Permissions</b>: To use this action, an AWS Identity and Access Management (IAM) user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn assign_instance(
+    fn assign_instance(&self, input: AssignInstanceRequest) -> Request<AssignInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn assign_volume(&self, input: AssignVolumeRequest) -> Request<AssignVolumeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates one of the stack's registered Elastic IP addresses with a specified instance. The address must first be registered with the stack by calling <a>RegisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn associate_elastic_ip(
         &self,
-        input: AssignInstanceRequest,
-    ) -> RusotoFuture<(), AssignInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        input: AssociateElasticIpRequest,
+    ) -> Request<AssociateElasticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches an Elastic Load Balancing load balancer to a specified layer. AWS OpsWorks Stacks does not support Application Load Balancer. You can only use Classic Load Balancer with AWS OpsWorks Stacks. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/layers-elb.html">Elastic Load Balancing</a>.</p> <note> <p>You must create the Elastic Load Balancing instance separately, by using the Elastic Load Balancing console, API, or CLI. For more information, see <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/Welcome.html"> Elastic Load Balancing Developer Guide</a>.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn attach_elastic_load_balancer(
+        &self,
+        input: AttachElasticLoadBalancerRequest,
+    ) -> Request<AttachElasticLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a clone of a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-cloning.html">Clone a Stack</a>. By default, all parameters are set to the values used by the parent stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn clone_stack(&self, input: CloneStackRequest) -> Request<CloneStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an app for a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_app(&self, input: CreateAppRequest) -> Request<CreateAppRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Runs deployment or stack commands. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-deploying.html">Deploying Apps</a> and <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-commands.html">Run Stack Commands</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> Request<CreateDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an instance in a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html">Adding an Instance to a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_instance(&self, input: CreateInstanceRequest) -> Request<CreateInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-create.html">How to Create a Layer</a>.</p> <note> <p>You should use <b>CreateLayer</b> for noncustom layer types such as PHP App Server only if the stack does not have an existing layer of that type. A stack can have at most one instance of each noncustom layer; if you attempt to create a second instance, <b>CreateLayer</b> fails. A stack can have an arbitrary number of custom layers, so you can call <b>CreateLayer</b> as many times as you like for that layer type.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_layer(&self, input: CreateLayerRequest) -> Request<CreateLayerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-edit.html">Create a New Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_stack(&self, input: CreateStackRequest) -> Request<CreateStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn create_user_profile(
+        &self,
+        input: CreateUserProfileRequest,
+    ) -> Request<CreateUserProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_app(&self, input: DeleteAppRequest) -> Request<DeleteAppRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified instance, which terminates the associated Amazon EC2 instance. You must stop an instance before you can delete it.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-delete.html">Deleting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_instance(&self, input: DeleteInstanceRequest) -> Request<DeleteInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_layer(&self, input: DeleteLayerRequest) -> Request<DeleteLayerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_stack(&self, input: DeleteStackRequest) -> Request<DeleteStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn delete_user_profile(
+        &self,
+        input: DeleteUserProfileRequest,
+    ) -> Request<DeleteUserProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters a specified Amazon ECS cluster from a stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html#workinglayers-ecscluster-delete"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html</a>.</p>
+    fn deregister_ecs_cluster(
+        &self,
+        input: DeregisterEcsClusterRequest,
+    ) -> Request<DeregisterEcsClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters a specified Elastic IP address. The address can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_elastic_ip(
+        &self,
+        input: DeregisterElasticIpRequest,
+    ) -> Request<DeregisterElasticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregister a registered Amazon EC2 or on-premises instance. This action removes the instance from the stack and returns it to your control. This action cannot be used with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_instance(
+        &self,
+        input: DeregisterInstanceRequest,
+    ) -> Request<DeregisterInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_rds_db_instance(
+        &self,
+        input: DeregisterRdsDbInstanceRequest,
+    ) -> Request<DeregisterRdsDbInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters an Amazon EBS volume. The volume can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn deregister_volume(
+        &self,
+        input: DeregisterVolumeRequest,
+    ) -> Request<DeregisterVolumeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the available AWS OpsWorks Stacks agent versions. You must specify a stack ID or a configuration manager. <code>DescribeAgentVersions</code> returns a list of available agent versions for the specified stack or configuration manager.</p>
+    fn describe_agent_versions(
+        &self,
+        input: DescribeAgentVersionsRequest,
+    ) -> Request<DescribeAgentVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Requests a description of a specified set of apps.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_apps(&self, input: DescribeAppsRequest) -> Request<DescribeAppsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the results of specified commands.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_commands(
+        &self,
+        input: DescribeCommandsRequest,
+    ) -> Request<DescribeCommandsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Requests a description of a specified set of deployments.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_deployments(
+        &self,
+        input: DescribeDeploymentsRequest,
+    ) -> Request<DescribeDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes Amazon ECS clusters that are registered with a stack. If you specify only a stack ID, you can use the <code>MaxResults</code> and <code>NextToken</code> parameters to paginate the response. However, AWS OpsWorks Stacks currently supports only one cluster per layer, so the result set has a maximum of one element.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permission. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
+    fn describe_ecs_clusters(
+        &self,
+        input: DescribeEcsClustersRequest,
+    ) -> Request<DescribeEcsClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_elastic_ips(
+        &self,
+        input: DescribeElasticIpsRequest,
+    ) -> Request<DescribeElasticIpsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a stack's Elastic Load Balancing instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_elastic_load_balancers(
+        &self,
+        input: DescribeElasticLoadBalancersRequest,
+    ) -> Request<DescribeElasticLoadBalancersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Requests a description of a set of instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_instances(
+        &self,
+        input: DescribeInstancesRequest,
+    ) -> Request<DescribeInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Requests a description of one or more layers in a specified stack.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_layers(&self, input: DescribeLayersRequest) -> Request<DescribeLayersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes load-based auto scaling configurations for specified layers.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_load_based_auto_scaling(
+        &self,
+        input: DescribeLoadBasedAutoScalingRequest,
+    ) -> Request<DescribeLoadBasedAutoScalingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a user's SSH information.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_my_user_profile(&self) -> Request<DescribeMyUserProfileRequest> {
+        Request::new(
+            DescribeMyUserProfileRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes the operating systems that are supported by AWS OpsWorks Stacks.</p>
+    fn describe_operating_systems(&self) -> Request<DescribeOperatingSystemsRequest> {
+        Request::new(
+            DescribeOperatingSystemsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes the permissions for a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_permissions(
+        &self,
+        input: DescribePermissionsRequest,
+    ) -> Request<DescribePermissionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describe an instance's RAID arrays.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_raid_arrays(
+        &self,
+        input: DescribeRaidArraysRequest,
+    ) -> Request<DescribeRaidArraysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes Amazon RDS instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
+    fn describe_rds_db_instances(
+        &self,
+        input: DescribeRdsDbInstancesRequest,
+    ) -> Request<DescribeRdsDbInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes AWS OpsWorks Stacks service errors.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
+    fn describe_service_errors(
+        &self,
+        input: DescribeServiceErrorsRequest,
+    ) -> Request<DescribeServiceErrorsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Requests a description of a stack's provisioning parameters.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_stack_provisioning_parameters(
+        &self,
+        input: DescribeStackProvisioningParametersRequest,
+    ) -> Request<DescribeStackProvisioningParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the number of layers and apps in a specified stack, and the number of instances in each state, such as <code>running_setup</code> or <code>online</code>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_stack_summary(
+        &self,
+        input: DescribeStackSummaryRequest,
+    ) -> Request<DescribeStackSummaryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Requests a description of one or more stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_stacks(&self, input: DescribeStacksRequest) -> Request<DescribeStacksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes time-based auto scaling configurations for specified instances.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_time_based_auto_scaling(
+        &self,
+        input: DescribeTimeBasedAutoScalingRequest,
+    ) -> Request<DescribeTimeBasedAutoScalingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describe specified users.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_user_profiles(
+        &self,
+        input: DescribeUserProfilesRequest,
+    ) -> Request<DescribeUserProfilesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes an instance's Amazon EBS volumes.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn describe_volumes(&self, input: DescribeVolumesRequest) -> Request<DescribeVolumesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detaches a specified Elastic Load Balancing instance from its layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn detach_elastic_load_balancer(
+        &self,
+        input: DetachElasticLoadBalancerRequest,
+    ) -> Request<DetachElasticLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disassociates an Elastic IP address from its instance. The address remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn disassociate_elastic_ip(
+        &self,
+        input: DisassociateElasticIpRequest,
+    ) -> Request<DisassociateElasticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a generated host name for the specified layer, based on the current host name theme.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn get_hostname_suggestion(
+        &self,
+        input: GetHostnameSuggestionRequest,
+    ) -> Request<GetHostnameSuggestionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><note> <p>This action can be used only with Windows stacks.</p> </note> <p>Grants RDP access to a Windows instance for a specified time period.</p></p>
+    fn grant_access(&self, input: GrantAccessRequest) -> Request<GrantAccessRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of tags that are applied to the specified stack or layer.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Reboots a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn reboot_instance(&self, input: RebootInstanceRequest) -> Request<RebootInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers a specified Amazon ECS cluster with a stack. You can register only one cluster with a stack. A cluster can be registered with only one stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html"> Managing User Permissions</a>.</p>
+    fn register_ecs_cluster(
+        &self,
+        input: RegisterEcsClusterRequest,
+    ) -> Request<RegisterEcsClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers an Elastic IP address with a specified stack. An address can be registered with only one stack at a time. If the address is already registered, you must first deregister it by calling <a>DeregisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_elastic_ip(
+        &self,
+        input: RegisterElasticIpRequest,
+    ) -> Request<RegisterElasticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers instances that were created outside of AWS OpsWorks Stacks with a specified stack.</p> <note> <p>We do not recommend using this action to register instances. The complete registration operation includes two tasks: installing the AWS OpsWorks Stacks agent on the instance, and registering the instance with the stack. <code>RegisterInstance</code> handles only the second step. You should instead use the AWS CLI <code>register</code> command, which performs the entire registration operation. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register.html"> Registering an Instance with an AWS OpsWorks Stacks Stack</a>.</p> </note> <p>Registered instances have the same requirements as instances that are created by using the <a>CreateInstance</a> API. For example, registered instances must be running a supported Linux-based operating system, and they must have a supported instance type. For more information about requirements for instances that you want to register, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register-registering-preparer.html"> Preparing the Instance</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_instance(
+        &self,
+        input: RegisterInstanceRequest,
+    ) -> Request<RegisterInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers an Amazon RDS instance with a stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_rds_db_instance(
+        &self,
+        input: RegisterRdsDbInstanceRequest,
+    ) -> Request<RegisterRdsDbInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers an Amazon EBS volume with a specified stack. A volume can be registered with only one stack at a time. If the volume is already registered, you must first deregister it by calling <a>DeregisterVolume</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn register_volume(&self, input: RegisterVolumeRequest) -> Request<RegisterVolumeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Specify the load-based auto scaling configuration for a specified layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <note> <p>To use load-based auto scaling, you must create a set of load-based auto scaling instances. Load-based auto scaling operates only on the instances from that set, so you must ensure that you have created enough instances to handle the maximum anticipated load.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn set_load_based_auto_scaling(
+        &self,
+        input: SetLoadBasedAutoScalingRequest,
+    ) -> Request<SetLoadBasedAutoScalingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Specifies a user's permissions. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn set_permission(&self, input: SetPermissionRequest) -> Request<SetPermissionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Specify the time-based auto scaling configuration for a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn set_time_based_auto_scaling(
+        &self,
+        input: SetTimeBasedAutoScalingRequest,
+    ) -> Request<SetTimeBasedAutoScalingRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn start_instance(&self, input: StartInstanceRequest) -> Request<StartInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn start_stack(&self, input: StartStackRequest) -> Request<StartStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn stop_instance(&self, input: StopInstanceRequest) -> Request<StopInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn stop_stack(&self, input: StopStackRequest) -> Request<StopStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html">Tags</a> in the AWS OpsWorks User Guide.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Unassigns a registered instance from all layers that are using the instance. The instance remains in the stack as an unassigned instance, and can be assigned to another layer as needed. You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn unassign_instance(
+        &self,
+        input: UnassignInstanceRequest,
+    ) -> Request<UnassignInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Unassigns an assigned Amazon EBS volume. The volume remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn unassign_volume(&self, input: UnassignVolumeRequest) -> Request<UnassignVolumeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes tags from a specified stack or layer.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_app(&self, input: UpdateAppRequest) -> Request<UpdateAppRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a registered Elastic IP address's name. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_elastic_ip(&self, input: UpdateElasticIpRequest) -> Request<UpdateElasticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a specified instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_instance(&self, input: UpdateInstanceRequest) -> Request<UpdateInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_layer(&self, input: UpdateLayerRequest) -> Request<UpdateLayerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a user's SSH public key.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_my_user_profile(
+        &self,
+        input: UpdateMyUserProfileRequest,
+    ) -> Request<UpdateMyUserProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_rds_db_instance(
+        &self,
+        input: UpdateRdsDbInstanceRequest,
+    ) -> Request<UpdateRdsDbInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_stack(&self, input: UpdateStackRequest) -> Request<UpdateStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a specified user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_user_profile(
+        &self,
+        input: UpdateUserProfileRequest,
+    ) -> Request<UpdateUserProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
+    fn update_volume(&self, input: UpdateVolumeRequest) -> Request<UpdateVolumeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssignInstanceRequest {
+    type Output = AssignInstanceResponse;
+    type Error = AssignInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssignInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssignInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6165,19 +6762,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn assign_volume(&self, input: AssignVolumeRequest) -> RusotoFuture<(), AssignVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for AssignVolumeRequest {
+    type Output = AssignVolumeResponse;
+    type Error = AssignVolumeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssignVolume");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssignVolumeResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6188,22 +6796,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Associates one of the stack's registered Elastic IP addresses with a specified instance. The address must first be registered with the stack by calling <a>RegisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn associate_elastic_ip(
-        &self,
-        input: AssociateElasticIpRequest,
-    ) -> RusotoFuture<(), AssociateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for AssociateElasticIpRequest {
+    type Output = AssociateElasticIpResponse;
+    type Error = AssociateElasticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssociateElasticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateElasticIpResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6214,25 +6830,33 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Attaches an Elastic Load Balancing load balancer to a specified layer. AWS OpsWorks Stacks does not support Application Load Balancer. You can only use Classic Load Balancer with AWS OpsWorks Stacks. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/layers-elb.html">Elastic Load Balancing</a>.</p> <note> <p>You must create the Elastic Load Balancing instance separately, by using the Elastic Load Balancing console, API, or CLI. For more information, see <a href="http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/Welcome.html"> Elastic Load Balancing Developer Guide</a>.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn attach_elastic_load_balancer(
-        &self,
-        input: AttachElasticLoadBalancerRequest,
-    ) -> RusotoFuture<(), AttachElasticLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for AttachElasticLoadBalancerRequest {
+    type Output = AttachElasticLoadBalancerResponse;
+    type Error = AttachElasticLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.AttachElasticLoadBalancer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AttachElasticLoadBalancerResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachElasticLoadBalancerError::from_response(response))
@@ -6240,24 +6864,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Creates a clone of a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-cloning.html">Clone a Stack</a>. By default, all parameters are set to the values used by the parent stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn clone_stack(
-        &self,
-        input: CloneStackRequest,
-    ) -> RusotoFuture<CloneStackResult, CloneStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for CloneStackRequest {
+    type Output = CloneStackResponse;
+    type Error = CloneStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CloneStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CloneStackResult, _>()
+                        .deserialize::<CloneStackResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6269,20 +6898,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Creates an app for a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for CreateAppRequest {
+    type Output = CreateAppResponse;
+    type Error = CreateAppError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateApp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<CreateAppResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateAppResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6294,24 +6932,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Runs deployment or stack commands. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-deploying.html">Deploying Apps</a> and <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-commands.html">Run Stack Commands</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentRequest,
-    ) -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for CreateDeploymentRequest {
+    type Output = CreateDeploymentResponse;
+    type Error = CreateDeploymentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateDeployment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDeploymentResult, _>()
+                        .deserialize::<CreateDeploymentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6323,24 +6966,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Creates an instance in a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html">Adding an Instance to a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_instance(
-        &self,
-        input: CreateInstanceRequest,
-    ) -> RusotoFuture<CreateInstanceResult, CreateInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for CreateInstanceRequest {
+    type Output = CreateInstanceResponse;
+    type Error = CreateInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateInstanceResult, _>()
+                        .deserialize::<CreateInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6352,24 +7000,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Creates a layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-create.html">How to Create a Layer</a>.</p> <note> <p>You should use <b>CreateLayer</b> for noncustom layer types such as PHP App Server only if the stack does not have an existing layer of that type. A stack can have at most one instance of each noncustom layer; if you attempt to create a second instance, <b>CreateLayer</b> fails. A stack can have an arbitrary number of custom layers, so you can call <b>CreateLayer</b> as many times as you like for that layer type.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_layer(
-        &self,
-        input: CreateLayerRequest,
-    ) -> RusotoFuture<CreateLayerResult, CreateLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for CreateLayerRequest {
+    type Output = CreateLayerResponse;
+    type Error = CreateLayerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateLayer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateLayerResult, _>()
+                        .deserialize::<CreateLayerResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6381,24 +7034,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-edit.html">Create a New Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_stack(
-        &self,
-        input: CreateStackRequest,
-    ) -> RusotoFuture<CreateStackResult, CreateStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for CreateStackRequest {
+    type Output = CreateStackResponse;
+    type Error = CreateStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStackResult, _>()
+                        .deserialize::<CreateStackResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6410,24 +7068,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn create_user_profile(
-        &self,
-        input: CreateUserProfileRequest,
-    ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for CreateUserProfileRequest {
+    type Output = CreateUserProfileResponse;
+    type Error = CreateUserProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateUserProfile");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateUserProfileResult, _>()
+                        .deserialize::<CreateUserProfileResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6439,19 +7102,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<(), DeleteAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeleteAppRequest {
+    type Output = DeleteAppResponse;
+    type Error = DeleteAppError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteApp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteAppResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6462,22 +7136,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified instance, which terminates the associated Amazon EC2 instance. You must stop an instance before you can delete it.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-delete.html">Deleting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_instance(
-        &self,
-        input: DeleteInstanceRequest,
-    ) -> RusotoFuture<(), DeleteInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeleteInstanceRequest {
+    type Output = DeleteInstanceResponse;
+    type Error = DeleteInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6488,19 +7170,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_layer(&self, input: DeleteLayerRequest) -> RusotoFuture<(), DeleteLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeleteLayerRequest {
+    type Output = DeleteLayerResponse;
+    type Error = DeleteLayerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteLayer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteLayerResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6511,19 +7204,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_stack(&self, input: DeleteStackRequest) -> RusotoFuture<(), DeleteStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeleteStackRequest {
+    type Output = DeleteStackResponse;
+    type Error = DeleteStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteStackResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6534,22 +7238,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn delete_user_profile(
-        &self,
-        input: DeleteUserProfileRequest,
-    ) -> RusotoFuture<(), DeleteUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeleteUserProfileRequest {
+    type Output = DeleteUserProfileResponse;
+    type Error = DeleteUserProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteUserProfile");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteUserProfileResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6560,22 +7272,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deregisters a specified Amazon ECS cluster from a stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html#workinglayers-ecscluster-delete"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html</a>.</p>
-    fn deregister_ecs_cluster(
-        &self,
-        input: DeregisterEcsClusterRequest,
-    ) -> RusotoFuture<(), DeregisterEcsClusterError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeregisterEcsClusterRequest {
+    type Output = DeregisterEcsClusterResponse;
+    type Error = DeregisterEcsClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterEcsCluster");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterEcsClusterResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -6585,22 +7305,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deregisters a specified Elastic IP address. The address can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn deregister_elastic_ip(
-        &self,
-        input: DeregisterElasticIpRequest,
-    ) -> RusotoFuture<(), DeregisterElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeregisterElasticIpRequest {
+    type Output = DeregisterElasticIpResponse;
+    type Error = DeregisterElasticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterElasticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterElasticIpResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -6610,22 +7338,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deregister a registered Amazon EC2 or on-premises instance. This action removes the instance from the stack and returns it to your control. This action cannot be used with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn deregister_instance(
-        &self,
-        input: DeregisterInstanceRequest,
-    ) -> RusotoFuture<(), DeregisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeregisterInstanceRequest {
+    type Output = DeregisterInstanceResponse;
+    type Error = DeregisterInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6636,22 +7372,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deregisters an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn deregister_rds_db_instance(
-        &self,
-        input: DeregisterRdsDbInstanceRequest,
-    ) -> RusotoFuture<(), DeregisterRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeregisterRdsDbInstanceRequest {
+    type Output = DeregisterRdsDbInstanceResponse;
+    type Error = DeregisterRdsDbInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterRdsDbInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterRdsDbInstanceResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeregisterRdsDbInstanceError::from_response(response))
@@ -6659,22 +7403,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Deregisters an Amazon EBS volume. The volume can then be registered by another stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn deregister_volume(
-        &self,
-        input: DeregisterVolumeRequest,
-    ) -> RusotoFuture<(), DeregisterVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DeregisterVolumeRequest {
+    type Output = DeregisterVolumeResponse;
+    type Error = DeregisterVolumeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterVolume");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterVolumeResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6685,24 +7437,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes the available AWS OpsWorks Stacks agent versions. You must specify a stack ID or a configuration manager. <code>DescribeAgentVersions</code> returns a list of available agent versions for the specified stack or configuration manager.</p>
-    fn describe_agent_versions(
-        &self,
-        input: DescribeAgentVersionsRequest,
-    ) -> RusotoFuture<DescribeAgentVersionsResult, DescribeAgentVersionsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeAgentVersionsRequest {
+    type Output = DescribeAgentVersionsResponse;
+    type Error = DescribeAgentVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeAgentVersions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAgentVersionsResult, _>()
+                        .deserialize::<DescribeAgentVersionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6713,24 +7470,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Requests a description of a specified set of apps.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_apps(
-        &self,
-        input: DescribeAppsRequest,
-    ) -> RusotoFuture<DescribeAppsResult, DescribeAppsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeAppsRequest {
+    type Output = DescribeAppsResponse;
+    type Error = DescribeAppsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeApps");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAppsResult, _>()
+                        .deserialize::<DescribeAppsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6742,24 +7504,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes the results of specified commands.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_commands(
-        &self,
-        input: DescribeCommandsRequest,
-    ) -> RusotoFuture<DescribeCommandsResult, DescribeCommandsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeCommandsRequest {
+    type Output = DescribeCommandsResponse;
+    type Error = DescribeCommandsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeCommands");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCommandsResult, _>()
+                        .deserialize::<DescribeCommandsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6771,24 +7538,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Requests a description of a specified set of deployments.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_deployments(
-        &self,
-        input: DescribeDeploymentsRequest,
-    ) -> RusotoFuture<DescribeDeploymentsResult, DescribeDeploymentsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeDeploymentsRequest {
+    type Output = DescribeDeploymentsResponse;
+    type Error = DescribeDeploymentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeDeployments");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeDeploymentsResult, _>()
+                        .deserialize::<DescribeDeploymentsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6799,24 +7571,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes Amazon ECS clusters that are registered with a stack. If you specify only a stack ID, you can use the <code>MaxResults</code> and <code>NextToken</code> parameters to paginate the response. However, AWS OpsWorks Stacks currently supports only one cluster per layer, so the result set has a maximum of one element.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permission. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
-    fn describe_ecs_clusters(
-        &self,
-        input: DescribeEcsClustersRequest,
-    ) -> RusotoFuture<DescribeEcsClustersResult, DescribeEcsClustersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeEcsClustersRequest {
+    type Output = DescribeEcsClustersResponse;
+    type Error = DescribeEcsClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeEcsClusters");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEcsClustersResult, _>()
+                        .deserialize::<DescribeEcsClustersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6827,24 +7604,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP addresses</a>.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_elastic_ips(
-        &self,
-        input: DescribeElasticIpsRequest,
-    ) -> RusotoFuture<DescribeElasticIpsResult, DescribeElasticIpsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeElasticIpsRequest {
+    type Output = DescribeElasticIpsResponse;
+    type Error = DescribeElasticIpsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeElasticIps");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeElasticIpsResult, _>()
+                        .deserialize::<DescribeElasticIpsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6856,27 +7638,32 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes a stack's Elastic Load Balancing instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_elastic_load_balancers(
-        &self,
-        input: DescribeElasticLoadBalancersRequest,
-    ) -> RusotoFuture<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeElasticLoadBalancersRequest {
+    type Output = DescribeElasticLoadBalancersResponse;
+    type Error = DescribeElasticLoadBalancersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeElasticLoadBalancers",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeElasticLoadBalancersResult, _>()
+                        .deserialize::<DescribeElasticLoadBalancersResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6885,24 +7672,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Requests a description of a set of instances.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_instances(
-        &self,
-        input: DescribeInstancesRequest,
-    ) -> RusotoFuture<DescribeInstancesResult, DescribeInstancesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeInstancesRequest {
+    type Output = DescribeInstancesResponse;
+    type Error = DescribeInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeInstances");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeInstancesResult, _>()
+                        .deserialize::<DescribeInstancesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6914,24 +7706,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Requests a description of one or more layers in a specified stack.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_layers(
-        &self,
-        input: DescribeLayersRequest,
-    ) -> RusotoFuture<DescribeLayersResult, DescribeLayersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeLayersRequest {
+    type Output = DescribeLayersResponse;
+    type Error = DescribeLayersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeLayers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeLayersResult, _>()
+                        .deserialize::<DescribeLayersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6943,27 +7740,32 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes load-based auto scaling configurations for specified layers.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_load_based_auto_scaling(
-        &self,
-        input: DescribeLoadBasedAutoScalingRequest,
-    ) -> RusotoFuture<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeLoadBasedAutoScalingRequest {
+    type Output = DescribeLoadBasedAutoScalingResponse;
+    type Error = DescribeLoadBasedAutoScalingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeLoadBasedAutoScaling",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeLoadBasedAutoScalingResult, _>()
+                        .deserialize::<DescribeLoadBasedAutoScalingResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6972,22 +7774,28 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes a user's SSH information.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_my_user_profile(
-        &self,
-    ) -> RusotoFuture<DescribeMyUserProfileResult, DescribeMyUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeMyUserProfileRequest {
+    type Output = DescribeMyUserProfileResponse;
+    type Error = DescribeMyUserProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeMyUserProfile");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeMyUserProfileResult, _>()
+                        .deserialize::<DescribeMyUserProfileResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6998,18 +7806,24 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes the operating systems that are supported by AWS OpsWorks Stacks.</p>
-    fn describe_operating_systems(
-        &self,
-    ) -> RusotoFuture<DescribeOperatingSystemsResponse, DescribeOperatingSystemsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeOperatingSystemsRequest {
+    type Output = DescribeOperatingSystemsResponse;
+    type Error = DescribeOperatingSystemsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeOperatingSystems");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -7022,24 +7836,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes the permissions for a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_permissions(
-        &self,
-        input: DescribePermissionsRequest,
-    ) -> RusotoFuture<DescribePermissionsResult, DescribePermissionsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribePermissionsRequest {
+    type Output = DescribePermissionsResponse;
+    type Error = DescribePermissionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribePermissions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePermissionsResult, _>()
+                        .deserialize::<DescribePermissionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7050,24 +7869,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describe an instance's RAID arrays.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_raid_arrays(
-        &self,
-        input: DescribeRaidArraysRequest,
-    ) -> RusotoFuture<DescribeRaidArraysResult, DescribeRaidArraysError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeRaidArraysRequest {
+    type Output = DescribeRaidArraysResponse;
+    type Error = DescribeRaidArraysError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeRaidArrays");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRaidArraysResult, _>()
+                        .deserialize::<DescribeRaidArraysResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7079,24 +7903,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes Amazon RDS instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
-    fn describe_rds_db_instances(
-        &self,
-        input: DescribeRdsDbInstancesRequest,
-    ) -> RusotoFuture<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeRdsDbInstancesRequest {
+    type Output = DescribeRdsDbInstancesResponse;
+    type Error = DescribeRdsDbInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeRdsDbInstances");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeRdsDbInstancesResult, _>()
+                        .deserialize::<DescribeRdsDbInstancesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7107,24 +7936,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes AWS OpsWorks Stacks service errors.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p> <p>This call accepts only one resource-identifying parameter.</p>
-    fn describe_service_errors(
-        &self,
-        input: DescribeServiceErrorsRequest,
-    ) -> RusotoFuture<DescribeServiceErrorsResult, DescribeServiceErrorsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeServiceErrorsRequest {
+    type Output = DescribeServiceErrorsResponse;
+    type Error = DescribeServiceErrorsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeServiceErrors");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeServiceErrorsResult, _>()
+                        .deserialize::<DescribeServiceErrorsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7135,30 +7969,32 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Requests a description of a stack's provisioning parameters.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_stack_provisioning_parameters(
-        &self,
-        input: DescribeStackProvisioningParametersRequest,
-    ) -> RusotoFuture<
-        DescribeStackProvisioningParametersResult,
-        DescribeStackProvisioningParametersError,
-    > {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeStackProvisioningParametersRequest {
+    type Output = DescribeStackProvisioningParametersResponse;
+    type Error = DescribeStackProvisioningParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeStackProvisioningParameters",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStackProvisioningParametersResult, _>()
+                        .deserialize::<DescribeStackProvisioningParametersResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7169,24 +8005,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes the number of layers and apps in a specified stack, and the number of instances in each state, such as <code>running_setup</code> or <code>online</code>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_stack_summary(
-        &self,
-        input: DescribeStackSummaryRequest,
-    ) -> RusotoFuture<DescribeStackSummaryResult, DescribeStackSummaryError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeStackSummaryRequest {
+    type Output = DescribeStackSummaryResponse;
+    type Error = DescribeStackSummaryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeStackSummary");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStackSummaryResult, _>()
+                        .deserialize::<DescribeStackSummaryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7197,24 +8038,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Requests a description of one or more stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_stacks(
-        &self,
-        input: DescribeStacksRequest,
-    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeStacksRequest {
+    type Output = DescribeStacksResponse;
+    type Error = DescribeStacksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeStacks");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStacksResult, _>()
+                        .deserialize::<DescribeStacksResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7226,27 +8072,32 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes time-based auto scaling configurations for specified instances.</p> <note> <p>You must specify at least one of the parameters.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_time_based_auto_scaling(
-        &self,
-        input: DescribeTimeBasedAutoScalingRequest,
-    ) -> RusotoFuture<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeTimeBasedAutoScalingRequest {
+    type Output = DescribeTimeBasedAutoScalingResponse;
+    type Error = DescribeTimeBasedAutoScalingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeTimeBasedAutoScaling",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeTimeBasedAutoScalingResult, _>()
+                        .deserialize::<DescribeTimeBasedAutoScalingResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7255,24 +8106,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describe specified users.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_user_profiles(
-        &self,
-        input: DescribeUserProfilesRequest,
-    ) -> RusotoFuture<DescribeUserProfilesResult, DescribeUserProfilesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeUserProfilesRequest {
+    type Output = DescribeUserProfilesResponse;
+    type Error = DescribeUserProfilesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeUserProfiles");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeUserProfilesResult, _>()
+                        .deserialize::<DescribeUserProfilesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7283,24 +8139,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Describes an instance's Amazon EBS volumes.</p> <note> <p>This call accepts only one resource-identifying parameter.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Show, Deploy, or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn describe_volumes(
-        &self,
-        input: DescribeVolumesRequest,
-    ) -> RusotoFuture<DescribeVolumesResult, DescribeVolumesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DescribeVolumesRequest {
+    type Output = DescribeVolumesResponse;
+    type Error = DescribeVolumesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeVolumes");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeVolumesResult, _>()
+                        .deserialize::<DescribeVolumesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7312,25 +8173,33 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Detaches a specified Elastic Load Balancing instance from its layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn detach_elastic_load_balancer(
-        &self,
-        input: DetachElasticLoadBalancerRequest,
-    ) -> RusotoFuture<(), DetachElasticLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DetachElasticLoadBalancerRequest {
+    type Output = DetachElasticLoadBalancerResponse;
+    type Error = DetachElasticLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DetachElasticLoadBalancer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DetachElasticLoadBalancerResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DetachElasticLoadBalancerError::from_response(response))
@@ -7338,22 +8207,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Disassociates an Elastic IP address from its instance. The address remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn disassociate_elastic_ip(
-        &self,
-        input: DisassociateElasticIpRequest,
-    ) -> RusotoFuture<(), DisassociateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for DisassociateElasticIpRequest {
+    type Output = DisassociateElasticIpResponse;
+    type Error = DisassociateElasticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DisassociateElasticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateElasticIpResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -7363,24 +8240,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Gets a generated host name for the specified layer, based on the current host name theme.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn get_hostname_suggestion(
-        &self,
-        input: GetHostnameSuggestionRequest,
-    ) -> RusotoFuture<GetHostnameSuggestionResult, GetHostnameSuggestionError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for GetHostnameSuggestionRequest {
+    type Output = GetHostnameSuggestionResponse;
+    type Error = GetHostnameSuggestionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.GetHostnameSuggestion");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetHostnameSuggestionResult, _>()
+                        .deserialize::<GetHostnameSuggestionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7391,24 +8273,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p><note> <p>This action can be used only with Windows stacks.</p> </note> <p>Grants RDP access to a Windows instance for a specified time period.</p></p>
-    fn grant_access(
-        &self,
-        input: GrantAccessRequest,
-    ) -> RusotoFuture<GrantAccessResult, GrantAccessError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for GrantAccessRequest {
+    type Output = GrantAccessResponse;
+    type Error = GrantAccessError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.GrantAccess");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GrantAccessResult, _>()
+                        .deserialize::<GrantAccessResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7420,20 +8307,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of tags that are applied to the specified stack or layer.</p>
-    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResult, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for ListTagsRequest {
+    type Output = ListTagsResponse;
+    type Error = ListTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.ListTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListTagsResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7445,22 +8341,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Reboots a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn reboot_instance(
-        &self,
-        input: RebootInstanceRequest,
-    ) -> RusotoFuture<(), RebootInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for RebootInstanceRequest {
+    type Output = RebootInstanceResponse;
+    type Error = RebootInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RebootInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RebootInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7471,24 +8375,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Registers a specified Amazon ECS cluster with a stack. You can register only one cluster with a stack. A cluster can be registered with only one stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-ecscluster.html"> Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html"> Managing User Permissions</a>.</p>
-    fn register_ecs_cluster(
-        &self,
-        input: RegisterEcsClusterRequest,
-    ) -> RusotoFuture<RegisterEcsClusterResult, RegisterEcsClusterError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for RegisterEcsClusterRequest {
+    type Output = RegisterEcsClusterResponse;
+    type Error = RegisterEcsClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterEcsCluster");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterEcsClusterResult, _>()
+                        .deserialize::<RegisterEcsClusterResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7500,24 +8409,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Registers an Elastic IP address with a specified stack. An address can be registered with only one stack at a time. If the address is already registered, you must first deregister it by calling <a>DeregisterElasticIp</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn register_elastic_ip(
-        &self,
-        input: RegisterElasticIpRequest,
-    ) -> RusotoFuture<RegisterElasticIpResult, RegisterElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for RegisterElasticIpRequest {
+    type Output = RegisterElasticIpResponse;
+    type Error = RegisterElasticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterElasticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterElasticIpResult, _>()
+                        .deserialize::<RegisterElasticIpResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7529,24 +8443,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Registers instances that were created outside of AWS OpsWorks Stacks with a specified stack.</p> <note> <p>We do not recommend using this action to register instances. The complete registration operation includes two tasks: installing the AWS OpsWorks Stacks agent on the instance, and registering the instance with the stack. <code>RegisterInstance</code> handles only the second step. You should instead use the AWS CLI <code>register</code> command, which performs the entire registration operation. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register.html"> Registering an Instance with an AWS OpsWorks Stacks Stack</a>.</p> </note> <p>Registered instances have the same requirements as instances that are created by using the <a>CreateInstance</a> API. For example, registered instances must be running a supported Linux-based operating system, and they must have a supported instance type. For more information about requirements for instances that you want to register, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/registered-instances-register-registering-preparer.html"> Preparing the Instance</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn register_instance(
-        &self,
-        input: RegisterInstanceRequest,
-    ) -> RusotoFuture<RegisterInstanceResult, RegisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for RegisterInstanceRequest {
+    type Output = RegisterInstanceResponse;
+    type Error = RegisterInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterInstanceResult, _>()
+                        .deserialize::<RegisterInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7558,22 +8477,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Registers an Amazon RDS instance with a stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn register_rds_db_instance(
-        &self,
-        input: RegisterRdsDbInstanceRequest,
-    ) -> RusotoFuture<(), RegisterRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for RegisterRdsDbInstanceRequest {
+    type Output = RegisterRdsDbInstanceResponse;
+    type Error = RegisterRdsDbInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterRdsDbInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterRdsDbInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -7583,24 +8510,29 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Registers an Amazon EBS volume with a specified stack. A volume can be registered with only one stack at a time. If the volume is already registered, you must first deregister it by calling <a>DeregisterVolume</a>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn register_volume(
-        &self,
-        input: RegisterVolumeRequest,
-    ) -> RusotoFuture<RegisterVolumeResult, RegisterVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for RegisterVolumeRequest {
+    type Output = RegisterVolumeResponse;
+    type Error = RegisterVolumeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterVolume");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RegisterVolumeResult, _>()
+                        .deserialize::<RegisterVolumeResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7612,22 +8544,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Specify the load-based auto scaling configuration for a specified layer. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <note> <p>To use load-based auto scaling, you must create a set of load-based auto scaling instances. Load-based auto scaling operates only on the instances from that set, so you must ensure that you have created enough instances to handle the maximum anticipated load.</p> </note> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn set_load_based_auto_scaling(
-        &self,
-        input: SetLoadBasedAutoScalingRequest,
-    ) -> RusotoFuture<(), SetLoadBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for SetLoadBasedAutoScalingRequest {
+    type Output = SetLoadBasedAutoScalingResponse;
+    type Error = SetLoadBasedAutoScalingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetLoadBasedAutoScaling");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SetLoadBasedAutoScalingResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetLoadBasedAutoScalingError::from_response(response))
@@ -7635,19 +8575,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Specifies a user's permissions. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn set_permission(&self, input: SetPermissionRequest) -> RusotoFuture<(), SetPermissionError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for SetPermissionRequest {
+    type Output = SetPermissionResponse;
+    type Error = SetPermissionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetPermission");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SetPermissionResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7658,22 +8609,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Specify the time-based auto scaling configuration for a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-autoscaling.html">Managing Load with Time-based and Load-based Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn set_time_based_auto_scaling(
-        &self,
-        input: SetTimeBasedAutoScalingRequest,
-    ) -> RusotoFuture<(), SetTimeBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for SetTimeBasedAutoScalingRequest {
+    type Output = SetTimeBasedAutoScalingResponse;
+    type Error = SetTimeBasedAutoScalingError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetTimeBasedAutoScaling");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SetTimeBasedAutoScalingResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetTimeBasedAutoScalingError::from_response(response))
@@ -7681,19 +8640,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Starts a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn start_instance(&self, input: StartInstanceRequest) -> RusotoFuture<(), StartInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for StartInstanceRequest {
+    type Output = StartInstanceResponse;
+    type Error = StartInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StartInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7704,19 +8674,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn start_stack(&self, input: StartStackRequest) -> RusotoFuture<(), StartStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for StartStackRequest {
+    type Output = StartStackResponse;
+    type Error = StartStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StartStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartStackResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7727,19 +8708,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn stop_instance(&self, input: StopInstanceRequest) -> RusotoFuture<(), StopInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for StopInstanceRequest {
+    type Output = StopInstanceResponse;
+    type Error = StopInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StopInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7750,19 +8742,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn stop_stack(&self, input: StopStackRequest) -> RusotoFuture<(), StopStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for StopStackRequest {
+    type Output = StopStackResponse;
+    type Error = StopStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StopStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopStackResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7773,19 +8776,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html">Tags</a> in the AWS OpsWorks User Guide.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7796,22 +8810,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Unassigns a registered instance from all layers that are using the instance. The instance remains in the stack as an unassigned instance, and can be assigned to another layer as needed. You cannot use this action with instances that were created with AWS OpsWorks Stacks.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn unassign_instance(
-        &self,
-        input: UnassignInstanceRequest,
-    ) -> RusotoFuture<(), UnassignInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UnassignInstanceRequest {
+    type Output = UnassignInstanceResponse;
+    type Error = UnassignInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UnassignInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UnassignInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7822,22 +8844,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Unassigns an assigned Amazon EBS volume. The volume remains registered with the stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn unassign_volume(
-        &self,
-        input: UnassignVolumeRequest,
-    ) -> RusotoFuture<(), UnassignVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UnassignVolumeRequest {
+    type Output = UnassignVolumeResponse;
+    type Error = UnassignVolumeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UnassignVolume");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UnassignVolumeResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7848,19 +8878,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Removes tags from a specified stack or layer.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7871,19 +8912,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_app(&self, input: UpdateAppRequest) -> RusotoFuture<(), UpdateAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateAppRequest {
+    type Output = UpdateAppResponse;
+    type Error = UpdateAppError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateApp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateAppResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7894,22 +8946,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates a registered Elastic IP address's name. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_elastic_ip(
-        &self,
-        input: UpdateElasticIpRequest,
-    ) -> RusotoFuture<(), UpdateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateElasticIpRequest {
+    type Output = UpdateElasticIpResponse;
+    type Error = UpdateElasticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateElasticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateElasticIpResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7920,22 +8980,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates a specified instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_instance(
-        &self,
-        input: UpdateInstanceRequest,
-    ) -> RusotoFuture<(), UpdateInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateInstanceRequest {
+    type Output = UpdateInstanceResponse;
+    type Error = UpdateInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7946,19 +9014,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_layer(&self, input: UpdateLayerRequest) -> RusotoFuture<(), UpdateLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateLayerRequest {
+    type Output = UpdateLayerResponse;
+    type Error = UpdateLayerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateLayer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateLayerResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7969,22 +9048,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates a user's SSH public key.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have self-management enabled or an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_my_user_profile(
-        &self,
-        input: UpdateMyUserProfileRequest,
-    ) -> RusotoFuture<(), UpdateMyUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateMyUserProfileRequest {
+    type Output = UpdateMyUserProfileResponse;
+    type Error = UpdateMyUserProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateMyUserProfile");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMyUserProfileResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -7994,22 +9081,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates an Amazon RDS instance.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_rds_db_instance(
-        &self,
-        input: UpdateRdsDbInstanceRequest,
-    ) -> RusotoFuture<(), UpdateRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateRdsDbInstanceRequest {
+    type Output = UpdateRdsDbInstanceResponse;
+    type Error = UpdateRdsDbInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateRdsDbInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateRdsDbInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -8019,19 +9114,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_stack(&self, input: UpdateStackRequest) -> RusotoFuture<(), UpdateStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateStackRequest {
+    type Output = UpdateStackResponse;
+    type Error = UpdateStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateStack");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateStackResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -8042,22 +9148,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates a specified user profile.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have an attached policy that explicitly grants permissions. For more information about user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_user_profile(
-        &self,
-        input: UpdateUserProfileRequest,
-    ) -> RusotoFuture<(), UpdateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateUserProfileRequest {
+    type Output = UpdateUserProfileResponse;
+    type Error = UpdateUserProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateUserProfile");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateUserProfileResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -8068,19 +9182,30 @@ impl OpsWorks for OpsWorksClient {
             }
         })
     }
+}
 
-    /// <p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
-    fn update_volume(&self, input: UpdateVolumeRequest) -> RusotoFuture<(), UpdateVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+impl ServiceRequest for UpdateVolumeRequest {
+    type Output = UpdateVolumeResponse;
+    type Error = UpdateVolumeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "opsworks", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateVolume");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateVolumeResponse, _>()
+                }))
             } else {
                 Box::new(
                     response

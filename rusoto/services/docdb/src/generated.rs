@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -36,17 +37,17 @@ use xml::EventReader;
 
 /// <p>Represents the input to <a>AddTagsToResource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddTagsToResourceMessage {
+pub struct AddTagsToResourceRequest {
     /// <p>The Amazon DocumentDB resource that the tags are added to. This value is an Amazon Resource Name (ARN).</p>
     pub resource_name: String,
     /// <p>The tags to be assigned to the Amazon DocumentDB resource. </p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `AddTagsToResourceMessage` contents to a `SignedRequest`.
-struct AddTagsToResourceMessageSerializer;
-impl AddTagsToResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceMessage) {
+/// Serialize `AddTagsToResourceRequest` contents to a `SignedRequest`.
+struct AddTagsToResourceRequestSerializer;
+impl AddTagsToResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -57,6 +58,19 @@ impl AddTagsToResourceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddTagsToResourceResponse {}
+
+struct AddTagsToResourceResponseDeserializer;
+impl AddTagsToResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddTagsToResourceResponse, XmlParseError> {
+        Ok(AddTagsToResourceResponse::default())
+    }
+}
 struct ApplyMethodDeserializer;
 impl ApplyMethodDeserializer {
     #[allow(unused_variables)]
@@ -70,7 +84,7 @@ impl ApplyMethodDeserializer {
 }
 /// <p>Represents the input to <a>ApplyPendingMaintenanceAction</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplyPendingMaintenanceActionMessage {
+pub struct ApplyPendingMaintenanceActionRequest {
     /// <p>The pending maintenance action to apply to this resource.</p> <p>Valid values: <code>system-update</code>, <code>db-upgrade</code> </p>
     pub apply_action: String,
     /// <p><p>A value that specifies the type of opt-in request or undoes an opt-in request. An opt-in request of type <code>immediate</code> can&#39;t be undone.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
@@ -79,10 +93,10 @@ pub struct ApplyPendingMaintenanceActionMessage {
     pub resource_identifier: String,
 }
 
-/// Serialize `ApplyPendingMaintenanceActionMessage` contents to a `SignedRequest`.
-struct ApplyPendingMaintenanceActionMessageSerializer;
-impl ApplyPendingMaintenanceActionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ApplyPendingMaintenanceActionMessage) {
+/// Serialize `ApplyPendingMaintenanceActionRequest` contents to a `SignedRequest`.
+struct ApplyPendingMaintenanceActionRequestSerializer;
+impl ApplyPendingMaintenanceActionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ApplyPendingMaintenanceActionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -98,18 +112,18 @@ impl ApplyPendingMaintenanceActionMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplyPendingMaintenanceActionResult {
+pub struct ApplyPendingMaintenanceActionResponse {
     pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
 }
 
-struct ApplyPendingMaintenanceActionResultDeserializer;
-impl ApplyPendingMaintenanceActionResultDeserializer {
+struct ApplyPendingMaintenanceActionResponseDeserializer;
+impl ApplyPendingMaintenanceActionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ApplyPendingMaintenanceActionResult, XmlParseError> {
-        deserialize_elements::<_, ApplyPendingMaintenanceActionResult, _>(
+    ) -> Result<ApplyPendingMaintenanceActionResponse, XmlParseError> {
+        deserialize_elements::<_, ApplyPendingMaintenanceActionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -290,7 +304,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
 
 /// <p>Represents the input to <a>CopyDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterParameterGroupMessage {
+pub struct CopyDBClusterParameterGroupRequest {
     /// <p><p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same AWS Region as the copy, specify a valid DB parameter group identifier; for example, <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different AWS Region than the copy, specify a valid DB cluster parameter group ARN; for example, <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul></p>
     pub source_db_cluster_parameter_group_identifier: String,
     /// <p>The tags that are to be assigned to the parameter group.</p>
@@ -301,10 +315,10 @@ pub struct CopyDBClusterParameterGroupMessage {
     pub target_db_cluster_parameter_group_identifier: String,
 }
 
-/// Serialize `CopyDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct CopyDBClusterParameterGroupMessageSerializer;
-impl CopyDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterParameterGroupMessage) {
+/// Serialize `CopyDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct CopyDBClusterParameterGroupRequestSerializer;
+impl CopyDBClusterParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -329,18 +343,18 @@ impl CopyDBClusterParameterGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterParameterGroupResult {
+pub struct CopyDBClusterParameterGroupResponse {
     pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
 }
 
-struct CopyDBClusterParameterGroupResultDeserializer;
-impl CopyDBClusterParameterGroupResultDeserializer {
+struct CopyDBClusterParameterGroupResponseDeserializer;
+impl CopyDBClusterParameterGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyDBClusterParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CopyDBClusterParameterGroupResult, _>(
+    ) -> Result<CopyDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CopyDBClusterParameterGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -361,7 +375,7 @@ impl CopyDBClusterParameterGroupResultDeserializer {
 }
 /// <p>Represents the input to <a>CopyDBClusterSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterSnapshotMessage {
+pub struct CopyDBClusterSnapshotRequest {
     /// <p>Set to <code>true</code> to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot, and otherwise <code>false</code>. The default is <code>false</code>.</p>
     pub copy_tags: Option<bool>,
     /// <p>The AWS KMS key ID for an encrypted DB cluster snapshot. The AWS KMS key ID is the Amazon Resource Name (ARN), AWS KMS key identifier, or the AWS KMS key alias for the AWS KMS encryption key. </p> <p>If you copy an encrypted DB cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new AWS KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the DB cluster snapshot is encrypted with the same AWS KMS key as the source DB cluster snapshot. </p> <p>If you copy an encrypted DB cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>. </p> <p>To copy an encrypted DB cluster snapshot to another AWS Region, set <code>KmsKeyId</code> to the AWS KMS key ID that you want to use to encrypt the copy of the DB cluster snapshot in the destination Region. AWS KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one Region in another Region.</p> <p>If you copy an unencrypted DB cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, an error is returned.</p>
@@ -376,10 +390,10 @@ pub struct CopyDBClusterSnapshotMessage {
     pub target_db_cluster_snapshot_identifier: String,
 }
 
-/// Serialize `CopyDBClusterSnapshotMessage` contents to a `SignedRequest`.
-struct CopyDBClusterSnapshotMessageSerializer;
-impl CopyDBClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterSnapshotMessage) {
+/// Serialize `CopyDBClusterSnapshotRequest` contents to a `SignedRequest`.
+struct CopyDBClusterSnapshotRequestSerializer;
+impl CopyDBClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -409,18 +423,18 @@ impl CopyDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CopyDBClusterSnapshotResult {
+pub struct CopyDBClusterSnapshotResponse {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
-struct CopyDBClusterSnapshotResultDeserializer;
-impl CopyDBClusterSnapshotResultDeserializer {
+struct CopyDBClusterSnapshotResponseDeserializer;
+impl CopyDBClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CopyDBClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CopyDBClusterSnapshotResult, _>(
+    ) -> Result<CopyDBClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CopyDBClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -438,9 +452,77 @@ impl CopyDBClusterSnapshotResultDeserializer {
         )
     }
 }
+/// <p>Represents the input of <a>CreateDBClusterParameterGroup</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDBClusterParameterGroupRequest {
+    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing <code>DBClusterParameterGroup</code>.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
+    pub db_cluster_parameter_group_name: String,
+    /// <p>The DB cluster parameter group family name.</p>
+    pub db_parameter_group_family: String,
+    /// <p>The description for the DB cluster parameter group.</p>
+    pub description: String,
+    /// <p>The tags to be assigned to the DB cluster parameter group.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `CreateDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct CreateDBClusterParameterGroupRequestSerializer;
+impl CreateDBClusterParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterParameterGroupRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+            &obj.db_cluster_parameter_group_name,
+        );
+        params.put(
+            &format!("{}{}", prefix, "DBParameterGroupFamily"),
+            &obj.db_parameter_group_family,
+        );
+        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDBClusterParameterGroupResponse {
+    pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
+}
+
+struct CreateDBClusterParameterGroupResponseDeserializer;
+impl CreateDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroup" => {
+                        obj.db_cluster_parameter_group =
+                            Some(DBClusterParameterGroupDeserializer::deserialize(
+                                "DBClusterParameterGroup",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>CreateDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterMessage {
+pub struct CreateDBClusterRequest {
     /// <p>A list of Amazon EC2 Availability Zones that instances in the DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p><p>The number of days for which automated backups are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35.</p> </li> </ul></p>
@@ -477,10 +559,10 @@ pub struct CreateDBClusterMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `CreateDBClusterMessage` contents to a `SignedRequest`.
-struct CreateDBClusterMessageSerializer;
-impl CreateDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterMessage) {
+/// Serialize `CreateDBClusterRequest` contents to a `SignedRequest`.
+struct CreateDBClusterRequestSerializer;
+impl CreateDBClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -563,66 +645,26 @@ impl CreateDBClusterMessageSerializer {
     }
 }
 
-/// <p>Represents the input of <a>CreateDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterParameterGroupMessage {
-    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing <code>DBClusterParameterGroup</code>.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
-    pub db_cluster_parameter_group_name: String,
-    /// <p>The DB cluster parameter group family name.</p>
-    pub db_parameter_group_family: String,
-    /// <p>The description for the DB cluster parameter group.</p>
-    pub description: String,
-    /// <p>The tags to be assigned to the DB cluster parameter group.</p>
-    pub tags: Option<Vec<Tag>>,
+pub struct CreateDBClusterResponse {
+    pub db_cluster: Option<DBCluster>,
 }
 
-/// Serialize `CreateDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct CreateDBClusterParameterGroupMessageSerializer;
-impl CreateDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
-            &obj.db_cluster_parameter_group_name,
-        );
-        params.put(
-            &format!("{}{}", prefix, "DBParameterGroupFamily"),
-            &obj.db_parameter_group_family,
-        );
-        params.put(&format!("{}{}", prefix, "Description"), &obj.description);
-        if let Some(ref field_value) = obj.tags {
-            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterParameterGroupResult {
-    pub db_cluster_parameter_group: Option<DBClusterParameterGroup>,
-}
-
-struct CreateDBClusterParameterGroupResultDeserializer;
-impl CreateDBClusterParameterGroupResultDeserializer {
+struct CreateDBClusterResponseDeserializer;
+impl CreateDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBClusterParameterGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBClusterParameterGroupResult, _>(
+    ) -> Result<CreateDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
                 match name {
-                    "DBClusterParameterGroup" => {
-                        obj.db_cluster_parameter_group =
-                            Some(DBClusterParameterGroupDeserializer::deserialize(
-                                "DBClusterParameterGroup",
-                                stack,
-                            )?);
+                    "DBCluster" => {
+                        obj.db_cluster =
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -631,32 +673,9 @@ impl CreateDBClusterParameterGroupResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterResult {
-    pub db_cluster: Option<DBCluster>,
-}
-
-struct CreateDBClusterResultDeserializer;
-impl CreateDBClusterResultDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBCluster" => {
-                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Represents the input of <a>CreateDBClusterSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterSnapshotMessage {
+pub struct CreateDBClusterSnapshotRequest {
     /// <p>The identifier of the DB cluster to create a snapshot for. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul> <p>Example: <code>my-cluster</code> </p>
     pub db_cluster_identifier: String,
     /// <p>The identifier of the DB cluster snapshot. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>
@@ -665,10 +684,10 @@ pub struct CreateDBClusterSnapshotMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBClusterSnapshotMessage` contents to a `SignedRequest`.
-struct CreateDBClusterSnapshotMessageSerializer;
-impl CreateDBClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterSnapshotMessage) {
+/// Serialize `CreateDBClusterSnapshotRequest` contents to a `SignedRequest`.
+struct CreateDBClusterSnapshotRequestSerializer;
+impl CreateDBClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -689,18 +708,18 @@ impl CreateDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBClusterSnapshotResult {
+pub struct CreateDBClusterSnapshotResponse {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
-struct CreateDBClusterSnapshotResultDeserializer;
-impl CreateDBClusterSnapshotResultDeserializer {
+struct CreateDBClusterSnapshotResponseDeserializer;
+impl CreateDBClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBClusterSnapshotResult, _>(
+    ) -> Result<CreateDBClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -720,7 +739,7 @@ impl CreateDBClusterSnapshotResultDeserializer {
 }
 /// <p>Represents the input to <a>CreateDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBInstanceMessage {
+pub struct CreateDBInstanceRequest {
     /// <p>Indicates that minor engine upgrades are applied automatically to the DB instance during the maintenance window.</p> <p>Default: <code>true</code> </p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p> The Amazon EC2 Availability Zone that the DB instance is created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's AWS Region.</p> <p> Example: <code>us-east-1d</code> </p> <p> Constraint: The <code>AvailabilityZone</code> parameter can't be specified if the <code>MultiAZ</code> parameter is set to <code>true</code>. The specified Availability Zone must be in the same AWS Region as the current endpoint. </p>
@@ -741,10 +760,10 @@ pub struct CreateDBInstanceMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBInstanceMessage` contents to a `SignedRequest`.
-struct CreateDBInstanceMessageSerializer;
-impl CreateDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceMessage) {
+/// Serialize `CreateDBInstanceRequest` contents to a `SignedRequest`.
+struct CreateDBInstanceRequestSerializer;
+impl CreateDBInstanceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -788,32 +807,36 @@ impl CreateDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBInstanceResult {
+pub struct CreateDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct CreateDBInstanceResultDeserializer;
-impl CreateDBInstanceResultDeserializer {
+struct CreateDBInstanceResponseDeserializer;
+impl CreateDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<CreateDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the input to <a>CreateDBSubnetGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSubnetGroupMessage {
+pub struct CreateDBSubnetGroupRequest {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: String,
     /// <p>The name for the DB subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 letters, numbers, periods, underscores, spaces, or hyphens. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
@@ -824,10 +847,10 @@ pub struct CreateDBSubnetGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateDBSubnetGroupMessage` contents to a `SignedRequest`.
-struct CreateDBSubnetGroupMessageSerializer;
-impl CreateDBSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBSubnetGroupMessage) {
+/// Serialize `CreateDBSubnetGroupRequest` contents to a `SignedRequest`.
+struct CreateDBSubnetGroupRequestSerializer;
+impl CreateDBSubnetGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -853,18 +876,18 @@ impl CreateDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDBSubnetGroupResult {
+pub struct CreateDBSubnetGroupResponse {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
 
-struct CreateDBSubnetGroupResultDeserializer;
-impl CreateDBSubnetGroupResultDeserializer {
+struct CreateDBSubnetGroupResponseDeserializer;
+impl CreateDBSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDBSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, CreateDBSubnetGroupResult, _>(
+    ) -> Result<CreateDBSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, CreateDBSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1178,38 +1201,6 @@ impl DBClusterMemberListDeserializer {
         })
     }
 }
-/// <p>Represents the output of <a>DescribeDBClusters</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterMessage {
-    /// <p>A list of DB clusters.</p>
-    pub db_clusters: Option<Vec<DBCluster>>,
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterMessageDeserializer;
-impl DBClusterMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBClusters" => {
-                    obj.db_clusters
-                        .get_or_insert(vec![])
-                        .extend(DBClusterListDeserializer::deserialize("DBClusters", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Detailed information about a DB cluster parameter group. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroup {
@@ -1263,42 +1254,6 @@ impl DBClusterParameterGroupDeserializer {
         )
     }
 }
-/// <p>Represents the output of <a>DBClusterParameterGroup</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterParameterGroupDetails {
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-    /// <p>Provides a list of parameters for the DB cluster parameter group.</p>
-    pub parameters: Option<Vec<Parameter>>,
-}
-
-struct DBClusterParameterGroupDetailsDeserializer;
-impl DBClusterParameterGroupDetailsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterParameterGroupDetails, XmlParseError> {
-        deserialize_elements::<_, DBClusterParameterGroupDetails, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Parameters" => {
-                        obj.parameters.get_or_insert(vec![]).extend(
-                            ParametersListDeserializer::deserialize("Parameters", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct DBClusterParameterGroupListDeserializer;
 impl DBClusterParameterGroupListDeserializer {
     #[allow(unused_variables)]
@@ -1317,76 +1272,6 @@ impl DBClusterParameterGroupListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Contains the name of a DB cluster parameter group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterParameterGroupNameMessage {
-    /// <p><p>The name of a DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 255 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
-    pub db_cluster_parameter_group_name: Option<String>,
-}
-
-struct DBClusterParameterGroupNameMessageDeserializer;
-impl DBClusterParameterGroupNameMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterParameterGroupNameMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterParameterGroupNameMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterParameterGroupName" => {
-                        obj.db_cluster_parameter_group_name = Some(
-                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Represents the output of <a>DBClusterParameterGroups</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterParameterGroupsMessage {
-    /// <p>A list of DB cluster parameter groups.</p>
-    pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterParameterGroupsMessageDeserializer;
-impl DBClusterParameterGroupsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterParameterGroupsMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterParameterGroupsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterParameterGroups" => {
-                        obj.db_cluster_parameter_groups
-                            .get_or_insert(vec![])
-                            .extend(DBClusterParameterGroupListDeserializer::deserialize(
-                                "DBClusterParameterGroups",
-                                stack,
-                            )?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Describes an AWS Identity and Access Management (IAM) role that is associated with a DB cluster.</p>
@@ -1686,45 +1571,6 @@ impl DBClusterSnapshotListDeserializer {
         })
     }
 }
-/// <p>Represents the output of <a>DescribeDBClusterSnapshots</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBClusterSnapshotMessage {
-    /// <p>Provides a list of DB cluster snapshots.</p>
-    pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-}
-
-struct DBClusterSnapshotMessageDeserializer;
-impl DBClusterSnapshotMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBClusterSnapshotMessage, XmlParseError> {
-        deserialize_elements::<_, DBClusterSnapshotMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "DBClusterSnapshots" => {
-                        obj.db_cluster_snapshots.get_or_insert(vec![]).extend(
-                            DBClusterSnapshotListDeserializer::deserialize(
-                                "DBClusterSnapshots",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p> Detailed information about a DB engine version. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBEngineVersion {
@@ -1821,38 +1667,6 @@ impl DBEngineVersionListDeserializer {
                 )?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-/// <p>Represents the output of <a>DescribeDBEngineVersions</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBEngineVersionMessage {
-    /// <p>Detailed information about one or more DB engine versions.</p>
-    pub db_engine_versions: Option<Vec<DBEngineVersion>>,
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-}
-
-struct DBEngineVersionMessageDeserializer;
-impl DBEngineVersionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBEngineVersionMessage, XmlParseError> {
-        deserialize_elements::<_, DBEngineVersionMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBEngineVersions" => {
-                    obj.db_engine_versions.get_or_insert(vec![]).extend(
-                        DBEngineVersionListDeserializer::deserialize("DBEngineVersions", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -2076,38 +1890,6 @@ impl DBInstanceListDeserializer {
         })
     }
 }
-/// <p>Represents the output of <a>DescribeDBInstances</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBInstanceMessage {
-    /// <p>Detailed information about one or more DB instances. </p>
-    pub db_instances: Option<Vec<DBInstance>>,
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-}
-
-struct DBInstanceMessageDeserializer;
-impl DBInstanceMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBInstanceMessage, XmlParseError> {
-        deserialize_elements::<_, DBInstanceMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstances" => {
-                    obj.db_instances.get_or_insert(vec![]).extend(
-                        DBInstanceListDeserializer::deserialize("DBInstances", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Provides a list of status information for a DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBInstanceStatusInfo {
@@ -2226,38 +2008,6 @@ impl DBSubnetGroupDeserializer {
         })
     }
 }
-/// <p>Represents the output of <a>DescribeDBSubnetGroups</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DBSubnetGroupMessage {
-    /// <p>Detailed information about one or more DB subnet groups.</p>
-    pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-}
-
-struct DBSubnetGroupMessageDeserializer;
-impl DBSubnetGroupMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DBSubnetGroupMessage, XmlParseError> {
-        deserialize_elements::<_, DBSubnetGroupMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBSubnetGroups" => {
-                    obj.db_subnet_groups.get_or_insert(vec![]).extend(
-                        DBSubnetGroupsDeserializer::deserialize("DBSubnetGroups", stack)?,
-                    );
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct DBSubnetGroupsDeserializer;
 impl DBSubnetGroupsDeserializer {
     #[allow(unused_variables)]
@@ -2278,9 +2028,45 @@ impl DBSubnetGroupsDeserializer {
         })
     }
 }
+/// <p>Represents the input to <a>DeleteDBClusterParameterGroup</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBClusterParameterGroupRequest {
+    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Cannot be associated with any DB clusters.</p> </li> </ul></p>
+    pub db_cluster_parameter_group_name: String,
+}
+
+/// Serialize `DeleteDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct DeleteDBClusterParameterGroupRequestSerializer;
+impl DeleteDBClusterParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterParameterGroupRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+            &obj.db_cluster_parameter_group_name,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBClusterParameterGroupResponse {}
+
+struct DeleteDBClusterParameterGroupResponseDeserializer;
+impl DeleteDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBClusterParameterGroupResponse, XmlParseError> {
+        Ok(DeleteDBClusterParameterGroupResponse::default())
+    }
+}
 /// <p>Represents the input to <a>DeleteDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterMessage {
+pub struct DeleteDBClusterRequest {
     /// <p><p>The DB cluster identifier for the DB cluster to be deleted. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing <code>DBClusterIdentifier</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
     /// <p><p> The DB cluster snapshot identifier of the new DB cluster snapshot created when <code>SkipFinalSnapshot</code> is set to <code>false</code>. </p> <note> <p> Specifying this parameter and also setting the <code>SkipFinalShapshot</code> parameter to <code>true</code> results in an error. </p> </note> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
@@ -2289,10 +2075,10 @@ pub struct DeleteDBClusterMessage {
     pub skip_final_snapshot: Option<bool>,
 }
 
-/// Serialize `DeleteDBClusterMessage` contents to a `SignedRequest`.
-struct DeleteDBClusterMessageSerializer;
-impl DeleteDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterMessage) {
+/// Serialize `DeleteDBClusterRequest` contents to a `SignedRequest`.
+struct DeleteDBClusterRequestSerializer;
+impl DeleteDBClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2314,63 +2100,45 @@ impl DeleteDBClusterMessageSerializer {
     }
 }
 
-/// <p>Represents the input to <a>DeleteDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterParameterGroupMessage {
-    /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Cannot be associated with any DB clusters.</p> </li> </ul></p>
-    pub db_cluster_parameter_group_name: String,
-}
-
-/// Serialize `DeleteDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct DeleteDBClusterParameterGroupMessageSerializer;
-impl DeleteDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
-            &obj.db_cluster_parameter_group_name,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterResult {
+pub struct DeleteDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct DeleteDBClusterResultDeserializer;
-impl DeleteDBClusterResultDeserializer {
+struct DeleteDBClusterResponseDeserializer;
+impl DeleteDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBCluster" => {
-                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+    ) -> Result<DeleteDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBClusterResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBCluster" => {
+                        obj.db_cluster =
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the input to <a>DeleteDBClusterSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterSnapshotMessage {
+pub struct DeleteDBClusterSnapshotRequest {
     /// <p>The identifier of the DB cluster snapshot to delete.</p> <p>Constraints: Must be the name of an existing DB cluster snapshot in the <code>available</code> state.</p>
     pub db_cluster_snapshot_identifier: String,
 }
 
-/// Serialize `DeleteDBClusterSnapshotMessage` contents to a `SignedRequest`.
-struct DeleteDBClusterSnapshotMessageSerializer;
-impl DeleteDBClusterSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterSnapshotMessage) {
+/// Serialize `DeleteDBClusterSnapshotRequest` contents to a `SignedRequest`.
+struct DeleteDBClusterSnapshotRequestSerializer;
+impl DeleteDBClusterSnapshotRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2384,18 +2152,18 @@ impl DeleteDBClusterSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBClusterSnapshotResult {
+pub struct DeleteDBClusterSnapshotResponse {
     pub db_cluster_snapshot: Option<DBClusterSnapshot>,
 }
 
-struct DeleteDBClusterSnapshotResultDeserializer;
-impl DeleteDBClusterSnapshotResultDeserializer {
+struct DeleteDBClusterSnapshotResponseDeserializer;
+impl DeleteDBClusterSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBClusterSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBClusterSnapshotResult, _>(
+    ) -> Result<DeleteDBClusterSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBClusterSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2415,15 +2183,15 @@ impl DeleteDBClusterSnapshotResultDeserializer {
 }
 /// <p>Represents the input to <a>DeleteDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBInstanceMessage {
+pub struct DeleteDBInstanceRequest {
     /// <p><p>The DB instance identifier for the DB instance to be deleted. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB instance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
 }
 
-/// Serialize `DeleteDBInstanceMessage` contents to a `SignedRequest`.
-struct DeleteDBInstanceMessageSerializer;
-impl DeleteDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceMessage) {
+/// Serialize `DeleteDBInstanceRequest` contents to a `SignedRequest`.
+struct DeleteDBInstanceRequestSerializer;
+impl DeleteDBInstanceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2437,40 +2205,44 @@ impl DeleteDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBInstanceResult {
+pub struct DeleteDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct DeleteDBInstanceResultDeserializer;
-impl DeleteDBInstanceResultDeserializer {
+struct DeleteDBInstanceResponseDeserializer;
+impl DeleteDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, DeleteDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<DeleteDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, DeleteDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the input to <a>DeleteDBSubnetGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteDBSubnetGroupMessage {
+pub struct DeleteDBSubnetGroupRequest {
     /// <p>The name of the database subnet group to delete.</p> <note> <p>You can't delete the default subnet group.</p> </note> <p>Constraints:</p> <p>Must match the name of an existing <code>DBSubnetGroup</code>. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: String,
 }
 
-/// Serialize `DeleteDBSubnetGroupMessage` contents to a `SignedRequest`.
-struct DeleteDBSubnetGroupMessageSerializer;
-impl DeleteDBSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSubnetGroupMessage) {
+/// Serialize `DeleteDBSubnetGroupRequest` contents to a `SignedRequest`.
+struct DeleteDBSubnetGroupRequestSerializer;
+impl DeleteDBSubnetGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2483,9 +2255,22 @@ impl DeleteDBSubnetGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDBSubnetGroupResponse {}
+
+struct DeleteDBSubnetGroupResponseDeserializer;
+impl DeleteDBSubnetGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBSubnetGroupResponse, XmlParseError> {
+        Ok(DeleteDBSubnetGroupResponse::default())
+    }
+}
 /// <p>Represents the input to <a>DescribeDBClusterParameterGroups</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterParameterGroupsMessage {
+pub struct DescribeDBClusterParameterGroupsRequest {
     /// <p><p>The name of a specific DB cluster parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the name of an existing <code>DBClusterParameterGroup</code>.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -2496,10 +2281,10 @@ pub struct DescribeDBClusterParameterGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBClusterParameterGroupsMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterParameterGroupsMessageSerializer;
-impl DescribeDBClusterParameterGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParameterGroupsMessage) {
+/// Serialize `DescribeDBClusterParameterGroupsRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterParameterGroupsRequestSerializer;
+impl DescribeDBClusterParameterGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParameterGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2527,9 +2312,48 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DBClusterParameterGroups</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterParameterGroupsResponse {
+    /// <p>A list of DB cluster parameter groups.</p>
+    pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClusterParameterGroupsResponseDeserializer;
+impl DescribeDBClusterParameterGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterParameterGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterParameterGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroups" => {
+                        obj.db_cluster_parameter_groups
+                            .get_or_insert(vec![])
+                            .extend(DBClusterParameterGroupListDeserializer::deserialize(
+                                "DBClusterParameterGroups",
+                                stack,
+                            )?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeDBClusterParameters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterParametersMessage {
+pub struct DescribeDBClusterParametersRequest {
     /// <p><p>The name of a specific DB cluster parameter group to return parameter details for.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the name of an existing <code>DBClusterParameterGroup</code>.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: String,
     /// <p>This parameter is not currently supported.</p>
@@ -2542,10 +2366,10 @@ pub struct DescribeDBClusterParametersMessage {
     pub source: Option<String>,
 }
 
-/// Serialize `DescribeDBClusterParametersMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterParametersMessageSerializer;
-impl DescribeDBClusterParametersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParametersMessage) {
+/// Serialize `DescribeDBClusterParametersRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterParametersRequestSerializer;
+impl DescribeDBClusterParametersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParametersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2574,20 +2398,56 @@ impl DescribeDBClusterParametersMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DBClusterParameterGroup</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterParametersResponse {
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p>Provides a list of parameters for the DB cluster parameter group.</p>
+    pub parameters: Option<Vec<Parameter>>,
+}
+
+struct DescribeDBClusterParametersResponseDeserializer;
+impl DescribeDBClusterParametersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterParametersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Parameters" => {
+                        obj.parameters.get_or_insert(vec![]).extend(
+                            ParametersListDeserializer::deserialize("Parameters", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeDBClusterSnapshotAttributes</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterSnapshotAttributesMessage {
+pub struct DescribeDBClusterSnapshotAttributesRequest {
     /// <p>The identifier for the DB cluster snapshot to describe the attributes for.</p>
     pub db_cluster_snapshot_identifier: String,
 }
 
-/// Serialize `DescribeDBClusterSnapshotAttributesMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterSnapshotAttributesMessageSerializer;
-impl DescribeDBClusterSnapshotAttributesMessageSerializer {
+/// Serialize `DescribeDBClusterSnapshotAttributesRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterSnapshotAttributesRequestSerializer;
+impl DescribeDBClusterSnapshotAttributesRequestSerializer {
     fn serialize(
         params: &mut Params,
         name: &str,
-        obj: &DescribeDBClusterSnapshotAttributesMessage,
+        obj: &DescribeDBClusterSnapshotAttributesRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -2602,18 +2462,18 @@ impl DescribeDBClusterSnapshotAttributesMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterSnapshotAttributesResult {
+pub struct DescribeDBClusterSnapshotAttributesResponse {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
 
-struct DescribeDBClusterSnapshotAttributesResultDeserializer;
-impl DescribeDBClusterSnapshotAttributesResultDeserializer {
+struct DescribeDBClusterSnapshotAttributesResponseDeserializer;
+impl DescribeDBClusterSnapshotAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeDBClusterSnapshotAttributesResult, XmlParseError> {
-        deserialize_elements::<_, DescribeDBClusterSnapshotAttributesResult, _>(
+    ) -> Result<DescribeDBClusterSnapshotAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterSnapshotAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2634,7 +2494,7 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
 }
 /// <p>Represents the input to <a>DescribeDBClusterSnapshots</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClusterSnapshotsMessage {
+pub struct DescribeDBClusterSnapshotsRequest {
     /// <p><p>The ID of the DB cluster to retrieve the list of DB cluster snapshots for. This parameter can&#39;t be used with the <code>DBClusterSnapshotIdentifier</code> parameter. This parameter is not case sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
     /// <p><p>A specific DB cluster snapshot identifier to describe. This parameter can&#39;t be used with the <code>DBClusterIdentifier</code> parameter. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the identifier of an existing <code>DBClusterSnapshot</code>.</p> </li> <li> <p>If this identifier is for an automated snapshot, the <code>SnapshotType</code> parameter must also be specified.</p> </li> </ul></p>
@@ -2653,10 +2513,10 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub snapshot_type: Option<String>,
 }
 
-/// Serialize `DescribeDBClusterSnapshotsMessage` contents to a `SignedRequest`.
-struct DescribeDBClusterSnapshotsMessageSerializer;
-impl DescribeDBClusterSnapshotsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterSnapshotsMessage) {
+/// Serialize `DescribeDBClusterSnapshotsRequest` contents to a `SignedRequest`.
+struct DescribeDBClusterSnapshotsRequestSerializer;
+impl DescribeDBClusterSnapshotsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterSnapshotsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2699,9 +2559,48 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeDBClusterSnapshots</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClusterSnapshotsResponse {
+    /// <p>Provides a list of DB cluster snapshots.</p>
+    pub db_cluster_snapshots: Option<Vec<DBClusterSnapshot>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClusterSnapshotsResponseDeserializer;
+impl DescribeDBClusterSnapshotsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClusterSnapshotsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClusterSnapshotsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterSnapshots" => {
+                        obj.db_cluster_snapshots.get_or_insert(vec![]).extend(
+                            DBClusterSnapshotListDeserializer::deserialize(
+                                "DBClusterSnapshots",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeDBClusters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBClustersMessage {
+pub struct DescribeDBClustersRequest {
     /// <p><p>The user-provided DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match an existing <code>DBClusterIdentifier</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
     /// <p><p>A filter that specifies one or more DB clusters to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list only includes information about the DB clusters identified by these ARNs.</p> </li> </ul></p>
@@ -2712,10 +2611,10 @@ pub struct DescribeDBClustersMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBClustersMessage` contents to a `SignedRequest`.
-struct DescribeDBClustersMessageSerializer;
-impl DescribeDBClustersMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClustersMessage) {
+/// Serialize `DescribeDBClustersRequest` contents to a `SignedRequest`.
+struct DescribeDBClustersRequestSerializer;
+impl DescribeDBClustersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClustersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2743,9 +2642,45 @@ impl DescribeDBClustersMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeDBClusters</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBClustersResponse {
+    /// <p>A list of DB clusters.</p>
+    pub db_clusters: Option<Vec<DBCluster>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBClustersResponseDeserializer;
+impl DescribeDBClustersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBClustersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBClustersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusters" => {
+                        obj.db_clusters
+                            .get_or_insert(vec![])
+                            .extend(DBClusterListDeserializer::deserialize("DBClusters", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeDBEngineVersions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBEngineVersionsMessage {
+pub struct DescribeDBEngineVersionsRequest {
     /// <p><p>The name of a specific DB parameter group family to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match an existing <code>DBParameterGroupFamily</code>.</p> </li> </ul></p>
     pub db_parameter_group_family: Option<String>,
     /// <p>Indicates that only the default version of the specified engine or engine and major version combination is returned.</p>
@@ -2766,10 +2701,10 @@ pub struct DescribeDBEngineVersionsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBEngineVersionsMessage` contents to a `SignedRequest`.
-struct DescribeDBEngineVersionsMessageSerializer;
-impl DescribeDBEngineVersionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBEngineVersionsMessage) {
+/// Serialize `DescribeDBEngineVersionsRequest` contents to a `SignedRequest`.
+struct DescribeDBEngineVersionsRequestSerializer;
+impl DescribeDBEngineVersionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBEngineVersionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2818,9 +2753,48 @@ impl DescribeDBEngineVersionsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeDBEngineVersions</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBEngineVersionsResponse {
+    /// <p>Detailed information about one or more DB engine versions.</p>
+    pub db_engine_versions: Option<Vec<DBEngineVersion>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBEngineVersionsResponseDeserializer;
+impl DescribeDBEngineVersionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBEngineVersionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBEngineVersionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBEngineVersions" => {
+                        obj.db_engine_versions.get_or_insert(vec![]).extend(
+                            DBEngineVersionListDeserializer::deserialize(
+                                "DBEngineVersions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeDBInstances</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBInstancesMessage {
+pub struct DescribeDBInstancesRequest {
     /// <p><p>The user-provided instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn&#39;t case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If provided, must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
     /// <p><p>A filter that specifies one or more DB instances to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list includes only the information about the DB instances that are associated with the DB clusters that are identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list includes only the information about the DB instances that are identified by these ARNs.</p> </li> </ul></p>
@@ -2831,10 +2805,10 @@ pub struct DescribeDBInstancesMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBInstancesMessage` contents to a `SignedRequest`.
-struct DescribeDBInstancesMessageSerializer;
-impl DescribeDBInstancesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstancesMessage) {
+/// Serialize `DescribeDBInstancesRequest` contents to a `SignedRequest`.
+struct DescribeDBInstancesRequestSerializer;
+impl DescribeDBInstancesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2862,9 +2836,45 @@ impl DescribeDBInstancesMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeDBInstances</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBInstancesResponse {
+    /// <p>Detailed information about one or more DB instances. </p>
+    pub db_instances: Option<Vec<DBInstance>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBInstancesResponseDeserializer;
+impl DescribeDBInstancesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBInstancesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBInstancesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstances" => {
+                        obj.db_instances.get_or_insert(vec![]).extend(
+                            DBInstanceListDeserializer::deserialize("DBInstances", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeDBSubnetGroups</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeDBSubnetGroupsMessage {
+pub struct DescribeDBSubnetGroupsRequest {
     /// <p>The name of the DB subnet group to return details for.</p>
     pub db_subnet_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
@@ -2875,10 +2885,10 @@ pub struct DescribeDBSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeDBSubnetGroupsMessage` contents to a `SignedRequest`.
-struct DescribeDBSubnetGroupsMessageSerializer;
-impl DescribeDBSubnetGroupsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSubnetGroupsMessage) {
+/// Serialize `DescribeDBSubnetGroupsRequest` contents to a `SignedRequest`.
+struct DescribeDBSubnetGroupsRequestSerializer;
+impl DescribeDBSubnetGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSubnetGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2903,9 +2913,45 @@ impl DescribeDBSubnetGroupsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeDBSubnetGroups</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeDBSubnetGroupsResponse {
+    /// <p>Detailed information about one or more DB subnet groups.</p>
+    pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeDBSubnetGroupsResponseDeserializer;
+impl DescribeDBSubnetGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeDBSubnetGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeDBSubnetGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBSubnetGroups" => {
+                        obj.db_subnet_groups.get_or_insert(vec![]).extend(
+                            DBSubnetGroupsDeserializer::deserialize("DBSubnetGroups", stack)?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeEngineDefaultClusterParameters</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultClusterParametersMessage {
+pub struct DescribeEngineDefaultClusterParametersRequest {
     /// <p>The name of the DB cluster parameter group family to return the engine parameter information for.</p>
     pub db_parameter_group_family: String,
     /// <p>This parameter is not currently supported.</p>
@@ -2916,13 +2962,13 @@ pub struct DescribeEngineDefaultClusterParametersMessage {
     pub max_records: Option<i64>,
 }
 
-/// Serialize `DescribeEngineDefaultClusterParametersMessage` contents to a `SignedRequest`.
-struct DescribeEngineDefaultClusterParametersMessageSerializer;
-impl DescribeEngineDefaultClusterParametersMessageSerializer {
+/// Serialize `DescribeEngineDefaultClusterParametersRequest` contents to a `SignedRequest`.
+struct DescribeEngineDefaultClusterParametersRequestSerializer;
+impl DescribeEngineDefaultClusterParametersRequestSerializer {
     fn serialize(
         params: &mut Params,
         name: &str,
-        obj: &DescribeEngineDefaultClusterParametersMessage,
+        obj: &DescribeEngineDefaultClusterParametersRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -2950,18 +2996,18 @@ impl DescribeEngineDefaultClusterParametersMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEngineDefaultClusterParametersResult {
+pub struct DescribeEngineDefaultClusterParametersResponse {
     pub engine_defaults: Option<EngineDefaults>,
 }
 
-struct DescribeEngineDefaultClusterParametersResultDeserializer;
-impl DescribeEngineDefaultClusterParametersResultDeserializer {
+struct DescribeEngineDefaultClusterParametersResponseDeserializer;
+impl DescribeEngineDefaultClusterParametersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeEngineDefaultClusterParametersResult, XmlParseError> {
-        deserialize_elements::<_, DescribeEngineDefaultClusterParametersResult, _>(
+    ) -> Result<DescribeEngineDefaultClusterParametersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEngineDefaultClusterParametersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2981,17 +3027,17 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
 }
 /// <p>Represents the input to <a>DescribeEventCategories</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventCategoriesMessage {
+pub struct DescribeEventCategoriesRequest {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The type of source that is generating the events.</p> <p>Valid values: <code>db-instance</code>, <code>db-parameter-group</code>, <code>db-security-group</code>, <code>db-snapshot</code> </p>
     pub source_type: Option<String>,
 }
 
-/// Serialize `DescribeEventCategoriesMessage` contents to a `SignedRequest`.
-struct DescribeEventCategoriesMessageSerializer;
-impl DescribeEventCategoriesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventCategoriesMessage) {
+/// Serialize `DescribeEventCategoriesRequest` contents to a `SignedRequest`.
+struct DescribeEventCategoriesRequestSerializer;
+impl DescribeEventCategoriesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventCategoriesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3010,9 +3056,43 @@ impl DescribeEventCategoriesMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeEventCategories</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventCategoriesResponse {
+    /// <p>A list of event category maps.</p>
+    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
+}
+
+struct DescribeEventCategoriesResponseDeserializer;
+impl DescribeEventCategoriesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventCategoriesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventCategoriesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventCategoriesMapList" => {
+                        obj.event_categories_map_list.get_or_insert(vec![]).extend(
+                            EventCategoriesMapListDeserializer::deserialize(
+                                "EventCategoriesMapList",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribeEvents</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventsMessage {
+pub struct DescribeEventsRequest {
     /// <p>The number of minutes to retrieve events for.</p> <p>Default: 60</p>
     pub duration: Option<i64>,
     /// <p> The end of the time interval for which to retrieve events, specified in ISO 8601 format. </p> <p>Example: 2009-07-08T18:00Z</p>
@@ -3033,10 +3113,10 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<String>,
 }
 
-/// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
-struct DescribeEventsMessageSerializer;
-impl DescribeEventsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
+/// Serialize `DescribeEventsRequest` contents to a `SignedRequest`.
+struct DescribeEventsRequestSerializer;
+impl DescribeEventsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3080,9 +3160,41 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeEvents</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventsResponse {
+    /// <p>Detailed information about one or more events. </p>
+    pub events: Option<Vec<Event>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+struct DescribeEventsResponseDeserializer;
+impl DescribeEventsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Events" => {
+                    obj.events
+                        .get_or_insert(vec![])
+                        .extend(EventListDeserializer::deserialize("Events", stack)?);
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Represents the input to <a>DescribeOrderableDBInstanceOptions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeOrderableDBInstanceOptionsMessage {
+pub struct DescribeOrderableDBInstanceOptionsRequest {
     /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings that match the specified DB instance class.</p>
     pub db_instance_class: Option<String>,
     /// <p>The name of the engine to retrieve DB instance options for.</p>
@@ -3101,10 +3213,10 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     pub vpc: Option<bool>,
 }
 
-/// Serialize `DescribeOrderableDBInstanceOptionsMessage` contents to a `SignedRequest`.
-struct DescribeOrderableDBInstanceOptionsMessageSerializer;
-impl DescribeOrderableDBInstanceOptionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeOrderableDBInstanceOptionsMessage) {
+/// Serialize `DescribeOrderableDBInstanceOptionsRequest` contents to a `SignedRequest`.
+struct DescribeOrderableDBInstanceOptionsRequestSerializer;
+impl DescribeOrderableDBInstanceOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeOrderableDBInstanceOptionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3139,9 +3251,48 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribeOrderableDBInstanceOptions</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeOrderableDBInstanceOptionsResponse {
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p>The options that are available for a particular orderable DB instance.</p>
+    pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
+}
+
+struct DescribeOrderableDBInstanceOptionsResponseDeserializer;
+impl DescribeOrderableDBInstanceOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeOrderableDBInstanceOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeOrderableDBInstanceOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "OrderableDBInstanceOptions" => {
+                        obj.orderable_db_instance_options
+                            .get_or_insert(vec![])
+                            .extend(OrderableDBInstanceOptionsListDeserializer::deserialize(
+                                "OrderableDBInstanceOptions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>DescribePendingMaintenanceActions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribePendingMaintenanceActionsMessage {
+pub struct DescribePendingMaintenanceActionsRequest {
     /// <p><p>A filter that specifies one or more resources to return pending maintenance actions for.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list includes only pending maintenance actions for the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list includes only pending maintenance actions for the DB instances identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
@@ -3152,10 +3303,10 @@ pub struct DescribePendingMaintenanceActionsMessage {
     pub resource_identifier: Option<String>,
 }
 
-/// Serialize `DescribePendingMaintenanceActionsMessage` contents to a `SignedRequest`.
-struct DescribePendingMaintenanceActionsMessageSerializer;
-impl DescribePendingMaintenanceActionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribePendingMaintenanceActionsMessage) {
+/// Serialize `DescribePendingMaintenanceActionsRequest` contents to a `SignedRequest`.
+struct DescribePendingMaintenanceActionsRequestSerializer;
+impl DescribePendingMaintenanceActionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribePendingMaintenanceActionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3180,6 +3331,45 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>DescribePendingMaintenanceActions</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribePendingMaintenanceActionsResponse {
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p>The maintenance actions to be applied.</p>
+    pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
+}
+
+struct DescribePendingMaintenanceActionsResponseDeserializer;
+impl DescribePendingMaintenanceActionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribePendingMaintenanceActionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribePendingMaintenanceActionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "PendingMaintenanceActions" => {
+                        obj.pending_maintenance_actions
+                            .get_or_insert(vec![])
+                            .extend(PendingMaintenanceActionsDeserializer::deserialize(
+                                "PendingMaintenanceActions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Network information for accessing a DB cluster or DB instance. Client programs must specify a valid endpoint to access these Amazon DocumentDB resources.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Endpoint {
@@ -3388,36 +3578,6 @@ impl EventCategoriesMapListDeserializer {
         })
     }
 }
-/// <p>Represents the output of <a>DescribeEventCategories</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventCategoriesMessage {
-    /// <p>A list of event category maps.</p>
-    pub event_categories_map_list: Option<Vec<EventCategoriesMap>>,
-}
-
-struct EventCategoriesMessageDeserializer;
-impl EventCategoriesMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventCategoriesMessage, XmlParseError> {
-        deserialize_elements::<_, EventCategoriesMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "EventCategoriesMapList" => {
-                    obj.event_categories_map_list.get_or_insert(vec![]).extend(
-                        EventCategoriesMapListDeserializer::deserialize(
-                            "EventCategoriesMapList",
-                            stack,
-                        )?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct EventListDeserializer;
 impl EventListDeserializer {
     #[allow(unused_variables)]
@@ -3435,51 +3595,19 @@ impl EventListDeserializer {
         })
     }
 }
-/// <p>Represents the output of <a>DescribeEvents</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventsMessage {
-    /// <p>Detailed information about one or more events. </p>
-    pub events: Option<Vec<Event>>,
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-}
-
-struct EventsMessageDeserializer;
-impl EventsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventsMessage, XmlParseError> {
-        deserialize_elements::<_, EventsMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Events" => {
-                    obj.events
-                        .get_or_insert(vec![])
-                        .extend(EventListDeserializer::deserialize("Events", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Represents the input to <a>FailoverDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct FailoverDBClusterMessage {
+pub struct FailoverDBClusterRequest {
     /// <p><p>A DB cluster identifier to force a failover for. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
     /// <p>The name of the instance to promote to the primary instance.</p> <p>You must specify the instance identifier for an Amazon DocumentDB replica in the DB cluster. For example, <code>mydbcluster-replica1</code>.</p>
     pub target_db_instance_identifier: Option<String>,
 }
 
-/// Serialize `FailoverDBClusterMessage` contents to a `SignedRequest`.
-struct FailoverDBClusterMessageSerializer;
-impl FailoverDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FailoverDBClusterMessage) {
+/// Serialize `FailoverDBClusterRequest` contents to a `SignedRequest`.
+struct FailoverDBClusterRequestSerializer;
+impl FailoverDBClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &FailoverDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3501,18 +3629,18 @@ impl FailoverDBClusterMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct FailoverDBClusterResult {
+pub struct FailoverDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct FailoverDBClusterResultDeserializer;
-impl FailoverDBClusterResultDeserializer {
+struct FailoverDBClusterResponseDeserializer;
+impl FailoverDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<FailoverDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, FailoverDBClusterResult, _>(
+    ) -> Result<FailoverDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, FailoverDBClusterResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3613,17 +3741,17 @@ impl KeyListSerializer {
 
 /// <p>Represents the input to <a>ListTagsForResource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTagsForResourceMessage {
+pub struct ListTagsForResourceRequest {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The Amazon DocumentDB resource with tags to be listed. This value is an Amazon Resource Name (ARN).</p>
     pub resource_name: String,
 }
 
-/// Serialize `ListTagsForResourceMessage` contents to a `SignedRequest`.
-struct ListTagsForResourceMessageSerializer;
-impl ListTagsForResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
+/// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
+struct ListTagsForResourceRequestSerializer;
+impl ListTagsForResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3640,6 +3768,37 @@ impl ListTagsForResourceMessageSerializer {
     }
 }
 
+/// <p>Represents the output of <a>ListTagsForResource</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListTagsForResourceResponse {
+    /// <p>A list of one or more tags.</p>
+    pub tag_list: Option<Vec<Tag>>,
+}
+
+struct ListTagsForResourceResponseDeserializer;
+impl ListTagsForResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        deserialize_elements::<_, ListTagsForResourceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "TagList" => {
+                        obj.tag_list
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("TagList", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct LogTypeListDeserializer;
 impl LogTypeListDeserializer {
     #[allow(unused_variables)]
@@ -3669,9 +3828,70 @@ impl LogTypeListSerializer {
     }
 }
 
+/// <p>Represents the input to <a>ModifyDBClusterParameterGroup</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDBClusterParameterGroupRequest {
+    /// <p>The name of the DB cluster parameter group to modify.</p>
+    pub db_cluster_parameter_group_name: String,
+    /// <p>A list of parameters in the DB cluster parameter group to modify.</p>
+    pub parameters: Vec<Parameter>,
+}
+
+/// Serialize `ModifyDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct ModifyDBClusterParameterGroupRequestSerializer;
+impl ModifyDBClusterParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterParameterGroupRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+            &obj.db_cluster_parameter_group_name,
+        );
+        ParametersListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Parameter"),
+            &obj.parameters,
+        );
+    }
+}
+
+/// <p>Contains the name of a DB cluster parameter group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyDBClusterParameterGroupResponse {
+    /// <p><p>The name of a DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 255 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
+    pub db_cluster_parameter_group_name: Option<String>,
+}
+
+struct ModifyDBClusterParameterGroupResponseDeserializer;
+impl ModifyDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroupName" => {
+                        obj.db_cluster_parameter_group_name = Some(
+                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>ModifyDBCluster</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterMessage {
+pub struct ModifyDBClusterRequest {
     /// <p>A value that specifies whether the changes in this request and any pending changes are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is set to <code>false</code>, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter affects only the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If you set this parameter value to <code>false</code>, the changes to the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
     /// <p><p>The number of days for which automated backups are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35.</p> </li> </ul></p>
@@ -3698,10 +3918,10 @@ pub struct ModifyDBClusterMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyDBClusterMessage` contents to a `SignedRequest`.
-struct ModifyDBClusterMessageSerializer;
-impl ModifyDBClusterMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterMessage) {
+/// Serialize `ModifyDBClusterRequest` contents to a `SignedRequest`.
+struct ModifyDBClusterRequestSerializer;
+impl ModifyDBClusterRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3770,62 +3990,37 @@ impl ModifyDBClusterMessageSerializer {
     }
 }
 
-/// <p>Represents the input to <a>ModifyDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterParameterGroupMessage {
-    /// <p>The name of the DB cluster parameter group to modify.</p>
-    pub db_cluster_parameter_group_name: String,
-    /// <p>A list of parameters in the DB cluster parameter group to modify.</p>
-    pub parameters: Vec<Parameter>,
-}
-
-/// Serialize `ModifyDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct ModifyDBClusterParameterGroupMessageSerializer;
-impl ModifyDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterParameterGroupMessage) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "DBClusterParameterGroupName"),
-            &obj.db_cluster_parameter_group_name,
-        );
-        ParametersListSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "Parameter"),
-            &obj.parameters,
-        );
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterResult {
+pub struct ModifyDBClusterResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct ModifyDBClusterResultDeserializer;
-impl ModifyDBClusterResultDeserializer {
+struct ModifyDBClusterResponseDeserializer;
+impl ModifyDBClusterResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBClusterResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBClusterResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBCluster" => {
-                    obj.db_cluster = Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+    ) -> Result<ModifyDBClusterResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBCluster" => {
+                        obj.db_cluster =
+                            Some(DBClusterDeserializer::deserialize("DBCluster", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the input to <a>ModifyDBClusterSnapshotAttribute</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterSnapshotAttributeMessage {
+pub struct ModifyDBClusterSnapshotAttributeRequest {
     /// <p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
     /// <p>The identifier for the DB cluster snapshot to modify the attributes for.</p>
@@ -3836,10 +4031,10 @@ pub struct ModifyDBClusterSnapshotAttributeMessage {
     pub values_to_remove: Option<Vec<String>>,
 }
 
-/// Serialize `ModifyDBClusterSnapshotAttributeMessage` contents to a `SignedRequest`.
-struct ModifyDBClusterSnapshotAttributeMessageSerializer;
-impl ModifyDBClusterSnapshotAttributeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterSnapshotAttributeMessage) {
+/// Serialize `ModifyDBClusterSnapshotAttributeRequest` contents to a `SignedRequest`.
+struct ModifyDBClusterSnapshotAttributeRequestSerializer;
+impl ModifyDBClusterSnapshotAttributeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterSnapshotAttributeRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3871,18 +4066,18 @@ impl ModifyDBClusterSnapshotAttributeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBClusterSnapshotAttributeResult {
+pub struct ModifyDBClusterSnapshotAttributeResponse {
     pub db_cluster_snapshot_attributes_result: Option<DBClusterSnapshotAttributesResult>,
 }
 
-struct ModifyDBClusterSnapshotAttributeResultDeserializer;
-impl ModifyDBClusterSnapshotAttributeResultDeserializer {
+struct ModifyDBClusterSnapshotAttributeResponseDeserializer;
+impl ModifyDBClusterSnapshotAttributeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBClusterSnapshotAttributeResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBClusterSnapshotAttributeResult, _>(
+    ) -> Result<ModifyDBClusterSnapshotAttributeResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterSnapshotAttributeResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3903,7 +4098,7 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
 }
 /// <p>Represents the input to <a>ModifyDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBInstanceMessage {
+pub struct ModifyDBInstanceRequest {
     /// <p>Specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB instance. </p> <p> If this parameter is set to <code>false</code>, changes to the DB instance are applied during the next maintenance window. Some parameter changes can cause an outage and are applied on the next reboot.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
     /// <p>Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case, and the change is asynchronously applied as soon as possible. An outage results if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Amazon DocumentDB has enabled automatic patching for that engine version. </p>
@@ -3920,10 +4115,10 @@ pub struct ModifyDBInstanceMessage {
     pub promotion_tier: Option<i64>,
 }
 
-/// Serialize `ModifyDBInstanceMessage` contents to a `SignedRequest`.
-struct ModifyDBInstanceMessageSerializer;
-impl ModifyDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBInstanceMessage) {
+/// Serialize `ModifyDBInstanceRequest` contents to a `SignedRequest`.
+struct ModifyDBInstanceRequestSerializer;
+impl ModifyDBInstanceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3964,32 +4159,36 @@ impl ModifyDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBInstanceResult {
+pub struct ModifyDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct ModifyDBInstanceResultDeserializer;
-impl ModifyDBInstanceResultDeserializer {
+struct ModifyDBInstanceResponseDeserializer;
+impl ModifyDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<ModifyDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the input to <a>ModifyDBSubnetGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSubnetGroupMessage {
+pub struct ModifyDBSubnetGroupRequest {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
     /// <p>The name for the DB subnet group. This value is stored as a lowercase string. You can't modify the default subnet group. </p> <p>Constraints: Must match the name of an existing <code>DBSubnetGroup</code>. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
@@ -3998,10 +4197,10 @@ pub struct ModifyDBSubnetGroupMessage {
     pub subnet_ids: Vec<String>,
 }
 
-/// Serialize `ModifyDBSubnetGroupMessage` contents to a `SignedRequest`.
-struct ModifyDBSubnetGroupMessageSerializer;
-impl ModifyDBSubnetGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSubnetGroupMessage) {
+/// Serialize `ModifyDBSubnetGroupRequest` contents to a `SignedRequest`.
+struct ModifyDBSubnetGroupRequestSerializer;
+impl ModifyDBSubnetGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4026,18 +4225,18 @@ impl ModifyDBSubnetGroupMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyDBSubnetGroupResult {
+pub struct ModifyDBSubnetGroupResponse {
     pub db_subnet_group: Option<DBSubnetGroup>,
 }
 
-struct ModifyDBSubnetGroupResultDeserializer;
-impl ModifyDBSubnetGroupResultDeserializer {
+struct ModifyDBSubnetGroupResponseDeserializer;
+impl ModifyDBSubnetGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyDBSubnetGroupResult, XmlParseError> {
-        deserialize_elements::<_, ModifyDBSubnetGroupResult, _>(
+    ) -> Result<ModifyDBSubnetGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyDBSubnetGroupResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4135,45 +4334,6 @@ impl OrderableDBInstanceOptionsListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Represents the output of <a>DescribeOrderableDBInstanceOptions</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OrderableDBInstanceOptionsMessage {
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-    /// <p>The options that are available for a particular orderable DB instance.</p>
-    pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
-}
-
-struct OrderableDBInstanceOptionsMessageDeserializer;
-impl OrderableDBInstanceOptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<OrderableDBInstanceOptionsMessage, XmlParseError> {
-        deserialize_elements::<_, OrderableDBInstanceOptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "OrderableDBInstanceOptions" => {
-                        obj.orderable_db_instance_options
-                            .get_or_insert(vec![])
-                            .extend(OrderableDBInstanceOptionsListDeserializer::deserialize(
-                                "OrderableDBInstanceOptions",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Detailed information about an individual parameter.</p>
@@ -4468,45 +4628,6 @@ impl PendingMaintenanceActionsDeserializer {
         })
     }
 }
-/// <p>Represents the output of <a>DescribePendingMaintenanceActions</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct PendingMaintenanceActionsMessage {
-    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
-    pub marker: Option<String>,
-    /// <p>The maintenance actions to be applied.</p>
-    pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
-}
-
-struct PendingMaintenanceActionsMessageDeserializer;
-impl PendingMaintenanceActionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<PendingMaintenanceActionsMessage, XmlParseError> {
-        deserialize_elements::<_, PendingMaintenanceActionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Marker" => {
-                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "PendingMaintenanceActions" => {
-                        obj.pending_maintenance_actions
-                            .get_or_insert(vec![])
-                            .extend(PendingMaintenanceActionsDeserializer::deserialize(
-                                "PendingMaintenanceActions",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p> One or more modified settings for a DB instance. These modified settings have been requested, but haven't been applied yet.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingModifiedValues {
@@ -4623,17 +4744,17 @@ impl PendingModifiedValuesDeserializer {
 }
 /// <p>Represents the input to <a>RebootDBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootDBInstanceMessage {
+pub struct RebootDBInstanceRequest {
     /// <p><p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
     pub db_instance_identifier: String,
     /// <p> When <code>true</code>, the reboot is conducted through a Multi-AZ failover. </p> <p>Constraint: You can't specify <code>true</code> if the instance is not configured for Multi-AZ.</p>
     pub force_failover: Option<bool>,
 }
 
-/// Serialize `RebootDBInstanceMessage` contents to a `SignedRequest`.
-struct RebootDBInstanceMessageSerializer;
-impl RebootDBInstanceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RebootDBInstanceMessage) {
+/// Serialize `RebootDBInstanceRequest` contents to a `SignedRequest`.
+struct RebootDBInstanceRequestSerializer;
+impl RebootDBInstanceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RebootDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4650,42 +4771,46 @@ impl RebootDBInstanceMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebootDBInstanceResult {
+pub struct RebootDBInstanceResponse {
     pub db_instance: Option<DBInstance>,
 }
 
-struct RebootDBInstanceResultDeserializer;
-impl RebootDBInstanceResultDeserializer {
+struct RebootDBInstanceResponseDeserializer;
+impl RebootDBInstanceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RebootDBInstanceResult, XmlParseError> {
-        deserialize_elements::<_, RebootDBInstanceResult, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "DBInstance" => {
-                    obj.db_instance =
-                        Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+    ) -> Result<RebootDBInstanceResponse, XmlParseError> {
+        deserialize_elements::<_, RebootDBInstanceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBInstance" => {
+                        obj.db_instance =
+                            Some(DBInstanceDeserializer::deserialize("DBInstance", stack)?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the input to <a>RemoveTagsFromResource</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveTagsFromResourceMessage {
+pub struct RemoveTagsFromResourceRequest {
     /// <p>The Amazon DocumentDB resource that the tags are removed from. This value is an Amazon Resource Name (ARN).</p>
     pub resource_name: String,
     /// <p>The tag key (name) of the tag to be removed.</p>
     pub tag_keys: Vec<String>,
 }
 
-/// Serialize `RemoveTagsFromResourceMessage` contents to a `SignedRequest`.
-struct RemoveTagsFromResourceMessageSerializer;
-impl RemoveTagsFromResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceMessage) {
+/// Serialize `RemoveTagsFromResourceRequest` contents to a `SignedRequest`.
+struct RemoveTagsFromResourceRequestSerializer;
+impl RemoveTagsFromResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4696,9 +4821,22 @@ impl RemoveTagsFromResourceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveTagsFromResourceResponse {}
+
+struct RemoveTagsFromResourceResponseDeserializer;
+impl RemoveTagsFromResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveTagsFromResourceResponse, XmlParseError> {
+        Ok(RemoveTagsFromResourceResponse::default())
+    }
+}
 /// <p>Represents the input to <a>ResetDBClusterParameterGroup</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResetDBClusterParameterGroupMessage {
+pub struct ResetDBClusterParameterGroupRequest {
     /// <p>The name of the DB cluster parameter group to reset.</p>
     pub db_cluster_parameter_group_name: String,
     /// <p>A list of parameter names in the DB cluster parameter group to reset to the default values. You can't use this parameter if the <code>ResetAllParameters</code> parameter is set to <code>true</code>.</p>
@@ -4707,10 +4845,10 @@ pub struct ResetDBClusterParameterGroupMessage {
     pub reset_all_parameters: Option<bool>,
 }
 
-/// Serialize `ResetDBClusterParameterGroupMessage` contents to a `SignedRequest`.
-struct ResetDBClusterParameterGroupMessageSerializer;
-impl ResetDBClusterParameterGroupMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResetDBClusterParameterGroupMessage) {
+/// Serialize `ResetDBClusterParameterGroupRequest` contents to a `SignedRequest`.
+struct ResetDBClusterParameterGroupRequestSerializer;
+impl ResetDBClusterParameterGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ResetDBClusterParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4733,6 +4871,37 @@ impl ResetDBClusterParameterGroupMessageSerializer {
     }
 }
 
+/// <p>Contains the name of a DB cluster parameter group.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResetDBClusterParameterGroupResponse {
+    /// <p><p>The name of a DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 255 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
+    pub db_cluster_parameter_group_name: Option<String>,
+}
+
+struct ResetDBClusterParameterGroupResponseDeserializer;
+impl ResetDBClusterParameterGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResetDBClusterParameterGroupResponse, XmlParseError> {
+        deserialize_elements::<_, ResetDBClusterParameterGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterParameterGroupName" => {
+                        obj.db_cluster_parameter_group_name = Some(
+                            StringDeserializer::deserialize("DBClusterParameterGroupName", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the output of <a>ApplyPendingMaintenanceAction</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResourcePendingMaintenanceActions {
@@ -4777,7 +4946,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
 }
 /// <p>Represents the input to <a>RestoreDBClusterFromSnapshot</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterFromSnapshotMessage {
+pub struct RestoreDBClusterFromSnapshotRequest {
     /// <p>Provides the list of Amazon EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p>The name of the DB cluster to create from the DB snapshot or DB cluster snapshot. This parameter isn't case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>
@@ -4802,10 +4971,10 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBClusterFromSnapshotMessage` contents to a `SignedRequest`.
-struct RestoreDBClusterFromSnapshotMessageSerializer;
-impl RestoreDBClusterFromSnapshotMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromSnapshotMessage) {
+/// Serialize `RestoreDBClusterFromSnapshotRequest` contents to a `SignedRequest`.
+struct RestoreDBClusterFromSnapshotRequestSerializer;
+impl RestoreDBClusterFromSnapshotRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4860,18 +5029,18 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterFromSnapshotResult {
+pub struct RestoreDBClusterFromSnapshotResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct RestoreDBClusterFromSnapshotResultDeserializer;
-impl RestoreDBClusterFromSnapshotResultDeserializer {
+struct RestoreDBClusterFromSnapshotResponseDeserializer;
+impl RestoreDBClusterFromSnapshotResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBClusterFromSnapshotResult, XmlParseError> {
-        deserialize_elements::<_, RestoreDBClusterFromSnapshotResult, _>(
+    ) -> Result<RestoreDBClusterFromSnapshotResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreDBClusterFromSnapshotResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4889,7 +5058,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
 }
 /// <p>Represents the input to <a>RestoreDBClusterToPointInTime</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterToPointInTimeMessage {
+pub struct RestoreDBClusterToPointInTimeRequest {
     /// <p><p>The name of the new DB cluster to be created.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
     /// <p>The DB subnet group name to use for the new DB cluster.</p> <p>Constraints: If provided, must match the name of an existing <code>DBSubnetGroup</code>.</p> <p>Example: <code>mySubnetgroup</code> </p>
@@ -4912,10 +5081,10 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// Serialize `RestoreDBClusterToPointInTimeMessage` contents to a `SignedRequest`.
-struct RestoreDBClusterToPointInTimeMessageSerializer;
-impl RestoreDBClusterToPointInTimeMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterToPointInTimeMessage) {
+/// Serialize `RestoreDBClusterToPointInTimeRequest` contents to a `SignedRequest`.
+struct RestoreDBClusterToPointInTimeRequestSerializer;
+impl RestoreDBClusterToPointInTimeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterToPointInTimeRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4968,18 +5137,18 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestoreDBClusterToPointInTimeResult {
+pub struct RestoreDBClusterToPointInTimeResponse {
     pub db_cluster: Option<DBCluster>,
 }
 
-struct RestoreDBClusterToPointInTimeResultDeserializer;
-impl RestoreDBClusterToPointInTimeResultDeserializer {
+struct RestoreDBClusterToPointInTimeResponseDeserializer;
+impl RestoreDBClusterToPointInTimeResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RestoreDBClusterToPointInTimeResult, XmlParseError> {
-        deserialize_elements::<_, RestoreDBClusterToPointInTimeResult, _>(
+    ) -> Result<RestoreDBClusterToPointInTimeResponse, XmlParseError> {
+        deserialize_elements::<_, RestoreDBClusterToPointInTimeResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -5169,33 +5338,6 @@ impl TagListSerializer {
     }
 }
 
-/// <p>Represents the output of <a>ListTagsForResource</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagListMessage {
-    /// <p>A list of one or more tags.</p>
-    pub tag_list: Option<Vec<Tag>>,
-}
-
-struct TagListMessageDeserializer;
-impl TagListMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TagListMessage, XmlParseError> {
-        deserialize_elements::<_, TagListMessage, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "TagList" => {
-                    obj.tag_list
-                        .get_or_insert(vec![])
-                        .extend(TagListDeserializer::deserialize("TagList", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>The version of the database engine that a DB instance can be upgraded to.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpgradeTarget {
@@ -8367,242 +8509,224 @@ pub trait Docdb {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
     fn add_tags_to_resource(
         &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<(), AddTagsToResourceError>;
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest>;
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
     fn apply_pending_maintenance_action(
         &self,
-        input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError>;
+        input: ApplyPendingMaintenanceActionRequest,
+    ) -> Request<ApplyPendingMaintenanceActionRequest>;
 
     /// <p>Copies the specified DB cluster parameter group.</p>
     fn copy_db_cluster_parameter_group(
         &self,
-        input: CopyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError>;
+        input: CopyDBClusterParameterGroupRequest,
+    ) -> Request<CopyDBClusterParameterGroupRequest>;
 
     /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>To cancel the copy operation after it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in the <i>copying</i> status.</p>
     fn copy_db_cluster_snapshot(
         &self,
-        input: CopyDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError>;
+        input: CopyDBClusterSnapshotRequest,
+    ) -> Request<CopyDBClusterSnapshotRequest>;
 
     /// <p>Creates a new Amazon DocumentDB DB cluster.</p>
-    fn create_db_cluster(
-        &self,
-        input: CreateDBClusterMessage,
-    ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError>;
+    fn create_db_cluster(&self, input: CreateDBClusterRequest) -> Request<CreateDBClusterRequest>;
 
     /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p>A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after you create it. After you create a DB cluster parameter group, you must associate it with your DB cluster. For the new DB cluster parameter group and associated settings to take effect, you must then reboot the DB instances in the DB cluster without failover.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
     fn create_db_cluster_parameter_group(
         &self,
-        input: CreateDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError>;
+        input: CreateDBClusterParameterGroupRequest,
+    ) -> Request<CreateDBClusterParameterGroupRequest>;
 
     /// <p>Creates a snapshot of a DB cluster. </p>
     fn create_db_cluster_snapshot(
         &self,
-        input: CreateDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError>;
+        input: CreateDBClusterSnapshotRequest,
+    ) -> Request<CreateDBClusterSnapshotRequest>;
 
     /// <p>Creates a new DB instance.</p>
     fn create_db_instance(
         &self,
-        input: CreateDBInstanceMessage,
-    ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError>;
+        input: CreateDBInstanceRequest,
+    ) -> Request<CreateDBInstanceRequest>;
 
     /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
     fn create_db_subnet_group(
         &self,
-        input: CreateDBSubnetGroupMessage,
-    ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError>;
+        input: CreateDBSubnetGroupRequest,
+    ) -> Request<CreateDBSubnetGroupRequest>;
 
     /// <p><p>Deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/></p>
-    fn delete_db_cluster(
-        &self,
-        input: DeleteDBClusterMessage,
-    ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError>;
+    fn delete_db_cluster(&self, input: DeleteDBClusterRequest) -> Request<DeleteDBClusterRequest>;
 
     /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p>
     fn delete_db_cluster_parameter_group(
         &self,
-        input: DeleteDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError>;
+        input: DeleteDBClusterParameterGroupRequest,
+    ) -> Request<DeleteDBClusterParameterGroupRequest>;
 
     /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
     fn delete_db_cluster_snapshot(
         &self,
-        input: DeleteDBClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError>;
+        input: DeleteDBClusterSnapshotRequest,
+    ) -> Request<DeleteDBClusterSnapshotRequest>;
 
     /// <p>Deletes a previously provisioned DB instance. </p>
     fn delete_db_instance(
         &self,
-        input: DeleteDBInstanceMessage,
-    ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError>;
+        input: DeleteDBInstanceRequest,
+    ) -> Request<DeleteDBInstanceRequest>;
 
     /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
     fn delete_db_subnet_group(
         &self,
-        input: DeleteDBSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSubnetGroupError>;
+        input: DeleteDBSubnetGroupRequest,
+    ) -> Request<DeleteDBSubnetGroupRequest>;
 
     /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified DB cluster parameter group. </p>
     fn describe_db_cluster_parameter_groups(
         &self,
-        input: DescribeDBClusterParameterGroupsMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError>;
+        input: DescribeDBClusterParameterGroupsRequest,
+    ) -> Request<DescribeDBClusterParameterGroupsRequest>;
 
     /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p>
     fn describe_db_cluster_parameters(
         &self,
-        input: DescribeDBClusterParametersMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError>;
+        input: DescribeDBClusterParametersRequest,
+    ) -> Request<DescribeDBClusterParametersRequest>;
 
     /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
     fn describe_db_cluster_snapshot_attributes(
         &self,
-        input: DescribeDBClusterSnapshotAttributesMessage,
-    ) -> RusotoFuture<
-        DescribeDBClusterSnapshotAttributesResult,
-        DescribeDBClusterSnapshotAttributesError,
-    >;
+        input: DescribeDBClusterSnapshotAttributesRequest,
+    ) -> Request<DescribeDBClusterSnapshotAttributesRequest>;
 
     /// <p>Returns information about DB cluster snapshots. This API operation supports pagination.</p>
     fn describe_db_cluster_snapshots(
         &self,
-        input: DescribeDBClusterSnapshotsMessage,
-    ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError>;
+        input: DescribeDBClusterSnapshotsRequest,
+    ) -> Request<DescribeDBClusterSnapshotsRequest>;
 
     /// <p>Returns information about provisioned Amazon DocumentDB DB clusters. This API operation supports pagination.</p>
     fn describe_db_clusters(
         &self,
-        input: DescribeDBClustersMessage,
-    ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError>;
+        input: DescribeDBClustersRequest,
+    ) -> Request<DescribeDBClustersRequest>;
 
     /// <p>Returns a list of the available DB engines.</p>
     fn describe_db_engine_versions(
         &self,
-        input: DescribeDBEngineVersionsMessage,
-    ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError>;
+        input: DescribeDBEngineVersionsRequest,
+    ) -> Request<DescribeDBEngineVersionsRequest>;
 
     /// <p>Returns information about provisioned Amazon DocumentDB instances. This API supports pagination.</p>
     fn describe_db_instances(
         &self,
-        input: DescribeDBInstancesMessage,
-    ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError>;
+        input: DescribeDBInstancesRequest,
+    ) -> Request<DescribeDBInstancesRequest>;
 
     /// <p>Returns a list of <code>DBSubnetGroup</code> descriptions. If a <code>DBSubnetGroupName</code> is specified, the list will contain only the descriptions of the specified <code>DBSubnetGroup</code>.</p>
     fn describe_db_subnet_groups(
         &self,
-        input: DescribeDBSubnetGroupsMessage,
-    ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError>;
+        input: DescribeDBSubnetGroupsRequest,
+    ) -> Request<DescribeDBSubnetGroupsRequest>;
 
     /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
     fn describe_engine_default_cluster_parameters(
         &self,
-        input: DescribeEngineDefaultClusterParametersMessage,
-    ) -> RusotoFuture<
-        DescribeEngineDefaultClusterParametersResult,
-        DescribeEngineDefaultClusterParametersError,
-    >;
+        input: DescribeEngineDefaultClusterParametersRequest,
+    ) -> Request<DescribeEngineDefaultClusterParametersRequest>;
 
     /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. </p>
     fn describe_event_categories(
         &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError>;
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest>;
 
     /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. You can obtain events specific to a particular DB instance, DB security group, DB snapshot, or DB parameter group by providing the name as a parameter. By default, the events of the past hour are returned.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 
     /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
     fn describe_orderable_db_instance_options(
         &self,
-        input: DescribeOrderableDBInstanceOptionsMessage,
-    ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>;
+        input: DescribeOrderableDBInstanceOptionsRequest,
+    ) -> Request<DescribeOrderableDBInstanceOptionsRequest>;
 
     /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
     fn describe_pending_maintenance_actions(
         &self,
-        input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>;
+        input: DescribePendingMaintenanceActionsRequest,
+    ) -> Request<DescribePendingMaintenanceActionsRequest>;
 
     /// <p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Amazon DocumentDB replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>If the primary instance fails, Amazon DocumentDB automatically fails over to an Amazon DocumentDB replica, if one exists. You can force a failover when you want to simulate a failure of a primary instance for testing.</p>
     fn failover_db_cluster(
         &self,
-        input: FailoverDBClusterMessage,
-    ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError>;
+        input: FailoverDBClusterRequest,
+    ) -> Request<FailoverDBClusterRequest>;
 
     /// <p>Lists all tags on an Amazon DocumentDB resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Modifies a setting for an Amazon DocumentDB DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. </p>
-    fn modify_db_cluster(
-        &self,
-        input: ModifyDBClusterMessage,
-    ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError>;
+    fn modify_db_cluster(&self, input: ModifyDBClusterRequest) -> Request<ModifyDBClusterRequest>;
 
     /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot or maintenance window before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
     fn modify_db_cluster_parameter_group(
         &self,
-        input: ModifyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError>;
+        input: ModifyDBClusterParameterGroupRequest,
+    ) -> Request<ModifyDBClusterParameterGroupRequest>;
 
     /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
     fn modify_db_cluster_snapshot_attribute(
         &self,
-        input: ModifyDBClusterSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>;
+        input: ModifyDBClusterSnapshotAttributeRequest,
+    ) -> Request<ModifyDBClusterSnapshotAttributeRequest>;
 
     /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>
     fn modify_db_instance(
         &self,
-        input: ModifyDBInstanceMessage,
-    ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError>;
+        input: ModifyDBInstanceRequest,
+    ) -> Request<ModifyDBInstanceRequest>;
 
     /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
     fn modify_db_subnet_group(
         &self,
-        input: ModifyDBSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError>;
+        input: ModifyDBSubnetGroupRequest,
+    ) -> Request<ModifyDBSubnetGroupRequest>;
 
     /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain changes, or if you change the DB cluster parameter group that is associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to <i>rebooting</i>. </p>
     fn reboot_db_instance(
         &self,
-        input: RebootDBInstanceMessage,
-    ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError>;
+        input: RebootDBInstanceRequest,
+    ) -> Request<RebootDBInstanceRequest>;
 
     /// <p>Removes metadata tags from an Amazon DocumentDB resource.</p>
     fn remove_tags_from_resource(
         &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<(), RemoveTagsFromResourceError>;
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest>;
 
     /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters, submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When you reset the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance reboot.</p>
     fn reset_db_cluster_parameter_group(
         &self,
-        input: ResetDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError>;
+        input: ResetDBClusterParameterGroupRequest,
+    ) -> Request<ResetDBClusterParameterGroupRequest>;
 
     /// <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p>
     fn restore_db_cluster_from_snapshot(
         &self,
-        input: RestoreDBClusterFromSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError>;
+        input: RestoreDBClusterFromSnapshotRequest,
+    ) -> Request<RestoreDBClusterFromSnapshotRequest>;
 
     /// <p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p>
     fn restore_db_cluster_to_point_in_time(
         &self,
-        input: RestoreDBClusterToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError>;
+        input: RestoreDBClusterToPointInTimeRequest,
+    ) -> Request<RestoreDBClusterToPointInTimeRequest>;
 }
 /// A client for the Amazon DocDB API.
 #[derive(Clone)]
@@ -8644,18 +8768,323 @@ impl Docdb for DocdbClient {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
     fn add_tags_to_resource(
         &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<(), AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
+    fn apply_pending_maintenance_action(
+        &self,
+        input: ApplyPendingMaintenanceActionRequest,
+    ) -> Request<ApplyPendingMaintenanceActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies the specified DB cluster parameter group.</p>
+    fn copy_db_cluster_parameter_group(
+        &self,
+        input: CopyDBClusterParameterGroupRequest,
+    ) -> Request<CopyDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>To cancel the copy operation after it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in the <i>copying</i> status.</p>
+    fn copy_db_cluster_snapshot(
+        &self,
+        input: CopyDBClusterSnapshotRequest,
+    ) -> Request<CopyDBClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new Amazon DocumentDB DB cluster.</p>
+    fn create_db_cluster(&self, input: CreateDBClusterRequest) -> Request<CreateDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p>A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after you create it. After you create a DB cluster parameter group, you must associate it with your DB cluster. For the new DB cluster parameter group and associated settings to take effect, you must then reboot the DB instances in the DB cluster without failover.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
+    fn create_db_cluster_parameter_group(
+        &self,
+        input: CreateDBClusterParameterGroupRequest,
+    ) -> Request<CreateDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a snapshot of a DB cluster. </p>
+    fn create_db_cluster_snapshot(
+        &self,
+        input: CreateDBClusterSnapshotRequest,
+    ) -> Request<CreateDBClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new DB instance.</p>
+    fn create_db_instance(
+        &self,
+        input: CreateDBInstanceRequest,
+    ) -> Request<CreateDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
+    fn create_db_subnet_group(
+        &self,
+        input: CreateDBSubnetGroupRequest,
+    ) -> Request<CreateDBSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/></p>
+    fn delete_db_cluster(&self, input: DeleteDBClusterRequest) -> Request<DeleteDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p>
+    fn delete_db_cluster_parameter_group(
+        &self,
+        input: DeleteDBClusterParameterGroupRequest,
+    ) -> Request<DeleteDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
+    fn delete_db_cluster_snapshot(
+        &self,
+        input: DeleteDBClusterSnapshotRequest,
+    ) -> Request<DeleteDBClusterSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a previously provisioned DB instance. </p>
+    fn delete_db_instance(
+        &self,
+        input: DeleteDBInstanceRequest,
+    ) -> Request<DeleteDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
+    fn delete_db_subnet_group(
+        &self,
+        input: DeleteDBSubnetGroupRequest,
+    ) -> Request<DeleteDBSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified DB cluster parameter group. </p>
+    fn describe_db_cluster_parameter_groups(
+        &self,
+        input: DescribeDBClusterParameterGroupsRequest,
+    ) -> Request<DescribeDBClusterParameterGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p>
+    fn describe_db_cluster_parameters(
+        &self,
+        input: DescribeDBClusterParametersRequest,
+    ) -> Request<DescribeDBClusterParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
+    fn describe_db_cluster_snapshot_attributes(
+        &self,
+        input: DescribeDBClusterSnapshotAttributesRequest,
+    ) -> Request<DescribeDBClusterSnapshotAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about DB cluster snapshots. This API operation supports pagination.</p>
+    fn describe_db_cluster_snapshots(
+        &self,
+        input: DescribeDBClusterSnapshotsRequest,
+    ) -> Request<DescribeDBClusterSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about provisioned Amazon DocumentDB DB clusters. This API operation supports pagination.</p>
+    fn describe_db_clusters(
+        &self,
+        input: DescribeDBClustersRequest,
+    ) -> Request<DescribeDBClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the available DB engines.</p>
+    fn describe_db_engine_versions(
+        &self,
+        input: DescribeDBEngineVersionsRequest,
+    ) -> Request<DescribeDBEngineVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about provisioned Amazon DocumentDB instances. This API supports pagination.</p>
+    fn describe_db_instances(
+        &self,
+        input: DescribeDBInstancesRequest,
+    ) -> Request<DescribeDBInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of <code>DBSubnetGroup</code> descriptions. If a <code>DBSubnetGroupName</code> is specified, the list will contain only the descriptions of the specified <code>DBSubnetGroup</code>.</p>
+    fn describe_db_subnet_groups(
+        &self,
+        input: DescribeDBSubnetGroupsRequest,
+    ) -> Request<DescribeDBSubnetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
+    fn describe_engine_default_cluster_parameters(
+        &self,
+        input: DescribeEngineDefaultClusterParametersRequest,
+    ) -> Request<DescribeEngineDefaultClusterParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. </p>
+    fn describe_event_categories(
+        &self,
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. You can obtain events specific to a particular DB instance, DB security group, DB snapshot, or DB parameter group by providing the name as a parameter. By default, the events of the past hour are returned.</p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
+    fn describe_orderable_db_instance_options(
+        &self,
+        input: DescribeOrderableDBInstanceOptionsRequest,
+    ) -> Request<DescribeOrderableDBInstanceOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
+    fn describe_pending_maintenance_actions(
+        &self,
+        input: DescribePendingMaintenanceActionsRequest,
+    ) -> Request<DescribePendingMaintenanceActionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Amazon DocumentDB replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>If the primary instance fails, Amazon DocumentDB automatically fails over to an Amazon DocumentDB replica, if one exists. You can force a failover when you want to simulate a failure of a primary instance for testing.</p>
+    fn failover_db_cluster(
+        &self,
+        input: FailoverDBClusterRequest,
+    ) -> Request<FailoverDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all tags on an Amazon DocumentDB resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies a setting for an Amazon DocumentDB DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. </p>
+    fn modify_db_cluster(&self, input: ModifyDBClusterRequest) -> Request<ModifyDBClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot or maintenance window before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
+    fn modify_db_cluster_parameter_group(
+        &self,
+        input: ModifyDBClusterParameterGroupRequest,
+    ) -> Request<ModifyDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
+    fn modify_db_cluster_snapshot_attribute(
+        &self,
+        input: ModifyDBClusterSnapshotAttributeRequest,
+    ) -> Request<ModifyDBClusterSnapshotAttributeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>
+    fn modify_db_instance(
+        &self,
+        input: ModifyDBInstanceRequest,
+    ) -> Request<ModifyDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
+    fn modify_db_subnet_group(
+        &self,
+        input: ModifyDBSubnetGroupRequest,
+    ) -> Request<ModifyDBSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain changes, or if you change the DB cluster parameter group that is associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to <i>rebooting</i>. </p>
+    fn reboot_db_instance(
+        &self,
+        input: RebootDBInstanceRequest,
+    ) -> Request<RebootDBInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes metadata tags from an Amazon DocumentDB resource.</p>
+    fn remove_tags_from_resource(
+        &self,
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters, submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When you reset the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance reboot.</p>
+    fn reset_db_cluster_parameter_group(
+        &self,
+        input: ResetDBClusterParameterGroupRequest,
+    ) -> Request<ResetDBClusterParameterGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p>
+    fn restore_db_cluster_from_snapshot(
+        &self,
+        input: RestoreDBClusterFromSnapshotRequest,
+    ) -> Request<RestoreDBClusterFromSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p>
+    fn restore_db_cluster_to_point_in_time(
+        &self,
+        input: RestoreDBClusterToPointInTimeRequest,
+    ) -> Request<RestoreDBClusterToPointInTimeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsToResourceRequest {
+    type Output = AddTagsToResourceResponse;
+    type Error = AddTagsToResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTagsToResource");
         params.put("Version", "2014-10-31");
-        AddTagsToResourceMessageSerializer::serialize(&mut params, "", &input);
+        AddTagsToResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8665,25 +9094,50 @@ impl Docdb for DocdbClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddTagsToResourceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddTagsToResourceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Applies a pending maintenance action to a resource (for example, to a DB instance).</p>
-    fn apply_pending_maintenance_action(
-        &self,
-        input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResult, ApplyPendingMaintenanceActionError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ApplyPendingMaintenanceActionRequest {
+    type Output = ApplyPendingMaintenanceActionResponse;
+    type Error = ApplyPendingMaintenanceActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ApplyPendingMaintenanceAction");
         params.put("Version", "2014-10-31");
-        ApplyPendingMaintenanceActionMessageSerializer::serialize(&mut params, "", &input);
+        ApplyPendingMaintenanceActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ApplyPendingMaintenanceActionError::from_response(response))
@@ -8694,7 +9148,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplyPendingMaintenanceActionResult::default();
+                    result = ApplyPendingMaintenanceActionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8704,7 +9158,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
+                    result = ApplyPendingMaintenanceActionResponseDeserializer::deserialize(
                         "ApplyPendingMaintenanceActionResult",
                         &mut stack,
                     )?;
@@ -8716,22 +9170,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Copies the specified DB cluster parameter group.</p>
-    fn copy_db_cluster_parameter_group(
-        &self,
-        input: CopyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CopyDBClusterParameterGroupRequest {
+    type Output = CopyDBClusterParameterGroupResponse;
+    type Error = CopyDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        CopyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CopyDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBClusterParameterGroupError::from_response(response))
@@ -8742,7 +9201,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyDBClusterParameterGroupResult::default();
+                    result = CopyDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8752,7 +9211,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
+                    result = CopyDBClusterParameterGroupResponseDeserializer::deserialize(
                         "CopyDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -8764,22 +9223,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>To cancel the copy operation after it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in the <i>copying</i> status.</p>
-    fn copy_db_cluster_snapshot(
-        &self,
-        input: CopyDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CopyDBClusterSnapshotResult, CopyDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CopyDBClusterSnapshotRequest {
+    type Output = CopyDBClusterSnapshotResponse;
+    type Error = CopyDBClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CopyDBClusterSnapshot");
         params.put("Version", "2014-10-31");
-        CopyDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CopyDBClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CopyDBClusterSnapshotError::from_response(response))
@@ -8790,7 +9254,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CopyDBClusterSnapshotResult::default();
+                    result = CopyDBClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8800,7 +9264,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterSnapshotResultDeserializer::deserialize(
+                    result = CopyDBClusterSnapshotResponseDeserializer::deserialize(
                         "CopyDBClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -8812,22 +9276,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new Amazon DocumentDB DB cluster.</p>
-    fn create_db_cluster(
-        &self,
-        input: CreateDBClusterMessage,
-    ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBClusterRequest {
+    type Output = CreateDBClusterResponse;
+    type Error = CreateDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBCluster");
         params.put("Version", "2014-10-31");
-        CreateDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8841,7 +9310,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBClusterResult::default();
+                    result = CreateDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8851,7 +9320,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterResultDeserializer::deserialize(
+                    result = CreateDBClusterResponseDeserializer::deserialize(
                         "CreateDBClusterResult",
                         &mut stack,
                     )?;
@@ -8863,22 +9332,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p>A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after you create it. After you create a DB cluster parameter group, you must associate it with your DB cluster. For the new DB cluster parameter group and associated settings to take effect, you must then reboot the DB instances in the DB cluster without failover.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
-    fn create_db_cluster_parameter_group(
-        &self,
-        input: CreateDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBClusterParameterGroupRequest {
+    type Output = CreateDBClusterParameterGroupResponse;
+    type Error = CreateDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        CreateDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterParameterGroupError::from_response(response))
@@ -8889,7 +9363,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBClusterParameterGroupResult::default();
+                    result = CreateDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8899,7 +9373,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
+                    result = CreateDBClusterParameterGroupResponseDeserializer::deserialize(
                         "CreateDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -8911,22 +9385,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a snapshot of a DB cluster. </p>
-    fn create_db_cluster_snapshot(
-        &self,
-        input: CreateDBClusterSnapshotMessage,
-    ) -> RusotoFuture<CreateDBClusterSnapshotResult, CreateDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBClusterSnapshotRequest {
+    type Output = CreateDBClusterSnapshotResponse;
+    type Error = CreateDBClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBClusterSnapshot");
         params.put("Version", "2014-10-31");
-        CreateDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDBClusterSnapshotError::from_response(response))
@@ -8937,7 +9416,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBClusterSnapshotResult::default();
+                    result = CreateDBClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8947,7 +9426,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterSnapshotResultDeserializer::deserialize(
+                    result = CreateDBClusterSnapshotResponseDeserializer::deserialize(
                         "CreateDBClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -8959,22 +9438,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new DB instance.</p>
-    fn create_db_instance(
-        &self,
-        input: CreateDBInstanceMessage,
-    ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBInstanceRequest {
+    type Output = CreateDBInstanceResponse;
+    type Error = CreateDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBInstance");
         params.put("Version", "2014-10-31");
-        CreateDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -8988,7 +9472,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBInstanceResult::default();
+                    result = CreateDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -8998,7 +9482,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBInstanceResultDeserializer::deserialize(
+                    result = CreateDBInstanceResponseDeserializer::deserialize(
                         "CreateDBInstanceResult",
                         &mut stack,
                     )?;
@@ -9010,22 +9494,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
-    fn create_db_subnet_group(
-        &self,
-        input: CreateDBSubnetGroupMessage,
-    ) -> RusotoFuture<CreateDBSubnetGroupResult, CreateDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for CreateDBSubnetGroupRequest {
+    type Output = CreateDBSubnetGroupResponse;
+    type Error = CreateDBSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDBSubnetGroup");
         params.put("Version", "2014-10-31");
-        CreateDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        CreateDBSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9038,7 +9527,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateDBSubnetGroupResult::default();
+                    result = CreateDBSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9048,7 +9537,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSubnetGroupResultDeserializer::deserialize(
+                    result = CreateDBSubnetGroupResponseDeserializer::deserialize(
                         "CreateDBSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -9060,22 +9549,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/></p>
-    fn delete_db_cluster(
-        &self,
-        input: DeleteDBClusterMessage,
-    ) -> RusotoFuture<DeleteDBClusterResult, DeleteDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBClusterRequest {
+    type Output = DeleteDBClusterResponse;
+    type Error = DeleteDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBCluster");
         params.put("Version", "2014-10-31");
-        DeleteDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9089,7 +9583,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBClusterResult::default();
+                    result = DeleteDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9099,7 +9593,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterResultDeserializer::deserialize(
+                    result = DeleteDBClusterResponseDeserializer::deserialize(
                         "DeleteDBClusterResult",
                         &mut stack,
                     )?;
@@ -9111,47 +9605,77 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p>
-    fn delete_db_cluster_parameter_group(
-        &self,
-        input: DeleteDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBClusterParameterGroupRequest {
+    type Output = DeleteDBClusterParameterGroupResponse;
+    type Error = DeleteDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        DeleteDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterParameterGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteDBClusterParameterGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDBClusterParameterGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a DB cluster snapshot. If the snapshot is being copied, the copy operation is terminated.</p> <note> <p>The DB cluster snapshot must be in the <code>available</code> state to be deleted.</p> </note></p>
-    fn delete_db_cluster_snapshot(
-        &self,
-        input: DeleteDBClusterSnapshotMessage,
-    ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBClusterSnapshotRequest {
+    type Output = DeleteDBClusterSnapshotResponse;
+    type Error = DeleteDBClusterSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBClusterSnapshot");
         params.put("Version", "2014-10-31");
-        DeleteDBClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBClusterSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteDBClusterSnapshotError::from_response(response))
@@ -9162,7 +9686,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBClusterSnapshotResult::default();
+                    result = DeleteDBClusterSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9172,7 +9696,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
+                    result = DeleteDBClusterSnapshotResponseDeserializer::deserialize(
                         "DeleteDBClusterSnapshotResult",
                         &mut stack,
                     )?;
@@ -9184,22 +9708,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a previously provisioned DB instance. </p>
-    fn delete_db_instance(
-        &self,
-        input: DeleteDBInstanceMessage,
-    ) -> RusotoFuture<DeleteDBInstanceResult, DeleteDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBInstanceRequest {
+    type Output = DeleteDBInstanceResponse;
+    type Error = DeleteDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBInstance");
         params.put("Version", "2014-10-31");
-        DeleteDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9213,7 +9742,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteDBInstanceResult::default();
+                    result = DeleteDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9223,7 +9752,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBInstanceResultDeserializer::deserialize(
+                    result = DeleteDBInstanceResponseDeserializer::deserialize(
                         "DeleteDBInstanceResult",
                         &mut stack,
                     )?;
@@ -9235,22 +9764,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes a DB subnet group.</p> <note> <p>The specified database subnet group must not be associated with any DB instances.</p> </note></p>
-    fn delete_db_subnet_group(
-        &self,
-        input: DeleteDBSubnetGroupMessage,
-    ) -> RusotoFuture<(), DeleteDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DeleteDBSubnetGroupRequest {
+    type Output = DeleteDBSubnetGroupResponse;
+    type Error = DeleteDBSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDBSubnetGroup");
         params.put("Version", "2014-10-31");
-        DeleteDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        DeleteDBSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9259,25 +9793,50 @@ impl Docdb for DocdbClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteDBSubnetGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDBSubnetGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list contains only the description of the specified DB cluster parameter group. </p>
-    fn describe_db_cluster_parameter_groups(
-        &self,
-        input: DescribeDBClusterParameterGroupsMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupsMessage, DescribeDBClusterParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterParameterGroupsRequest {
+    type Output = DescribeDBClusterParameterGroupsResponse;
+    type Error = DescribeDBClusterParameterGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterParameterGroups");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterParameterGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterParameterGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterParameterGroupsError::from_response(
@@ -9290,7 +9849,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupsMessage::default();
+                    result = DescribeDBClusterParameterGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9300,7 +9859,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupsMessageDeserializer::deserialize(
+                    result = DescribeDBClusterParameterGroupsResponseDeserializer::deserialize(
                         "DescribeDBClusterParameterGroupsResult",
                         &mut stack,
                     )?;
@@ -9312,22 +9871,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the detailed parameter list for a particular DB cluster parameter group.</p>
-    fn describe_db_cluster_parameters(
-        &self,
-        input: DescribeDBClusterParametersMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupDetails, DescribeDBClusterParametersError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterParametersRequest {
+    type Output = DescribeDBClusterParametersResponse;
+    type Error = DescribeDBClusterParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterParameters");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterParametersError::from_response(response))
@@ -9338,7 +9902,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupDetails::default();
+                    result = DescribeDBClusterParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9348,7 +9912,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupDetailsDeserializer::deserialize(
+                    result = DescribeDBClusterParametersResponseDeserializer::deserialize(
                         "DescribeDBClusterParametersResult",
                         &mut stack,
                     )?;
@@ -9360,25 +9924,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of DB cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual DB cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual DB cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
-    fn describe_db_cluster_snapshot_attributes(
-        &self,
-        input: DescribeDBClusterSnapshotAttributesMessage,
-    ) -> RusotoFuture<
-        DescribeDBClusterSnapshotAttributesResult,
-        DescribeDBClusterSnapshotAttributesError,
-    > {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterSnapshotAttributesRequest {
+    type Output = DescribeDBClusterSnapshotAttributesResponse;
+    type Error = DescribeDBClusterSnapshotAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterSnapshotAttributes");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterSnapshotAttributesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterSnapshotAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterSnapshotAttributesError::from_response(
@@ -9391,7 +9957,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeDBClusterSnapshotAttributesResult::default();
+                    result = DescribeDBClusterSnapshotAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9401,7 +9967,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
+                    result = DescribeDBClusterSnapshotAttributesResponseDeserializer::deserialize(
                         "DescribeDBClusterSnapshotAttributesResult",
                         &mut stack,
                     )?;
@@ -9413,22 +9979,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about DB cluster snapshots. This API operation supports pagination.</p>
-    fn describe_db_cluster_snapshots(
-        &self,
-        input: DescribeDBClusterSnapshotsMessage,
-    ) -> RusotoFuture<DBClusterSnapshotMessage, DescribeDBClusterSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClusterSnapshotsRequest {
+    type Output = DescribeDBClusterSnapshotsResponse;
+    type Error = DescribeDBClusterSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusterSnapshots");
         params.put("Version", "2014-10-31");
-        DescribeDBClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClusterSnapshotsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBClusterSnapshotsError::from_response(response))
@@ -9439,7 +10010,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterSnapshotMessage::default();
+                    result = DescribeDBClusterSnapshotsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9449,7 +10020,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterSnapshotMessageDeserializer::deserialize(
+                    result = DescribeDBClusterSnapshotsResponseDeserializer::deserialize(
                         "DescribeDBClusterSnapshotsResult",
                         &mut stack,
                     )?;
@@ -9461,22 +10032,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about provisioned Amazon DocumentDB DB clusters. This API operation supports pagination.</p>
-    fn describe_db_clusters(
-        &self,
-        input: DescribeDBClustersMessage,
-    ) -> RusotoFuture<DBClusterMessage, DescribeDBClustersError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBClustersRequest {
+    type Output = DescribeDBClustersResponse;
+    type Error = DescribeDBClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBClusters");
         params.put("Version", "2014-10-31");
-        DescribeDBClustersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBClustersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9490,7 +10066,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterMessage::default();
+                    result = DescribeDBClustersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9500,7 +10076,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterMessageDeserializer::deserialize(
+                    result = DescribeDBClustersResponseDeserializer::deserialize(
                         "DescribeDBClustersResult",
                         &mut stack,
                     )?;
@@ -9512,22 +10088,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the available DB engines.</p>
-    fn describe_db_engine_versions(
-        &self,
-        input: DescribeDBEngineVersionsMessage,
-    ) -> RusotoFuture<DBEngineVersionMessage, DescribeDBEngineVersionsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBEngineVersionsRequest {
+    type Output = DescribeDBEngineVersionsResponse;
+    type Error = DescribeDBEngineVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBEngineVersions");
         params.put("Version", "2014-10-31");
-        DescribeDBEngineVersionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBEngineVersionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBEngineVersionsError::from_response(response))
@@ -9538,7 +10119,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBEngineVersionMessage::default();
+                    result = DescribeDBEngineVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9548,7 +10129,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBEngineVersionMessageDeserializer::deserialize(
+                    result = DescribeDBEngineVersionsResponseDeserializer::deserialize(
                         "DescribeDBEngineVersionsResult",
                         &mut stack,
                     )?;
@@ -9560,22 +10141,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about provisioned Amazon DocumentDB instances. This API supports pagination.</p>
-    fn describe_db_instances(
-        &self,
-        input: DescribeDBInstancesMessage,
-    ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBInstancesRequest {
+    type Output = DescribeDBInstancesResponse;
+    type Error = DescribeDBInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBInstances");
         params.put("Version", "2014-10-31");
-        DescribeDBInstancesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBInstancesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9588,7 +10174,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBInstanceMessage::default();
+                    result = DescribeDBInstancesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9598,7 +10184,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBInstanceMessageDeserializer::deserialize(
+                    result = DescribeDBInstancesResponseDeserializer::deserialize(
                         "DescribeDBInstancesResult",
                         &mut stack,
                     )?;
@@ -9610,22 +10196,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of <code>DBSubnetGroup</code> descriptions. If a <code>DBSubnetGroupName</code> is specified, the list will contain only the descriptions of the specified <code>DBSubnetGroup</code>.</p>
-    fn describe_db_subnet_groups(
-        &self,
-        input: DescribeDBSubnetGroupsMessage,
-    ) -> RusotoFuture<DBSubnetGroupMessage, DescribeDBSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeDBSubnetGroupsRequest {
+    type Output = DescribeDBSubnetGroupsResponse;
+    type Error = DescribeDBSubnetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDBSubnetGroups");
         params.put("Version", "2014-10-31");
-        DescribeDBSubnetGroupsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeDBSubnetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeDBSubnetGroupsError::from_response(response))
@@ -9636,7 +10227,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBSubnetGroupMessage::default();
+                    result = DescribeDBSubnetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9646,7 +10237,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSubnetGroupMessageDeserializer::deserialize(
+                    result = DescribeDBSubnetGroupsResponseDeserializer::deserialize(
                         "DescribeDBSubnetGroupsResult",
                         &mut stack,
                     )?;
@@ -9658,25 +10249,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the default engine and system parameter information for the cluster database engine.</p>
-    fn describe_engine_default_cluster_parameters(
-        &self,
-        input: DescribeEngineDefaultClusterParametersMessage,
-    ) -> RusotoFuture<
-        DescribeEngineDefaultClusterParametersResult,
-        DescribeEngineDefaultClusterParametersError,
-    > {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEngineDefaultClusterParametersRequest {
+    type Output = DescribeEngineDefaultClusterParametersResponse;
+    type Error = DescribeEngineDefaultClusterParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEngineDefaultClusterParameters");
         params.put("Version", "2014-10-31");
-        DescribeEngineDefaultClusterParametersMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEngineDefaultClusterParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEngineDefaultClusterParametersError::from_response(
@@ -9689,7 +10282,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEngineDefaultClusterParametersResult::default();
+                    result = DescribeEngineDefaultClusterParametersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9699,10 +10292,11 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
-                        "DescribeEngineDefaultClusterParametersResult",
-                        &mut stack,
-                    )?;
+                    result =
+                        DescribeEngineDefaultClusterParametersResponseDeserializer::deserialize(
+                            "DescribeEngineDefaultClusterParametersResult",
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -9711,22 +10305,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. </p>
-    fn describe_event_categories(
-        &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<EventCategoriesMessage, DescribeEventCategoriesError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEventCategoriesRequest {
+    type Output = DescribeEventCategoriesResponse;
+    type Error = DescribeEventCategoriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEventCategories");
         params.put("Version", "2014-10-31");
-        DescribeEventCategoriesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventCategoriesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEventCategoriesError::from_response(response))
@@ -9737,7 +10336,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventCategoriesMessage::default();
+                    result = DescribeEventCategoriesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9747,7 +10346,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EventCategoriesMessageDeserializer::deserialize(
+                    result = DescribeEventCategoriesResponseDeserializer::deserialize(
                         "DescribeEventCategoriesResult",
                         &mut stack,
                     )?;
@@ -9759,22 +10358,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns events related to DB instances, DB security groups, DB snapshots, and DB parameter groups for the past 14 days. You can obtain events specific to a particular DB instance, DB security group, DB snapshot, or DB parameter group by providing the name as a parameter. By default, the events of the past hour are returned.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
         params.put("Version", "2014-10-31");
-        DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9788,7 +10392,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventsMessage::default();
+                    result = DescribeEventsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9798,8 +10402,10 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
+                    result = DescribeEventsResponseDeserializer::deserialize(
+                        "DescribeEventsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -9808,23 +10414,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of orderable DB instance options for the specified engine.</p>
-    fn describe_orderable_db_instance_options(
-        &self,
-        input: DescribeOrderableDBInstanceOptionsMessage,
-    ) -> RusotoFuture<OrderableDBInstanceOptionsMessage, DescribeOrderableDBInstanceOptionsError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribeOrderableDBInstanceOptionsRequest {
+    type Output = DescribeOrderableDBInstanceOptionsResponse;
+    type Error = DescribeOrderableDBInstanceOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeOrderableDBInstanceOptions");
         params.put("Version", "2014-10-31");
-        DescribeOrderableDBInstanceOptionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeOrderableDBInstanceOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrderableDBInstanceOptionsError::from_response(
@@ -9837,7 +10447,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = OrderableDBInstanceOptionsMessage::default();
+                    result = DescribeOrderableDBInstanceOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9847,7 +10457,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
+                    result = DescribeOrderableDBInstanceOptionsResponseDeserializer::deserialize(
                         "DescribeOrderableDBInstanceOptionsResult",
                         &mut stack,
                     )?;
@@ -9859,23 +10469,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of resources (for example, DB instances) that have at least one pending maintenance action.</p>
-    fn describe_pending_maintenance_actions(
-        &self,
-        input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for DescribePendingMaintenanceActionsRequest {
+    type Output = DescribePendingMaintenanceActionsResponse;
+    type Error = DescribePendingMaintenanceActionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribePendingMaintenanceActions");
         params.put("Version", "2014-10-31");
-        DescribePendingMaintenanceActionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribePendingMaintenanceActionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribePendingMaintenanceActionsError::from_response(
@@ -9888,7 +10502,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PendingMaintenanceActionsMessage::default();
+                    result = DescribePendingMaintenanceActionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9898,7 +10512,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PendingMaintenanceActionsMessageDeserializer::deserialize(
+                    result = DescribePendingMaintenanceActionsResponseDeserializer::deserialize(
                         "DescribePendingMaintenanceActionsResult",
                         &mut stack,
                     )?;
@@ -9910,22 +10524,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Forces a failover for a DB cluster.</p> <p>A failover for a DB cluster promotes one of the Amazon DocumentDB replicas (read-only instances) in the DB cluster to be the primary instance (the cluster writer).</p> <p>If the primary instance fails, Amazon DocumentDB automatically fails over to an Amazon DocumentDB replica, if one exists. You can force a failover when you want to simulate a failure of a primary instance for testing.</p>
-    fn failover_db_cluster(
-        &self,
-        input: FailoverDBClusterMessage,
-    ) -> RusotoFuture<FailoverDBClusterResult, FailoverDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for FailoverDBClusterRequest {
+    type Output = FailoverDBClusterResponse;
+    type Error = FailoverDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "FailoverDBCluster");
         params.put("Version", "2014-10-31");
-        FailoverDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        FailoverDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9939,7 +10558,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = FailoverDBClusterResult::default();
+                    result = FailoverDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9949,7 +10568,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = FailoverDBClusterResultDeserializer::deserialize(
+                    result = FailoverDBClusterResponseDeserializer::deserialize(
                         "FailoverDBClusterResult",
                         &mut stack,
                     )?;
@@ -9961,22 +10580,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all tags on an Amazon DocumentDB resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<TagListMessage, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2014-10-31");
-        ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
+        ListTagsForResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9989,7 +10613,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TagListMessage::default();
+                    result = ListTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9999,7 +10623,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
+                    result = ListTagsForResourceResponseDeserializer::deserialize(
                         "ListTagsForResourceResult",
                         &mut stack,
                     )?;
@@ -10011,22 +10635,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies a setting for an Amazon DocumentDB DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. </p>
-    fn modify_db_cluster(
-        &self,
-        input: ModifyDBClusterMessage,
-    ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBClusterRequest {
+    type Output = ModifyDBClusterResponse;
+    type Error = ModifyDBClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBCluster");
         params.put("Version", "2014-10-31");
-        ModifyDBClusterMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBClusterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10040,7 +10669,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBClusterResult::default();
+                    result = ModifyDBClusterResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10050,7 +10679,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterResultDeserializer::deserialize(
+                    result = ModifyDBClusterResponseDeserializer::deserialize(
                         "ModifyDBClusterResult",
                         &mut stack,
                     )?;
@@ -10062,22 +10691,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot or maintenance window before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon DocumentDB to fully complete the create action before the parameter group is used as the default for a new DB cluster. This step is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter.</p> </important></p>
-    fn modify_db_cluster_parameter_group(
-        &self,
-        input: ModifyDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ModifyDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBClusterParameterGroupRequest {
+    type Output = ModifyDBClusterParameterGroupResponse;
+    type Error = ModifyDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        ModifyDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterParameterGroupError::from_response(response))
@@ -10088,7 +10722,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
+                    result = ModifyDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10098,7 +10732,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                    result = ModifyDBClusterParameterGroupResponseDeserializer::deserialize(
                         "ModifyDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -10110,23 +10744,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
-    fn modify_db_cluster_snapshot_attribute(
-        &self,
-        input: ModifyDBClusterSnapshotAttributeMessage,
-    ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>
-    {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBClusterSnapshotAttributeRequest {
+    type Output = ModifyDBClusterSnapshotAttributeResponse;
+    type Error = ModifyDBClusterSnapshotAttributeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBClusterSnapshotAttribute");
         params.put("Version", "2014-10-31");
-        ModifyDBClusterSnapshotAttributeMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBClusterSnapshotAttributeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyDBClusterSnapshotAttributeError::from_response(
@@ -10139,7 +10777,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBClusterSnapshotAttributeResult::default();
+                    result = ModifyDBClusterSnapshotAttributeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10149,7 +10787,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
+                    result = ModifyDBClusterSnapshotAttributeResponseDeserializer::deserialize(
                         "ModifyDBClusterSnapshotAttributeResult",
                         &mut stack,
                     )?;
@@ -10161,22 +10799,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>
-    fn modify_db_instance(
-        &self,
-        input: ModifyDBInstanceMessage,
-    ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBInstanceRequest {
+    type Output = ModifyDBInstanceResponse;
+    type Error = ModifyDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBInstance");
         params.put("Version", "2014-10-31");
-        ModifyDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10190,7 +10833,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBInstanceResult::default();
+                    result = ModifyDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10200,7 +10843,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBInstanceResultDeserializer::deserialize(
+                    result = ModifyDBInstanceResponseDeserializer::deserialize(
                         "ModifyDBInstanceResult",
                         &mut stack,
                     )?;
@@ -10212,22 +10855,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies an existing DB subnet group. DB subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
-    fn modify_db_subnet_group(
-        &self,
-        input: ModifyDBSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyDBSubnetGroupResult, ModifyDBSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ModifyDBSubnetGroupRequest {
+    type Output = ModifyDBSubnetGroupResponse;
+    type Error = ModifyDBSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyDBSubnetGroup");
         params.put("Version", "2014-10-31");
-        ModifyDBSubnetGroupMessageSerializer::serialize(&mut params, "", &input);
+        ModifyDBSubnetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10240,7 +10888,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyDBSubnetGroupResult::default();
+                    result = ModifyDBSubnetGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10250,7 +10898,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSubnetGroupResultDeserializer::deserialize(
+                    result = ModifyDBSubnetGroupResponseDeserializer::deserialize(
                         "ModifyDBSubnetGroupResult",
                         &mut stack,
                     )?;
@@ -10262,22 +10910,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain changes, or if you change the DB cluster parameter group that is associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to <i>rebooting</i>. </p>
-    fn reboot_db_instance(
-        &self,
-        input: RebootDBInstanceMessage,
-    ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RebootDBInstanceRequest {
+    type Output = RebootDBInstanceResponse;
+    type Error = RebootDBInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebootDBInstance");
         params.put("Version", "2014-10-31");
-        RebootDBInstanceMessageSerializer::serialize(&mut params, "", &input);
+        RebootDBInstanceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10291,7 +10944,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RebootDBInstanceResult::default();
+                    result = RebootDBInstanceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10301,7 +10954,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootDBInstanceResultDeserializer::deserialize(
+                    result = RebootDBInstanceResponseDeserializer::deserialize(
                         "RebootDBInstanceResult",
                         &mut stack,
                     )?;
@@ -10313,47 +10966,77 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Removes metadata tags from an Amazon DocumentDB resource.</p>
-    fn remove_tags_from_resource(
-        &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<(), RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RemoveTagsFromResourceRequest {
+    type Output = RemoveTagsFromResourceResponse;
+    type Error = RemoveTagsFromResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTagsFromResource");
         params.put("Version", "2014-10-31");
-        RemoveTagsFromResourceMessageSerializer::serialize(&mut params, "", &input);
+        RemoveTagsFromResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsFromResourceError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemoveTagsFromResourceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RemoveTagsFromResourceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters, submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When you reset the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance reboot.</p>
-    fn reset_db_cluster_parameter_group(
-        &self,
-        input: ResetDBClusterParameterGroupMessage,
-    ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for ResetDBClusterParameterGroupRequest {
+    type Output = ResetDBClusterParameterGroupResponse;
+    type Error = ResetDBClusterParameterGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetDBClusterParameterGroup");
         params.put("Version", "2014-10-31");
-        ResetDBClusterParameterGroupMessageSerializer::serialize(&mut params, "", &input);
+        ResetDBClusterParameterGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResetDBClusterParameterGroupError::from_response(response))
@@ -10364,7 +11047,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
+                    result = ResetDBClusterParameterGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10374,7 +11057,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                    result = ResetDBClusterParameterGroupResponseDeserializer::deserialize(
                         "ResetDBClusterParameterGroupResult",
                         &mut stack,
                     )?;
@@ -10386,22 +11069,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p>
-    fn restore_db_cluster_from_snapshot(
-        &self,
-        input: RestoreDBClusterFromSnapshotMessage,
-    ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBClusterFromSnapshotRequest {
+    type Output = RestoreDBClusterFromSnapshotResponse;
+    type Error = RestoreDBClusterFromSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterFromSnapshot");
         params.put("Version", "2014-10-31");
-        RestoreDBClusterFromSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBClusterFromSnapshotRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterFromSnapshotError::from_response(response))
@@ -10412,7 +11100,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBClusterFromSnapshotResult::default();
+                    result = RestoreDBClusterFromSnapshotResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10422,7 +11110,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+                    result = RestoreDBClusterFromSnapshotResponseDeserializer::deserialize(
                         "RestoreDBClusterFromSnapshotResult",
                         &mut stack,
                     )?;
@@ -10434,22 +11122,27 @@ impl Docdb for DocdbClient {
             }))
         })
     }
+}
 
-    /// <p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p>
-    fn restore_db_cluster_to_point_in_time(
-        &self,
-        input: RestoreDBClusterToPointInTimeMessage,
-    ) -> RusotoFuture<RestoreDBClusterToPointInTimeResult, RestoreDBClusterToPointInTimeError> {
-        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+impl ServiceRequest for RestoreDBClusterToPointInTimeRequest {
+    type Output = RestoreDBClusterToPointInTimeResponse;
+    type Error = RestoreDBClusterToPointInTimeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "rds", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestoreDBClusterToPointInTime");
         params.put("Version", "2014-10-31");
-        RestoreDBClusterToPointInTimeMessageSerializer::serialize(&mut params, "", &input);
+        RestoreDBClusterToPointInTimeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RestoreDBClusterToPointInTimeError::from_response(response))
@@ -10460,7 +11153,7 @@ impl Docdb for DocdbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RestoreDBClusterToPointInTimeResult::default();
+                    result = RestoreDBClusterToPointInTimeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10470,7 +11163,7 @@ impl Docdb for DocdbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
+                    result = RestoreDBClusterToPointInTimeResponseDeserializer::deserialize(
                         "RestoreDBClusterToPointInTimeResult",
                         &mut stack,
                     )?;

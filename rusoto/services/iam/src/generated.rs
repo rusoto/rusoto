@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -275,6 +276,19 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddClientIDToOpenIDConnectProviderResponse {}
+
+struct AddClientIDToOpenIDConnectProviderResponseDeserializer;
+impl AddClientIDToOpenIDConnectProviderResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddClientIDToOpenIDConnectProviderResponse, XmlParseError> {
+        Ok(AddClientIDToOpenIDConnectProviderResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddRoleToInstanceProfileRequest {
     /// <p>The name of the instance profile to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -300,6 +314,19 @@ impl AddRoleToInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddRoleToInstanceProfileResponse {}
+
+struct AddRoleToInstanceProfileResponseDeserializer;
+impl AddRoleToInstanceProfileResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddRoleToInstanceProfileResponse, XmlParseError> {
+        Ok(AddRoleToInstanceProfileResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddUserToGroupRequest {
     /// <p>The name of the group to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -321,6 +348,19 @@ impl AddUserToGroupRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AddUserToGroupResponse {}
+
+struct AddUserToGroupResponseDeserializer;
+impl AddUserToGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddUserToGroupResponse, XmlParseError> {
+        Ok(AddUserToGroupResponse::default())
+    }
+}
 struct ArnListTypeDeserializer;
 impl ArnListTypeDeserializer {
     #[allow(unused_variables)]
@@ -372,6 +412,19 @@ impl AttachGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachGroupPolicyResponse {}
+
+struct AttachGroupPolicyResponseDeserializer;
+impl AttachGroupPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AttachGroupPolicyResponse, XmlParseError> {
+        Ok(AttachGroupPolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -394,6 +447,19 @@ impl AttachRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachRolePolicyResponse {}
+
+struct AttachRolePolicyResponseDeserializer;
+impl AttachRolePolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AttachRolePolicyResponse, XmlParseError> {
+        Ok(AttachRolePolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -415,6 +481,19 @@ impl AttachUserPolicyRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachUserPolicyResponse {}
+
+struct AttachUserPolicyResponseDeserializer;
+impl AttachUserPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AttachUserPolicyResponse, XmlParseError> {
+        Ok(AttachUserPolicyResponse::default())
+    }
+}
 /// <p>Contains information about an attached permissions boundary.</p> <p>An attached permissions boundary is a managed policy that has been attached to a user or role to set the permissions boundary.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachedPermissionsBoundary {
@@ -626,6 +705,19 @@ impl ChangePasswordRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ChangePasswordResponse {}
+
+struct ChangePasswordResponseDeserializer;
+impl ChangePasswordResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ChangePasswordResponse, XmlParseError> {
+        Ok(ChangePasswordResponse::default())
+    }
+}
 struct ClientIDListTypeDeserializer;
 impl ClientIDListTypeDeserializer {
     #[allow(unused_variables)]
@@ -835,6 +927,19 @@ impl CreateAccountAliasRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateAccountAliasResponse {}
+
+struct CreateAccountAliasResponseDeserializer;
+impl CreateAccountAliasResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateAccountAliasResponse, XmlParseError> {
+        Ok(CreateAccountAliasResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateGroupRequest {
     /// <p>The name of the group to create. Do not include the path in this value.</p> <p>IAM user, group, role, and policy names must be unique within the account. Names are not distinguished by case. For example, you cannot create resources named both "MyResource" and "myresource".</p>
@@ -1590,6 +1695,19 @@ impl DeactivateMFADeviceRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeactivateMFADeviceResponse {}
+
+struct DeactivateMFADeviceResponseDeserializer;
+impl DeactivateMFADeviceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeactivateMFADeviceResponse, XmlParseError> {
+        Ok(DeactivateMFADeviceResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteAccessKeyRequest {
     /// <p>The access key ID for the access key ID and secret access key you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
@@ -1614,6 +1732,19 @@ impl DeleteAccessKeyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteAccessKeyResponse {}
+
+struct DeleteAccessKeyResponseDeserializer;
+impl DeleteAccessKeyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAccessKeyResponse, XmlParseError> {
+        Ok(DeleteAccessKeyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteAccountAliasRequest {
     /// <p>The name of the account alias to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
     pub account_alias: String,
@@ -1632,6 +1763,46 @@ impl DeleteAccountAliasRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteAccountAliasResponse {}
+
+struct DeleteAccountAliasResponseDeserializer;
+impl DeleteAccountAliasResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAccountAliasResponse, XmlParseError> {
+        Ok(DeleteAccountAliasResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteAccountPasswordPolicyRequest {}
+
+/// Serialize `DeleteAccountPasswordPolicyRequest` contents to a `SignedRequest`.
+struct DeleteAccountPasswordPolicyRequestSerializer;
+impl DeleteAccountPasswordPolicyRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DeleteAccountPasswordPolicyRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteAccountPasswordPolicyResponse {}
+
+struct DeleteAccountPasswordPolicyResponseDeserializer;
+impl DeleteAccountPasswordPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAccountPasswordPolicyResponse, XmlParseError> {
+        Ok(DeleteAccountPasswordPolicyResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
@@ -1655,6 +1826,19 @@ impl DeleteGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteGroupPolicyResponse {}
+
+struct DeleteGroupPolicyResponseDeserializer;
+impl DeleteGroupPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteGroupPolicyResponse, XmlParseError> {
+        Ok(DeleteGroupPolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteGroupRequest {
     /// <p>The name of the IAM group to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -1673,6 +1857,19 @@ impl DeleteGroupRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteGroupResponse {}
+
+struct DeleteGroupResponseDeserializer;
+impl DeleteGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteGroupResponse, XmlParseError> {
+        Ok(DeleteGroupResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteInstanceProfileRequest {
     /// <p>The name of the instance profile to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
@@ -1696,6 +1893,19 @@ impl DeleteInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteInstanceProfileResponse {}
+
+struct DeleteInstanceProfileResponseDeserializer;
+impl DeleteInstanceProfileResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteInstanceProfileResponse, XmlParseError> {
+        Ok(DeleteInstanceProfileResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLoginProfileRequest {
     /// <p>The name of the user whose password you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -1714,6 +1924,19 @@ impl DeleteLoginProfileRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteLoginProfileResponse {}
+
+struct DeleteLoginProfileResponseDeserializer;
+impl DeleteLoginProfileResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLoginProfileResponse, XmlParseError> {
+        Ok(DeleteLoginProfileResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteOpenIDConnectProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM OpenID Connect provider resource object to delete. You can get a list of OpenID Connect provider resource ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p>
@@ -1737,6 +1960,19 @@ impl DeleteOpenIDConnectProviderRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteOpenIDConnectProviderResponse {}
+
+struct DeleteOpenIDConnectProviderResponseDeserializer;
+impl DeleteOpenIDConnectProviderResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteOpenIDConnectProviderResponse, XmlParseError> {
+        Ok(DeleteOpenIDConnectProviderResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to delete.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -1755,6 +1991,19 @@ impl DeletePolicyRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeletePolicyResponse {}
+
+struct DeletePolicyResponseDeserializer;
+impl DeletePolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeletePolicyResponse, XmlParseError> {
+        Ok(DeletePolicyResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletePolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy from which you want to delete a version.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
@@ -1778,6 +2027,19 @@ impl DeletePolicyVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeletePolicyVersionResponse {}
+
+struct DeletePolicyVersionResponseDeserializer;
+impl DeletePolicyVersionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeletePolicyVersionResponse, XmlParseError> {
+        Ok(DeletePolicyVersionResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRolePermissionsBoundaryRequest {
     /// <p>The name (friendly name, not ARN) of the IAM role from which you want to remove the permissions boundary.</p>
     pub role_name: String,
@@ -1796,6 +2058,19 @@ impl DeleteRolePermissionsBoundaryRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteRolePermissionsBoundaryResponse {}
+
+struct DeleteRolePermissionsBoundaryResponseDeserializer;
+impl DeleteRolePermissionsBoundaryResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteRolePermissionsBoundaryResponse, XmlParseError> {
+        Ok(DeleteRolePermissionsBoundaryResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRolePolicyRequest {
     /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
@@ -1819,6 +2094,19 @@ impl DeleteRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteRolePolicyResponse {}
+
+struct DeleteRolePolicyResponseDeserializer;
+impl DeleteRolePolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteRolePolicyResponse, XmlParseError> {
+        Ok(DeleteRolePolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRoleRequest {
     /// <p>The name of the role to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -1837,6 +2125,19 @@ impl DeleteRoleRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteRoleResponse {}
+
+struct DeleteRoleResponseDeserializer;
+impl DeleteRoleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteRoleResponse, XmlParseError> {
+        Ok(DeleteRoleResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSAMLProviderRequest {
     /// <p>The Amazon Resource Name (ARN) of the SAML provider to delete.</p>
@@ -1859,6 +2160,19 @@ impl DeleteSAMLProviderRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteSAMLProviderResponse {}
+
+struct DeleteSAMLProviderResponseDeserializer;
+impl DeleteSAMLProviderResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteSAMLProviderResponse, XmlParseError> {
+        Ok(DeleteSAMLProviderResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSSHPublicKeyRequest {
     /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
@@ -1885,6 +2199,19 @@ impl DeleteSSHPublicKeyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteSSHPublicKeyResponse {}
+
+struct DeleteSSHPublicKeyResponseDeserializer;
+impl DeleteSSHPublicKeyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteSSHPublicKeyResponse, XmlParseError> {
+        Ok(DeleteSSHPublicKeyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServerCertificateRequest {
     /// <p>The name of the server certificate you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
@@ -1906,6 +2233,19 @@ impl DeleteServerCertificateRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteServerCertificateResponse {}
+
+struct DeleteServerCertificateResponseDeserializer;
+impl DeleteServerCertificateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteServerCertificateResponse, XmlParseError> {
+        Ok(DeleteServerCertificateResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServiceLinkedRoleRequest {
     /// <p>The name of the service-linked role to be deleted.</p>
@@ -1982,6 +2322,19 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteServiceSpecificCredentialResponse {}
+
+struct DeleteServiceSpecificCredentialResponseDeserializer;
+impl DeleteServiceSpecificCredentialResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteServiceSpecificCredentialResponse, XmlParseError> {
+        Ok(DeleteServiceSpecificCredentialResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSigningCertificateRequest {
     /// <p>The ID of the signing certificate to delete.</p> <p>The format of this parameter, as described by its <a href="http://wikipedia.org/wiki/regex">regex</a> pattern, is a string of characters that can be upper- or lower-cased letters or digits.</p>
     pub certificate_id: String,
@@ -2009,6 +2362,19 @@ impl DeleteSigningCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteSigningCertificateResponse {}
+
+struct DeleteSigningCertificateResponseDeserializer;
+impl DeleteSigningCertificateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteSigningCertificateResponse, XmlParseError> {
+        Ok(DeleteSigningCertificateResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteUserPermissionsBoundaryRequest {
     /// <p>The name (friendly name, not ARN) of the IAM user from which you want to remove the permissions boundary.</p>
     pub user_name: String,
@@ -2027,6 +2393,19 @@ impl DeleteUserPermissionsBoundaryRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteUserPermissionsBoundaryResponse {}
+
+struct DeleteUserPermissionsBoundaryResponseDeserializer;
+impl DeleteUserPermissionsBoundaryResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteUserPermissionsBoundaryResponse, XmlParseError> {
+        Ok(DeleteUserPermissionsBoundaryResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteUserPolicyRequest {
     /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
@@ -2050,6 +2429,19 @@ impl DeleteUserPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteUserPolicyResponse {}
+
+struct DeleteUserPolicyResponseDeserializer;
+impl DeleteUserPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteUserPolicyResponse, XmlParseError> {
+        Ok(DeleteUserPolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteUserRequest {
     /// <p>The name of the user to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
@@ -2069,6 +2461,19 @@ impl DeleteUserRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteUserResponse {}
+
+struct DeleteUserResponseDeserializer;
+impl DeleteUserResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteUserResponse, XmlParseError> {
+        Ok(DeleteUserResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVirtualMFADeviceRequest {
     /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the same as the ARN.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
@@ -2087,6 +2492,19 @@ impl DeleteVirtualMFADeviceRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteVirtualMFADeviceResponse {}
+
+struct DeleteVirtualMFADeviceResponseDeserializer;
+impl DeleteVirtualMFADeviceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteVirtualMFADeviceResponse, XmlParseError> {
+        Ok(DeleteVirtualMFADeviceResponse::default())
+    }
+}
 /// <p>The reason that the service-linked role deletion failed.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletionTaskFailureReasonType {
@@ -2168,6 +2586,19 @@ impl DetachGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DetachGroupPolicyResponse {}
+
+struct DetachGroupPolicyResponseDeserializer;
+impl DetachGroupPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DetachGroupPolicyResponse, XmlParseError> {
+        Ok(DetachGroupPolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2190,6 +2621,19 @@ impl DetachRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DetachRolePolicyResponse {}
+
+struct DetachRolePolicyResponseDeserializer;
+impl DetachRolePolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DetachRolePolicyResponse, XmlParseError> {
+        Ok(DetachRolePolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2211,6 +2655,19 @@ impl DetachUserPolicyRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DetachUserPolicyResponse {}
+
+struct DetachUserPolicyResponseDeserializer;
+impl DetachUserPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DetachUserPolicyResponse, XmlParseError> {
+        Ok(DetachUserPolicyResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableMFADeviceRequest {
     /// <p><p>An authentication code emitted by the device. </p> <p>The format for this parameter is a string of six digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important></p>
@@ -2245,6 +2702,19 @@ impl EnableMFADeviceRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableMFADeviceResponse {}
+
+struct EnableMFADeviceResponseDeserializer;
+impl EnableMFADeviceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableMFADeviceResponse, XmlParseError> {
+        Ok(EnableMFADeviceResponse::default())
+    }
+}
 /// <p>An object that contains details about when the IAM entities (users or roles) were last used in an attempt to access the specified AWS service.</p> <p>This data type is a response element in the <a>GetServiceLastAccessedDetailsWithEntities</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EntityDetails {
@@ -2541,6 +3011,20 @@ impl ExistingUserNameTypeDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GenerateCredentialReportRequest {}
+
+/// Serialize `GenerateCredentialReportRequest` contents to a `SignedRequest`.
+struct GenerateCredentialReportRequestSerializer;
+impl GenerateCredentialReportRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &GenerateCredentialReportRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>Contains the response to a successful <a>GenerateCredentialReport</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GenerateCredentialReportResponse {
@@ -2785,6 +3269,20 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetAccountPasswordPolicyRequest {}
+
+/// Serialize `GetAccountPasswordPolicyRequest` contents to a `SignedRequest`.
+struct GetAccountPasswordPolicyRequestSerializer;
+impl GetAccountPasswordPolicyRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &GetAccountPasswordPolicyRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>Contains the response to a successful <a>GetAccountPasswordPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountPasswordPolicyResponse {
@@ -2815,6 +3313,20 @@ impl GetAccountPasswordPolicyResponseDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetAccountSummaryRequest {}
+
+/// Serialize `GetAccountSummaryRequest` contents to a `SignedRequest`.
+struct GetAccountSummaryRequestSerializer;
+impl GetAccountSummaryRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &GetAccountSummaryRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>Contains the response to a successful <a>GetAccountSummary</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountSummaryResponse {
@@ -2872,19 +3384,19 @@ impl GetContextKeysForCustomPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>GetContextKeysForPrincipalPolicy</a> or <a>GetContextKeysForCustomPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetContextKeysForPolicyResponse {
+pub struct GetContextKeysForCustomPolicyResponse {
     /// <p>The list of context keys that are referenced in the input policies.</p>
     pub context_key_names: Option<Vec<String>>,
 }
 
-struct GetContextKeysForPolicyResponseDeserializer;
-impl GetContextKeysForPolicyResponseDeserializer {
+struct GetContextKeysForCustomPolicyResponseDeserializer;
+impl GetContextKeysForCustomPolicyResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetContextKeysForPolicyResponse, XmlParseError> {
-        deserialize_elements::<_, GetContextKeysForPolicyResponse, _>(
+    ) -> Result<GetContextKeysForCustomPolicyResponse, XmlParseError> {
+        deserialize_elements::<_, GetContextKeysForCustomPolicyResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2932,6 +3444,54 @@ impl GetContextKeysForPrincipalPolicyRequestSerializer {
             &format!("{}{}", prefix, "PolicySourceArn"),
             &obj.policy_source_arn,
         );
+    }
+}
+
+/// <p>Contains the response to a successful <a>GetContextKeysForPrincipalPolicy</a> or <a>GetContextKeysForCustomPolicy</a> request. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetContextKeysForPrincipalPolicyResponse {
+    /// <p>The list of context keys that are referenced in the input policies.</p>
+    pub context_key_names: Option<Vec<String>>,
+}
+
+struct GetContextKeysForPrincipalPolicyResponseDeserializer;
+impl GetContextKeysForPrincipalPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetContextKeysForPrincipalPolicyResponse, XmlParseError> {
+        deserialize_elements::<_, GetContextKeysForPrincipalPolicyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ContextKeyNames" => {
+                        obj.context_key_names.get_or_insert(vec![]).extend(
+                            ContextKeyNamesResultListTypeDeserializer::deserialize(
+                                "ContextKeyNames",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetCredentialReportRequest {}
+
+/// Serialize `GetCredentialReportRequest` contents to a `SignedRequest`.
+struct GetCredentialReportRequestSerializer;
+impl GetCredentialReportRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &GetCredentialReportRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
     }
 }
 
@@ -7571,6 +8131,19 @@ impl PutGroupPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutGroupPolicyResponse {}
+
+struct PutGroupPolicyResponseDeserializer;
+impl PutGroupPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutGroupPolicyResponse, XmlParseError> {
+        Ok(PutGroupPolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutRolePermissionsBoundaryRequest {
     /// <p>The ARN of the policy that is used to set the permissions boundary for the role.</p>
     pub permissions_boundary: String,
@@ -7595,6 +8168,19 @@ impl PutRolePermissionsBoundaryRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutRolePermissionsBoundaryResponse {}
+
+struct PutRolePermissionsBoundaryResponseDeserializer;
+impl PutRolePermissionsBoundaryResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutRolePermissionsBoundaryResponse, XmlParseError> {
+        Ok(PutRolePermissionsBoundaryResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutRolePolicyRequest {
     /// <p><p>The policy document.</p> <p>You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
@@ -7624,6 +8210,19 @@ impl PutRolePolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutRolePolicyResponse {}
+
+struct PutRolePolicyResponseDeserializer;
+impl PutRolePolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutRolePolicyResponse, XmlParseError> {
+        Ok(PutRolePolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutUserPermissionsBoundaryRequest {
     /// <p>The ARN of the policy that is used to set the permissions boundary for the user.</p>
     pub permissions_boundary: String,
@@ -7648,6 +8247,19 @@ impl PutUserPermissionsBoundaryRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutUserPermissionsBoundaryResponse {}
+
+struct PutUserPermissionsBoundaryResponseDeserializer;
+impl PutUserPermissionsBoundaryResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutUserPermissionsBoundaryResponse, XmlParseError> {
+        Ok(PutUserPermissionsBoundaryResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutUserPolicyRequest {
     /// <p><p>The policy document.</p> <p>You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
@@ -7676,6 +8288,19 @@ impl PutUserPolicyRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutUserPolicyResponse {}
+
+struct PutUserPolicyResponseDeserializer;
+impl PutUserPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutUserPolicyResponse, XmlParseError> {
+        Ok(PutUserPolicyResponse::default())
+    }
+}
 struct ReasonTypeDeserializer;
 impl ReasonTypeDeserializer {
     #[allow(unused_variables)]
@@ -7728,6 +8353,19 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveClientIDFromOpenIDConnectProviderResponse {}
+
+struct RemoveClientIDFromOpenIDConnectProviderResponseDeserializer;
+impl RemoveClientIDFromOpenIDConnectProviderResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveClientIDFromOpenIDConnectProviderResponse, XmlParseError> {
+        Ok(RemoveClientIDFromOpenIDConnectProviderResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveRoleFromInstanceProfileRequest {
     /// <p>The name of the instance profile to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
@@ -7753,6 +8391,19 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveRoleFromInstanceProfileResponse {}
+
+struct RemoveRoleFromInstanceProfileResponseDeserializer;
+impl RemoveRoleFromInstanceProfileResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveRoleFromInstanceProfileResponse, XmlParseError> {
+        Ok(RemoveRoleFromInstanceProfileResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveUserFromGroupRequest {
     /// <p>The name of the group to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
@@ -7774,6 +8425,19 @@ impl RemoveUserFromGroupRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RemoveUserFromGroupResponse {}
+
+struct RemoveUserFromGroupResponseDeserializer;
+impl RemoveUserFromGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveUserFromGroupResponse, XmlParseError> {
+        Ok(RemoveUserFromGroupResponse::default())
+    }
+}
 struct ReportContentTypeDeserializer;
 impl ReportContentTypeDeserializer {
     #[allow(unused_variables)]
@@ -8028,6 +8692,19 @@ impl ResyncMFADeviceRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResyncMFADeviceResponse {}
+
+struct ResyncMFADeviceResponseDeserializer;
+impl ResyncMFADeviceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResyncMFADeviceResponse, XmlParseError> {
+        Ok(ResyncMFADeviceResponse::default())
+    }
+}
 /// <p>Contains information about an IAM role. This structure is returned as a response element in several API operations that interact with roles.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Role {
@@ -8968,6 +9645,19 @@ impl SetDefaultPolicyVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetDefaultPolicyVersionResponse {}
+
+struct SetDefaultPolicyVersionResponseDeserializer;
+impl SetDefaultPolicyVersionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetDefaultPolicyVersionResponse, XmlParseError> {
+        Ok(SetDefaultPolicyVersionResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetSecurityTokenServicePreferencesRequest {
     /// <p>The version of the global endpoint token. Version 1 tokens are valid only in AWS Regions that are available by default. These tokens do not work in manually enabled Regions, such as Asia Pacific (Hong Kong). Version 2 tokens are valid in all Regions. However, version 2 tokens are longer and might affect systems where you temporarily store tokens.</p> <p>For information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
     pub global_endpoint_token_version: String,
@@ -8989,6 +9679,19 @@ impl SetSecurityTokenServicePreferencesRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetSecurityTokenServicePreferencesResponse {}
+
+struct SetSecurityTokenServicePreferencesResponseDeserializer;
+impl SetSecurityTokenServicePreferencesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetSecurityTokenServicePreferencesResponse, XmlParseError> {
+        Ok(SetSecurityTokenServicePreferencesResponse::default())
+    }
+}
 /// <p>Contains information about an X.509 signing certificate.</p> <p>This data type is used as a response element in the <a>UploadSigningCertificate</a> and <a>ListSigningCertificates</a> operations. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SigningCertificate {
@@ -9119,7 +9822,7 @@ impl SimulateCustomPolicyRequestSerializer {
 
 /// <p>Contains the response to a successful <a>SimulatePrincipalPolicy</a> or <a>SimulateCustomPolicy</a> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SimulatePolicyResponse {
+pub struct SimulateCustomPolicyResponse {
     /// <p>The results of the simulation.</p>
     pub evaluation_results: Option<Vec<EvaluationResult>>,
     /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
@@ -9128,36 +9831,40 @@ pub struct SimulatePolicyResponse {
     pub marker: Option<String>,
 }
 
-struct SimulatePolicyResponseDeserializer;
-impl SimulatePolicyResponseDeserializer {
+struct SimulateCustomPolicyResponseDeserializer;
+impl SimulateCustomPolicyResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SimulatePolicyResponse, XmlParseError> {
-        deserialize_elements::<_, SimulatePolicyResponse, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "EvaluationResults" => {
-                    obj.evaluation_results.get_or_insert(vec![]).extend(
-                        EvaluationResultsListTypeDeserializer::deserialize(
-                            "EvaluationResults",
-                            stack,
-                        )?,
-                    );
+    ) -> Result<SimulateCustomPolicyResponse, XmlParseError> {
+        deserialize_elements::<_, SimulateCustomPolicyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EvaluationResults" => {
+                        obj.evaluation_results.get_or_insert(vec![]).extend(
+                            EvaluationResultsListTypeDeserializer::deserialize(
+                                "EvaluationResults",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(ResponseMarkerTypeDeserializer::deserialize(
+                            "Marker", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                "IsTruncated" => {
-                    obj.is_truncated =
-                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                }
-                "Marker" => {
-                    obj.marker = Some(ResponseMarkerTypeDeserializer::deserialize(
-                        "Marker", stack,
-                    )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -9246,6 +9953,54 @@ impl SimulatePrincipalPolicyRequestSerializer {
         if let Some(ref field_value) = obj.resource_policy {
             params.put(&format!("{}{}", prefix, "ResourcePolicy"), &field_value);
         }
+    }
+}
+
+/// <p>Contains the response to a successful <a>SimulatePrincipalPolicy</a> or <a>SimulateCustomPolicy</a> request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SimulatePrincipalPolicyResponse {
+    /// <p>The results of the simulation.</p>
+    pub evaluation_results: Option<Vec<EvaluationResult>>,
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
+    pub is_truncated: Option<bool>,
+    /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
+    pub marker: Option<String>,
+}
+
+struct SimulatePrincipalPolicyResponseDeserializer;
+impl SimulatePrincipalPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SimulatePrincipalPolicyResponse, XmlParseError> {
+        deserialize_elements::<_, SimulatePrincipalPolicyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EvaluationResults" => {
+                        obj.evaluation_results.get_or_insert(vec![]).extend(
+                            EvaluationResultsListTypeDeserializer::deserialize(
+                                "EvaluationResults",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(ResponseMarkerTypeDeserializer::deserialize(
+                            "Marker", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 
@@ -9508,6 +10263,19 @@ impl TagRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagRoleResponse {}
+
+struct TagRoleResponseDeserializer;
+impl TagRoleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TagRoleResponse, XmlParseError> {
+        Ok(TagRoleResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagUserRequest {
     /// <p>The list of tags that you want to attach to the user. Each tag consists of a key name and an associated value.</p>
     pub tags: Vec<Tag>,
@@ -9529,6 +10297,19 @@ impl TagUserRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagUserResponse {}
+
+struct TagUserResponseDeserializer;
+impl TagUserResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TagUserResponse, XmlParseError> {
+        Ok(TagUserResponse::default())
+    }
+}
 struct TagValueTypeDeserializer;
 impl TagValueTypeDeserializer {
     #[allow(unused_variables)]
@@ -9607,6 +10388,19 @@ impl UntagRoleRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UntagRoleResponse {}
+
+struct UntagRoleResponseDeserializer;
+impl UntagRoleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UntagRoleResponse, XmlParseError> {
+        Ok(UntagRoleResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UntagUserRequest {
     /// <p>A list of key names as a simple array of strings. The tags with matching keys are removed from the specified user.</p>
     pub tag_keys: Vec<String>,
@@ -9632,6 +10426,19 @@ impl UntagUserRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UntagUserResponse {}
+
+struct UntagUserResponseDeserializer;
+impl UntagUserResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UntagUserResponse, XmlParseError> {
+        Ok(UntagUserResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAccessKeyRequest {
     /// <p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
@@ -9659,6 +10466,19 @@ impl UpdateAccessKeyRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateAccessKeyResponse {}
+
+struct UpdateAccessKeyResponseDeserializer;
+impl UpdateAccessKeyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateAccessKeyResponse, XmlParseError> {
+        Ok(UpdateAccessKeyResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAccountPasswordPolicyRequest {
     /// <p> Allows all IAM users in your account to use the AWS Management Console to change their own passwords. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/HowToPwdIAMUser.html">Letting IAM Users Change Their Own Passwords</a> in the <i>IAM User Guide</i>.</p> <p>If you do not specify a value for this parameter, then the operation uses the default value of <code>false</code>. The result is that IAM users in the account do not automatically have permissions to change their own password.</p>
@@ -9736,6 +10556,19 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateAccountPasswordPolicyResponse {}
+
+struct UpdateAccountPasswordPolicyResponseDeserializer;
+impl UpdateAccountPasswordPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateAccountPasswordPolicyResponse, XmlParseError> {
+        Ok(UpdateAccountPasswordPolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAssumeRolePolicyRequest {
     /// <p><p>The policy that grants an entity permission to assume the role.</p> <p>You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
@@ -9760,6 +10593,19 @@ impl UpdateAssumeRolePolicyRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateAssumeRolePolicyResponse {}
+
+struct UpdateAssumeRolePolicyResponseDeserializer;
+impl UpdateAssumeRolePolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateAssumeRolePolicyResponse, XmlParseError> {
+        Ok(UpdateAssumeRolePolicyResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateGroupRequest {
     /// <p>Name of the IAM group to update. If you're changing the name of the group, this is the original name.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
@@ -9789,6 +10635,19 @@ impl UpdateGroupRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateGroupResponse {}
+
+struct UpdateGroupResponseDeserializer;
+impl UpdateGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateGroupResponse, XmlParseError> {
+        Ok(UpdateGroupResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateLoginProfileRequest {
     /// <p>The new password for the specified IAM user.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul> <p>However, the format can be further restricted by the account administrator by setting a password policy on the AWS account. For more information, see <a>UpdateAccountPasswordPolicy</a>.</p>
@@ -9822,6 +10681,19 @@ impl UpdateLoginProfileRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateLoginProfileResponse {}
+
+struct UpdateLoginProfileResponseDeserializer;
+impl UpdateLoginProfileResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateLoginProfileResponse, XmlParseError> {
+        Ok(UpdateLoginProfileResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateOpenIDConnectProviderThumbprintRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM OIDC provider resource object for which you want to update the thumbprint. You can get a list of OIDC provider ARNs by using the <a>ListOpenIDConnectProviders</a> operation.</p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub open_id_connect_provider_arn: String,
@@ -9854,6 +10726,19 @@ impl UpdateOpenIDConnectProviderThumbprintRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateOpenIDConnectProviderThumbprintResponse {}
+
+struct UpdateOpenIDConnectProviderThumbprintResponseDeserializer;
+impl UpdateOpenIDConnectProviderThumbprintResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateOpenIDConnectProviderThumbprintResponse, XmlParseError> {
+        Ok(UpdateOpenIDConnectProviderThumbprintResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateRoleDescriptionRequest {
     /// <p>The new description that you want to apply to the specified role.</p>
@@ -10039,6 +10924,19 @@ impl UpdateSSHPublicKeyRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateSSHPublicKeyResponse {}
+
+struct UpdateSSHPublicKeyResponseDeserializer;
+impl UpdateSSHPublicKeyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateSSHPublicKeyResponse, XmlParseError> {
+        Ok(UpdateSSHPublicKeyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateServerCertificateRequest {
     /// <p>The new path for the server certificate. Include this only if you are updating the server certificate's path.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
@@ -10074,6 +10972,19 @@ impl UpdateServerCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateServerCertificateResponse {}
+
+struct UpdateServerCertificateResponseDeserializer;
+impl UpdateServerCertificateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateServerCertificateResponse, XmlParseError> {
+        Ok(UpdateServerCertificateResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -10103,6 +11014,19 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateServiceSpecificCredentialResponse {}
+
+struct UpdateServiceSpecificCredentialResponseDeserializer;
+impl UpdateServiceSpecificCredentialResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateServiceSpecificCredentialResponse, XmlParseError> {
+        Ok(UpdateServiceSpecificCredentialResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSigningCertificateRequest {
     /// <p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
@@ -10134,6 +11058,19 @@ impl UpdateSigningCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateSigningCertificateResponse {}
+
+struct UpdateSigningCertificateResponseDeserializer;
+impl UpdateSigningCertificateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateSigningCertificateResponse, XmlParseError> {
+        Ok(UpdateSigningCertificateResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateUserRequest {
     /// <p>New path for the IAM user. Include this parameter only if you're changing the user's path.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
@@ -10162,6 +11099,19 @@ impl UpdateUserRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateUserResponse {}
+
+struct UpdateUserResponseDeserializer;
+impl UpdateUserResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateUserResponse, XmlParseError> {
+        Ok(UpdateUserResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadSSHPublicKeyRequest {
     /// <p><p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format. The minimum bit-length of the public key is 2048 bits. For example, you can generate a 2048-bit key, and the resulting PEM file is 1679 bytes long.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
@@ -19586,789 +20536,679 @@ pub trait Iam {
     fn add_client_id_to_open_id_connect_provider(
         &self,
         input: AddClientIDToOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<(), AddClientIDToOpenIDConnectProviderError>;
+    ) -> Request<AddClientIDToOpenIDConnectProviderRequest>;
 
     /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn add_role_to_instance_profile(
         &self,
         input: AddRoleToInstanceProfileRequest,
-    ) -> RusotoFuture<(), AddRoleToInstanceProfileError>;
+    ) -> Request<AddRoleToInstanceProfileRequest>;
 
     /// <p>Adds the specified user to the specified group.</p>
-    fn add_user_to_group(
-        &self,
-        input: AddUserToGroupRequest,
-    ) -> RusotoFuture<(), AddUserToGroupError>;
+    fn add_user_to_group(&self, input: AddUserToGroupRequest) -> Request<AddUserToGroupRequest>;
 
     /// <p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_group_policy(
         &self,
         input: AttachGroupPolicyRequest,
-    ) -> RusotoFuture<(), AttachGroupPolicyError>;
+    ) -> Request<AttachGroupPolicyRequest>;
 
     /// <p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_role_policy(
         &self,
         input: AttachRolePolicyRequest,
-    ) -> RusotoFuture<(), AttachRolePolicyError>;
+    ) -> Request<AttachRolePolicyRequest>;
 
     /// <p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn attach_user_policy(
         &self,
         input: AttachUserPolicyRequest,
-    ) -> RusotoFuture<(), AttachUserPolicyError>;
+    ) -> Request<AttachUserPolicyRequest>;
 
     /// <p>Changes the password of the IAM user who is calling this operation. The AWS account root user password is not affected by this operation.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
-    fn change_password(
-        &self,
-        input: ChangePasswordRequest,
-    ) -> RusotoFuture<(), ChangePasswordError>;
+    fn change_password(&self, input: ChangePasswordRequest) -> Request<ChangePasswordRequest>;
 
     /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
-    fn create_access_key(
-        &self,
-        input: CreateAccessKeyRequest,
-    ) -> RusotoFuture<CreateAccessKeyResponse, CreateAccessKeyError>;
+    fn create_access_key(&self, input: CreateAccessKeyRequest) -> Request<CreateAccessKeyRequest>;
 
     /// <p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn create_account_alias(
         &self,
         input: CreateAccountAliasRequest,
-    ) -> RusotoFuture<(), CreateAccountAliasError>;
+    ) -> Request<CreateAccountAliasRequest>;
 
     /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn create_group(
-        &self,
-        input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest>;
 
     /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
     fn create_instance_profile(
         &self,
         input: CreateInstanceProfileRequest,
-    ) -> RusotoFuture<CreateInstanceProfileResponse, CreateInstanceProfileError>;
+    ) -> Request<CreateInstanceProfileRequest>;
 
     /// <p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn create_login_profile(
         &self,
         input: CreateLoginProfileRequest,
-    ) -> RusotoFuture<CreateLoginProfileResponse, CreateLoginProfileError>;
+    ) -> Request<CreateLoginProfileRequest>;
 
     /// <p><p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href="http://openid.net/connect/">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role&#39;s trust policy. Such a policy establishes a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the following:</p> <ul> <li> <p>The URL of the OIDC identity provider (IdP) to trust</p> </li> <li> <p>A list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider</p> </li> <li> <p>A list of thumbprints of the server certificate(s) that the IdP uses</p> </li> </ul> <p>You get all of this information from the OIDC IdP that you want to use to access AWS.</p> <note> <p>The trust for the OIDC provider is derived from the IAM provider that this operation creates. Therefore, it is best to limit access to the <a>CreateOpenIDConnectProvider</a> operation to highly privileged users.</p> </note></p>
     fn create_open_id_connect_provider(
         &self,
         input: CreateOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<CreateOpenIDConnectProviderResponse, CreateOpenIDConnectProviderError>;
+    ) -> Request<CreateOpenIDConnectProviderRequest>;
 
     /// <p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn create_policy(
-        &self,
-        input: CreatePolicyRequest,
-    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError>;
+    fn create_policy(&self, input: CreatePolicyRequest) -> Request<CreatePolicyRequest>;
 
     /// <p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn create_policy_version(
         &self,
         input: CreatePolicyVersionRequest,
-    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError>;
+    ) -> Request<CreatePolicyVersionRequest>;
 
     /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">IAM Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn create_role(
-        &self,
-        input: CreateRoleRequest,
-    ) -> RusotoFuture<CreateRoleResponse, CreateRoleError>;
+    fn create_role(&self, input: CreateRoleRequest) -> Request<CreateRoleRequest>;
 
     /// <p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy. Such a policy can enable federated users who sign in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload a SAML metadata document that you get from your IdP. That document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note> <p> For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>
     fn create_saml_provider(
         &self,
         input: CreateSAMLProviderRequest,
-    ) -> RusotoFuture<CreateSAMLProviderResponse, CreateSAMLProviderError>;
+    ) -> Request<CreateSAMLProviderRequest>;
 
     /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html">Using Service-Linked Roles</a> in the <i>IAM User Guide</i>. </p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
     fn create_service_linked_role(
         &self,
         input: CreateServiceLinkedRoleRequest,
-    ) -> RusotoFuture<CreateServiceLinkedRoleResponse, CreateServiceLinkedRoleError>;
+    ) -> Request<CreateServiceLinkedRoleRequest>;
 
     /// <p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>
     fn create_service_specific_credential(
         &self,
         input: CreateServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<CreateServiceSpecificCredentialResponse, CreateServiceSpecificCredentialError>;
+    ) -> Request<CreateServiceSpecificCredentialRequest>;
 
     /// <p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest>;
 
     /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information. In other words, protect the seed information as you would your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
     fn create_virtual_mfa_device(
         &self,
         input: CreateVirtualMFADeviceRequest,
-    ) -> RusotoFuture<CreateVirtualMFADeviceResponse, CreateVirtualMFADeviceError>;
+    ) -> Request<CreateVirtualMFADeviceRequest>;
 
     /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Enabling a Virtual Multi-factor Authentication (MFA) Device</a> in the <i>IAM User Guide</i>.</p>
     fn deactivate_mfa_device(
         &self,
         input: DeactivateMFADeviceRequest,
-    ) -> RusotoFuture<(), DeactivateMFADeviceError>;
+    ) -> Request<DeactivateMFADeviceRequest>;
 
     /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
-    fn delete_access_key(
-        &self,
-        input: DeleteAccessKeyRequest,
-    ) -> RusotoFuture<(), DeleteAccessKeyError>;
+    fn delete_access_key(&self, input: DeleteAccessKeyRequest) -> Request<DeleteAccessKeyRequest>;
 
     /// <p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn delete_account_alias(
         &self,
         input: DeleteAccountAliasRequest,
-    ) -> RusotoFuture<(), DeleteAccountAliasError>;
+    ) -> Request<DeleteAccountAliasRequest>;
 
     /// <p>Deletes the password policy for the AWS account. There are no parameters.</p>
-    fn delete_account_password_policy(&self) -> RusotoFuture<(), DeleteAccountPasswordPolicyError>;
+    fn delete_account_password_policy(&self) -> Request<DeleteAccountPasswordPolicyRequest>;
 
     /// <p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>
-    fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError>;
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest>;
 
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_group_policy(
         &self,
         input: DeleteGroupPolicyRequest,
-    ) -> RusotoFuture<(), DeleteGroupPolicyError>;
+    ) -> Request<DeleteGroupPolicyRequest>;
 
     /// <p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn delete_instance_profile(
         &self,
         input: DeleteInstanceProfileRequest,
-    ) -> RusotoFuture<(), DeleteInstanceProfileError>;
+    ) -> Request<DeleteInstanceProfileRequest>;
 
     /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access, you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
     fn delete_login_profile(
         &self,
         input: DeleteLoginProfileRequest,
-    ) -> RusotoFuture<(), DeleteLoginProfileError>;
+    ) -> Request<DeleteLoginProfileRequest>;
 
     /// <p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This operation is idempotent; it does not fail or return an error if you call the operation for a provider that does not exist.</p>
     fn delete_open_id_connect_provider(
         &self,
         input: DeleteOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<(), DeleteOpenIDConnectProviderError>;
+    ) -> Request<DeleteOpenIDConnectProviderRequest>;
 
     /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition, you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest>;
 
     /// <p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_policy_version(
         &self,
         input: DeletePolicyVersionRequest,
-    ) -> RusotoFuture<(), DeletePolicyVersionError>;
+    ) -> Request<DeletePolicyVersionRequest>;
 
     /// <p><p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important></p>
-    fn delete_role(&self, input: DeleteRoleRequest) -> RusotoFuture<(), DeleteRoleError>;
+    fn delete_role(&self, input: DeleteRoleRequest) -> Request<DeleteRoleRequest>;
 
     /// <p><p>Deletes the permissions boundary for the specified IAM role. </p> <important> <p>Deleting the permissions boundary for a role might increase its permissions. For example, it might allow anyone who assumes the role to perform all the actions granted in its permissions policies. </p> </important></p>
     fn delete_role_permissions_boundary(
         &self,
         input: DeleteRolePermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), DeleteRolePermissionsBoundaryError>;
+    ) -> Request<DeleteRolePermissionsBoundaryRequest>;
 
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_role_policy(
         &self,
         input: DeleteRolePolicyRequest,
-    ) -> RusotoFuture<(), DeleteRolePolicyError>;
+    ) -> Request<DeleteRolePolicyRequest>;
 
     /// <p><p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource&#39;s ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn delete_saml_provider(
         &self,
         input: DeleteSAMLProviderRequest,
-    ) -> RusotoFuture<(), DeleteSAMLProviderError>;
+    ) -> Request<DeleteSAMLProviderRequest>;
 
     /// <p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn delete_ssh_public_key(
         &self,
         input: DeleteSSHPublicKeyRequest,
-    ) -> RusotoFuture<(), DeleteSSHPublicKeyError>;
+    ) -> Request<DeleteSSHPublicKeyRequest>;
 
     /// <p><p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn&#39;t detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href="https://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important></p>
     fn delete_server_certificate(
         &self,
         input: DeleteServerCertificateRequest,
-    ) -> RusotoFuture<(), DeleteServerCertificateError>;
+    ) -> Request<DeleteServerCertificateRequest>;
 
     /// <p>Submits a service-linked role deletion request and returns a <code>DeletionTaskId</code>, which you can use to check the status of the deletion. Before you call this operation, confirm that the role has no active sessions and that any resources used by the role in the linked service are deleted. If you call this operation more than once for the same service-linked role and an earlier deletion task is not complete, then the <code>DeletionTaskId</code> of the earlier request is returned.</p> <p>If you submit a deletion request for a service-linked role whose linked service is still accessing a resource, then the deletion task fails. If it fails, the <a>GetServiceLinkedRoleDeletionStatus</a> API operation returns the reason for the failure, usually including the resources that must be deleted. To delete the service-linked role, you must first remove those resources from the linked service and then submit the deletion request again. Resources are specific to the service that is linked to the role. For more information about removing resources from a service, see the <a href="http://docs.aws.amazon.com/">AWS documentation</a> for your service.</p> <p>For more information about service-linked roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">Roles Terms and Concepts: AWS Service-Linked Role</a> in the <i>IAM User Guide</i>.</p>
     fn delete_service_linked_role(
         &self,
         input: DeleteServiceLinkedRoleRequest,
-    ) -> RusotoFuture<DeleteServiceLinkedRoleResponse, DeleteServiceLinkedRoleError>;
+    ) -> Request<DeleteServiceLinkedRoleRequest>;
 
     /// <p>Deletes the specified service-specific credential.</p>
     fn delete_service_specific_credential(
         &self,
         input: DeleteServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<(), DeleteServiceSpecificCredentialError>;
+    ) -> Request<DeleteServiceSpecificCredentialRequest>;
 
     /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
     fn delete_signing_certificate(
         &self,
         input: DeleteSigningCertificateRequest,
-    ) -> RusotoFuture<(), DeleteSigningCertificateError>;
+    ) -> Request<DeleteSigningCertificateRequest>;
 
     /// <p><p>Deletes the specified IAM user. Unlike the AWS Management Console, when you delete a user programmatically, you must delete the items attached to the user manually, or the deletion fails. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_deleting_cli">Deleting an IAM User</a>. Before attempting to delete a user, remove the following items:</p> <ul> <li> <p>Password (<a>DeleteLoginProfile</a>)</p> </li> <li> <p>Access keys (<a>DeleteAccessKey</a>)</p> </li> <li> <p>Signing certificate (<a>DeleteSigningCertificate</a>)</p> </li> <li> <p>SSH public key (<a>DeleteSSHPublicKey</a>)</p> </li> <li> <p>Git credentials (<a>DeleteServiceSpecificCredential</a>)</p> </li> <li> <p>Multi-factor authentication (MFA) device (<a>DeactivateMFADevice</a>, <a>DeleteVirtualMFADevice</a>)</p> </li> <li> <p>Inline policies (<a>DeleteUserPolicy</a>)</p> </li> <li> <p>Attached managed policies (<a>DetachUserPolicy</a>)</p> </li> <li> <p>Group memberships (<a>RemoveUserFromGroup</a>)</p> </li> </ul></p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest>;
 
     /// <p><p>Deletes the permissions boundary for the specified IAM user.</p> <important> <p>Deleting the permissions boundary for a user might increase its permissions by allowing the user to perform all the actions granted in its permissions policies. </p> </important></p>
     fn delete_user_permissions_boundary(
         &self,
         input: DeleteUserPermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), DeleteUserPermissionsBoundaryError>;
+    ) -> Request<DeleteUserPermissionsBoundaryRequest>;
 
     /// <p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_user_policy(
         &self,
         input: DeleteUserPolicyRequest,
-    ) -> RusotoFuture<(), DeleteUserPolicyError>;
+    ) -> Request<DeleteUserPolicyRequest>;
 
     /// <p><p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user&#39;s virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note></p>
     fn delete_virtual_mfa_device(
         &self,
         input: DeleteVirtualMFADeviceRequest,
-    ) -> RusotoFuture<(), DeleteVirtualMFADeviceError>;
+    ) -> Request<DeleteVirtualMFADeviceRequest>;
 
     /// <p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_group_policy(
         &self,
         input: DetachGroupPolicyRequest,
-    ) -> RusotoFuture<(), DetachGroupPolicyError>;
+    ) -> Request<DetachGroupPolicyRequest>;
 
     /// <p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_role_policy(
         &self,
         input: DetachRolePolicyRequest,
-    ) -> RusotoFuture<(), DetachRolePolicyError>;
+    ) -> Request<DetachRolePolicyRequest>;
 
     /// <p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn detach_user_policy(
         &self,
         input: DetachUserPolicyRequest,
-    ) -> RusotoFuture<(), DetachUserPolicyError>;
+    ) -> Request<DetachUserPolicyRequest>;
 
     /// <p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>
-    fn enable_mfa_device(
-        &self,
-        input: EnableMFADeviceRequest,
-    ) -> RusotoFuture<(), EnableMFADeviceError>;
+    fn enable_mfa_device(&self, input: EnableMFADeviceRequest) -> Request<EnableMFADeviceRequest>;
 
     /// <p> Generates a credential report for the AWS account. For more information about the credential report, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
-    fn generate_credential_report(
-        &self,
-    ) -> RusotoFuture<GenerateCredentialReportResponse, GenerateCredentialReportError>;
+    fn generate_credential_report(&self) -> Request<GenerateCredentialReportRequest>;
 
     /// <p>Generates a request for a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your Region began supporting this feature within the last year. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt. </p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Policy Scope by Viewing User Activity</a> in the <i>IAM User Guide</i>.</p>
     fn generate_service_last_accessed_details(
         &self,
         input: GenerateServiceLastAccessedDetailsRequest,
-    ) -> RusotoFuture<
-        GenerateServiceLastAccessedDetailsResponse,
-        GenerateServiceLastAccessedDetailsError,
-    >;
+    ) -> Request<GenerateServiceLastAccessedDetailsRequest>;
 
     /// <p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and Region that were specified in the last request made with that key.</p>
     fn get_access_key_last_used(
         &self,
         input: GetAccessKeyLastUsedRequest,
-    ) -> RusotoFuture<GetAccessKeyLastUsedResponse, GetAccessKeyLastUsedError>;
+    ) -> Request<GetAccessKeyLastUsedRequest>;
 
     /// <p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn get_account_authorization_details(
         &self,
         input: GetAccountAuthorizationDetailsRequest,
-    ) -> RusotoFuture<GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError>;
+    ) -> Request<GetAccountAuthorizationDetailsRequest>;
 
     /// <p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a>.</p>
-    fn get_account_password_policy(
-        &self,
-    ) -> RusotoFuture<GetAccountPasswordPolicyResponse, GetAccountPasswordPolicyError>;
+    fn get_account_password_policy(&self) -> Request<GetAccountPasswordPolicyRequest>;
 
     /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn get_account_summary(
-        &self,
-    ) -> RusotoFuture<GetAccountSummaryResponse, GetAccountSummaryError>;
+    fn get_account_summary(&self) -> Request<GetAccountSummaryRequest>;
 
     /// <p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. Context keys can be evaluated by testing against a value specified in an IAM policy. Use <code>GetContextKeysForCustomPolicy</code> to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity but must be URL encoded to be included as a part of a real HTML request.</p>
     fn get_context_keys_for_custom_policy(
         &self,
         input: GetContextKeysForCustomPolicyRequest,
-    ) -> RusotoFuture<GetContextKeysForPolicyResponse, GetContextKeysForCustomPolicyError>;
+    ) -> Request<GetContextKeysForCustomPolicyRequest>;
 
     /// <p>Gets a list of all of the context keys referenced in all the IAM policies that are attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. Context keys can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>
     fn get_context_keys_for_principal_policy(
         &self,
         input: GetContextKeysForPrincipalPolicyRequest,
-    ) -> RusotoFuture<GetContextKeysForPolicyResponse, GetContextKeysForPrincipalPolicyError>;
+    ) -> Request<GetContextKeysForPrincipalPolicyRequest>;
 
     /// <p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
-    fn get_credential_report(
-        &self,
-    ) -> RusotoFuture<GetCredentialReportResponse, GetCredentialReportError>;
+    fn get_credential_report(&self) -> Request<GetCredentialReportRequest>;
 
     /// <p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest>;
 
     /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn get_group_policy(
-        &self,
-        input: GetGroupPolicyRequest,
-    ) -> RusotoFuture<GetGroupPolicyResponse, GetGroupPolicyError>;
+    fn get_group_policy(&self, input: GetGroupPolicyRequest) -> Request<GetGroupPolicyRequest>;
 
     /// <p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>
     fn get_instance_profile(
         &self,
         input: GetInstanceProfileRequest,
-    ) -> RusotoFuture<GetInstanceProfileResponse, GetInstanceProfileError>;
+    ) -> Request<GetInstanceProfileRequest>;
 
     /// <p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the operation returns a 404 (<code>NoSuchEntity</code>) error.</p>
-    fn get_login_profile(
-        &self,
-        input: GetLoginProfileRequest,
-    ) -> RusotoFuture<GetLoginProfileResponse, GetLoginProfileError>;
+    fn get_login_profile(&self, input: GetLoginProfileRequest) -> Request<GetLoginProfileRequest>;
 
     /// <p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>
     fn get_open_id_connect_provider(
         &self,
         input: GetOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<GetOpenIDConnectProviderResponse, GetOpenIDConnectProviderError>;
+    ) -> Request<GetOpenIDConnectProviderRequest>;
 
     /// <p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest>;
 
     /// <p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     fn get_policy_version(
         &self,
         input: GetPolicyVersionRequest,
-    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError>;
+    ) -> Request<GetPolicyVersionRequest>;
 
     /// <p><p>Retrieves information about the specified role, including the role&#39;s path, GUID, ARN, and the role&#39;s trust policy that grants permission to assume the role. For more information about roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note></p>
-    fn get_role(&self, input: GetRoleRequest) -> RusotoFuture<GetRoleResponse, GetRoleError>;
+    fn get_role(&self, input: GetRoleRequest) -> Request<GetRoleRequest>;
 
     /// <p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
-    fn get_role_policy(
-        &self,
-        input: GetRolePolicyRequest,
-    ) -> RusotoFuture<GetRolePolicyResponse, GetRolePolicyError>;
+    fn get_role_policy(&self, input: GetRolePolicyRequest) -> Request<GetRolePolicyRequest>;
 
     /// <p><p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
-    fn get_saml_provider(
-        &self,
-        input: GetSAMLProviderRequest,
-    ) -> RusotoFuture<GetSAMLProviderResponse, GetSAMLProviderError>;
+    fn get_saml_provider(&self, input: GetSAMLProviderRequest) -> Request<GetSAMLProviderRequest>;
 
     /// <p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
-    fn get_ssh_public_key(
-        &self,
-        input: GetSSHPublicKeyRequest,
-    ) -> RusotoFuture<GetSSHPublicKeyResponse, GetSSHPublicKeyError>;
+    fn get_ssh_public_key(&self, input: GetSSHPublicKeyRequest) -> Request<GetSSHPublicKeyRequest>;
 
     /// <p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
     fn get_server_certificate(
         &self,
         input: GetServerCertificateRequest,
-    ) -> RusotoFuture<GetServerCertificateResponse, GetServerCertificateError>;
+    ) -> Request<GetServerCertificateRequest>;
 
     /// <p>After you generate a user, group, role, or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code>. This operation retrieves the status of your report job and a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services. This list includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p>
     fn get_service_last_accessed_details(
         &self,
         input: GetServiceLastAccessedDetailsRequest,
-    ) -> RusotoFuture<GetServiceLastAccessedDetailsResponse, GetServiceLastAccessedDetailsError>;
+    ) -> Request<GetServiceLastAccessedDetailsRequest>;
 
     /// <p>After you generate a group or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetailsWithEntities</code>. This operation retrieves the status of your report job and a list of entities that could have used group or policy permissions to access the specified service.</p> <ul> <li> <p> <b>Group</b> – For a group report, this operation returns a list of users in the group that could have used the group’s policies in an attempt to access the service.</p> </li> <li> <p> <b>Policy</b> – For a policy report, this operation returns a list of entities (users or roles) that could have used the policy in an attempt to access the service.</p> </li> </ul> <p>You can also use this operation for user or role reports to retrieve details about those entities.</p> <p>If the operation fails, the <code>GetServiceLastAccessedDetailsWithEntities</code> operation returns the reason that it failed.</p> <p>By default, the list of associated entities is sorted by date, with the most recent access listed first.</p>
     fn get_service_last_accessed_details_with_entities(
         &self,
         input: GetServiceLastAccessedDetailsWithEntitiesRequest,
-    ) -> RusotoFuture<
-        GetServiceLastAccessedDetailsWithEntitiesResponse,
-        GetServiceLastAccessedDetailsWithEntitiesError,
-    >;
+    ) -> Request<GetServiceLastAccessedDetailsWithEntitiesRequest>;
 
     /// <p>Retrieves the status of your service-linked role deletion. After you use the <a>DeleteServiceLinkedRole</a> API operation to submit a service-linked role for deletion, you can use the <code>DeletionTaskId</code> parameter in <code>GetServiceLinkedRoleDeletionStatus</code> to check the status of the deletion. If the deletion fails, this operation returns the reason that it failed, if that information is returned by the service.</p>
     fn get_service_linked_role_deletion_status(
         &self,
         input: GetServiceLinkedRoleDeletionStatusRequest,
-    ) -> RusotoFuture<
-        GetServiceLinkedRoleDeletionStatusResponse,
-        GetServiceLinkedRoleDeletionStatusError,
-    >;
+    ) -> Request<GetServiceLinkedRoleDeletionStatusRequest>;
 
     /// <p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>
-    fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError>;
+    fn get_user(&self, input: GetUserRequest) -> Request<GetUserRequest>;
 
     /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version. Then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn get_user_policy(
-        &self,
-        input: GetUserPolicyRequest,
-    ) -> RusotoFuture<GetUserPolicyResponse, GetUserPolicyError>;
+    fn get_user_policy(&self, input: GetUserPolicyRequest) -> Request<GetUserPolicyRequest>;
 
     /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there is none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
-    fn list_access_keys(
-        &self,
-        input: ListAccessKeysRequest,
-    ) -> RusotoFuture<ListAccessKeysResponse, ListAccessKeysError>;
+    fn list_access_keys(&self, input: ListAccessKeysRequest) -> Request<ListAccessKeysRequest>;
 
     /// <p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
     fn list_account_aliases(
         &self,
         input: ListAccountAliasesRequest,
-    ) -> RusotoFuture<ListAccountAliasesResponse, ListAccountAliasesError>;
+    ) -> Request<ListAccountAliasesRequest>;
 
     /// <p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
     fn list_attached_group_policies(
         &self,
         input: ListAttachedGroupPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedGroupPoliciesResponse, ListAttachedGroupPoliciesError>;
+    ) -> Request<ListAttachedGroupPoliciesRequest>;
 
     /// <p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the operation returns an empty list.</p>
     fn list_attached_role_policies(
         &self,
         input: ListAttachedRolePoliciesRequest,
-    ) -> RusotoFuture<ListAttachedRolePoliciesResponse, ListAttachedRolePoliciesError>;
+    ) -> Request<ListAttachedRolePoliciesRequest>;
 
     /// <p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
     fn list_attached_user_policies(
         &self,
         input: ListAttachedUserPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedUserPoliciesResponse, ListAttachedUserPoliciesError>;
+    ) -> Request<ListAttachedUserPoliciesRequest>;
 
     /// <p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_entities_for_policy(
         &self,
         input: ListEntitiesForPolicyRequest,
-    ) -> RusotoFuture<ListEntitiesForPolicyResponse, ListEntitiesForPolicyError>;
+    ) -> Request<ListEntitiesForPolicyRequest>;
 
     /// <p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the operation returns an empty list.</p>
     fn list_group_policies(
         &self,
         input: ListGroupPoliciesRequest,
-    ) -> RusotoFuture<ListGroupPoliciesResponse, ListGroupPoliciesError>;
+    ) -> Request<ListGroupPoliciesRequest>;
 
     /// <p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest>;
 
     /// <p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_groups_for_user(
         &self,
         input: ListGroupsForUserRequest,
-    ) -> RusotoFuture<ListGroupsForUserResponse, ListGroupsForUserError>;
+    ) -> Request<ListGroupsForUserRequest>;
 
     /// <p>Lists the instance profiles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_instance_profiles(
         &self,
         input: ListInstanceProfilesRequest,
-    ) -> RusotoFuture<ListInstanceProfilesResponse, ListInstanceProfilesError>;
+    ) -> Request<ListInstanceProfilesRequest>;
 
     /// <p>Lists the instance profiles that have the specified associated IAM role. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_instance_profiles_for_role(
         &self,
         input: ListInstanceProfilesForRoleRequest,
-    ) -> RusotoFuture<ListInstanceProfilesForRoleResponse, ListInstanceProfilesForRoleError>;
+    ) -> Request<ListInstanceProfilesForRoleRequest>;
 
     /// <p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this operation lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_mfa_devices(
-        &self,
-        input: ListMFADevicesRequest,
-    ) -> RusotoFuture<ListMFADevicesResponse, ListMFADevicesError>;
+    fn list_mfa_devices(&self, input: ListMFADevicesRequest) -> Request<ListMFADevicesRequest>;
 
     /// <p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>
-    fn list_open_id_connect_providers(
-        &self,
-        input: ListOpenIDConnectProvidersRequest,
-    ) -> RusotoFuture<ListOpenIDConnectProvidersResponse, ListOpenIDConnectProvidersError>;
+    fn list_open_id_connect_providers(&self) -> Request<ListOpenIDConnectProvidersRequest>;
 
     /// <p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn list_policies(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError>;
+    fn list_policies(&self, input: ListPoliciesRequest) -> Request<ListPoliciesRequest>;
 
     /// <p>Retrieves a list of policies that the IAM identity (user, group, or role) can use to access each specified service.</p> <note> <p>This operation does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>The list of policies returned by the operation depends on the ARN of the identity that you provide.</p> <ul> <li> <p> <b>User</b> – The list of policies includes the managed and inline policies that are attached to the user directly. The list also includes any additional managed and inline policies that are attached to the group to which the user belongs. </p> </li> <li> <p> <b>Group</b> – The list of policies includes only the managed and inline policies that are attached to the group directly. Policies that are attached to the group’s user are not included.</p> </li> <li> <p> <b>Role</b> – The list of policies includes only the managed and inline policies that are attached to the role.</p> </li> </ul> <p>For each managed policy, this operation returns the ARN and policy name. For each inline policy, it returns the policy name and the entity to which it is attached. Inline policies do not have an ARN. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>Policies that are attached to users and roles as permissions boundaries are not returned. To view which managed policy is currently used to set the permissions boundary for a user or role, use the <a>GetUser</a> or <a>GetRole</a> operations.</p>
     fn list_policies_granting_service_access(
         &self,
         input: ListPoliciesGrantingServiceAccessRequest,
-    ) -> RusotoFuture<
-        ListPoliciesGrantingServiceAccessResponse,
-        ListPoliciesGrantingServiceAccessError,
-    >;
+    ) -> Request<ListPoliciesGrantingServiceAccessRequest>;
 
     /// <p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn list_policy_versions(
         &self,
         input: ListPolicyVersionsRequest,
-    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError>;
+    ) -> Request<ListPolicyVersionsRequest>;
 
     /// <p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the operation returns an empty list.</p>
     fn list_role_policies(
         &self,
         input: ListRolePoliciesRequest,
-    ) -> RusotoFuture<ListRolePoliciesResponse, ListRolePoliciesError>;
+    ) -> Request<ListRolePoliciesRequest>;
 
     /// <p>Lists the tags that are attached to the specified role. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn list_role_tags(
-        &self,
-        input: ListRoleTagsRequest,
-    ) -> RusotoFuture<ListRoleTagsResponse, ListRoleTagsError>;
+    fn list_role_tags(&self, input: ListRoleTagsRequest) -> Request<ListRoleTagsRequest>;
 
     /// <p>Lists the IAM roles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_roles(
-        &self,
-        input: ListRolesRequest,
-    ) -> RusotoFuture<ListRolesResponse, ListRolesError>;
+    fn list_roles(&self, input: ListRolesRequest) -> Request<ListRolesRequest>;
 
     /// <p><p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
-    fn list_saml_providers(
-        &self,
-        input: ListSAMLProvidersRequest,
-    ) -> RusotoFuture<ListSAMLProvidersResponse, ListSAMLProvidersError>;
+    fn list_saml_providers(&self) -> Request<ListSAMLProvidersRequest>;
 
     /// <p>Returns information about the SSH public keys associated with the specified IAM user. If none exists, the operation returns an empty list.</p> <p>The SSH public keys returned by this operation are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_ssh_public_keys(
         &self,
         input: ListSSHPublicKeysRequest,
-    ) -> RusotoFuture<ListSSHPublicKeysResponse, ListSSHPublicKeysError>;
+    ) -> Request<ListSSHPublicKeysRequest>;
 
     /// <p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the operation returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
     fn list_server_certificates(
         &self,
         input: ListServerCertificatesRequest,
-    ) -> RusotoFuture<ListServerCertificatesResponse, ListServerCertificatesError>;
+    ) -> Request<ListServerCertificatesRequest>;
 
     /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If none exists, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
     fn list_service_specific_credentials(
         &self,
         input: ListServiceSpecificCredentialsRequest,
-    ) -> RusotoFuture<ListServiceSpecificCredentialsResponse, ListServiceSpecificCredentialsError>;
+    ) -> Request<ListServiceSpecificCredentialsRequest>;
 
     /// <p>Returns information about the signing certificates associated with the specified IAM user. If none exists, the operation returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn list_signing_certificates(
         &self,
         input: ListSigningCertificatesRequest,
-    ) -> RusotoFuture<ListSigningCertificatesResponse, ListSigningCertificatesError>;
+    ) -> Request<ListSigningCertificatesRequest>;
 
     /// <p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the operation returns an empty list.</p>
     fn list_user_policies(
         &self,
         input: ListUserPoliciesRequest,
-    ) -> RusotoFuture<ListUserPoliciesResponse, ListUserPoliciesError>;
+    ) -> Request<ListUserPoliciesRequest>;
 
     /// <p>Lists the tags that are attached to the specified user. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn list_user_tags(
-        &self,
-        input: ListUserTagsRequest,
-    ) -> RusotoFuture<ListUserTagsResponse, ListUserTagsError>;
+    fn list_user_tags(&self, input: ListUserTagsRequest) -> Request<ListUserTagsRequest>;
 
     /// <p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the operation returns all users in the AWS account. If there are none, the operation returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_users(
-        &self,
-        input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
+    fn list_users(&self, input: ListUsersRequest) -> Request<ListUsersRequest>;
 
     /// <p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the operation returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_virtual_mfa_devices(
         &self,
         input: ListVirtualMFADevicesRequest,
-    ) -> RusotoFuture<ListVirtualMFADevicesResponse, ListVirtualMFADevicesError>;
+    ) -> Request<ListVirtualMFADevicesRequest>;
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn put_group_policy(
-        &self,
-        input: PutGroupPolicyRequest,
-    ) -> RusotoFuture<(), PutGroupPolicyError>;
+    fn put_group_policy(&self, input: PutGroupPolicyRequest) -> Request<PutGroupPolicyRequest>;
 
     /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
     fn put_role_permissions_boundary(
         &self,
         input: PutRolePermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), PutRolePermissionsBoundaryError>;
+    ) -> Request<PutRolePermissionsBoundaryRequest>;
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn put_role_policy(&self, input: PutRolePolicyRequest) -> RusotoFuture<(), PutRolePolicyError>;
+    fn put_role_policy(&self, input: PutRolePolicyRequest) -> Request<PutRolePolicyRequest>;
 
     /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
     fn put_user_permissions_boundary(
         &self,
         input: PutUserPermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), PutUserPermissionsBoundaryError>;
+    ) -> Request<PutUserPermissionsBoundaryRequest>;
 
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn put_user_policy(&self, input: PutUserPolicyRequest) -> RusotoFuture<(), PutUserPolicyError>;
+    fn put_user_policy(&self, input: PutUserPolicyRequest) -> Request<PutUserPolicyRequest>;
 
     /// <p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This operation is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>
     fn remove_client_id_from_open_id_connect_provider(
         &self,
         input: RemoveClientIDFromOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<(), RemoveClientIDFromOpenIDConnectProviderError>;
+    ) -> Request<RemoveClientIDFromOpenIDConnectProviderRequest>;
 
     /// <p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn remove_role_from_instance_profile(
         &self,
         input: RemoveRoleFromInstanceProfileRequest,
-    ) -> RusotoFuture<(), RemoveRoleFromInstanceProfileError>;
+    ) -> Request<RemoveRoleFromInstanceProfileRequest>;
 
     /// <p>Removes the specified user from the specified group.</p>
     fn remove_user_from_group(
         &self,
         input: RemoveUserFromGroupRequest,
-    ) -> RusotoFuture<(), RemoveUserFromGroupError>;
+    ) -> Request<RemoveUserFromGroupRequest>;
 
     /// <p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>
     fn reset_service_specific_credential(
         &self,
         input: ResetServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<ResetServiceSpecificCredentialResponse, ResetServiceSpecificCredentialError>;
+    ) -> Request<ResetServiceSpecificCredentialRequest>;
 
     /// <p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
-    fn resync_mfa_device(
-        &self,
-        input: ResyncMFADeviceRequest,
-    ) -> RusotoFuture<(), ResyncMFADeviceError>;
+    fn resync_mfa_device(&self, input: ResyncMFADeviceRequest) -> Request<ResyncMFADeviceRequest>;
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This operation affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn set_default_policy_version(
         &self,
         input: SetDefaultPolicyVersionRequest,
-    ) -> RusotoFuture<(), SetDefaultPolicyVersionError>;
+    ) -> Request<SetDefaultPolicyVersionRequest>;
 
     /// <p>Sets the specified version of the global endpoint token as the token version used for the AWS account.</p> <p>By default, AWS Security Token Service (STS) is available as a global service, and all STS requests go to a single endpoint at <code>https://sts.amazonaws.com</code>. AWS recommends using Regional STS endpoints to reduce latency, build in redundancy, and increase session token availability. For information about Regional endpoints for STS, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sts_region">AWS Regions and Endpoints</a> in the <i>AWS General Reference</i>.</p> <p>If you make an STS call to the global endpoint, the resulting session tokens might be valid in some Regions but not others. It depends on the version that is set in this operation. Version 1 tokens are valid only in AWS Regions that are available by default. These tokens do not work in manually enabled Regions, such as Asia Pacific (Hong Kong). Version 2 tokens are valid in all Regions. However, version 2 tokens are longer and might affect systems where you temporarily store tokens. For information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p> <p>To view the current session token version, see the <code>GlobalEndpointTokenVersion</code> entry in the response of the <a>GetAccountSummary</a> operation.</p>
     fn set_security_token_service_preferences(
         &self,
         input: SetSecurityTokenServicePreferencesRequest,
-    ) -> RusotoFuture<(), SetSecurityTokenServicePreferencesError>;
+    ) -> Request<SetSecurityTokenServicePreferencesRequest>;
 
     /// <p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API operations and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
     fn simulate_custom_policy(
         &self,
         input: SimulateCustomPolicyRequest,
-    ) -> RusotoFuture<SimulatePolicyResponse, SimulateCustomPolicyError>;
+    ) -> Request<SimulateCustomPolicyRequest>;
 
     /// <p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API operations and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to.</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
     fn simulate_principal_policy(
         &self,
         input: SimulatePrincipalPolicyRequest,
-    ) -> RusotoFuture<SimulatePolicyResponse, SimulatePrincipalPolicyError>;
+    ) -> Request<SimulatePrincipalPolicyRequest>;
 
     /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn tag_role(&self, input: TagRoleRequest) -> RusotoFuture<(), TagRoleError>;
+    fn tag_role(&self, input: TagRoleRequest) -> Request<TagRoleRequest>;
 
     /// <p>Adds one or more tags to an IAM user. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM requesting user or to a role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn tag_user(&self, input: TagUserRequest) -> RusotoFuture<(), TagUserError>;
+    fn tag_user(&self, input: TagUserRequest) -> Request<TagUserRequest>;
 
     /// <p>Removes the specified tags from the role. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn untag_role(&self, input: UntagRoleRequest) -> RusotoFuture<(), UntagRoleError>;
+    fn untag_role(&self, input: UntagRoleRequest) -> Request<UntagRoleRequest>;
 
     /// <p>Removes the specified tags from the user. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn untag_user(&self, input: UntagUserRequest) -> RusotoFuture<(), UntagUserError>;
+    fn untag_user(&self, input: UntagUserRequest) -> Request<UntagUserRequest>;
 
     /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
-    fn update_access_key(
-        &self,
-        input: UpdateAccessKeyRequest,
-    ) -> RusotoFuture<(), UpdateAccessKeyError>;
+    fn update_access_key(&self, input: UpdateAccessKeyRequest) -> Request<UpdateAccessKeyRequest>;
 
     /// <p>Updates the password policy settings for the AWS account.</p> <note> <ul> <li> <p>This operation does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value. Also note that some parameters do not allow the default parameter to be explicitly set. Instead, to invoke the default value, do not include that parameter when you invoke the operation.</p> </li> </ul> </note> <p> For more information about using a password policy, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>
     fn update_account_password_policy(
         &self,
         input: UpdateAccountPasswordPolicyRequest,
-    ) -> RusotoFuture<(), UpdateAccountPasswordPolicyError>;
+    ) -> Request<UpdateAccountPasswordPolicyRequest>;
 
     /// <p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the "role trust policy". For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
     fn update_assume_role_policy(
         &self,
         input: UpdateAssumeRolePolicyRequest,
-    ) -> RusotoFuture<(), UpdateAssumeRolePolicyError>;
+    ) -> Request<UpdateAssumeRolePolicyRequest>;
 
     /// <p><p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the role group with the old name and the new name. For example, to change the group named <code>Managers</code> to <code>MGRs</code>, the principal must have a policy that allows them to update both groups. If the principal has permission to update the <code>Managers</code> group, but not the <code>MGRs</code> group, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a>. </p> </note></p>
-    fn update_group(&self, input: UpdateGroupRequest) -> RusotoFuture<(), UpdateGroupError>;
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest>;
 
     /// <p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
     fn update_login_profile(
         &self,
         input: UpdateLoginProfileRequest,
-    ) -> RusotoFuture<(), UpdateLoginProfileError>;
+    ) -> Request<UpdateLoginProfileRequest>;
 
     /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint. Therefore, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
     fn update_open_id_connect_provider_thumbprint(
         &self,
         input: UpdateOpenIDConnectProviderThumbprintRequest,
-    ) -> RusotoFuture<(), UpdateOpenIDConnectProviderThumbprintError>;
+    ) -> Request<UpdateOpenIDConnectProviderThumbprintRequest>;
 
     /// <p>Updates the description or maximum session duration setting of a role.</p>
-    fn update_role(
-        &self,
-        input: UpdateRoleRequest,
-    ) -> RusotoFuture<UpdateRoleResponse, UpdateRoleError>;
+    fn update_role(&self, input: UpdateRoleRequest) -> Request<UpdateRoleRequest>;
 
     /// <p>Use <a>UpdateRole</a> instead.</p> <p>Modifies only the description of a role. This operation performs the same function as the <code>Description</code> parameter in the <code>UpdateRole</code> operation.</p>
     fn update_role_description(
         &self,
         input: UpdateRoleDescriptionRequest,
-    ) -> RusotoFuture<UpdateRoleDescriptionResponse, UpdateRoleDescriptionError>;
+    ) -> Request<UpdateRoleDescriptionRequest>;
 
     /// <p><p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
     fn update_saml_provider(
         &self,
         input: UpdateSAMLProviderRequest,
-    ) -> RusotoFuture<UpdateSAMLProviderResponse, UpdateSAMLProviderError>;
+    ) -> Request<UpdateSAMLProviderRequest>;
 
     /// <p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This operation can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn update_ssh_public_key(
         &self,
         input: UpdateSSHPublicKeyRequest,
-    ) -> RusotoFuture<(), UpdateSSHPublicKeyError>;
+    ) -> Request<UpdateSSHPublicKeyRequest>;
 
     /// <p><p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p>You should understand the implications of changing a server certificate&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the server certificate with the old name and the new name. For example, to change the certificate named <code>ProductionCert</code> to <code>ProdCert</code>, the principal must have a policy that allows them to update both certificates. If the principal has permission to update the <code>ProductionCert</code> group, but not the <code>ProdCert</code> certificate, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn update_server_certificate(
         &self,
         input: UpdateServerCertificateRequest,
-    ) -> RusotoFuture<(), UpdateServerCertificateError>;
+    ) -> Request<UpdateServerCertificateRequest>;
 
     /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user's service-specific credential as part of a credential rotation work flow.</p>
     fn update_service_specific_credential(
         &self,
         input: UpdateServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<(), UpdateServiceSpecificCredentialError>;
+    ) -> Request<UpdateServiceSpecificCredentialRequest>;
 
     /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn update_signing_certificate(
         &self,
         input: UpdateSigningCertificateRequest,
-    ) -> RusotoFuture<(), UpdateSigningCertificateError>;
+    ) -> Request<UpdateSigningCertificateRequest>;
 
     /// <p><p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming">Renaming an IAM User</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name, the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
-    fn update_user(&self, input: UpdateUserRequest) -> RusotoFuture<(), UpdateUserError>;
+    fn update_user(&self, input: UpdateUserRequest) -> Request<UpdateUserRequest>;
 
     /// <p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this operation can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
     fn upload_ssh_public_key(
         &self,
         input: UploadSSHPublicKeyRequest,
-    ) -> RusotoFuture<UploadSSHPublicKeyResponse, UploadSSHPublicKeyError>;
+    ) -> Request<UploadSSHPublicKeyRequest>;
 
     /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="https://docs.aws.amazon.com/acm/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="https://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <p>For information about the number of server certificates you can upload, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_server_certificate(
         &self,
         input: UploadServerCertificateRequest,
-    ) -> RusotoFuture<UploadServerCertificateResponse, UploadServerCertificateError>;
+    ) -> Request<UploadServerCertificateRequest>;
 
     /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of an X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_signing_certificate(
         &self,
         input: UploadSigningCertificateRequest,
-    ) -> RusotoFuture<UploadSigningCertificateResponse, UploadSigningCertificateError>;
+    ) -> Request<UploadSigningCertificateRequest>;
 }
 /// A client for the IAM API.
 #[derive(Clone)]
@@ -20411,17 +21251,1004 @@ impl Iam for IamClient {
     fn add_client_id_to_open_id_connect_provider(
         &self,
         input: AddClientIDToOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<(), AddClientIDToOpenIDConnectProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+    ) -> Request<AddClientIDToOpenIDConnectProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
+    fn add_role_to_instance_profile(
+        &self,
+        input: AddRoleToInstanceProfileRequest,
+    ) -> Request<AddRoleToInstanceProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified user to the specified group.</p>
+    fn add_user_to_group(&self, input: AddUserToGroupRequest) -> Request<AddUserToGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn attach_group_policy(
+        &self,
+        input: AttachGroupPolicyRequest,
+    ) -> Request<AttachGroupPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn attach_role_policy(
+        &self,
+        input: AttachRolePolicyRequest,
+    ) -> Request<AttachRolePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn attach_user_policy(
+        &self,
+        input: AttachUserPolicyRequest,
+    ) -> Request<AttachUserPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the password of the IAM user who is calling this operation. The AWS account root user password is not affected by this operation.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
+    fn change_password(&self, input: ChangePasswordRequest) -> Request<ChangePasswordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
+    fn create_access_key(&self, input: CreateAccessKeyRequest) -> Request<CreateAccessKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
+    fn create_account_alias(
+        &self,
+        input: CreateAccountAliasRequest,
+    ) -> Request<CreateAccountAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    fn create_instance_profile(
+        &self,
+        input: CreateInstanceProfileRequest,
+    ) -> Request<CreateInstanceProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
+    fn create_login_profile(
+        &self,
+        input: CreateLoginProfileRequest,
+    ) -> Request<CreateLoginProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href="http://openid.net/connect/">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role&#39;s trust policy. Such a policy establishes a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the following:</p> <ul> <li> <p>The URL of the OIDC identity provider (IdP) to trust</p> </li> <li> <p>A list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider</p> </li> <li> <p>A list of thumbprints of the server certificate(s) that the IdP uses</p> </li> </ul> <p>You get all of this information from the OIDC IdP that you want to use to access AWS.</p> <note> <p>The trust for the OIDC provider is derived from the IAM provider that this operation creates. Therefore, it is best to limit access to the <a>CreateOpenIDConnectProvider</a> operation to highly privileged users.</p> </note></p>
+    fn create_open_id_connect_provider(
+        &self,
+        input: CreateOpenIDConnectProviderRequest,
+    ) -> Request<CreateOpenIDConnectProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn create_policy(&self, input: CreatePolicyRequest) -> Request<CreatePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn create_policy_version(
+        &self,
+        input: CreatePolicyVersionRequest,
+    ) -> Request<CreatePolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">IAM Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    fn create_role(&self, input: CreateRoleRequest) -> Request<CreateRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy. Such a policy can enable federated users who sign in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload a SAML metadata document that you get from your IdP. That document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note> <p> For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>
+    fn create_saml_provider(
+        &self,
+        input: CreateSAMLProviderRequest,
+    ) -> Request<CreateSAMLProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html">Using Service-Linked Roles</a> in the <i>IAM User Guide</i>. </p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
+    fn create_service_linked_role(
+        &self,
+        input: CreateServiceLinkedRoleRequest,
+    ) -> Request<CreateServiceLinkedRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>
+    fn create_service_specific_credential(
+        &self,
+        input: CreateServiceSpecificCredentialRequest,
+    ) -> Request<CreateServiceSpecificCredentialRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    fn create_user(&self, input: CreateUserRequest) -> Request<CreateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information. In other words, protect the seed information as you would your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
+    fn create_virtual_mfa_device(
+        &self,
+        input: CreateVirtualMFADeviceRequest,
+    ) -> Request<CreateVirtualMFADeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Enabling a Virtual Multi-factor Authentication (MFA) Device</a> in the <i>IAM User Guide</i>.</p>
+    fn deactivate_mfa_device(
+        &self,
+        input: DeactivateMFADeviceRequest,
+    ) -> Request<DeactivateMFADeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    fn delete_access_key(&self, input: DeleteAccessKeyRequest) -> Request<DeleteAccessKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_account_alias(
+        &self,
+        input: DeleteAccountAliasRequest,
+    ) -> Request<DeleteAccountAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the password policy for the AWS account. There are no parameters.</p>
+    fn delete_account_password_policy(&self) -> Request<DeleteAccountPasswordPolicyRequest> {
+        Request::new(
+            DeleteAccountPasswordPolicyRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_group_policy(
+        &self,
+        input: DeleteGroupPolicyRequest,
+    ) -> Request<DeleteGroupPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
+    fn delete_instance_profile(
+        &self,
+        input: DeleteInstanceProfileRequest,
+    ) -> Request<DeleteInstanceProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access, you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
+    fn delete_login_profile(
+        &self,
+        input: DeleteLoginProfileRequest,
+    ) -> Request<DeleteLoginProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This operation is idempotent; it does not fail or return an error if you call the operation for a provider that does not exist.</p>
+    fn delete_open_id_connect_provider(
+        &self,
+        input: DeleteOpenIDConnectProviderRequest,
+    ) -> Request<DeleteOpenIDConnectProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition, you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_policy_version(
+        &self,
+        input: DeletePolicyVersionRequest,
+    ) -> Request<DeletePolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important></p>
+    fn delete_role(&self, input: DeleteRoleRequest) -> Request<DeleteRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the permissions boundary for the specified IAM role. </p> <important> <p>Deleting the permissions boundary for a role might increase its permissions. For example, it might allow anyone who assumes the role to perform all the actions granted in its permissions policies. </p> </important></p>
+    fn delete_role_permissions_boundary(
+        &self,
+        input: DeleteRolePermissionsBoundaryRequest,
+    ) -> Request<DeleteRolePermissionsBoundaryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_role_policy(
+        &self,
+        input: DeleteRolePolicyRequest,
+    ) -> Request<DeleteRolePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource&#39;s ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
+    fn delete_saml_provider(
+        &self,
+        input: DeleteSAMLProviderRequest,
+    ) -> Request<DeleteSAMLProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
+    fn delete_ssh_public_key(
+        &self,
+        input: DeleteSSHPublicKeyRequest,
+    ) -> Request<DeleteSSHPublicKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn&#39;t detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href="https://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important></p>
+    fn delete_server_certificate(
+        &self,
+        input: DeleteServerCertificateRequest,
+    ) -> Request<DeleteServerCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Submits a service-linked role deletion request and returns a <code>DeletionTaskId</code>, which you can use to check the status of the deletion. Before you call this operation, confirm that the role has no active sessions and that any resources used by the role in the linked service are deleted. If you call this operation more than once for the same service-linked role and an earlier deletion task is not complete, then the <code>DeletionTaskId</code> of the earlier request is returned.</p> <p>If you submit a deletion request for a service-linked role whose linked service is still accessing a resource, then the deletion task fails. If it fails, the <a>GetServiceLinkedRoleDeletionStatus</a> API operation returns the reason for the failure, usually including the resources that must be deleted. To delete the service-linked role, you must first remove those resources from the linked service and then submit the deletion request again. Resources are specific to the service that is linked to the role. For more information about removing resources from a service, see the <a href="http://docs.aws.amazon.com/">AWS documentation</a> for your service.</p> <p>For more information about service-linked roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">Roles Terms and Concepts: AWS Service-Linked Role</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_service_linked_role(
+        &self,
+        input: DeleteServiceLinkedRoleRequest,
+    ) -> Request<DeleteServiceLinkedRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified service-specific credential.</p>
+    fn delete_service_specific_credential(
+        &self,
+        input: DeleteServiceSpecificCredentialRequest,
+    ) -> Request<DeleteServiceSpecificCredentialRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
+    fn delete_signing_certificate(
+        &self,
+        input: DeleteSigningCertificateRequest,
+    ) -> Request<DeleteSigningCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified IAM user. Unlike the AWS Management Console, when you delete a user programmatically, you must delete the items attached to the user manually, or the deletion fails. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_deleting_cli">Deleting an IAM User</a>. Before attempting to delete a user, remove the following items:</p> <ul> <li> <p>Password (<a>DeleteLoginProfile</a>)</p> </li> <li> <p>Access keys (<a>DeleteAccessKey</a>)</p> </li> <li> <p>Signing certificate (<a>DeleteSigningCertificate</a>)</p> </li> <li> <p>SSH public key (<a>DeleteSSHPublicKey</a>)</p> </li> <li> <p>Git credentials (<a>DeleteServiceSpecificCredential</a>)</p> </li> <li> <p>Multi-factor authentication (MFA) device (<a>DeactivateMFADevice</a>, <a>DeleteVirtualMFADevice</a>)</p> </li> <li> <p>Inline policies (<a>DeleteUserPolicy</a>)</p> </li> <li> <p>Attached managed policies (<a>DetachUserPolicy</a>)</p> </li> <li> <p>Group memberships (<a>RemoveUserFromGroup</a>)</p> </li> </ul></p>
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the permissions boundary for the specified IAM user.</p> <important> <p>Deleting the permissions boundary for a user might increase its permissions by allowing the user to perform all the actions granted in its permissions policies. </p> </important></p>
+    fn delete_user_permissions_boundary(
+        &self,
+        input: DeleteUserPermissionsBoundaryRequest,
+    ) -> Request<DeleteUserPermissionsBoundaryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_user_policy(
+        &self,
+        input: DeleteUserPolicyRequest,
+    ) -> Request<DeleteUserPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user&#39;s virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note></p>
+    fn delete_virtual_mfa_device(
+        &self,
+        input: DeleteVirtualMFADeviceRequest,
+    ) -> Request<DeleteVirtualMFADeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn detach_group_policy(
+        &self,
+        input: DetachGroupPolicyRequest,
+    ) -> Request<DetachGroupPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn detach_role_policy(
+        &self,
+        input: DetachRolePolicyRequest,
+    ) -> Request<DetachRolePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn detach_user_policy(
+        &self,
+        input: DetachUserPolicyRequest,
+    ) -> Request<DetachUserPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>
+    fn enable_mfa_device(&self, input: EnableMFADeviceRequest) -> Request<EnableMFADeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Generates a credential report for the AWS account. For more information about the credential report, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
+    fn generate_credential_report(&self) -> Request<GenerateCredentialReportRequest> {
+        Request::new(
+            GenerateCredentialReportRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Generates a request for a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your Region began supporting this feature within the last year. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt. </p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Policy Scope by Viewing User Activity</a> in the <i>IAM User Guide</i>.</p>
+    fn generate_service_last_accessed_details(
+        &self,
+        input: GenerateServiceLastAccessedDetailsRequest,
+    ) -> Request<GenerateServiceLastAccessedDetailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and Region that were specified in the last request made with that key.</p>
+    fn get_access_key_last_used(
+        &self,
+        input: GetAccessKeyLastUsedRequest,
+    ) -> Request<GetAccessKeyLastUsedRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn get_account_authorization_details(
+        &self,
+        input: GetAccountAuthorizationDetailsRequest,
+    ) -> Request<GetAccountAuthorizationDetailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a>.</p>
+    fn get_account_password_policy(&self) -> Request<GetAccountPasswordPolicyRequest> {
+        Request::new(
+            GetAccountPasswordPolicyRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
+    fn get_account_summary(&self) -> Request<GetAccountSummaryRequest> {
+        Request::new(
+            GetAccountSummaryRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. Context keys can be evaluated by testing against a value specified in an IAM policy. Use <code>GetContextKeysForCustomPolicy</code> to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity but must be URL encoded to be included as a part of a real HTML request.</p>
+    fn get_context_keys_for_custom_policy(
+        &self,
+        input: GetContextKeysForCustomPolicyRequest,
+    ) -> Request<GetContextKeysForCustomPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of all of the context keys referenced in all the IAM policies that are attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. Context keys can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>
+    fn get_context_keys_for_principal_policy(
+        &self,
+        input: GetContextKeysForPrincipalPolicyRequest,
+    ) -> Request<GetContextKeysForPrincipalPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
+    fn get_credential_report(&self) -> Request<GetCredentialReportRequest> {
+        Request::new(
+            GetCredentialReportRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn get_group_policy(&self, input: GetGroupPolicyRequest) -> Request<GetGroupPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>
+    fn get_instance_profile(
+        &self,
+        input: GetInstanceProfileRequest,
+    ) -> Request<GetInstanceProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the operation returns a 404 (<code>NoSuchEntity</code>) error.</p>
+    fn get_login_profile(&self, input: GetLoginProfileRequest) -> Request<GetLoginProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>
+    fn get_open_id_connect_provider(
+        &self,
+        input: GetOpenIDConnectProviderRequest,
+    ) -> Request<GetOpenIDConnectProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn get_policy(&self, input: GetPolicyRequest) -> Request<GetPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn get_policy_version(
+        &self,
+        input: GetPolicyVersionRequest,
+    ) -> Request<GetPolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Retrieves information about the specified role, including the role&#39;s path, GUID, ARN, and the role&#39;s trust policy that grants permission to assume the role. For more information about roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note></p>
+    fn get_role(&self, input: GetRoleRequest) -> Request<GetRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
+    fn get_role_policy(&self, input: GetRolePolicyRequest) -> Request<GetRolePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
+    fn get_saml_provider(&self, input: GetSAMLProviderRequest) -> Request<GetSAMLProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
+    fn get_ssh_public_key(&self, input: GetSSHPublicKeyRequest) -> Request<GetSSHPublicKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
+    fn get_server_certificate(
+        &self,
+        input: GetServerCertificateRequest,
+    ) -> Request<GetServerCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>After you generate a user, group, role, or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code>. This operation retrieves the status of your report job and a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services. This list includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p>
+    fn get_service_last_accessed_details(
+        &self,
+        input: GetServiceLastAccessedDetailsRequest,
+    ) -> Request<GetServiceLastAccessedDetailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>After you generate a group or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetailsWithEntities</code>. This operation retrieves the status of your report job and a list of entities that could have used group or policy permissions to access the specified service.</p> <ul> <li> <p> <b>Group</b> – For a group report, this operation returns a list of users in the group that could have used the group’s policies in an attempt to access the service.</p> </li> <li> <p> <b>Policy</b> – For a policy report, this operation returns a list of entities (users or roles) that could have used the policy in an attempt to access the service.</p> </li> </ul> <p>You can also use this operation for user or role reports to retrieve details about those entities.</p> <p>If the operation fails, the <code>GetServiceLastAccessedDetailsWithEntities</code> operation returns the reason that it failed.</p> <p>By default, the list of associated entities is sorted by date, with the most recent access listed first.</p>
+    fn get_service_last_accessed_details_with_entities(
+        &self,
+        input: GetServiceLastAccessedDetailsWithEntitiesRequest,
+    ) -> Request<GetServiceLastAccessedDetailsWithEntitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the status of your service-linked role deletion. After you use the <a>DeleteServiceLinkedRole</a> API operation to submit a service-linked role for deletion, you can use the <code>DeletionTaskId</code> parameter in <code>GetServiceLinkedRoleDeletionStatus</code> to check the status of the deletion. If the deletion fails, this operation returns the reason that it failed, if that information is returned by the service.</p>
+    fn get_service_linked_role_deletion_status(
+        &self,
+        input: GetServiceLinkedRoleDeletionStatusRequest,
+    ) -> Request<GetServiceLinkedRoleDeletionStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>
+    fn get_user(&self, input: GetUserRequest) -> Request<GetUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version. Then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn get_user_policy(&self, input: GetUserPolicyRequest) -> Request<GetUserPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there is none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
+    fn list_access_keys(&self, input: ListAccessKeysRequest) -> Request<ListAccessKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
+    fn list_account_aliases(
+        &self,
+        input: ListAccountAliasesRequest,
+    ) -> Request<ListAccountAliasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
+    fn list_attached_group_policies(
+        &self,
+        input: ListAttachedGroupPoliciesRequest,
+    ) -> Request<ListAttachedGroupPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the operation returns an empty list.</p>
+    fn list_attached_role_policies(
+        &self,
+        input: ListAttachedRolePoliciesRequest,
+    ) -> Request<ListAttachedRolePoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
+    fn list_attached_user_policies(
+        &self,
+        input: ListAttachedUserPoliciesRequest,
+    ) -> Request<ListAttachedUserPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_entities_for_policy(
+        &self,
+        input: ListEntitiesForPolicyRequest,
+    ) -> Request<ListEntitiesForPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the operation returns an empty list.</p>
+    fn list_group_policies(
+        &self,
+        input: ListGroupPoliciesRequest,
+    ) -> Request<ListGroupPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_groups_for_user(
+        &self,
+        input: ListGroupsForUserRequest,
+    ) -> Request<ListGroupsForUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the instance profiles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_instance_profiles(
+        &self,
+        input: ListInstanceProfilesRequest,
+    ) -> Request<ListInstanceProfilesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the instance profiles that have the specified associated IAM role. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_instance_profiles_for_role(
+        &self,
+        input: ListInstanceProfilesForRoleRequest,
+    ) -> Request<ListInstanceProfilesForRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this operation lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_mfa_devices(&self, input: ListMFADevicesRequest) -> Request<ListMFADevicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>
+    fn list_open_id_connect_providers(&self) -> Request<ListOpenIDConnectProvidersRequest> {
+        Request::new(
+            ListOpenIDConnectProvidersRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn list_policies(&self, input: ListPoliciesRequest) -> Request<ListPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves a list of policies that the IAM identity (user, group, or role) can use to access each specified service.</p> <note> <p>This operation does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>The list of policies returned by the operation depends on the ARN of the identity that you provide.</p> <ul> <li> <p> <b>User</b> – The list of policies includes the managed and inline policies that are attached to the user directly. The list also includes any additional managed and inline policies that are attached to the group to which the user belongs. </p> </li> <li> <p> <b>Group</b> – The list of policies includes only the managed and inline policies that are attached to the group directly. Policies that are attached to the group’s user are not included.</p> </li> <li> <p> <b>Role</b> – The list of policies includes only the managed and inline policies that are attached to the role.</p> </li> </ul> <p>For each managed policy, this operation returns the ARN and policy name. For each inline policy, it returns the policy name and the entity to which it is attached. Inline policies do not have an ARN. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>Policies that are attached to users and roles as permissions boundaries are not returned. To view which managed policy is currently used to set the permissions boundary for a user or role, use the <a>GetUser</a> or <a>GetRole</a> operations.</p>
+    fn list_policies_granting_service_access(
+        &self,
+        input: ListPoliciesGrantingServiceAccessRequest,
+    ) -> Request<ListPoliciesGrantingServiceAccessRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn list_policy_versions(
+        &self,
+        input: ListPolicyVersionsRequest,
+    ) -> Request<ListPolicyVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the operation returns an empty list.</p>
+    fn list_role_policies(
+        &self,
+        input: ListRolePoliciesRequest,
+    ) -> Request<ListRolePoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags that are attached to the specified role. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn list_role_tags(&self, input: ListRoleTagsRequest) -> Request<ListRoleTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the IAM roles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_roles(&self, input: ListRolesRequest) -> Request<ListRolesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
+    fn list_saml_providers(&self) -> Request<ListSAMLProvidersRequest> {
+        Request::new(
+            ListSAMLProvidersRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If none exists, the operation returns an empty list.</p> <p>The SSH public keys returned by this operation are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_ssh_public_keys(
+        &self,
+        input: ListSSHPublicKeysRequest,
+    ) -> Request<ListSSHPublicKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the operation returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
+    fn list_server_certificates(
+        &self,
+        input: ListServerCertificatesRequest,
+    ) -> Request<ListServerCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If none exists, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
+    fn list_service_specific_credentials(
+        &self,
+        input: ListServiceSpecificCredentialsRequest,
+    ) -> Request<ListServiceSpecificCredentialsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the signing certificates associated with the specified IAM user. If none exists, the operation returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    fn list_signing_certificates(
+        &self,
+        input: ListSigningCertificatesRequest,
+    ) -> Request<ListSigningCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the operation returns an empty list.</p>
+    fn list_user_policies(
+        &self,
+        input: ListUserPoliciesRequest,
+    ) -> Request<ListUserPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags that are attached to the specified user. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn list_user_tags(&self, input: ListUserTagsRequest) -> Request<ListUserTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the operation returns all users in the AWS account. If there are none, the operation returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_users(&self, input: ListUsersRequest) -> Request<ListUsersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the operation returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    fn list_virtual_mfa_devices(
+        &self,
+        input: ListVirtualMFADevicesRequest,
+    ) -> Request<ListVirtualMFADevicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    fn put_group_policy(&self, input: PutGroupPolicyRequest) -> Request<PutGroupPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    fn put_role_permissions_boundary(
+        &self,
+        input: PutRolePermissionsBoundaryRequest,
+    ) -> Request<PutRolePermissionsBoundaryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    fn put_role_policy(&self, input: PutRolePolicyRequest) -> Request<PutRolePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    fn put_user_permissions_boundary(
+        &self,
+        input: PutUserPermissionsBoundaryRequest,
+    ) -> Request<PutUserPermissionsBoundaryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    fn put_user_policy(&self, input: PutUserPolicyRequest) -> Request<PutUserPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This operation is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>
+    fn remove_client_id_from_open_id_connect_provider(
+        &self,
+        input: RemoveClientIDFromOpenIDConnectProviderRequest,
+    ) -> Request<RemoveClientIDFromOpenIDConnectProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
+    fn remove_role_from_instance_profile(
+        &self,
+        input: RemoveRoleFromInstanceProfileRequest,
+    ) -> Request<RemoveRoleFromInstanceProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified user from the specified group.</p>
+    fn remove_user_from_group(
+        &self,
+        input: RemoveUserFromGroupRequest,
+    ) -> Request<RemoveUserFromGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>
+    fn reset_service_specific_credential(
+        &self,
+        input: ResetServiceSpecificCredentialRequest,
+    ) -> Request<ResetServiceSpecificCredentialRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
+    fn resync_mfa_device(&self, input: ResyncMFADeviceRequest) -> Request<ResyncMFADeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This operation affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    fn set_default_policy_version(
+        &self,
+        input: SetDefaultPolicyVersionRequest,
+    ) -> Request<SetDefaultPolicyVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the specified version of the global endpoint token as the token version used for the AWS account.</p> <p>By default, AWS Security Token Service (STS) is available as a global service, and all STS requests go to a single endpoint at <code>https://sts.amazonaws.com</code>. AWS recommends using Regional STS endpoints to reduce latency, build in redundancy, and increase session token availability. For information about Regional endpoints for STS, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sts_region">AWS Regions and Endpoints</a> in the <i>AWS General Reference</i>.</p> <p>If you make an STS call to the global endpoint, the resulting session tokens might be valid in some Regions but not others. It depends on the version that is set in this operation. Version 1 tokens are valid only in AWS Regions that are available by default. These tokens do not work in manually enabled Regions, such as Asia Pacific (Hong Kong). Version 2 tokens are valid in all Regions. However, version 2 tokens are longer and might affect systems where you temporarily store tokens. For information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p> <p>To view the current session token version, see the <code>GlobalEndpointTokenVersion</code> entry in the response of the <a>GetAccountSummary</a> operation.</p>
+    fn set_security_token_service_preferences(
+        &self,
+        input: SetSecurityTokenServicePreferencesRequest,
+    ) -> Request<SetSecurityTokenServicePreferencesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API operations and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
+    fn simulate_custom_policy(
+        &self,
+        input: SimulateCustomPolicyRequest,
+    ) -> Request<SimulateCustomPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API operations and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to.</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
+    fn simulate_principal_policy(
+        &self,
+        input: SimulatePrincipalPolicyRequest,
+    ) -> Request<SimulatePrincipalPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn tag_role(&self, input: TagRoleRequest) -> Request<TagRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more tags to an IAM user. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM requesting user or to a role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn tag_user(&self, input: TagUserRequest) -> Request<TagUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from the role. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn untag_role(&self, input: UntagRoleRequest) -> Request<UntagRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from the user. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn untag_user(&self, input: UntagUserRequest) -> Request<UntagUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
+    fn update_access_key(&self, input: UpdateAccessKeyRequest) -> Request<UpdateAccessKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the password policy settings for the AWS account.</p> <note> <ul> <li> <p>This operation does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value. Also note that some parameters do not allow the default parameter to be explicitly set. Instead, to invoke the default value, do not include that parameter when you invoke the operation.</p> </li> </ul> </note> <p> For more information about using a password policy, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>
+    fn update_account_password_policy(
+        &self,
+        input: UpdateAccountPasswordPolicyRequest,
+    ) -> Request<UpdateAccountPasswordPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the "role trust policy". For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
+    fn update_assume_role_policy(
+        &self,
+        input: UpdateAssumeRolePolicyRequest,
+    ) -> Request<UpdateAssumeRolePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the role group with the old name and the new name. For example, to change the group named <code>Managers</code> to <code>MGRs</code>, the principal must have a policy that allows them to update both groups. If the principal has permission to update the <code>Managers</code> group, but not the <code>MGRs</code> group, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a>. </p> </note></p>
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
+    fn update_login_profile(
+        &self,
+        input: UpdateLoginProfileRequest,
+    ) -> Request<UpdateLoginProfileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint. Therefore, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
+    fn update_open_id_connect_provider_thumbprint(
+        &self,
+        input: UpdateOpenIDConnectProviderThumbprintRequest,
+    ) -> Request<UpdateOpenIDConnectProviderThumbprintRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the description or maximum session duration setting of a role.</p>
+    fn update_role(&self, input: UpdateRoleRequest) -> Request<UpdateRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Use <a>UpdateRole</a> instead.</p> <p>Modifies only the description of a role. This operation performs the same function as the <code>Description</code> parameter in the <code>UpdateRole</code> operation.</p>
+    fn update_role_description(
+        &self,
+        input: UpdateRoleDescriptionRequest,
+    ) -> Request<UpdateRoleDescriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
+    fn update_saml_provider(
+        &self,
+        input: UpdateSAMLProviderRequest,
+    ) -> Request<UpdateSAMLProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This operation can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
+    fn update_ssh_public_key(
+        &self,
+        input: UpdateSSHPublicKeyRequest,
+    ) -> Request<UpdateSSHPublicKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p>You should understand the implications of changing a server certificate&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the server certificate with the old name and the new name. For example, to change the certificate named <code>ProductionCert</code> to <code>ProdCert</code>, the principal must have a policy that allows them to update both certificates. If the principal has permission to update the <code>ProductionCert</code> group, but not the <code>ProdCert</code> certificate, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    fn update_server_certificate(
+        &self,
+        input: UpdateServerCertificateRequest,
+    ) -> Request<UpdateServerCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user's service-specific credential as part of a credential rotation work flow.</p>
+    fn update_service_specific_credential(
+        &self,
+        input: UpdateServiceSpecificCredentialRequest,
+    ) -> Request<UpdateServiceSpecificCredentialRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    fn update_signing_certificate(
+        &self,
+        input: UpdateSigningCertificateRequest,
+    ) -> Request<UpdateSigningCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming">Renaming an IAM User</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name, the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
+    fn update_user(&self, input: UpdateUserRequest) -> Request<UpdateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this operation can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
+    fn upload_ssh_public_key(
+        &self,
+        input: UploadSSHPublicKeyRequest,
+    ) -> Request<UploadSSHPublicKeyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="https://docs.aws.amazon.com/acm/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="https://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <p>For information about the number of server certificates you can upload, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    fn upload_server_certificate(
+        &self,
+        input: UploadServerCertificateRequest,
+    ) -> Request<UploadServerCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of an X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    fn upload_signing_certificate(
+        &self,
+        input: UploadSigningCertificateRequest,
+    ) -> Request<UploadSigningCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddClientIDToOpenIDConnectProviderRequest {
+    type Output = AddClientIDToOpenIDConnectProviderResponse;
+    type Error = AddClientIDToOpenIDConnectProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddClientIDToOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
-        AddClientIDToOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
+        AddClientIDToOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddClientIDToOpenIDConnectProviderError::from_response(
@@ -20430,50 +22257,100 @@ impl Iam for IamClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddClientIDToOpenIDConnectProviderResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddClientIDToOpenIDConnectProviderResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
-    fn add_role_to_instance_profile(
-        &self,
-        input: AddRoleToInstanceProfileRequest,
-    ) -> RusotoFuture<(), AddRoleToInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for AddRoleToInstanceProfileRequest {
+    type Output = AddRoleToInstanceProfileResponse;
+    type Error = AddRoleToInstanceProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddRoleToInstanceProfile");
         params.put("Version", "2010-05-08");
-        AddRoleToInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
+        AddRoleToInstanceProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddRoleToInstanceProfileError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddRoleToInstanceProfileResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddRoleToInstanceProfileResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Adds the specified user to the specified group.</p>
-    fn add_user_to_group(
-        &self,
-        input: AddUserToGroupRequest,
-    ) -> RusotoFuture<(), AddUserToGroupError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for AddUserToGroupRequest {
+    type Output = AddUserToGroupResponse;
+    type Error = AddUserToGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddUserToGroup");
         params.put("Version", "2010-05-08");
-        AddUserToGroupRequestSerializer::serialize(&mut params, "", &input);
+        AddUserToGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20483,25 +22360,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AddUserToGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AddUserToGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Attaches the specified managed policy to the specified IAM group.</p> <p>You use this API to attach a managed policy to a group. To embed an inline policy in a group, use <a>PutGroupPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn attach_group_policy(
-        &self,
-        input: AttachGroupPolicyRequest,
-    ) -> RusotoFuture<(), AttachGroupPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for AttachGroupPolicyRequest {
+    type Output = AttachGroupPolicyResponse;
+    type Error = AttachGroupPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachGroupPolicy");
         params.put("Version", "2010-05-08");
-        AttachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
+        AttachGroupPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20511,25 +22413,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AttachGroupPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AttachGroupPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Attaches the specified managed policy to the specified IAM role. When you attach a managed policy to a role, the managed policy becomes part of the role's permission (access) policy.</p> <note> <p>You cannot use a managed policy as the role's trust policy. The role's trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role's trust policy using <a>UpdateAssumeRolePolicy</a>.</p> </note> <p>Use this API to attach a <i>managed</i> policy to a role. To embed an inline policy in a role, use <a>PutRolePolicy</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn attach_role_policy(
-        &self,
-        input: AttachRolePolicyRequest,
-    ) -> RusotoFuture<(), AttachRolePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for AttachRolePolicyRequest {
+    type Output = AttachRolePolicyResponse;
+    type Error = AttachRolePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachRolePolicy");
         params.put("Version", "2010-05-08");
-        AttachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
+        AttachRolePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20539,25 +22466,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AttachRolePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AttachRolePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Attaches the specified managed policy to the specified user.</p> <p>You use this API to attach a <i>managed</i> policy to a user. To embed an inline policy in a user, use <a>PutUserPolicy</a>.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn attach_user_policy(
-        &self,
-        input: AttachUserPolicyRequest,
-    ) -> RusotoFuture<(), AttachUserPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for AttachUserPolicyRequest {
+    type Output = AttachUserPolicyResponse;
+    type Error = AttachUserPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachUserPolicy");
         params.put("Version", "2010-05-08");
-        AttachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
+        AttachUserPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20567,25 +22519,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AttachUserPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AttachUserPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Changes the password of the IAM user who is calling this operation. The AWS account root user password is not affected by this operation.</p> <p>To change the password for a different user, see <a>UpdateLoginProfile</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
-    fn change_password(
-        &self,
-        input: ChangePasswordRequest,
-    ) -> RusotoFuture<(), ChangePasswordError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ChangePasswordRequest {
+    type Output = ChangePasswordResponse;
+    type Error = ChangePasswordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ChangePassword");
         params.put("Version", "2010-05-08");
-        ChangePasswordRequestSerializer::serialize(&mut params, "", &input);
+        ChangePasswordRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20595,25 +22572,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ChangePasswordResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ChangePasswordResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
-    fn create_access_key(
-        &self,
-        input: CreateAccessKeyRequest,
-    ) -> RusotoFuture<CreateAccessKeyResponse, CreateAccessKeyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateAccessKeyRequest {
+    type Output = CreateAccessKeyResponse;
+    type Error = CreateAccessKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateAccessKey");
         params.put("Version", "2010-05-08");
-        CreateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
+        CreateAccessKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20649,22 +22651,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an alias for your AWS account. For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
-    fn create_account_alias(
-        &self,
-        input: CreateAccountAliasRequest,
-    ) -> RusotoFuture<(), CreateAccountAliasError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateAccountAliasRequest {
+    type Output = CreateAccountAliasResponse;
+    type Error = CreateAccountAliasError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateAccountAlias");
         params.put("Version", "2010-05-08");
-        CreateAccountAliasRequestSerializer::serialize(&mut params, "", &input);
+        CreateAccountAliasRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20674,25 +22681,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateAccountAliasResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateAccountAliasResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Creates a new group.</p> <p> For information about the number of groups you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn create_group(
-        &self,
-        input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateGroupRequest {
+    type Output = CreateGroupResponse;
+    type Error = CreateGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateGroup");
         params.put("Version", "2010-05-08");
-        CreateGroupRequestSerializer::serialize(&mut params, "", &input);
+        CreateGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20728,22 +22760,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p> Creates a new instance profile. For information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p> For information about the number of instance profiles you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn create_instance_profile(
-        &self,
-        input: CreateInstanceProfileRequest,
-    ) -> RusotoFuture<CreateInstanceProfileResponse, CreateInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateInstanceProfileRequest {
+    type Output = CreateInstanceProfileResponse;
+    type Error = CreateInstanceProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateInstanceProfile");
         params.put("Version", "2010-05-08");
-        CreateInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
+        CreateInstanceProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateInstanceProfileError::from_response(response))
@@ -20776,22 +22813,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p> Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console. For more information about managing passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
-    fn create_login_profile(
-        &self,
-        input: CreateLoginProfileRequest,
-    ) -> RusotoFuture<CreateLoginProfileResponse, CreateLoginProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateLoginProfileRequest {
+    type Output = CreateLoginProfileResponse;
+    type Error = CreateLoginProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoginProfile");
         params.put("Version", "2010-05-08");
-        CreateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
+        CreateLoginProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20827,22 +22869,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates an IAM entity to describe an identity provider (IdP) that supports <a href="http://openid.net/connect/">OpenID Connect (OIDC)</a>.</p> <p>The OIDC provider that you create with this operation can be used as a principal in a role&#39;s trust policy. Such a policy establishes a trust relationship between AWS and the OIDC provider.</p> <p>When you create the IAM OIDC provider, you specify the following:</p> <ul> <li> <p>The URL of the OIDC identity provider (IdP) to trust</p> </li> <li> <p>A list of client IDs (also known as audiences) that identify the application or applications that are allowed to authenticate using the OIDC provider</p> </li> <li> <p>A list of thumbprints of the server certificate(s) that the IdP uses</p> </li> </ul> <p>You get all of this information from the OIDC IdP that you want to use to access AWS.</p> <note> <p>The trust for the OIDC provider is derived from the IAM provider that this operation creates. Therefore, it is best to limit access to the <a>CreateOpenIDConnectProvider</a> operation to highly privileged users.</p> </note></p>
-    fn create_open_id_connect_provider(
-        &self,
-        input: CreateOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<CreateOpenIDConnectProviderResponse, CreateOpenIDConnectProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateOpenIDConnectProviderRequest {
+    type Output = CreateOpenIDConnectProviderResponse;
+    type Error = CreateOpenIDConnectProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
-        CreateOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
+        CreateOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateOpenIDConnectProviderError::from_response(response))
@@ -20875,22 +22922,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new managed policy for your AWS account.</p> <p>This operation creates a policy version with a version identifier of <code>v1</code> and sets v1 as the policy's default version. For more information about policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policies in general, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn create_policy(
-        &self,
-        input: CreatePolicyRequest,
-    ) -> RusotoFuture<CreatePolicyResponse, CreatePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreatePolicyRequest {
+    type Output = CreatePolicyResponse;
+    type Error = CreatePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreatePolicy");
         params.put("Version", "2010-05-08");
-        CreatePolicyRequestSerializer::serialize(&mut params, "", &input);
+        CreatePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -20926,22 +22978,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new version of the specified managed policy. To update a managed policy, you create a new policy version. A managed policy can have up to five versions. If the policy has five versions, you must delete an existing version using <a>DeletePolicyVersion</a> before you create a new version.</p> <p>Optionally, you can set the new version as the policy's default version. The default version is the version that is in effect for the IAM users, groups, and roles to which the policy is attached.</p> <p>For more information about managed policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn create_policy_version(
-        &self,
-        input: CreatePolicyVersionRequest,
-    ) -> RusotoFuture<CreatePolicyVersionResponse, CreatePolicyVersionError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreatePolicyVersionRequest {
+    type Output = CreatePolicyVersionResponse;
+    type Error = CreatePolicyVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreatePolicyVersion");
         params.put("Version", "2010-05-08");
-        CreatePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
+        CreatePolicyVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -20976,22 +23033,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new role for your AWS account. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">IAM Roles</a>. For information about limitations on role names and the number of roles you can create, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn create_role(
-        &self,
-        input: CreateRoleRequest,
-    ) -> RusotoFuture<CreateRoleResponse, CreateRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateRoleRequest {
+    type Output = CreateRoleResponse;
+    type Error = CreateRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateRole");
         params.put("Version", "2010-05-08");
-        CreateRoleRequestSerializer::serialize(&mut params, "", &input);
+        CreateRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21027,22 +23089,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.</p> <p>The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy. Such a policy can enable federated users who sign in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS.</p> <p>When you create the SAML provider resource, you upload a SAML metadata document that you get from your IdP. That document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note> <p> For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html">Enabling SAML 2.0 Federated Users to Access the AWS Management Console</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i>.</p>
-    fn create_saml_provider(
-        &self,
-        input: CreateSAMLProviderRequest,
-    ) -> RusotoFuture<CreateSAMLProviderResponse, CreateSAMLProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateSAMLProviderRequest {
+    type Output = CreateSAMLProviderResponse;
+    type Error = CreateSAMLProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateSAMLProvider");
         params.put("Version", "2010-05-08");
-        CreateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
+        CreateSAMLProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21078,22 +23145,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html">Using Service-Linked Roles</a> in the <i>IAM User Guide</i>. </p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
-    fn create_service_linked_role(
-        &self,
-        input: CreateServiceLinkedRoleRequest,
-    ) -> RusotoFuture<CreateServiceLinkedRoleResponse, CreateServiceLinkedRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateServiceLinkedRoleRequest {
+    type Output = CreateServiceLinkedRoleResponse;
+    type Error = CreateServiceLinkedRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateServiceLinkedRole");
         params.put("Version", "2010-05-08");
-        CreateServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &input);
+        CreateServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateServiceLinkedRoleError::from_response(response))
@@ -21126,23 +23198,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Generates a set of credentials consisting of a user name and password that can be used to access the service specified in the request. These credentials are generated by IAM, and can be used only for the specified service. </p> <p>You can have a maximum of two sets of service-specific credentials for each supported service per user.</p> <p>The only supported service at this time is AWS CodeCommit.</p> <p>You can reset the password to a new service-generated value by calling <a>ResetServiceSpecificCredential</a>.</p> <p>For more information about service-specific credentials, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_ssh-keys.html">Using IAM with AWS CodeCommit: Git Credentials, SSH Keys, and AWS Access Keys</a> in the <i>IAM User Guide</i>.</p>
-    fn create_service_specific_credential(
-        &self,
-        input: CreateServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<CreateServiceSpecificCredentialResponse, CreateServiceSpecificCredentialError>
-    {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateServiceSpecificCredentialRequest {
+    type Output = CreateServiceSpecificCredentialResponse;
+    type Error = CreateServiceSpecificCredentialError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateServiceSpecificCredential");
         params.put("Version", "2010-05-08");
-        CreateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
+        CreateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateServiceSpecificCredentialError::from_response(
@@ -21177,22 +23253,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new IAM user for your AWS account.</p> <p> For information about limitations on the number of IAM users you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn create_user(
-        &self,
-        input: CreateUserRequest,
-    ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateUserRequest {
+    type Output = CreateUserResponse;
+    type Error = CreateUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateUser");
         params.put("Version", "2010-05-08");
-        CreateUserRequestSerializer::serialize(&mut params, "", &input);
+        CreateUserRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21228,22 +23309,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new virtual MFA device for the AWS account. After creating the virtual MFA, use <a>EnableMFADevice</a> to attach the MFA device to an IAM user. For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of MFA devices you can create, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>The seed information contained in the QR code and the Base32 string should be treated like any other secret access information. In other words, protect the seed information as you would your AWS access keys or your passwords. After you provision your virtual device, you should ensure that the information is destroyed following secure procedures.</p> </important></p>
-    fn create_virtual_mfa_device(
-        &self,
-        input: CreateVirtualMFADeviceRequest,
-    ) -> RusotoFuture<CreateVirtualMFADeviceResponse, CreateVirtualMFADeviceError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for CreateVirtualMFADeviceRequest {
+    type Output = CreateVirtualMFADeviceResponse;
+    type Error = CreateVirtualMFADeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateVirtualMFADevice");
         params.put("Version", "2010-05-08");
-        CreateVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
+        CreateVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateVirtualMFADeviceError::from_response(response))
@@ -21276,22 +23362,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Enabling a Virtual Multi-factor Authentication (MFA) Device</a> in the <i>IAM User Guide</i>.</p>
-    fn deactivate_mfa_device(
-        &self,
-        input: DeactivateMFADeviceRequest,
-    ) -> RusotoFuture<(), DeactivateMFADeviceError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeactivateMFADeviceRequest {
+    type Output = DeactivateMFADeviceResponse;
+    type Error = DeactivateMFADeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeactivateMFADevice");
         params.put("Version", "2010-05-08");
-        DeactivateMFADeviceRequestSerializer::serialize(&mut params, "", &input);
+        DeactivateMFADeviceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -21300,25 +23391,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeactivateMFADeviceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeactivateMFADeviceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
-    fn delete_access_key(
-        &self,
-        input: DeleteAccessKeyRequest,
-    ) -> RusotoFuture<(), DeleteAccessKeyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteAccessKeyRequest {
+    type Output = DeleteAccessKeyResponse;
+    type Error = DeleteAccessKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAccessKey");
         params.put("Version", "2010-05-08");
-        DeleteAccessKeyRequestSerializer::serialize(&mut params, "", &input);
+        DeleteAccessKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21328,25 +23444,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteAccessKeyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteAccessKeyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> Deletes the specified AWS account alias. For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_account_alias(
-        &self,
-        input: DeleteAccountAliasRequest,
-    ) -> RusotoFuture<(), DeleteAccountAliasError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteAccountAliasRequest {
+    type Output = DeleteAccountAliasResponse;
+    type Error = DeleteAccountAliasError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAccountAlias");
         params.put("Version", "2010-05-08");
-        DeleteAccountAliasRequestSerializer::serialize(&mut params, "", &input);
+        DeleteAccountAliasRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21356,44 +23497,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteAccountAliasResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteAccountAliasResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the password policy for the AWS account. There are no parameters.</p>
-    fn delete_account_password_policy(&self) -> RusotoFuture<(), DeleteAccountPasswordPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteAccountPasswordPolicyRequest {
+    type Output = DeleteAccountPasswordPolicyResponse;
+    type Error = DeleteAccountPasswordPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAccountPasswordPolicy");
         params.put("Version", "2010-05-08");
-
+        DeleteAccountPasswordPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAccountPasswordPolicyError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteAccountPasswordPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteAccountPasswordPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified IAM group. The group must not contain any users or have any attached policies.</p>
-    fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteGroupRequest {
+    type Output = DeleteGroupResponse;
+    type Error = DeleteGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteGroup");
         params.put("Version", "2010-05-08");
-        DeleteGroupRequestSerializer::serialize(&mut params, "", &input);
+        DeleteGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21403,25 +23600,48 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        DeleteGroupResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified inline policy that is embedded in the specified IAM group.</p> <p>A group can also have managed policies attached to it. To detach a managed policy from a group, use <a>DetachGroupPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_group_policy(
-        &self,
-        input: DeleteGroupPolicyRequest,
-    ) -> RusotoFuture<(), DeleteGroupPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteGroupPolicyRequest {
+    type Output = DeleteGroupPolicyResponse;
+    type Error = DeleteGroupPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteGroupPolicy");
         params.put("Version", "2010-05-08");
-        DeleteGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
+        DeleteGroupPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21431,50 +23651,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteGroupPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteGroupPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified instance profile. The instance profile must not have an associated role.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the instance profile you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important> <p>For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
-    fn delete_instance_profile(
-        &self,
-        input: DeleteInstanceProfileRequest,
-    ) -> RusotoFuture<(), DeleteInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteInstanceProfileRequest {
+    type Output = DeleteInstanceProfileResponse;
+    type Error = DeleteInstanceProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteInstanceProfile");
         params.put("Version", "2010-05-08");
-        DeleteInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
+        DeleteInstanceProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteInstanceProfileError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteInstanceProfileResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteInstanceProfileResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access, you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
-    fn delete_login_profile(
-        &self,
-        input: DeleteLoginProfileRequest,
-    ) -> RusotoFuture<(), DeleteLoginProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteLoginProfileRequest {
+    type Output = DeleteLoginProfileResponse;
+    type Error = DeleteLoginProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoginProfile");
         params.put("Version", "2010-05-08");
-        DeleteLoginProfileRequestSerializer::serialize(&mut params, "", &input);
+        DeleteLoginProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21484,47 +23754,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteLoginProfileResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteLoginProfileResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes an OpenID Connect identity provider (IdP) resource object in IAM.</p> <p>Deleting an IAM OIDC provider resource does not update any roles that reference the provider as a principal in their trust policies. Any attempt to assume a role that references a deleted provider fails.</p> <p>This operation is idempotent; it does not fail or return an error if you call the operation for a provider that does not exist.</p>
-    fn delete_open_id_connect_provider(
-        &self,
-        input: DeleteOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<(), DeleteOpenIDConnectProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteOpenIDConnectProviderRequest {
+    type Output = DeleteOpenIDConnectProviderResponse;
+    type Error = DeleteOpenIDConnectProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
-        DeleteOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
+        DeleteOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteOpenIDConnectProviderError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteOpenIDConnectProviderResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteOpenIDConnectProviderResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition, you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeletePolicyRequest {
+    type Output = DeletePolicyResponse;
+    type Error = DeletePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeletePolicy");
         params.put("Version", "2010-05-08");
-        DeletePolicyRequestSerializer::serialize(&mut params, "", &input);
+        DeletePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21534,25 +23857,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeletePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeletePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_policy_version(
-        &self,
-        input: DeletePolicyVersionRequest,
-    ) -> RusotoFuture<(), DeletePolicyVersionError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeletePolicyVersionRequest {
+    type Output = DeletePolicyVersionResponse;
+    type Error = DeletePolicyVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeletePolicyVersion");
         params.put("Version", "2010-05-08");
-        DeletePolicyVersionRequestSerializer::serialize(&mut params, "", &input);
+        DeletePolicyVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -21561,22 +23909,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeletePolicyVersionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeletePolicyVersionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the specified role. The role must not have any policies attached. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to delete. Deleting a role or instance profile that is associated with a running instance will break any applications running on the instance.</p> </important></p>
-    fn delete_role(&self, input: DeleteRoleRequest) -> RusotoFuture<(), DeleteRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteRoleRequest {
+    type Output = DeleteRoleResponse;
+    type Error = DeleteRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteRole");
         params.put("Version", "2010-05-08");
-        DeleteRoleRequestSerializer::serialize(&mut params, "", &input);
+        DeleteRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21586,50 +23962,98 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteRoleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        DeleteRoleResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the permissions boundary for the specified IAM role. </p> <important> <p>Deleting the permissions boundary for a role might increase its permissions. For example, it might allow anyone who assumes the role to perform all the actions granted in its permissions policies. </p> </important></p>
-    fn delete_role_permissions_boundary(
-        &self,
-        input: DeleteRolePermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), DeleteRolePermissionsBoundaryError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteRolePermissionsBoundaryRequest {
+    type Output = DeleteRolePermissionsBoundaryResponse;
+    type Error = DeleteRolePermissionsBoundaryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteRolePermissionsBoundary");
         params.put("Version", "2010-05-08");
-        DeleteRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        DeleteRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRolePermissionsBoundaryError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteRolePermissionsBoundaryResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteRolePermissionsBoundaryResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified inline policy that is embedded in the specified IAM role.</p> <p>A role can also have managed policies attached to it. To detach a managed policy from a role, use <a>DetachRolePolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_role_policy(
-        &self,
-        input: DeleteRolePolicyRequest,
-    ) -> RusotoFuture<(), DeleteRolePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteRolePolicyRequest {
+    type Output = DeleteRolePolicyResponse;
+    type Error = DeleteRolePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteRolePolicy");
         params.put("Version", "2010-05-08");
-        DeleteRolePolicyRequestSerializer::serialize(&mut params, "", &input);
+        DeleteRolePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21639,25 +24063,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteRolePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteRolePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a SAML provider resource in IAM.</p> <p>Deleting the provider resource from IAM does not update any roles that reference the SAML provider resource&#39;s ARN as a principal in their trust policies. Any attempt to assume a role that references a non-existent provider resource ARN fails.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
-    fn delete_saml_provider(
-        &self,
-        input: DeleteSAMLProviderRequest,
-    ) -> RusotoFuture<(), DeleteSAMLProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteSAMLProviderRequest {
+    type Output = DeleteSAMLProviderResponse;
+    type Error = DeleteSAMLProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSAMLProvider");
         params.put("Version", "2010-05-08");
-        DeleteSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
+        DeleteSAMLProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21667,25 +24116,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteSAMLProviderResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteSAMLProviderResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified SSH public key.</p> <p>The SSH public key deleted by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
-    fn delete_ssh_public_key(
-        &self,
-        input: DeleteSSHPublicKeyRequest,
-    ) -> RusotoFuture<(), DeleteSSHPublicKeyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteSSHPublicKeyRequest {
+    type Output = DeleteSSHPublicKeyResponse;
+    type Error = DeleteSSHPublicKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSSHPublicKey");
         params.put("Version", "2010-05-08");
-        DeleteSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
+        DeleteSSHPublicKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21695,50 +24169,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteSSHPublicKeyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteSSHPublicKeyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the specified server certificate.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p> If you are using a server certificate with Elastic Load Balancing, deleting the certificate could have implications for your application. If Elastic Load Balancing doesn&#39;t detect the deletion of bound certificates, it may continue to use the certificates. This could cause Elastic Load Balancing to stop accepting traffic. We recommend that you remove the reference to the certificate from Elastic Load Balancing before using this command to delete the certificate. For more information, go to <a href="https://docs.aws.amazon.com/ElasticLoadBalancing/latest/APIReference/API_DeleteLoadBalancerListeners.html">DeleteLoadBalancerListeners</a> in the <i>Elastic Load Balancing API Reference</i>.</p> </important></p>
-    fn delete_server_certificate(
-        &self,
-        input: DeleteServerCertificateRequest,
-    ) -> RusotoFuture<(), DeleteServerCertificateError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteServerCertificateRequest {
+    type Output = DeleteServerCertificateResponse;
+    type Error = DeleteServerCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteServerCertificate");
         params.put("Version", "2010-05-08");
-        DeleteServerCertificateRequestSerializer::serialize(&mut params, "", &input);
+        DeleteServerCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServerCertificateError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteServerCertificateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteServerCertificateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Submits a service-linked role deletion request and returns a <code>DeletionTaskId</code>, which you can use to check the status of the deletion. Before you call this operation, confirm that the role has no active sessions and that any resources used by the role in the linked service are deleted. If you call this operation more than once for the same service-linked role and an earlier deletion task is not complete, then the <code>DeletionTaskId</code> of the earlier request is returned.</p> <p>If you submit a deletion request for a service-linked role whose linked service is still accessing a resource, then the deletion task fails. If it fails, the <a>GetServiceLinkedRoleDeletionStatus</a> API operation returns the reason for the failure, usually including the resources that must be deleted. To delete the service-linked role, you must first remove those resources from the linked service and then submit the deletion request again. Resources are specific to the service that is linked to the role. For more information about removing resources from a service, see the <a href="http://docs.aws.amazon.com/">AWS documentation</a> for your service.</p> <p>For more information about service-linked roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">Roles Terms and Concepts: AWS Service-Linked Role</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_service_linked_role(
-        &self,
-        input: DeleteServiceLinkedRoleRequest,
-    ) -> RusotoFuture<DeleteServiceLinkedRoleResponse, DeleteServiceLinkedRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteServiceLinkedRoleRequest {
+    type Output = DeleteServiceLinkedRoleResponse;
+    type Error = DeleteServiceLinkedRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteServiceLinkedRole");
         params.put("Version", "2010-05-08");
-        DeleteServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &input);
+        DeleteServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServiceLinkedRoleError::from_response(response))
@@ -21771,22 +24295,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified service-specific credential.</p>
-    fn delete_service_specific_credential(
-        &self,
-        input: DeleteServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<(), DeleteServiceSpecificCredentialError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteServiceSpecificCredentialRequest {
+    type Output = DeleteServiceSpecificCredentialResponse;
+    type Error = DeleteServiceSpecificCredentialError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteServiceSpecificCredential");
         params.put("Version", "2010-05-08");
-        DeleteServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
+        DeleteServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServiceSpecificCredentialError::from_response(
@@ -21795,47 +24324,100 @@ impl Iam for IamClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteServiceSpecificCredentialResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteServiceSpecificCredentialResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
-    fn delete_signing_certificate(
-        &self,
-        input: DeleteSigningCertificateRequest,
-    ) -> RusotoFuture<(), DeleteSigningCertificateError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteSigningCertificateRequest {
+    type Output = DeleteSigningCertificateResponse;
+    type Error = DeleteSigningCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSigningCertificate");
         params.put("Version", "2010-05-08");
-        DeleteSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
+        DeleteSigningCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteSigningCertificateError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteSigningCertificateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteSigningCertificateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the specified IAM user. Unlike the AWS Management Console, when you delete a user programmatically, you must delete the items attached to the user manually, or the deletion fails. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_deleting_cli">Deleting an IAM User</a>. Before attempting to delete a user, remove the following items:</p> <ul> <li> <p>Password (<a>DeleteLoginProfile</a>)</p> </li> <li> <p>Access keys (<a>DeleteAccessKey</a>)</p> </li> <li> <p>Signing certificate (<a>DeleteSigningCertificate</a>)</p> </li> <li> <p>SSH public key (<a>DeleteSSHPublicKey</a>)</p> </li> <li> <p>Git credentials (<a>DeleteServiceSpecificCredential</a>)</p> </li> <li> <p>Multi-factor authentication (MFA) device (<a>DeactivateMFADevice</a>, <a>DeleteVirtualMFADevice</a>)</p> </li> <li> <p>Inline policies (<a>DeleteUserPolicy</a>)</p> </li> <li> <p>Attached managed policies (<a>DetachUserPolicy</a>)</p> </li> <li> <p>Group memberships (<a>RemoveUserFromGroup</a>)</p> </li> </ul></p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteUserRequest {
+    type Output = DeleteUserResponse;
+    type Error = DeleteUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteUser");
         params.put("Version", "2010-05-08");
-        DeleteUserRequestSerializer::serialize(&mut params, "", &input);
+        DeleteUserRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21845,50 +24427,98 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteUserResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        DeleteUserResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the permissions boundary for the specified IAM user.</p> <important> <p>Deleting the permissions boundary for a user might increase its permissions by allowing the user to perform all the actions granted in its permissions policies. </p> </important></p>
-    fn delete_user_permissions_boundary(
-        &self,
-        input: DeleteUserPermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), DeleteUserPermissionsBoundaryError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteUserPermissionsBoundaryRequest {
+    type Output = DeleteUserPermissionsBoundaryResponse;
+    type Error = DeleteUserPermissionsBoundaryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteUserPermissionsBoundary");
         params.put("Version", "2010-05-08");
-        DeleteUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        DeleteUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteUserPermissionsBoundaryError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteUserPermissionsBoundaryResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteUserPermissionsBoundaryResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified inline policy that is embedded in the specified IAM user.</p> <p>A user can also have managed policies attached to it. To detach a managed policy from a user, use <a>DetachUserPolicy</a>. For more information about policies, refer to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn delete_user_policy(
-        &self,
-        input: DeleteUserPolicyRequest,
-    ) -> RusotoFuture<(), DeleteUserPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteUserPolicyRequest {
+    type Output = DeleteUserPolicyResponse;
+    type Error = DeleteUserPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteUserPolicy");
         params.put("Version", "2010-05-08");
-        DeleteUserPolicyRequestSerializer::serialize(&mut params, "", &input);
+        DeleteUserPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21898,50 +24528,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteUserPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteUserPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes a virtual MFA device.</p> <note> <p> You must deactivate a user&#39;s virtual MFA device before you can delete it. For information about deactivating MFA devices, see <a>DeactivateMFADevice</a>. </p> </note></p>
-    fn delete_virtual_mfa_device(
-        &self,
-        input: DeleteVirtualMFADeviceRequest,
-    ) -> RusotoFuture<(), DeleteVirtualMFADeviceError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DeleteVirtualMFADeviceRequest {
+    type Output = DeleteVirtualMFADeviceResponse;
+    type Error = DeleteVirtualMFADeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteVirtualMFADevice");
         params.put("Version", "2010-05-08");
-        DeleteVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &input);
+        DeleteVirtualMFADeviceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteVirtualMFADeviceError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteVirtualMFADeviceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteVirtualMFADeviceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified managed policy from the specified IAM group.</p> <p>A group can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteGroupPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn detach_group_policy(
-        &self,
-        input: DetachGroupPolicyRequest,
-    ) -> RusotoFuture<(), DetachGroupPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DetachGroupPolicyRequest {
+    type Output = DetachGroupPolicyResponse;
+    type Error = DetachGroupPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachGroupPolicy");
         params.put("Version", "2010-05-08");
-        DetachGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
+        DetachGroupPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21951,25 +24631,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DetachGroupPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DetachGroupPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified managed policy from the specified role.</p> <p>A role can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteRolePolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn detach_role_policy(
-        &self,
-        input: DetachRolePolicyRequest,
-    ) -> RusotoFuture<(), DetachRolePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DetachRolePolicyRequest {
+    type Output = DetachRolePolicyResponse;
+    type Error = DetachRolePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachRolePolicy");
         params.put("Version", "2010-05-08");
-        DetachRolePolicyRequestSerializer::serialize(&mut params, "", &input);
+        DetachRolePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -21979,25 +24684,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DetachRolePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DetachRolePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified managed policy from the specified user.</p> <p>A user can also have inline policies embedded with it. To delete an inline policy, use the <a>DeleteUserPolicy</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn detach_user_policy(
-        &self,
-        input: DetachUserPolicyRequest,
-    ) -> RusotoFuture<(), DetachUserPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for DetachUserPolicyRequest {
+    type Output = DetachUserPolicyResponse;
+    type Error = DetachUserPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachUserPolicy");
         params.put("Version", "2010-05-08");
-        DetachUserPolicyRequestSerializer::serialize(&mut params, "", &input);
+        DetachUserPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22007,25 +24737,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DetachUserPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DetachUserPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Enables the specified MFA device and associates it with the specified IAM user. When enabled, the MFA device is required for every subsequent login by the IAM user associated with the device.</p>
-    fn enable_mfa_device(
-        &self,
-        input: EnableMFADeviceRequest,
-    ) -> RusotoFuture<(), EnableMFADeviceError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for EnableMFADeviceRequest {
+    type Output = EnableMFADeviceResponse;
+    type Error = EnableMFADeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableMFADevice");
         params.put("Version", "2010-05-08");
-        EnableMFADeviceRequestSerializer::serialize(&mut params, "", &input);
+        EnableMFADeviceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22035,24 +24790,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = EnableMFADeviceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = EnableMFADeviceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> Generates a credential report for the AWS account. For more information about the credential report, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
-    fn generate_credential_report(
-        &self,
-    ) -> RusotoFuture<GenerateCredentialReportResponse, GenerateCredentialReportError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GenerateCredentialReportRequest {
+    type Output = GenerateCredentialReportResponse;
+    type Error = GenerateCredentialReportError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GenerateCredentialReport");
         params.put("Version", "2010-05-08");
-
+        GenerateCredentialReportRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GenerateCredentialReportError::from_response(response))
@@ -22085,25 +24866,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Generates a request for a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your Region began supporting this feature within the last year. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt. </p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service last accessed data, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Policy Scope by Viewing User Activity</a> in the <i>IAM User Guide</i>.</p>
-    fn generate_service_last_accessed_details(
-        &self,
-        input: GenerateServiceLastAccessedDetailsRequest,
-    ) -> RusotoFuture<
-        GenerateServiceLastAccessedDetailsResponse,
-        GenerateServiceLastAccessedDetailsError,
-    > {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GenerateServiceLastAccessedDetailsRequest {
+    type Output = GenerateServiceLastAccessedDetailsResponse;
+    type Error = GenerateServiceLastAccessedDetailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GenerateServiceLastAccessedDetails");
         params.put("Version", "2010-05-08");
-        GenerateServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &input);
+        GenerateServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GenerateServiceLastAccessedDetailsError::from_response(
@@ -22138,22 +24921,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and Region that were specified in the last request made with that key.</p>
-    fn get_access_key_last_used(
-        &self,
-        input: GetAccessKeyLastUsedRequest,
-    ) -> RusotoFuture<GetAccessKeyLastUsedResponse, GetAccessKeyLastUsedError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetAccessKeyLastUsedRequest {
+    type Output = GetAccessKeyLastUsedResponse;
+    type Error = GetAccessKeyLastUsedError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetAccessKeyLastUsed");
         params.put("Version", "2010-05-08");
-        GetAccessKeyLastUsedRequestSerializer::serialize(&mut params, "", &input);
+        GetAccessKeyLastUsedRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -22188,23 +24976,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves information about all IAM users, groups, roles, and policies in your AWS account, including their relationships to one another. Use this API to obtain a snapshot of the configuration of IAM permissions (users, groups, roles, and policies) in your account.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>You can optionally filter the results using the <code>Filter</code> parameter. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn get_account_authorization_details(
-        &self,
-        input: GetAccountAuthorizationDetailsRequest,
-    ) -> RusotoFuture<GetAccountAuthorizationDetailsResponse, GetAccountAuthorizationDetailsError>
-    {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetAccountAuthorizationDetailsRequest {
+    type Output = GetAccountAuthorizationDetailsResponse;
+    type Error = GetAccountAuthorizationDetailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetAccountAuthorizationDetails");
         params.put("Version", "2010-05-08");
-        GetAccountAuthorizationDetailsRequestSerializer::serialize(&mut params, "", &input);
+        GetAccountAuthorizationDetailsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountAuthorizationDetailsError::from_response(response))
@@ -22237,21 +25029,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the password policy for the AWS account. For more information about using a password policy, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a>.</p>
-    fn get_account_password_policy(
-        &self,
-    ) -> RusotoFuture<GetAccountPasswordPolicyResponse, GetAccountPasswordPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetAccountPasswordPolicyRequest {
+    type Output = GetAccountPasswordPolicyResponse;
+    type Error = GetAccountPasswordPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetAccountPasswordPolicy");
         params.put("Version", "2010-05-08");
-
+        GetAccountPasswordPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetAccountPasswordPolicyError::from_response(response))
@@ -22284,21 +25082,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves information about IAM entity usage and IAM quotas in the AWS account.</p> <p> For information about limitations on IAM entities, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p>
-    fn get_account_summary(
-        &self,
-    ) -> RusotoFuture<GetAccountSummaryResponse, GetAccountSummaryError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetAccountSummaryRequest {
+    type Output = GetAccountSummaryResponse;
+    type Error = GetAccountSummaryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetAccountSummary");
         params.put("Version", "2010-05-08");
-
+        GetAccountSummaryRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22334,22 +25138,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Gets a list of all of the context keys referenced in the input policies. The policies are supplied as a list of one or more strings. To get the context keys from policies associated with an IAM user, group, or role, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. Context keys can be evaluated by testing against a value specified in an IAM policy. Use <code>GetContextKeysForCustomPolicy</code> to understand what key names and values you must supply when you call <a>SimulateCustomPolicy</a>. Note that all parameters are shown in unencoded form here for clarity but must be URL encoded to be included as a part of a real HTML request.</p>
-    fn get_context_keys_for_custom_policy(
-        &self,
-        input: GetContextKeysForCustomPolicyRequest,
-    ) -> RusotoFuture<GetContextKeysForPolicyResponse, GetContextKeysForCustomPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetContextKeysForCustomPolicyRequest {
+    type Output = GetContextKeysForCustomPolicyResponse;
+    type Error = GetContextKeysForCustomPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetContextKeysForCustomPolicy");
         params.put("Version", "2010-05-08");
-        GetContextKeysForCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
+        GetContextKeysForCustomPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetContextKeysForCustomPolicyError::from_response(response))
@@ -22360,7 +25169,7 @@ impl Iam for IamClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetContextKeysForPolicyResponse::default();
+                    result = GetContextKeysForCustomPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22370,7 +25179,7 @@ impl Iam for IamClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+                    result = GetContextKeysForCustomPolicyResponseDeserializer::deserialize(
                         "GetContextKeysForCustomPolicyResult",
                         &mut stack,
                     )?;
@@ -22382,22 +25191,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Gets a list of all of the context keys referenced in all the IAM policies that are attached to the specified IAM entity. The entity can be an IAM user, group, or role. If you specify a user, then the request also includes all of the policies attached to groups that the user is a member of.</p> <p>You can optionally include a list of one or more additional policies, specified as strings. If you want to include <i>only</i> a list of policies by string, use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>GetContextKeysForCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. Context keys can be evaluated by testing against a value in an IAM policy. Use <a>GetContextKeysForPrincipalPolicy</a> to understand what key names and values you must supply when you call <a>SimulatePrincipalPolicy</a>.</p>
-    fn get_context_keys_for_principal_policy(
-        &self,
-        input: GetContextKeysForPrincipalPolicyRequest,
-    ) -> RusotoFuture<GetContextKeysForPolicyResponse, GetContextKeysForPrincipalPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetContextKeysForPrincipalPolicyRequest {
+    type Output = GetContextKeysForPrincipalPolicyResponse;
+    type Error = GetContextKeysForPrincipalPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetContextKeysForPrincipalPolicy");
         params.put("Version", "2010-05-08");
-        GetContextKeysForPrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
+        GetContextKeysForPrincipalPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetContextKeysForPrincipalPolicyError::from_response(
@@ -22410,7 +25224,7 @@ impl Iam for IamClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetContextKeysForPolicyResponse::default();
+                    result = GetContextKeysForPrincipalPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -22420,7 +25234,7 @@ impl Iam for IamClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetContextKeysForPolicyResponseDeserializer::deserialize(
+                    result = GetContextKeysForPrincipalPolicyResponseDeserializer::deserialize(
                         "GetContextKeysForPrincipalPolicyResult",
                         &mut stack,
                     )?;
@@ -22432,21 +25246,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p> Retrieves a credential report for the AWS account. For more information about the credential report, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Getting Credential Reports</a> in the <i>IAM User Guide</i>.</p>
-    fn get_credential_report(
-        &self,
-    ) -> RusotoFuture<GetCredentialReportResponse, GetCredentialReportError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetCredentialReportRequest {
+    type Output = GetCredentialReportResponse;
+    type Error = GetCredentialReportError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetCredentialReport");
         params.put("Version", "2010-05-08");
-
+        GetCredentialReportRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -22481,19 +25301,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p> Returns a list of IAM users that are in the specified IAM group. You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetGroupRequest {
+    type Output = GetGroupResponse;
+    type Error = GetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetGroup");
         params.put("Version", "2010-05-08");
-        GetGroupRequestSerializer::serialize(&mut params, "", &input);
+        GetGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22527,22 +25355,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM group.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM group can also have managed policies attached to it. To retrieve a managed policy document that is attached to a group, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn get_group_policy(
-        &self,
-        input: GetGroupPolicyRequest,
-    ) -> RusotoFuture<GetGroupPolicyResponse, GetGroupPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetGroupPolicyRequest {
+    type Output = GetGroupPolicyResponse;
+    type Error = GetGroupPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetGroupPolicy");
         params.put("Version", "2010-05-08");
-        GetGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
+        GetGroupPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22578,22 +25411,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p> Retrieves information about the specified instance profile, including the instance profile's path, GUID, ARN, and role. For more information about instance profiles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a> in the <i>IAM User Guide</i>.</p>
-    fn get_instance_profile(
-        &self,
-        input: GetInstanceProfileRequest,
-    ) -> RusotoFuture<GetInstanceProfileResponse, GetInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetInstanceProfileRequest {
+    type Output = GetInstanceProfileResponse;
+    type Error = GetInstanceProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetInstanceProfile");
         params.put("Version", "2010-05-08");
-        GetInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
+        GetInstanceProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22629,22 +25467,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the user name and password-creation date for the specified IAM user. If the user has not been assigned a password, the operation returns a 404 (<code>NoSuchEntity</code>) error.</p>
-    fn get_login_profile(
-        &self,
-        input: GetLoginProfileRequest,
-    ) -> RusotoFuture<GetLoginProfileResponse, GetLoginProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetLoginProfileRequest {
+    type Output = GetLoginProfileResponse;
+    type Error = GetLoginProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetLoginProfile");
         params.put("Version", "2010-05-08");
-        GetLoginProfileRequestSerializer::serialize(&mut params, "", &input);
+        GetLoginProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22680,22 +25523,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the specified OpenID Connect (OIDC) provider resource object in IAM.</p>
-    fn get_open_id_connect_provider(
-        &self,
-        input: GetOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<GetOpenIDConnectProviderResponse, GetOpenIDConnectProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetOpenIDConnectProviderRequest {
+    type Output = GetOpenIDConnectProviderResponse;
+    type Error = GetOpenIDConnectProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
-        GetOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &input);
+        GetOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetOpenIDConnectProviderError::from_response(response))
@@ -22728,22 +25576,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves information about the specified managed policy, including the policy's default version and the total number of IAM users, groups, and roles to which the policy is attached. To retrieve the list of the specific users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API. This API returns metadata about the policy. To retrieve the actual policy document for a specific version of the policy, use <a>GetPolicyVersion</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded with an IAM user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn get_policy(
-        &self,
-        input: GetPolicyRequest,
-    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetPolicyRequest {
+    type Output = GetPolicyResponse;
+    type Error = GetPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetPolicy");
         params.put("Version", "2010-05-08");
-        GetPolicyRequestSerializer::serialize(&mut params, "", &input);
+        GetPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22777,22 +25630,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves information about the specified version of the specified managed policy, including the policy document.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>To list the available versions for a policy, use <a>ListPolicyVersions</a>.</p> <p>This API retrieves information about managed policies. To retrieve information about an inline policy that is embedded in a user, group, or role, use the <a>GetUserPolicy</a>, <a>GetGroupPolicy</a>, or <a>GetRolePolicy</a> API.</p> <p>For more information about the types of policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about managed policy versions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn get_policy_version(
-        &self,
-        input: GetPolicyVersionRequest,
-    ) -> RusotoFuture<GetPolicyVersionResponse, GetPolicyVersionError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetPolicyVersionRequest {
+    type Output = GetPolicyVersionResponse;
+    type Error = GetPolicyVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetPolicyVersion");
         params.put("Version", "2010-05-08");
-        GetPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
+        GetPolicyVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22828,19 +25686,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Retrieves information about the specified role, including the role&#39;s path, GUID, ARN, and the role&#39;s trust policy that grants permission to assume the role. For more information about roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note></p>
-    fn get_role(&self, input: GetRoleRequest) -> RusotoFuture<GetRoleResponse, GetRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetRoleRequest {
+    type Output = GetRoleResponse;
+    type Error = GetRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetRole");
         params.put("Version", "2010-05-08");
-        GetRoleRequestSerializer::serialize(&mut params, "", &input);
+        GetRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22873,22 +25739,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the specified inline policy document that is embedded with the specified IAM role.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM role can also have managed policies attached to it. To retrieve a managed policy document that is attached to a role, use <a>GetPolicy</a> to determine the policy's default version, then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For more information about roles, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
-    fn get_role_policy(
-        &self,
-        input: GetRolePolicyRequest,
-    ) -> RusotoFuture<GetRolePolicyResponse, GetRolePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetRolePolicyRequest {
+    type Output = GetRolePolicyResponse;
+    type Error = GetRolePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetRolePolicy");
         params.put("Version", "2010-05-08");
-        GetRolePolicyRequestSerializer::serialize(&mut params, "", &input);
+        GetRolePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22924,22 +25795,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns the SAML provider metadocument that was uploaded when the IAM SAML provider resource object was created or updated.</p> <note> <p>This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
-    fn get_saml_provider(
-        &self,
-        input: GetSAMLProviderRequest,
-    ) -> RusotoFuture<GetSAMLProviderResponse, GetSAMLProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetSAMLProviderRequest {
+    type Output = GetSAMLProviderResponse;
+    type Error = GetSAMLProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetSAMLProvider");
         params.put("Version", "2010-05-08");
-        GetSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
+        GetSAMLProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -22975,22 +25851,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the specified SSH public key, including metadata about the key.</p> <p>The SSH public key retrieved by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
-    fn get_ssh_public_key(
-        &self,
-        input: GetSSHPublicKeyRequest,
-    ) -> RusotoFuture<GetSSHPublicKeyResponse, GetSSHPublicKeyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetSSHPublicKeyRequest {
+    type Output = GetSSHPublicKeyResponse;
+    type Error = GetSSHPublicKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetSSHPublicKey");
         params.put("Version", "2010-05-08");
-        GetSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
+        GetSSHPublicKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23026,22 +25907,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves information about the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
-    fn get_server_certificate(
-        &self,
-        input: GetServerCertificateRequest,
-    ) -> RusotoFuture<GetServerCertificateResponse, GetServerCertificateError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetServerCertificateRequest {
+    type Output = GetServerCertificateResponse;
+    type Error = GetServerCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetServerCertificate");
         params.put("Version", "2010-05-08");
-        GetServerCertificateRequestSerializer::serialize(&mut params, "", &input);
+        GetServerCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -23076,23 +25962,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>After you generate a user, group, role, or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code>. This operation retrieves the status of your report job and a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services. This list includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p>
-    fn get_service_last_accessed_details(
-        &self,
-        input: GetServiceLastAccessedDetailsRequest,
-    ) -> RusotoFuture<GetServiceLastAccessedDetailsResponse, GetServiceLastAccessedDetailsError>
-    {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetServiceLastAccessedDetailsRequest {
+    type Output = GetServiceLastAccessedDetailsResponse;
+    type Error = GetServiceLastAccessedDetailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetServiceLastAccessedDetails");
         params.put("Version", "2010-05-08");
-        GetServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &input);
+        GetServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetServiceLastAccessedDetailsError::from_response(response))
@@ -23125,16 +26015,18 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>After you generate a group or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetailsWithEntities</code>. This operation retrieves the status of your report job and a list of entities that could have used group or policy permissions to access the specified service.</p> <ul> <li> <p> <b>Group</b> – For a group report, this operation returns a list of users in the group that could have used the group’s policies in an attempt to access the service.</p> </li> <li> <p> <b>Policy</b> – For a policy report, this operation returns a list of entities (users or roles) that could have used the policy in an attempt to access the service.</p> </li> </ul> <p>You can also use this operation for user or role reports to retrieve details about those entities.</p> <p>If the operation fails, the <code>GetServiceLastAccessedDetailsWithEntities</code> operation returns the reason that it failed.</p> <p>By default, the list of associated entities is sorted by date, with the most recent access listed first.</p>
-    fn get_service_last_accessed_details_with_entities(
-        &self,
-        input: GetServiceLastAccessedDetailsWithEntitiesRequest,
-    ) -> RusotoFuture<
-        GetServiceLastAccessedDetailsWithEntitiesResponse,
-        GetServiceLastAccessedDetailsWithEntitiesError,
-    > {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetServiceLastAccessedDetailsWithEntitiesRequest {
+    type Output = GetServiceLastAccessedDetailsWithEntitiesResponse;
+    type Error = GetServiceLastAccessedDetailsWithEntitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetServiceLastAccessedDetailsWithEntities");
@@ -23142,12 +26034,12 @@ impl Iam for IamClient {
         GetServiceLastAccessedDetailsWithEntitiesRequestSerializer::serialize(
             &mut params,
             "",
-            &input,
+            &self,
         );
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetServiceLastAccessedDetailsWithEntitiesError::from_response(response))
@@ -23181,25 +26073,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the status of your service-linked role deletion. After you use the <a>DeleteServiceLinkedRole</a> API operation to submit a service-linked role for deletion, you can use the <code>DeletionTaskId</code> parameter in <code>GetServiceLinkedRoleDeletionStatus</code> to check the status of the deletion. If the deletion fails, this operation returns the reason that it failed, if that information is returned by the service.</p>
-    fn get_service_linked_role_deletion_status(
-        &self,
-        input: GetServiceLinkedRoleDeletionStatusRequest,
-    ) -> RusotoFuture<
-        GetServiceLinkedRoleDeletionStatusResponse,
-        GetServiceLinkedRoleDeletionStatusError,
-    > {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetServiceLinkedRoleDeletionStatusRequest {
+    type Output = GetServiceLinkedRoleDeletionStatusResponse;
+    type Error = GetServiceLinkedRoleDeletionStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetServiceLinkedRoleDeletionStatus");
         params.put("Version", "2010-05-08");
-        GetServiceLinkedRoleDeletionStatusRequestSerializer::serialize(&mut params, "", &input);
+        GetServiceLinkedRoleDeletionStatusRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetServiceLinkedRoleDeletionStatusError::from_response(
@@ -23234,19 +26128,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>
-    fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetUserRequest {
+    type Output = GetUserResponse;
+    type Error = GetUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetUser");
         params.put("Version", "2010-05-08");
-        GetUserRequestSerializer::serialize(&mut params, "", &input);
+        GetUserRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23279,22 +26181,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves the specified inline policy document that is embedded in the specified IAM user.</p> <note> <p>Policies returned by this API are URL-encoded compliant with <a href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>. You can use a URL decoding method to convert the policy back to plain JSON text. For example, if you use Java, you can use the <code>decode</code> method of the <code>java.net.URLDecoder</code> utility class in the Java SDK. Other languages and SDKs provide similar functionality.</p> </note> <p>An IAM user can also have managed policies attached to it. To retrieve a managed policy document that is attached to a user, use <a>GetPolicy</a> to determine the policy's default version. Then use <a>GetPolicyVersion</a> to retrieve the policy document.</p> <p>For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn get_user_policy(
-        &self,
-        input: GetUserPolicyRequest,
-    ) -> RusotoFuture<GetUserPolicyResponse, GetUserPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for GetUserPolicyRequest {
+    type Output = GetUserPolicyResponse;
+    type Error = GetUserPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetUserPolicy");
         params.put("Version", "2010-05-08");
-        GetUserPolicyRequestSerializer::serialize(&mut params, "", &input);
+        GetUserPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23330,22 +26237,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there is none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
-    fn list_access_keys(
-        &self,
-        input: ListAccessKeysRequest,
-    ) -> RusotoFuture<ListAccessKeysResponse, ListAccessKeysError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListAccessKeysRequest {
+    type Output = ListAccessKeysResponse;
+    type Error = ListAccessKeysError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAccessKeys");
         params.put("Version", "2010-05-08");
-        ListAccessKeysRequestSerializer::serialize(&mut params, "", &input);
+        ListAccessKeysRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23381,22 +26293,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the account alias associated with the AWS account (Note: you can have only one). For information about using an AWS account alias, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AccountAlias.html">Using an Alias for Your AWS Account ID</a> in the <i>IAM User Guide</i>.</p>
-    fn list_account_aliases(
-        &self,
-        input: ListAccountAliasesRequest,
-    ) -> RusotoFuture<ListAccountAliasesResponse, ListAccountAliasesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListAccountAliasesRequest {
+    type Output = ListAccountAliasesResponse;
+    type Error = ListAccountAliasesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAccountAliases");
         params.put("Version", "2010-05-08");
-        ListAccountAliasesRequestSerializer::serialize(&mut params, "", &input);
+        ListAccountAliasesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23432,22 +26349,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all managed policies that are attached to the specified IAM group.</p> <p>An IAM group can also have inline policies embedded with it. To list the inline policies for a group, use the <a>ListGroupPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
-    fn list_attached_group_policies(
-        &self,
-        input: ListAttachedGroupPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedGroupPoliciesResponse, ListAttachedGroupPoliciesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListAttachedGroupPoliciesRequest {
+    type Output = ListAttachedGroupPoliciesResponse;
+    type Error = ListAttachedGroupPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAttachedGroupPolicies");
         params.put("Version", "2010-05-08");
-        ListAttachedGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListAttachedGroupPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedGroupPoliciesError::from_response(response))
@@ -23480,22 +26402,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all managed policies that are attached to the specified IAM role.</p> <p>An IAM role can also have inline policies embedded with it. To list the inline policies for a role, use the <a>ListRolePolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified role (or none that match the specified path prefix), the operation returns an empty list.</p>
-    fn list_attached_role_policies(
-        &self,
-        input: ListAttachedRolePoliciesRequest,
-    ) -> RusotoFuture<ListAttachedRolePoliciesResponse, ListAttachedRolePoliciesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListAttachedRolePoliciesRequest {
+    type Output = ListAttachedRolePoliciesResponse;
+    type Error = ListAttachedRolePoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAttachedRolePolicies");
         params.put("Version", "2010-05-08");
-        ListAttachedRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListAttachedRolePoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedRolePoliciesError::from_response(response))
@@ -23528,22 +26455,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all managed policies that are attached to the specified IAM user.</p> <p>An IAM user can also have inline policies embedded with it. To list the inline policies for a user, use the <a>ListUserPolicies</a> API. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. You can use the <code>PathPrefix</code> parameter to limit the list of policies to only those matching the specified path prefix. If there are no policies attached to the specified group (or none that match the specified path prefix), the operation returns an empty list.</p>
-    fn list_attached_user_policies(
-        &self,
-        input: ListAttachedUserPoliciesRequest,
-    ) -> RusotoFuture<ListAttachedUserPoliciesResponse, ListAttachedUserPoliciesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListAttachedUserPoliciesRequest {
+    type Output = ListAttachedUserPoliciesResponse;
+    type Error = ListAttachedUserPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAttachedUserPolicies");
         params.put("Version", "2010-05-08");
-        ListAttachedUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListAttachedUserPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAttachedUserPoliciesError::from_response(response))
@@ -23576,22 +26508,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all IAM users, groups, and roles that the specified managed policy is attached to.</p> <p>You can use the optional <code>EntityFilter</code> parameter to limit the results to a particular type of entity (users, groups, or roles). For example, to list only the roles that are attached to the specified policy, set <code>EntityFilter</code> to <code>Role</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_entities_for_policy(
-        &self,
-        input: ListEntitiesForPolicyRequest,
-    ) -> RusotoFuture<ListEntitiesForPolicyResponse, ListEntitiesForPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListEntitiesForPolicyRequest {
+    type Output = ListEntitiesForPolicyResponse;
+    type Error = ListEntitiesForPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListEntitiesForPolicy");
         params.put("Version", "2010-05-08");
-        ListEntitiesForPolicyRequestSerializer::serialize(&mut params, "", &input);
+        ListEntitiesForPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListEntitiesForPolicyError::from_response(response))
@@ -23624,22 +26561,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the names of the inline policies that are embedded in the specified IAM group.</p> <p>An IAM group can also have managed policies attached to it. To list the managed policies that are attached to a group, use <a>ListAttachedGroupPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified group, the operation returns an empty list.</p>
-    fn list_group_policies(
-        &self,
-        input: ListGroupPoliciesRequest,
-    ) -> RusotoFuture<ListGroupPoliciesResponse, ListGroupPoliciesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListGroupPoliciesRequest {
+    type Output = ListGroupPoliciesResponse;
+    type Error = ListGroupPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListGroupPolicies");
         params.put("Version", "2010-05-08");
-        ListGroupPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListGroupPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23675,22 +26617,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the IAM groups that have the specified path prefix.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListGroupsRequest {
+    type Output = ListGroupsResponse;
+    type Error = ListGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListGroups");
         params.put("Version", "2010-05-08");
-        ListGroupsRequestSerializer::serialize(&mut params, "", &input);
+        ListGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23726,22 +26673,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the IAM groups that the specified IAM user belongs to.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_groups_for_user(
-        &self,
-        input: ListGroupsForUserRequest,
-    ) -> RusotoFuture<ListGroupsForUserResponse, ListGroupsForUserError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListGroupsForUserRequest {
+    type Output = ListGroupsForUserResponse;
+    type Error = ListGroupsForUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListGroupsForUser");
         params.put("Version", "2010-05-08");
-        ListGroupsForUserRequestSerializer::serialize(&mut params, "", &input);
+        ListGroupsForUserRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23777,22 +26729,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the instance profiles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_instance_profiles(
-        &self,
-        input: ListInstanceProfilesRequest,
-    ) -> RusotoFuture<ListInstanceProfilesResponse, ListInstanceProfilesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListInstanceProfilesRequest {
+    type Output = ListInstanceProfilesResponse;
+    type Error = ListInstanceProfilesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListInstanceProfiles");
         params.put("Version", "2010-05-08");
-        ListInstanceProfilesRequestSerializer::serialize(&mut params, "", &input);
+        ListInstanceProfilesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -23827,22 +26784,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the instance profiles that have the specified associated IAM role. If there are none, the operation returns an empty list. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_instance_profiles_for_role(
-        &self,
-        input: ListInstanceProfilesForRoleRequest,
-    ) -> RusotoFuture<ListInstanceProfilesForRoleResponse, ListInstanceProfilesForRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListInstanceProfilesForRoleRequest {
+    type Output = ListInstanceProfilesForRoleResponse;
+    type Error = ListInstanceProfilesForRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListInstanceProfilesForRole");
         params.put("Version", "2010-05-08");
-        ListInstanceProfilesForRoleRequestSerializer::serialize(&mut params, "", &input);
+        ListInstanceProfilesForRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListInstanceProfilesForRoleError::from_response(response))
@@ -23875,22 +26837,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the MFA devices for an IAM user. If the request includes a IAM user name, then this operation lists all the MFA devices associated with the specified user. If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request for this API.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_mfa_devices(
-        &self,
-        input: ListMFADevicesRequest,
-    ) -> RusotoFuture<ListMFADevicesResponse, ListMFADevicesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListMFADevicesRequest {
+    type Output = ListMFADevicesResponse;
+    type Error = ListMFADevicesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListMFADevices");
         params.put("Version", "2010-05-08");
-        ListMFADevicesRequestSerializer::serialize(&mut params, "", &input);
+        ListMFADevicesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -23926,22 +26893,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists information about the IAM OpenID Connect (OIDC) provider resource objects defined in the AWS account.</p>
-    fn list_open_id_connect_providers(
-        &self,
-        input: ListOpenIDConnectProvidersRequest,
-    ) -> RusotoFuture<ListOpenIDConnectProvidersResponse, ListOpenIDConnectProvidersError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListOpenIDConnectProvidersRequest {
+    type Output = ListOpenIDConnectProvidersResponse;
+    type Error = ListOpenIDConnectProvidersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListOpenIDConnectProviders");
         params.put("Version", "2010-05-08");
-        ListOpenIDConnectProvidersRequestSerializer::serialize(&mut params, "", &input);
+        ListOpenIDConnectProvidersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListOpenIDConnectProvidersError::from_response(response))
@@ -23974,22 +26946,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all the managed policies that are available in your AWS account, including your own customer-defined managed policies and all AWS managed policies.</p> <p>You can filter the list of policies that is returned using the optional <code>OnlyAttached</code>, <code>Scope</code>, and <code>PathPrefix</code> parameters. For example, to list only the customer managed policies in your AWS account, set <code>Scope</code> to <code>Local</code>. To list only AWS managed policies, set <code>Scope</code> to <code>AWS</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn list_policies(
-        &self,
-        input: ListPoliciesRequest,
-    ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListPoliciesRequest {
+    type Output = ListPoliciesResponse;
+    type Error = ListPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListPolicies");
         params.put("Version", "2010-05-08");
-        ListPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24025,25 +27002,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves a list of policies that the IAM identity (user, group, or role) can use to access each specified service.</p> <note> <p>This operation does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>The list of policies returned by the operation depends on the ARN of the identity that you provide.</p> <ul> <li> <p> <b>User</b> – The list of policies includes the managed and inline policies that are attached to the user directly. The list also includes any additional managed and inline policies that are attached to the group to which the user belongs. </p> </li> <li> <p> <b>Group</b> – The list of policies includes only the managed and inline policies that are attached to the group directly. Policies that are attached to the group’s user are not included.</p> </li> <li> <p> <b>Role</b> – The list of policies includes only the managed and inline policies that are attached to the role.</p> </li> </ul> <p>For each managed policy, this operation returns the ARN and policy name. For each inline policy, it returns the policy name and the entity to which it is attached. Inline policies do not have an ARN. For more information about these policy types, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>Policies that are attached to users and roles as permissions boundaries are not returned. To view which managed policy is currently used to set the permissions boundary for a user or role, use the <a>GetUser</a> or <a>GetRole</a> operations.</p>
-    fn list_policies_granting_service_access(
-        &self,
-        input: ListPoliciesGrantingServiceAccessRequest,
-    ) -> RusotoFuture<
-        ListPoliciesGrantingServiceAccessResponse,
-        ListPoliciesGrantingServiceAccessError,
-    > {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListPoliciesGrantingServiceAccessRequest {
+    type Output = ListPoliciesGrantingServiceAccessResponse;
+    type Error = ListPoliciesGrantingServiceAccessError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListPoliciesGrantingServiceAccess");
         params.put("Version", "2010-05-08");
-        ListPoliciesGrantingServiceAccessRequestSerializer::serialize(&mut params, "", &input);
+        ListPoliciesGrantingServiceAccessRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListPoliciesGrantingServiceAccessError::from_response(
@@ -24078,22 +27057,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn list_policy_versions(
-        &self,
-        input: ListPolicyVersionsRequest,
-    ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListPolicyVersionsRequest {
+    type Output = ListPolicyVersionsResponse;
+    type Error = ListPolicyVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListPolicyVersions");
         params.put("Version", "2010-05-08");
-        ListPolicyVersionsRequestSerializer::serialize(&mut params, "", &input);
+        ListPolicyVersionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24129,22 +27113,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the names of the inline policies that are embedded in the specified IAM role.</p> <p>An IAM role can also have managed policies attached to it. To list the managed policies that are attached to a role, use <a>ListAttachedRolePolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified role, the operation returns an empty list.</p>
-    fn list_role_policies(
-        &self,
-        input: ListRolePoliciesRequest,
-    ) -> RusotoFuture<ListRolePoliciesResponse, ListRolePoliciesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListRolePoliciesRequest {
+    type Output = ListRolePoliciesResponse;
+    type Error = ListRolePoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListRolePolicies");
         params.put("Version", "2010-05-08");
-        ListRolePoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListRolePoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24180,22 +27169,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the tags that are attached to the specified role. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn list_role_tags(
-        &self,
-        input: ListRoleTagsRequest,
-    ) -> RusotoFuture<ListRoleTagsResponse, ListRoleTagsError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListRoleTagsRequest {
+    type Output = ListRoleTagsResponse;
+    type Error = ListRoleTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListRoleTags");
         params.put("Version", "2010-05-08");
-        ListRoleTagsRequestSerializer::serialize(&mut params, "", &input);
+        ListRoleTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24231,22 +27225,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the IAM roles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_roles(
-        &self,
-        input: ListRolesRequest,
-    ) -> RusotoFuture<ListRolesResponse, ListRolesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListRolesRequest {
+    type Output = ListRolesResponse;
+    type Error = ListRolesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListRoles");
         params.put("Version", "2010-05-08");
-        ListRolesRequestSerializer::serialize(&mut params, "", &input);
+        ListRolesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24280,22 +27279,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Lists the SAML provider resource objects defined in IAM in the account.</p> <note> <p> This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
-    fn list_saml_providers(
-        &self,
-        input: ListSAMLProvidersRequest,
-    ) -> RusotoFuture<ListSAMLProvidersResponse, ListSAMLProvidersError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListSAMLProvidersRequest {
+    type Output = ListSAMLProvidersResponse;
+    type Error = ListSAMLProvidersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListSAMLProviders");
         params.put("Version", "2010-05-08");
-        ListSAMLProvidersRequestSerializer::serialize(&mut params, "", &input);
+        ListSAMLProvidersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24331,22 +27335,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If none exists, the operation returns an empty list.</p> <p>The SSH public keys returned by this operation are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_ssh_public_keys(
-        &self,
-        input: ListSSHPublicKeysRequest,
-    ) -> RusotoFuture<ListSSHPublicKeysResponse, ListSSHPublicKeysError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListSSHPublicKeysRequest {
+    type Output = ListSSHPublicKeysResponse;
+    type Error = ListSSHPublicKeysError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListSSHPublicKeys");
         params.put("Version", "2010-05-08");
-        ListSSHPublicKeysRequestSerializer::serialize(&mut params, "", &input);
+        ListSSHPublicKeysRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24382,22 +27391,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the server certificates stored in IAM that have the specified path prefix. If none exist, the operation returns an empty list.</p> <p> You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p>
-    fn list_server_certificates(
-        &self,
-        input: ListServerCertificatesRequest,
-    ) -> RusotoFuture<ListServerCertificatesResponse, ListServerCertificatesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListServerCertificatesRequest {
+    type Output = ListServerCertificatesResponse;
+    type Error = ListServerCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListServerCertificates");
         params.put("Version", "2010-05-08");
-        ListServerCertificatesRequestSerializer::serialize(&mut params, "", &input);
+        ListServerCertificatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListServerCertificatesError::from_response(response))
@@ -24430,23 +27444,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If none exists, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
-    fn list_service_specific_credentials(
-        &self,
-        input: ListServiceSpecificCredentialsRequest,
-    ) -> RusotoFuture<ListServiceSpecificCredentialsResponse, ListServiceSpecificCredentialsError>
-    {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListServiceSpecificCredentialsRequest {
+    type Output = ListServiceSpecificCredentialsResponse;
+    type Error = ListServiceSpecificCredentialsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListServiceSpecificCredentials");
         params.put("Version", "2010-05-08");
-        ListServiceSpecificCredentialsRequestSerializer::serialize(&mut params, "", &input);
+        ListServiceSpecificCredentialsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListServiceSpecificCredentialsError::from_response(response))
@@ -24479,22 +27497,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the signing certificates associated with the specified IAM user. If none exists, the operation returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
-    fn list_signing_certificates(
-        &self,
-        input: ListSigningCertificatesRequest,
-    ) -> RusotoFuture<ListSigningCertificatesResponse, ListSigningCertificatesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListSigningCertificatesRequest {
+    type Output = ListSigningCertificatesResponse;
+    type Error = ListSigningCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListSigningCertificates");
         params.put("Version", "2010-05-08");
-        ListSigningCertificatesRequestSerializer::serialize(&mut params, "", &input);
+        ListSigningCertificatesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListSigningCertificatesError::from_response(response))
@@ -24527,22 +27550,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the names of the inline policies embedded in the specified IAM user.</p> <p>An IAM user can also have managed policies attached to it. To list the managed policies that are attached to a user, use <a>ListAttachedUserPolicies</a>. For more information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters. If there are no inline policies embedded with the specified user, the operation returns an empty list.</p>
-    fn list_user_policies(
-        &self,
-        input: ListUserPoliciesRequest,
-    ) -> RusotoFuture<ListUserPoliciesResponse, ListUserPoliciesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListUserPoliciesRequest {
+    type Output = ListUserPoliciesResponse;
+    type Error = ListUserPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListUserPolicies");
         params.put("Version", "2010-05-08");
-        ListUserPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        ListUserPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24578,22 +27606,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the tags that are attached to the specified user. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn list_user_tags(
-        &self,
-        input: ListUserTagsRequest,
-    ) -> RusotoFuture<ListUserTagsResponse, ListUserTagsError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListUserTagsRequest {
+    type Output = ListUserTagsResponse;
+    type Error = ListUserTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListUserTags");
         params.put("Version", "2010-05-08");
-        ListUserTagsRequestSerializer::serialize(&mut params, "", &input);
+        ListUserTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24629,22 +27662,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the operation returns all users in the AWS account. If there are none, the operation returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_users(
-        &self,
-        input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListUsersRequest {
+    type Output = ListUsersResponse;
+    type Error = ListUsersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListUsers");
         params.put("Version", "2010-05-08");
-        ListUsersRequestSerializer::serialize(&mut params, "", &input);
+        ListUsersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24678,22 +27716,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the virtual MFA devices defined in the AWS account by assignment status. If you do not specify an assignment status, the operation returns a list of all virtual MFA devices. Assignment status can be <code>Assigned</code>, <code>Unassigned</code>, or <code>Any</code>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-    fn list_virtual_mfa_devices(
-        &self,
-        input: ListVirtualMFADevicesRequest,
-    ) -> RusotoFuture<ListVirtualMFADevicesResponse, ListVirtualMFADevicesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ListVirtualMFADevicesRequest {
+    type Output = ListVirtualMFADevicesResponse;
+    type Error = ListVirtualMFADevicesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListVirtualMFADevices");
         params.put("Version", "2010-05-08");
-        ListVirtualMFADevicesRequestSerializer::serialize(&mut params, "", &input);
+        ListVirtualMFADevicesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListVirtualMFADevicesError::from_response(response))
@@ -24726,22 +27769,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM group.</p> <p>A user can also have managed policies attached to it. To attach a managed policy to a group, use <a>AttachGroupPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a group, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutGroupPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn put_group_policy(
-        &self,
-        input: PutGroupPolicyRequest,
-    ) -> RusotoFuture<(), PutGroupPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for PutGroupPolicyRequest {
+    type Output = PutGroupPolicyResponse;
+    type Error = PutGroupPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutGroupPolicy");
         params.put("Version", "2010-05-08");
-        PutGroupPolicyRequestSerializer::serialize(&mut params, "", &input);
+        PutGroupPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24751,47 +27799,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutGroupPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutGroupPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
-    fn put_role_permissions_boundary(
-        &self,
-        input: PutRolePermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), PutRolePermissionsBoundaryError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for PutRolePermissionsBoundaryRequest {
+    type Output = PutRolePermissionsBoundaryResponse;
+    type Error = PutRolePermissionsBoundaryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutRolePermissionsBoundary");
         params.put("Version", "2010-05-08");
-        PutRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        PutRolePermissionsBoundaryRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutRolePermissionsBoundaryError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutRolePermissionsBoundaryResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutRolePermissionsBoundaryResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn put_role_policy(&self, input: PutRolePolicyRequest) -> RusotoFuture<(), PutRolePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for PutRolePolicyRequest {
+    type Output = PutRolePolicyResponse;
+    type Error = PutRolePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutRolePolicy");
         params.put("Version", "2010-05-08");
-        PutRolePolicyRequestSerializer::serialize(&mut params, "", &input);
+        PutRolePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24801,47 +27902,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutRolePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutRolePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
-    fn put_user_permissions_boundary(
-        &self,
-        input: PutUserPermissionsBoundaryRequest,
-    ) -> RusotoFuture<(), PutUserPermissionsBoundaryError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for PutUserPermissionsBoundaryRequest {
+    type Output = PutUserPermissionsBoundaryResponse;
+    type Error = PutUserPermissionsBoundaryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutUserPermissionsBoundary");
         params.put("Version", "2010-05-08");
-        PutUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &input);
+        PutUserPermissionsBoundaryRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutUserPermissionsBoundaryError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutUserPermissionsBoundaryResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutUserPermissionsBoundaryResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM user.</p> <p>An IAM user can also have a managed policy attached to it. To attach a managed policy to a user, use <a>AttachUserPolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed in a user, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutUserPolicy</code>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn put_user_policy(&self, input: PutUserPolicyRequest) -> RusotoFuture<(), PutUserPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for PutUserPolicyRequest {
+    type Output = PutUserPolicyResponse;
+    type Error = PutUserPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutUserPolicy");
         params.put("Version", "2010-05-08");
-        PutUserPolicyRequestSerializer::serialize(&mut params, "", &input);
+        PutUserPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -24851,29 +28005,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutUserPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutUserPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified client ID (also known as audience) from the list of client IDs registered for the specified IAM OpenID Connect (OIDC) provider resource object.</p> <p>This operation is idempotent; it does not fail or return an error if you try to remove a client ID that does not exist.</p>
-    fn remove_client_id_from_open_id_connect_provider(
-        &self,
-        input: RemoveClientIDFromOpenIDConnectProviderRequest,
-    ) -> RusotoFuture<(), RemoveClientIDFromOpenIDConnectProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for RemoveClientIDFromOpenIDConnectProviderRequest {
+    type Output = RemoveClientIDFromOpenIDConnectProviderResponse;
+    type Error = RemoveClientIDFromOpenIDConnectProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveClientIDFromOpenIDConnectProvider");
         params.put("Version", "2010-05-08");
-        RemoveClientIDFromOpenIDConnectProviderRequestSerializer::serialize(
-            &mut params,
-            "",
-            &input,
-        );
+        RemoveClientIDFromOpenIDConnectProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveClientIDFromOpenIDConnectProviderError::from_response(
@@ -24882,50 +28057,101 @@ impl Iam for IamClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemoveClientIDFromOpenIDConnectProviderResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        RemoveClientIDFromOpenIDConnectProviderResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified IAM role from the specified EC2 instance profile.</p> <important> <p>Make sure that you do not have any Amazon EC2 instances running with the role you are about to remove from the instance profile. Removing a role from an instance profile that is associated with a running instance might break any applications running on the instance.</p> </important> <p> For more information about IAM roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
-    fn remove_role_from_instance_profile(
-        &self,
-        input: RemoveRoleFromInstanceProfileRequest,
-    ) -> RusotoFuture<(), RemoveRoleFromInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for RemoveRoleFromInstanceProfileRequest {
+    type Output = RemoveRoleFromInstanceProfileResponse;
+    type Error = RemoveRoleFromInstanceProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveRoleFromInstanceProfile");
         params.put("Version", "2010-05-08");
-        RemoveRoleFromInstanceProfileRequestSerializer::serialize(&mut params, "", &input);
+        RemoveRoleFromInstanceProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveRoleFromInstanceProfileError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemoveRoleFromInstanceProfileResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RemoveRoleFromInstanceProfileResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified user from the specified group.</p>
-    fn remove_user_from_group(
-        &self,
-        input: RemoveUserFromGroupRequest,
-    ) -> RusotoFuture<(), RemoveUserFromGroupError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for RemoveUserFromGroupRequest {
+    type Output = RemoveUserFromGroupResponse;
+    type Error = RemoveUserFromGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveUserFromGroup");
         params.put("Version", "2010-05-08");
-        RemoveUserFromGroupRequestSerializer::serialize(&mut params, "", &input);
+        RemoveUserFromGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -24934,26 +28160,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RemoveUserFromGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RemoveUserFromGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Resets the password for a service-specific credential. The new password is AWS generated and cryptographically strong. It cannot be configured by the user. Resetting the password immediately invalidates the previous password associated with this user.</p>
-    fn reset_service_specific_credential(
-        &self,
-        input: ResetServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<ResetServiceSpecificCredentialResponse, ResetServiceSpecificCredentialError>
-    {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ResetServiceSpecificCredentialRequest {
+    type Output = ResetServiceSpecificCredentialResponse;
+    type Error = ResetServiceSpecificCredentialError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResetServiceSpecificCredential");
         params.put("Version", "2010-05-08");
-        ResetServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
+        ResetServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ResetServiceSpecificCredentialError::from_response(response))
@@ -24986,22 +28236,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Synchronizes the specified MFA device with its IAM resource object on the AWS servers.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
-    fn resync_mfa_device(
-        &self,
-        input: ResyncMFADeviceRequest,
-    ) -> RusotoFuture<(), ResyncMFADeviceError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for ResyncMFADeviceRequest {
+    type Output = ResyncMFADeviceResponse;
+    type Error = ResyncMFADeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResyncMFADevice");
         params.put("Version", "2010-05-08");
-        ResyncMFADeviceRequestSerializer::serialize(&mut params, "", &input);
+        ResyncMFADeviceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25011,50 +28266,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ResyncMFADeviceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ResyncMFADeviceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the specified version of the specified policy as the policy's default (operative) version.</p> <p>This operation affects all users, groups, and roles that the policy is attached to. To list the users, groups, and roles that the policy is attached to, use the <a>ListEntitiesForPolicy</a> API.</p> <p>For information about managed policies, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
-    fn set_default_policy_version(
-        &self,
-        input: SetDefaultPolicyVersionRequest,
-    ) -> RusotoFuture<(), SetDefaultPolicyVersionError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for SetDefaultPolicyVersionRequest {
+    type Output = SetDefaultPolicyVersionResponse;
+    type Error = SetDefaultPolicyVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetDefaultPolicyVersion");
         params.put("Version", "2010-05-08");
-        SetDefaultPolicyVersionRequestSerializer::serialize(&mut params, "", &input);
+        SetDefaultPolicyVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetDefaultPolicyVersionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetDefaultPolicyVersionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetDefaultPolicyVersionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the specified version of the global endpoint token as the token version used for the AWS account.</p> <p>By default, AWS Security Token Service (STS) is available as a global service, and all STS requests go to a single endpoint at <code>https://sts.amazonaws.com</code>. AWS recommends using Regional STS endpoints to reduce latency, build in redundancy, and increase session token availability. For information about Regional endpoints for STS, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#sts_region">AWS Regions and Endpoints</a> in the <i>AWS General Reference</i>.</p> <p>If you make an STS call to the global endpoint, the resulting session tokens might be valid in some Regions but not others. It depends on the version that is set in this operation. Version 1 tokens are valid only in AWS Regions that are available by default. These tokens do not work in manually enabled Regions, such as Asia Pacific (Hong Kong). Version 2 tokens are valid in all Regions. However, version 2 tokens are longer and might affect systems where you temporarily store tokens. For information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p> <p>To view the current session token version, see the <code>GlobalEndpointTokenVersion</code> entry in the response of the <a>GetAccountSummary</a> operation.</p>
-    fn set_security_token_service_preferences(
-        &self,
-        input: SetSecurityTokenServicePreferencesRequest,
-    ) -> RusotoFuture<(), SetSecurityTokenServicePreferencesError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for SetSecurityTokenServicePreferencesRequest {
+    type Output = SetSecurityTokenServicePreferencesResponse;
+    type Error = SetSecurityTokenServicePreferencesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetSecurityTokenServicePreferences");
         params.put("Version", "2010-05-08");
-        SetSecurityTokenServicePreferencesRequestSerializer::serialize(&mut params, "", &input);
+        SetSecurityTokenServicePreferencesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetSecurityTokenServicePreferencesError::from_response(
@@ -25063,25 +28368,50 @@ impl Iam for IamClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetSecurityTokenServicePreferencesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetSecurityTokenServicePreferencesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Simulate how a set of IAM policies and optionally a resource-based policy works with a list of API operations and AWS resources to determine the policies' effective permissions. The policies are provided as strings.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p>If you want to simulate existing policies attached to an IAM user, group, or role, use <a>SimulatePrincipalPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForCustomPolicy</a>.</p> <p>If the output is long, you can use <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
-    fn simulate_custom_policy(
-        &self,
-        input: SimulateCustomPolicyRequest,
-    ) -> RusotoFuture<SimulatePolicyResponse, SimulateCustomPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for SimulateCustomPolicyRequest {
+    type Output = SimulateCustomPolicyResponse;
+    type Error = SimulateCustomPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SimulateCustomPolicy");
         params.put("Version", "2010-05-08");
-        SimulateCustomPolicyRequestSerializer::serialize(&mut params, "", &input);
+        SimulateCustomPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -25094,7 +28424,7 @@ impl Iam for IamClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SimulatePolicyResponse::default();
+                    result = SimulateCustomPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25104,7 +28434,7 @@ impl Iam for IamClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SimulatePolicyResponseDeserializer::deserialize(
+                    result = SimulateCustomPolicyResponseDeserializer::deserialize(
                         "SimulateCustomPolicyResult",
                         &mut stack,
                     )?;
@@ -25116,22 +28446,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Simulate how a set of IAM policies attached to an IAM entity works with a list of API operations and AWS resources to determine the policies' effective permissions. The entity can be an IAM user, group, or role. If you specify a user, then the simulation also includes all of the policies that are attached to groups that the user belongs to.</p> <p>You can optionally include a list of one or more additional policies specified as strings to include in the simulation. If you want to simulate only policies specified as strings, use <a>SimulateCustomPolicy</a> instead.</p> <p>You can also optionally include one resource-based policy to be evaluated with each of the resources included in the simulation.</p> <p>The simulation does not perform the API operations; it only checks the authorization to determine if the simulated policies allow or deny the operations.</p> <p> <b>Note:</b> This API discloses information about the permissions granted to other users. If you do not want users to see other user's permissions, then consider allowing them to use <a>SimulateCustomPolicy</a> instead.</p> <p>Context keys are variables maintained by AWS and its services that provide details about the context of an API query request. You can use the <code>Condition</code> element of an IAM policy to evaluate context keys. To get the list of context keys that the policies require for correct simulation, use <a>GetContextKeysForPrincipalPolicy</a>.</p> <p>If the output is long, you can use the <code>MaxItems</code> and <code>Marker</code> parameters to paginate the results.</p>
-    fn simulate_principal_policy(
-        &self,
-        input: SimulatePrincipalPolicyRequest,
-    ) -> RusotoFuture<SimulatePolicyResponse, SimulatePrincipalPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for SimulatePrincipalPolicyRequest {
+    type Output = SimulatePrincipalPolicyResponse;
+    type Error = SimulatePrincipalPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SimulatePrincipalPolicy");
         params.put("Version", "2010-05-08");
-        SimulatePrincipalPolicyRequestSerializer::serialize(&mut params, "", &input);
+        SimulatePrincipalPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SimulatePrincipalPolicyError::from_response(response))
@@ -25142,7 +28477,7 @@ impl Iam for IamClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SimulatePolicyResponse::default();
+                    result = SimulatePrincipalPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -25152,7 +28487,7 @@ impl Iam for IamClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SimulatePolicyResponseDeserializer::deserialize(
+                    result = SimulatePrincipalPolicyResponseDeserializer::deserialize(
                         "SimulatePrincipalPolicyResult",
                         &mut stack,
                     )?;
@@ -25164,19 +28499,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn tag_role(&self, input: TagRoleRequest) -> RusotoFuture<(), TagRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for TagRoleRequest {
+    type Output = TagRoleResponse;
+    type Error = TagRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TagRole");
         params.put("Version", "2010-05-08");
-        TagRoleRequestSerializer::serialize(&mut params, "", &input);
+        TagRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25186,22 +28529,48 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = TagRoleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        TagRoleResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Adds one or more tags to an IAM user. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM requesting user or to a role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn tag_user(&self, input: TagUserRequest) -> RusotoFuture<(), TagUserError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for TagUserRequest {
+    type Output = TagUserResponse;
+    type Error = TagUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TagUser");
         params.put("Version", "2010-05-08");
-        TagUserRequestSerializer::serialize(&mut params, "", &input);
+        TagUserRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25211,22 +28580,48 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = TagUserResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        TagUserResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified tags from the role. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn untag_role(&self, input: UntagRoleRequest) -> RusotoFuture<(), UntagRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UntagRoleRequest {
+    type Output = UntagRoleResponse;
+    type Error = UntagRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UntagRole");
         params.put("Version", "2010-05-08");
-        UntagRoleRequestSerializer::serialize(&mut params, "", &input);
+        UntagRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25236,22 +28631,48 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UntagRoleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        UntagRoleResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Removes the specified tags from the user. For more information about tagging, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
-    fn untag_user(&self, input: UntagUserRequest) -> RusotoFuture<(), UntagUserError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UntagUserRequest {
+    type Output = UntagUserResponse;
+    type Error = UntagUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UntagUser");
         params.put("Version", "2010-05-08");
-        UntagUserRequestSerializer::serialize(&mut params, "", &input);
+        UntagUserRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25261,25 +28682,48 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UntagUserResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        UntagUserResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
-    fn update_access_key(
-        &self,
-        input: UpdateAccessKeyRequest,
-    ) -> RusotoFuture<(), UpdateAccessKeyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateAccessKeyRequest {
+    type Output = UpdateAccessKeyResponse;
+    type Error = UpdateAccessKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAccessKey");
         params.put("Version", "2010-05-08");
-        UpdateAccessKeyRequestSerializer::serialize(&mut params, "", &input);
+        UpdateAccessKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25289,72 +28733,150 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateAccessKeyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateAccessKeyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Updates the password policy settings for the AWS account.</p> <note> <ul> <li> <p>This operation does not support partial updates. No parameters are required, but if you do not specify a parameter, that parameter's value reverts to its default value. See the <b>Request Parameters</b> section for each parameter's default value. Also note that some parameters do not allow the default parameter to be explicitly set. Instead, to invoke the default value, do not include that parameter when you invoke the operation.</p> </li> </ul> </note> <p> For more information about using a password policy, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingPasswordPolicies.html">Managing an IAM Password Policy</a> in the <i>IAM User Guide</i>.</p>
-    fn update_account_password_policy(
-        &self,
-        input: UpdateAccountPasswordPolicyRequest,
-    ) -> RusotoFuture<(), UpdateAccountPasswordPolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateAccountPasswordPolicyRequest {
+    type Output = UpdateAccountPasswordPolicyResponse;
+    type Error = UpdateAccountPasswordPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAccountPasswordPolicy");
         params.put("Version", "2010-05-08");
-        UpdateAccountPasswordPolicyRequestSerializer::serialize(&mut params, "", &input);
+        UpdateAccountPasswordPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAccountPasswordPolicyError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateAccountPasswordPolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateAccountPasswordPolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Updates the policy that grants an IAM entity permission to assume a role. This is typically referred to as the "role trust policy". For more information about roles, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p>
-    fn update_assume_role_policy(
-        &self,
-        input: UpdateAssumeRolePolicyRequest,
-    ) -> RusotoFuture<(), UpdateAssumeRolePolicyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateAssumeRolePolicyRequest {
+    type Output = UpdateAssumeRolePolicyResponse;
+    type Error = UpdateAssumeRolePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAssumeRolePolicy");
         params.put("Version", "2010-05-08");
-        UpdateAssumeRolePolicyRequestSerializer::serialize(&mut params, "", &input);
+        UpdateAssumeRolePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAssumeRolePolicyError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateAssumeRolePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateAssumeRolePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Updates the name and/or the path of the specified IAM group.</p> <important> <p> You should understand the implications of changing a group&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_WorkingWithGroupsAndUsers.html">Renaming Users and Groups</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the role group with the old name and the new name. For example, to change the group named <code>Managers</code> to <code>MGRs</code>, the principal must have a policy that allows them to update both groups. If the principal has permission to update the <code>Managers</code> group, but not the <code>MGRs</code> group, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a>. </p> </note></p>
-    fn update_group(&self, input: UpdateGroupRequest) -> RusotoFuture<(), UpdateGroupError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateGroupRequest {
+    type Output = UpdateGroupResponse;
+    type Error = UpdateGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateGroup");
         params.put("Version", "2010-05-08");
-        UpdateGroupRequestSerializer::serialize(&mut params, "", &input);
+        UpdateGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25364,25 +28886,48 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        UpdateGroupResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Changes the password for the specified IAM user.</p> <p>IAM users can change their own passwords by calling <a>ChangePassword</a>. For more information about modifying passwords, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html">Managing Passwords</a> in the <i>IAM User Guide</i>.</p>
-    fn update_login_profile(
-        &self,
-        input: UpdateLoginProfileRequest,
-    ) -> RusotoFuture<(), UpdateLoginProfileError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateLoginProfileRequest {
+    type Output = UpdateLoginProfileResponse;
+    type Error = UpdateLoginProfileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateLoginProfile");
         params.put("Version", "2010-05-08");
-        UpdateLoginProfileRequestSerializer::serialize(&mut params, "", &input);
+        UpdateLoginProfileRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25392,25 +28937,50 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateLoginProfileResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateLoginProfileResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint. Therefore, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
-    fn update_open_id_connect_provider_thumbprint(
-        &self,
-        input: UpdateOpenIDConnectProviderThumbprintRequest,
-    ) -> RusotoFuture<(), UpdateOpenIDConnectProviderThumbprintError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateOpenIDConnectProviderThumbprintRequest {
+    type Output = UpdateOpenIDConnectProviderThumbprintResponse;
+    type Error = UpdateOpenIDConnectProviderThumbprintError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateOpenIDConnectProviderThumbprint");
         params.put("Version", "2010-05-08");
-        UpdateOpenIDConnectProviderThumbprintRequestSerializer::serialize(&mut params, "", &input);
+        UpdateOpenIDConnectProviderThumbprintRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateOpenIDConnectProviderThumbprintError::from_response(
@@ -25419,25 +28989,51 @@ impl Iam for IamClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateOpenIDConnectProviderThumbprintResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        UpdateOpenIDConnectProviderThumbprintResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Updates the description or maximum session duration setting of a role.</p>
-    fn update_role(
-        &self,
-        input: UpdateRoleRequest,
-    ) -> RusotoFuture<UpdateRoleResponse, UpdateRoleError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateRoleRequest {
+    type Output = UpdateRoleResponse;
+    type Error = UpdateRoleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateRole");
         params.put("Version", "2010-05-08");
-        UpdateRoleRequestSerializer::serialize(&mut params, "", &input);
+        UpdateRoleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25473,22 +29069,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Use <a>UpdateRole</a> instead.</p> <p>Modifies only the description of a role. This operation performs the same function as the <code>Description</code> parameter in the <code>UpdateRole</code> operation.</p>
-    fn update_role_description(
-        &self,
-        input: UpdateRoleDescriptionRequest,
-    ) -> RusotoFuture<UpdateRoleDescriptionResponse, UpdateRoleDescriptionError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateRoleDescriptionRequest {
+    type Output = UpdateRoleDescriptionResponse;
+    type Error = UpdateRoleDescriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateRoleDescription");
         params.put("Version", "2010-05-08");
-        UpdateRoleDescriptionRequestSerializer::serialize(&mut params, "", &input);
+        UpdateRoleDescriptionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateRoleDescriptionError::from_response(response))
@@ -25521,22 +29122,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Updates the metadata document for an existing SAML provider resource object.</p> <note> <p>This operation requires <a href="https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html">Signature Version 4</a>.</p> </note></p>
-    fn update_saml_provider(
-        &self,
-        input: UpdateSAMLProviderRequest,
-    ) -> RusotoFuture<UpdateSAMLProviderResponse, UpdateSAMLProviderError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateSAMLProviderRequest {
+    type Output = UpdateSAMLProviderResponse;
+    type Error = UpdateSAMLProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateSAMLProvider");
         params.put("Version", "2010-05-08");
-        UpdateSAMLProviderRequestSerializer::serialize(&mut params, "", &input);
+        UpdateSAMLProviderRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25572,22 +29178,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p>Sets the status of an IAM user's SSH public key to active or inactive. SSH public keys that are inactive cannot be used for authentication. This operation can be used to disable a user's SSH public key as part of a key rotation work flow.</p> <p>The SSH public key affected by this operation is used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
-    fn update_ssh_public_key(
-        &self,
-        input: UpdateSSHPublicKeyRequest,
-    ) -> RusotoFuture<(), UpdateSSHPublicKeyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateSSHPublicKeyRequest {
+    type Output = UpdateSSHPublicKeyResponse;
+    type Error = UpdateSSHPublicKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateSSHPublicKey");
         params.put("Version", "2010-05-08");
-        UpdateSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
+        UpdateSSHPublicKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25597,50 +29208,100 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateSSHPublicKeyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateSSHPublicKeyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Updates the name and/or the path of the specified server certificate stored in IAM.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic also includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <important> <p>You should understand the implications of changing a server certificate&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs_manage.html#RenamingServerCerts">Renaming a Server Certificate</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p>The person making the request (the principal), must have permission to change the server certificate with the old name and the new name. For example, to change the certificate named <code>ProductionCert</code> to <code>ProdCert</code>, the principal must have a policy that allows them to update both certificates. If the principal has permission to update the <code>ProductionCert</code> group, but not the <code>ProdCert</code> certificate, then the update fails. For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html">Access Management</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn update_server_certificate(
-        &self,
-        input: UpdateServerCertificateRequest,
-    ) -> RusotoFuture<(), UpdateServerCertificateError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateServerCertificateRequest {
+    type Output = UpdateServerCertificateResponse;
+    type Error = UpdateServerCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateServerCertificate");
         params.put("Version", "2010-05-08");
-        UpdateServerCertificateRequestSerializer::serialize(&mut params, "", &input);
+        UpdateServerCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateServerCertificateError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateServerCertificateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateServerCertificateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the status of a service-specific credential to <code>Active</code> or <code>Inactive</code>. Service-specific credentials that are inactive cannot be used for authentication to the service. This operation can be used to disable a user's service-specific credential as part of a credential rotation work flow.</p>
-    fn update_service_specific_credential(
-        &self,
-        input: UpdateServiceSpecificCredentialRequest,
-    ) -> RusotoFuture<(), UpdateServiceSpecificCredentialError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateServiceSpecificCredentialRequest {
+    type Output = UpdateServiceSpecificCredentialResponse;
+    type Error = UpdateServiceSpecificCredentialError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateServiceSpecificCredential");
         params.put("Version", "2010-05-08");
-        UpdateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &input);
+        UpdateServiceSpecificCredentialRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateServiceSpecificCredentialError::from_response(
@@ -25649,47 +29310,100 @@ impl Iam for IamClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateServiceSpecificCredentialResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateServiceSpecificCredentialResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
-    fn update_signing_certificate(
-        &self,
-        input: UpdateSigningCertificateRequest,
-    ) -> RusotoFuture<(), UpdateSigningCertificateError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateSigningCertificateRequest {
+    type Output = UpdateSigningCertificateResponse;
+    type Error = UpdateSigningCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateSigningCertificate");
         params.put("Version", "2010-05-08");
-        UpdateSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
+        UpdateSigningCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateSigningCertificateError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateSigningCertificateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateSigningCertificateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Updates the name and/or the path of the specified IAM user.</p> <important> <p> You should understand the implications of changing an IAM user&#39;s path or name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_manage.html#id_users_renaming">Renaming an IAM User</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups_manage_rename.html">Renaming an IAM Group</a> in the <i>IAM User Guide</i>.</p> </important> <note> <p> To change a user name, the requester must have appropriate permissions on both the source object and the target object. For example, to change Bob to Robert, the entity making the request must have permission on Bob and Robert, or must have permission on all (*). For more information about permissions, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/PermissionsAndPolicies.html">Permissions and Policies</a>. </p> </note></p>
-    fn update_user(&self, input: UpdateUserRequest) -> RusotoFuture<(), UpdateUserError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UpdateUserRequest {
+    type Output = UpdateUserResponse;
+    type Error = UpdateUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateUser");
         params.put("Version", "2010-05-08");
-        UpdateUserRequestSerializer::serialize(&mut params, "", &input);
+        UpdateUserRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25699,25 +29413,48 @@ impl Iam for IamClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateUserResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        UpdateUserResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Uploads an SSH public key and associates it with the specified IAM user.</p> <p>The SSH public key uploaded by this operation can be used only for authenticating the associated IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p>
-    fn upload_ssh_public_key(
-        &self,
-        input: UploadSSHPublicKeyRequest,
-    ) -> RusotoFuture<UploadSSHPublicKeyResponse, UploadSSHPublicKeyError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UploadSSHPublicKeyRequest {
+    type Output = UploadSSHPublicKeyResponse;
+    type Error = UploadSSHPublicKeyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UploadSSHPublicKey");
         params.put("Version", "2010-05-08");
-        UploadSSHPublicKeyRequestSerializer::serialize(&mut params, "", &input);
+        UploadSSHPublicKeyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -25753,22 +29490,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="https://docs.aws.amazon.com/acm/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="https://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <p>For information about the number of server certificates you can upload, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn upload_server_certificate(
-        &self,
-        input: UploadServerCertificateRequest,
-    ) -> RusotoFuture<UploadServerCertificateResponse, UploadServerCertificateError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UploadServerCertificateRequest {
+    type Output = UploadServerCertificateResponse;
+    type Error = UploadServerCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UploadServerCertificate");
         params.put("Version", "2010-05-08");
-        UploadServerCertificateRequestSerializer::serialize(&mut params, "", &input);
+        UploadServerCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UploadServerCertificateError::from_response(response))
@@ -25801,22 +29543,27 @@ impl Iam for IamClient {
             }))
         })
     }
+}
 
-    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of an X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
-    fn upload_signing_certificate(
-        &self,
-        input: UploadSigningCertificateRequest,
-    ) -> RusotoFuture<UploadSigningCertificateResponse, UploadSigningCertificateError> {
-        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+impl ServiceRequest for UploadSigningCertificateRequest {
+    type Output = UploadSigningCertificateResponse;
+    type Error = UploadSigningCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "iam", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UploadSigningCertificate");
         params.put("Version", "2010-05-08");
-        UploadSigningCertificateRequestSerializer::serialize(&mut params, "", &input);
+        UploadSigningCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UploadSigningCertificateError::from_response(response))
@@ -25892,8 +29639,8 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = IamClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.get_account_summary().sync();
+        let request = GetAccountSummaryRequest::default();
+        let result = client.get_account_summary(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 

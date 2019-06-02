@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -77,7 +78,7 @@ pub struct CreateProjectRequest {
 /// <p> Result structure used in response to a request to create a project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateProjectResult {
+pub struct CreateProjectResponse {
     /// <p> Detailed information about the created AWS Mobile Hub project. </p>
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -95,7 +96,7 @@ pub struct DeleteProjectRequest {
 /// <p> Result structure used in response to request to delete a project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteProjectResult {
+pub struct DeleteProjectResponse {
     /// <p> Resources which were deleted. </p>
     #[serde(rename = "deletedResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -117,7 +118,7 @@ pub struct DescribeBundleRequest {
 /// <p> Result structure contains the details of the bundle. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeBundleResult {
+pub struct DescribeBundleResponse {
     /// <p> The details of the bundle. </p>
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -139,7 +140,7 @@ pub struct DescribeProjectRequest {
 /// <p> Result structure used for requests of project details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeProjectResult {
+pub struct DescribeProjectResponse {
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<ProjectDetails>,
@@ -164,7 +165,7 @@ pub struct ExportBundleRequest {
 /// <p> Result structure which contains link to download custom-generated SDK and tool packages used to integrate mobile web or app clients with backed AWS resources. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ExportBundleResult {
+pub struct ExportBundleResponse {
     /// <p> URL which contains the custom-generated SDK and tool packages used to integrate the client mobile app or web app with the AWS resources created by the AWS Mobile Hub project. </p>
     #[serde(rename = "downloadUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -182,7 +183,7 @@ pub struct ExportProjectRequest {
 /// <p> Result structure used for requests to export project configuration details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ExportProjectResult {
+pub struct ExportProjectResponse {
     /// <p> URL which can be used to download the exported project configuation file(s). </p>
     #[serde(rename = "downloadUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -213,7 +214,7 @@ pub struct ListBundlesRequest {
 /// <p> Result structure contains a list of all available bundles with details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListBundlesResult {
+pub struct ListBundlesResponse {
     /// <p> A list of bundles. </p>
     #[serde(rename = "bundleList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -240,7 +241,7 @@ pub struct ListProjectsRequest {
 /// <p> Result structure used for requests to list projects in AWS Mobile Hub. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListProjectsResult {
+pub struct ListProjectsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -337,7 +338,7 @@ pub struct UpdateProjectRequest {
 /// <p> Result structure used for requests to updated project configuration. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateProjectResult {
+pub struct UpdateProjectResponse {
     /// <p> Detailed information about the updated AWS Mobile Hub project. </p>
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -914,58 +915,31 @@ impl Error for UpdateProjectError {
 /// Trait representing the capabilities of the AWS Mobile API. AWS Mobile clients implement this trait.
 pub trait Mobile {
     /// <p> Creates an AWS Mobile Hub project. </p>
-    fn create_project(
-        &self,
-        input: CreateProjectRequest,
-    ) -> RusotoFuture<CreateProjectResult, CreateProjectError>;
+    fn create_project(&self, input: CreateProjectRequest) -> Request<CreateProjectRequest>;
 
     /// <p> Delets a project in AWS Mobile Hub. </p>
-    fn delete_project(
-        &self,
-        input: DeleteProjectRequest,
-    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError>;
+    fn delete_project(&self, input: DeleteProjectRequest) -> Request<DeleteProjectRequest>;
 
     /// <p> Get the bundle details for the requested bundle id. </p>
-    fn describe_bundle(
-        &self,
-        input: DescribeBundleRequest,
-    ) -> RusotoFuture<DescribeBundleResult, DescribeBundleError>;
+    fn describe_bundle(&self, input: DescribeBundleRequest) -> Request<DescribeBundleRequest>;
 
     /// <p> Gets details about a project in AWS Mobile Hub. </p>
-    fn describe_project(
-        &self,
-        input: DescribeProjectRequest,
-    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError>;
+    fn describe_project(&self, input: DescribeProjectRequest) -> Request<DescribeProjectRequest>;
 
     /// <p> Generates customized software development kit (SDK) and or tool packages used to integrate mobile web or mobile app clients with backend AWS resources. </p>
-    fn export_bundle(
-        &self,
-        input: ExportBundleRequest,
-    ) -> RusotoFuture<ExportBundleResult, ExportBundleError>;
+    fn export_bundle(&self, input: ExportBundleRequest) -> Request<ExportBundleRequest>;
 
     /// <p> Exports project configuration to a snapshot which can be downloaded and shared. Note that mobile app push credentials are encrypted in exported projects, so they can only be shared successfully within the same AWS account. </p>
-    fn export_project(
-        &self,
-        input: ExportProjectRequest,
-    ) -> RusotoFuture<ExportProjectResult, ExportProjectError>;
+    fn export_project(&self, input: ExportProjectRequest) -> Request<ExportProjectRequest>;
 
     /// <p> List all available bundles. </p>
-    fn list_bundles(
-        &self,
-        input: ListBundlesRequest,
-    ) -> RusotoFuture<ListBundlesResult, ListBundlesError>;
+    fn list_bundles(&self, input: ListBundlesRequest) -> Request<ListBundlesRequest>;
 
     /// <p> Lists projects in AWS Mobile Hub. </p>
-    fn list_projects(
-        &self,
-        input: ListProjectsRequest,
-    ) -> RusotoFuture<ListProjectsResult, ListProjectsError>;
+    fn list_projects(&self, input: ListProjectsRequest) -> Request<ListProjectsRequest>;
 
     /// <p> Update an existing project. </p>
-    fn update_project(
-        &self,
-        input: UpdateProjectRequest,
-    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError>;
+    fn update_project(&self, input: UpdateProjectRequest) -> Request<UpdateProjectRequest>;
 }
 /// A client for the AWS Mobile API.
 #[derive(Clone)]
@@ -1005,18 +979,68 @@ impl MobileClient {
 
 impl Mobile for MobileClient {
     /// <p> Creates an AWS Mobile Hub project. </p>
-    fn create_project(
-        &self,
-        input: CreateProjectRequest,
-    ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
+    fn create_project(&self, input: CreateProjectRequest) -> Request<CreateProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Delets a project in AWS Mobile Hub. </p>
+    fn delete_project(&self, input: DeleteProjectRequest) -> Request<DeleteProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Get the bundle details for the requested bundle id. </p>
+    fn describe_bundle(&self, input: DescribeBundleRequest) -> Request<DescribeBundleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Gets details about a project in AWS Mobile Hub. </p>
+    fn describe_project(&self, input: DescribeProjectRequest) -> Request<DescribeProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Generates customized software development kit (SDK) and or tool packages used to integrate mobile web or mobile app clients with backend AWS resources. </p>
+    fn export_bundle(&self, input: ExportBundleRequest) -> Request<ExportBundleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Exports project configuration to a snapshot which can be downloaded and shared. Note that mobile app push credentials are encrypted in exported projects, so they can only be shared successfully within the same AWS account. </p>
+    fn export_project(&self, input: ExportProjectRequest) -> Request<ExportProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> List all available bundles. </p>
+    fn list_bundles(&self, input: ListBundlesRequest) -> Request<ListBundlesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Lists projects in AWS Mobile Hub. </p>
+    fn list_projects(&self, input: ListProjectsRequest) -> Request<ListProjectsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Update an existing project. </p>
+    fn update_project(&self, input: UpdateProjectRequest) -> Request<UpdateProjectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateProjectRequest {
+    type Output = CreateProjectResponse;
+    type Error = CreateProjectError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/projects";
 
-        let mut request =
-            SignedRequest::new("POST", "AWSMobileHubService", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
-        let encoded = if let Some(ref payload) = input.contents {
+        let encoded = if let Some(ref payload) = self.contents {
             Some(payload.to_owned())
         } else {
             None
@@ -1024,22 +1048,22 @@ impl Mobile for MobileClient {
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.name {
+        if let Some(ref x) = self.name {
             params.put("name", x);
         }
-        if let Some(ref x) = input.region {
+        if let Some(ref x) = self.region {
             params.put("region", x);
         }
-        if let Some(ref x) = input.snapshot_id {
+        if let Some(ref x) = self.snapshot_id {
             params.put("snapshotId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateProjectResult, _>()?;
+                        .deserialize::<CreateProjectResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1053,25 +1077,30 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> Delets a project in AWS Mobile Hub. </p>
-    fn delete_project(
-        &self,
-        input: DeleteProjectRequest,
-    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
-        let request_uri = format!("/projects/{project_id}", project_id = input.project_id);
+impl ServiceRequest for DeleteProjectRequest {
+    type Output = DeleteProjectResponse;
+    type Error = DeleteProjectError;
 
-        let mut request =
-            SignedRequest::new("DELETE", "AWSMobileHubService", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/projects/{project_id}", project_id = self.project_id);
+
+        let mut request = SignedRequest::new("DELETE", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteProjectResult, _>()?;
+                        .deserialize::<DeleteProjectResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1085,25 +1114,30 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> Get the bundle details for the requested bundle id. </p>
-    fn describe_bundle(
-        &self,
-        input: DescribeBundleRequest,
-    ) -> RusotoFuture<DescribeBundleResult, DescribeBundleError> {
-        let request_uri = format!("/bundles/{bundle_id}", bundle_id = input.bundle_id);
+impl ServiceRequest for DescribeBundleRequest {
+    type Output = DescribeBundleResponse;
+    type Error = DescribeBundleError;
 
-        let mut request =
-            SignedRequest::new("GET", "AWSMobileHubService", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bundles/{bundle_id}", bundle_id = self.bundle_id);
+
+        let mut request = SignedRequest::new("GET", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeBundleResult, _>()?;
+                        .deserialize::<DescribeBundleResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1117,32 +1151,37 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> Gets details about a project in AWS Mobile Hub. </p>
-    fn describe_project(
-        &self,
-        input: DescribeProjectRequest,
-    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError> {
+impl ServiceRequest for DescribeProjectRequest {
+    type Output = DescribeProjectResponse;
+    type Error = DescribeProjectError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/project";
 
-        let mut request =
-            SignedRequest::new("GET", "AWSMobileHubService", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
 
         let mut params = Params::new();
-        params.put("projectId", &input.project_id);
-        if let Some(ref x) = input.sync_from_resources {
+        params.put("projectId", &self.project_id);
+        if let Some(ref x) = self.sync_from_resources {
             params.put("syncFromResources", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeProjectResult, _>()?;
+                        .deserialize::<DescribeProjectResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1156,34 +1195,39 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> Generates customized software development kit (SDK) and or tool packages used to integrate mobile web or mobile app clients with backend AWS resources. </p>
-    fn export_bundle(
-        &self,
-        input: ExportBundleRequest,
-    ) -> RusotoFuture<ExportBundleResult, ExportBundleError> {
-        let request_uri = format!("/bundles/{bundle_id}", bundle_id = input.bundle_id);
+impl ServiceRequest for ExportBundleRequest {
+    type Output = ExportBundleResponse;
+    type Error = ExportBundleError;
 
-        let mut request =
-            SignedRequest::new("POST", "AWSMobileHubService", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bundles/{bundle_id}", bundle_id = self.bundle_id);
+
+        let mut request = SignedRequest::new("POST", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.platform {
+        if let Some(ref x) = self.platform {
             params.put("platform", x);
         }
-        if let Some(ref x) = input.project_id {
+        if let Some(ref x) = self.project_id {
             params.put("projectId", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExportBundleResult, _>()?;
+                        .deserialize::<ExportBundleResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1197,25 +1241,30 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> Exports project configuration to a snapshot which can be downloaded and shared. Note that mobile app push credentials are encrypted in exported projects, so they can only be shared successfully within the same AWS account. </p>
-    fn export_project(
-        &self,
-        input: ExportProjectRequest,
-    ) -> RusotoFuture<ExportProjectResult, ExportProjectError> {
-        let request_uri = format!("/exports/{project_id}", project_id = input.project_id);
+impl ServiceRequest for ExportProjectRequest {
+    type Output = ExportProjectResponse;
+    type Error = ExportProjectError;
 
-        let mut request =
-            SignedRequest::new("POST", "AWSMobileHubService", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/exports/{project_id}", project_id = self.project_id);
+
+        let mut request = SignedRequest::new("POST", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExportProjectResult, _>()?;
+                        .deserialize::<ExportProjectResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1229,34 +1278,39 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> List all available bundles. </p>
-    fn list_bundles(
-        &self,
-        input: ListBundlesRequest,
-    ) -> RusotoFuture<ListBundlesResult, ListBundlesError> {
+impl ServiceRequest for ListBundlesRequest {
+    type Output = ListBundlesResponse;
+    type Error = ListBundlesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/bundles";
 
-        let mut request =
-            SignedRequest::new("GET", "AWSMobileHubService", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListBundlesResult, _>()?;
+                        .deserialize::<ListBundlesResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1270,34 +1324,39 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> Lists projects in AWS Mobile Hub. </p>
-    fn list_projects(
-        &self,
-        input: ListProjectsRequest,
-    ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
+impl ServiceRequest for ListProjectsRequest {
+    type Output = ListProjectsResponse;
+    type Error = ListProjectsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/projects";
 
-        let mut request =
-            SignedRequest::new("GET", "AWSMobileHubService", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListProjectsResult, _>()?;
+                        .deserialize::<ListProjectsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1311,20 +1370,25 @@ impl Mobile for MobileClient {
             }
         })
     }
+}
 
-    /// <p> Update an existing project. </p>
-    fn update_project(
-        &self,
-        input: UpdateProjectRequest,
-    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
+impl ServiceRequest for UpdateProjectRequest {
+    type Output = UpdateProjectResponse;
+    type Error = UpdateProjectError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/update";
 
-        let mut request =
-            SignedRequest::new("POST", "AWSMobileHubService", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "AWSMobileHubService", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("mobile".to_string());
-        let encoded = if let Some(ref payload) = input.contents {
+        let encoded = if let Some(ref payload) = self.contents {
             Some(payload.to_owned())
         } else {
             None
@@ -1332,14 +1396,14 @@ impl Mobile for MobileClient {
         request.set_payload(encoded);
 
         let mut params = Params::new();
-        params.put("projectId", &input.project_id);
+        params.put("projectId", &self.project_id);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateProjectResult, _>()?;
+                        .deserialize::<UpdateProjectResponse, _>()?;
 
                     Ok(result)
                 }))

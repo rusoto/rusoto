@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -44,7 +45,7 @@ pub struct AccountQuota {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AddTagsToResourceMessage {
+pub struct AddTagsToResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -60,7 +61,7 @@ pub struct AddTagsToResourceResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ApplyPendingMaintenanceActionMessage {
+pub struct ApplyPendingMaintenanceActionRequest {
     /// <p>The pending maintenance action to apply to this resource.</p>
     #[serde(rename = "ApplyAction")]
     pub apply_action: String,
@@ -175,7 +176,7 @@ pub struct Connection {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateEndpointMessage {
+pub struct CreateEndpointRequest {
     /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -274,7 +275,7 @@ pub struct CreateEndpointResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateEventSubscriptionMessage {
+pub struct CreateEventSubscriptionRequest {
     /// <p> A Boolean value; set to <code>true</code> to activate the subscription, or set to <code>false</code> to create the subscription but not activate it. </p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -315,7 +316,7 @@ pub struct CreateEventSubscriptionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateReplicationInstanceMessage {
+pub struct CreateReplicationInstanceRequest {
     /// <p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -384,7 +385,7 @@ pub struct CreateReplicationInstanceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateReplicationSubnetGroupMessage {
+pub struct CreateReplicationSubnetGroupRequest {
     /// <p>The description for the subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
     pub replication_subnet_group_description: String,
@@ -412,7 +413,7 @@ pub struct CreateReplicationSubnetGroupResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateReplicationTaskMessage {
+pub struct CreateReplicationTaskRequest {
     /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -464,7 +465,7 @@ pub struct CreateReplicationTaskResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteCertificateMessage {
+pub struct DeleteCertificateRequest {
     /// <p>The Amazon Resource Name (ARN) of the deleted certificate.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
@@ -481,7 +482,7 @@ pub struct DeleteCertificateResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteEndpointMessage {
+pub struct DeleteEndpointRequest {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -499,7 +500,7 @@ pub struct DeleteEndpointResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteEventSubscriptionMessage {
+pub struct DeleteEventSubscriptionRequest {
     /// <p>The name of the DMS event notification subscription to be deleted.</p>
     #[serde(rename = "SubscriptionName")]
     pub subscription_name: String,
@@ -517,7 +518,7 @@ pub struct DeleteEventSubscriptionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteReplicationInstanceMessage {
+pub struct DeleteReplicationInstanceRequest {
     /// <p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
@@ -535,7 +536,7 @@ pub struct DeleteReplicationInstanceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteReplicationSubnetGroupMessage {
+pub struct DeleteReplicationSubnetGroupRequest {
     /// <p>The subnet group name of the replication instance.</p>
     #[serde(rename = "ReplicationSubnetGroupIdentifier")]
     pub replication_subnet_group_identifier: String,
@@ -548,7 +549,7 @@ pub struct DeleteReplicationSubnetGroupResponse {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteReplicationTaskMessage {
+pub struct DeleteReplicationTaskRequest {
     /// <p>The Amazon Resource Name (ARN) of the replication task to be deleted.</p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -566,7 +567,7 @@ pub struct DeleteReplicationTaskResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeAccountAttributesMessage {}
+pub struct DescribeAccountAttributesRequest {}
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -579,7 +580,7 @@ pub struct DescribeAccountAttributesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeCertificatesMessage {
+pub struct DescribeCertificatesRequest {
     /// <p>Filters applied to the certificate described in the form of key-value pairs.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -609,7 +610,7 @@ pub struct DescribeCertificatesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeConnectionsMessage {
+pub struct DescribeConnectionsRequest {
     /// <p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -640,7 +641,7 @@ pub struct DescribeConnectionsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEndpointTypesMessage {
+pub struct DescribeEndpointTypesRequest {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -671,7 +672,7 @@ pub struct DescribeEndpointTypesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEndpointsMessage {
+pub struct DescribeEndpointsRequest {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -702,7 +703,7 @@ pub struct DescribeEndpointsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEventCategoriesMessage {
+pub struct DescribeEventCategoriesRequest {
     /// <p>Filters applied to the action.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -725,7 +726,7 @@ pub struct DescribeEventCategoriesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEventSubscriptionsMessage {
+pub struct DescribeEventSubscriptionsRequest {
     /// <p>Filters applied to the action.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -760,7 +761,7 @@ pub struct DescribeEventSubscriptionsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEventsMessage {
+pub struct DescribeEventsRequest {
     /// <p>The duration of the events to be listed.</p>
     #[serde(rename = "Duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -815,7 +816,7 @@ pub struct DescribeEventsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeOrderableReplicationInstancesMessage {
+pub struct DescribeOrderableReplicationInstancesRequest {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -842,7 +843,7 @@ pub struct DescribeOrderableReplicationInstancesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribePendingMaintenanceActionsMessage {
+pub struct DescribePendingMaintenanceActionsRequest {
     /// <p><p/></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -877,7 +878,7 @@ pub struct DescribePendingMaintenanceActionsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeRefreshSchemasStatusMessage {
+pub struct DescribeRefreshSchemasStatusRequest {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -894,7 +895,7 @@ pub struct DescribeRefreshSchemasStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeReplicationInstanceTaskLogsMessage {
+pub struct DescribeReplicationInstanceTaskLogsRequest {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -927,7 +928,7 @@ pub struct DescribeReplicationInstanceTaskLogsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeReplicationInstancesMessage {
+pub struct DescribeReplicationInstancesRequest {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -958,7 +959,7 @@ pub struct DescribeReplicationInstancesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeReplicationSubnetGroupsMessage {
+pub struct DescribeReplicationSubnetGroupsRequest {
     /// <p>Filters applied to the describe action.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -989,7 +990,7 @@ pub struct DescribeReplicationSubnetGroupsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeReplicationTaskAssessmentResultsMessage {
+pub struct DescribeReplicationTaskAssessmentResultsRequest {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1024,7 +1025,7 @@ pub struct DescribeReplicationTaskAssessmentResultsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeReplicationTasksMessage {
+pub struct DescribeReplicationTasksRequest {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1059,7 +1060,7 @@ pub struct DescribeReplicationTasksResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeSchemasMessage {
+pub struct DescribeSchemasRequest {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -1089,7 +1090,7 @@ pub struct DescribeSchemasResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeTableStatisticsMessage {
+pub struct DescribeTableStatisticsRequest {
     /// <p>Filters applied to the describe table statistics action.</p> <p>Valid filter names: schema-name | table-name | table-state</p> <p>A combination of filters creates an AND condition where each record matches all specified filters.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1361,7 +1362,7 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ImportCertificateMessage {
+pub struct ImportCertificateRequest {
     /// <p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>
     #[serde(rename = "CertificateIdentifier")]
     pub certificate_identifier: String,
@@ -1412,7 +1413,7 @@ pub struct KinesisSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForResourceMessage {
+pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -1430,7 +1431,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ModifyEndpointMessage {
+pub struct ModifyEndpointRequest {
     /// <p>The Amazon Resource Name (ARN) of the certificate used for SSL connection.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1527,7 +1528,7 @@ pub struct ModifyEndpointResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ModifyEventSubscriptionMessage {
+pub struct ModifyEventSubscriptionRequest {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription. </p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1561,7 +1562,7 @@ pub struct ModifyEventSubscriptionResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ModifyReplicationInstanceMessage {
+pub struct ModifyReplicationInstanceRequest {
     /// <p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>
     #[serde(rename = "AllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1619,7 +1620,7 @@ pub struct ModifyReplicationInstanceResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ModifyReplicationSubnetGroupMessage {
+pub struct ModifyReplicationSubnetGroupRequest {
     /// <p>The description of the replication instance subnet group.</p>
     #[serde(rename = "ReplicationSubnetGroupDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1644,7 +1645,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ModifyReplicationTaskMessage {
+pub struct ModifyReplicationTaskRequest {
     /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1810,7 +1811,7 @@ pub struct PendingMaintenanceAction {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RebootReplicationInstanceMessage {
+pub struct RebootReplicationInstanceRequest {
     /// <p>If this parameter is <code>true</code>, the reboot is conducted through a Multi-AZ failover. (If the instance isn't configured for Multi-AZ, then you can't specify <code>true</code>.)</p>
     #[serde(rename = "ForceFailover")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1936,7 +1937,7 @@ pub struct RedshiftSettings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RefreshSchemasMessage {
+pub struct RefreshSchemasRequest {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -1982,7 +1983,7 @@ pub struct RefreshSchemasStatus {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ReloadTablesMessage {
+pub struct ReloadTablesRequest {
     /// <p>Options for reload. Specify <code>data-reload</code> to reload the data and re-validate it if validation is enabled. Specify <code>validate-only</code> to re-validate the table. This option applies only when validation is enabled for the task. </p> <p>Valid values: data-reload, validate-only</p> <p>Default value is data-reload.</p>
     #[serde(rename = "ReloadOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2006,7 +2007,7 @@ pub struct ReloadTablesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RemoveTagsFromResourceMessage {
+pub struct RemoveTagsFromResourceRequest {
     /// <p>&gt;The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be removed from.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -2403,7 +2404,7 @@ pub struct S3Settings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartReplicationTaskAssessmentMessage {
+pub struct StartReplicationTaskAssessmentRequest {
     /// <p> The Amazon Resource Name (ARN) of the replication task. </p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -2421,7 +2422,7 @@ pub struct StartReplicationTaskAssessmentResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartReplicationTaskMessage {
+pub struct StartReplicationTaskRequest {
     /// <p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position "checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
     #[serde(rename = "CdcStartPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2454,7 +2455,7 @@ pub struct StartReplicationTaskResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StopReplicationTaskMessage {
+pub struct StopReplicationTaskRequest {
     /// <p>The Amazon Resource Name(ARN) of the replication task to be stopped.</p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
@@ -2608,7 +2609,7 @@ pub struct Tag {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TestConnectionMessage {
+pub struct TestConnectionRequest {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -4904,289 +4905,251 @@ pub trait DatabaseMigrationService {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError>;
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest>;
 
     /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
     fn apply_pending_maintenance_action(
         &self,
-        input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>;
+        input: ApplyPendingMaintenanceActionRequest,
+    ) -> Request<ApplyPendingMaintenanceActionRequest>;
 
     /// <p>Creates an endpoint using the provided settings.</p>
-    fn create_endpoint(
-        &self,
-        input: CreateEndpointMessage,
-    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError>;
+    fn create_endpoint(&self, input: CreateEndpointRequest) -> Request<CreateEndpointRequest>;
 
     /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn create_event_subscription(
         &self,
-        input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
+        input: CreateEventSubscriptionRequest,
+    ) -> Request<CreateEventSubscriptionRequest>;
 
     /// <p>Creates the replication instance using the specified parameters.</p>
     fn create_replication_instance(
         &self,
-        input: CreateReplicationInstanceMessage,
-    ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError>;
+        input: CreateReplicationInstanceRequest,
+    ) -> Request<CreateReplicationInstanceRequest>;
 
     /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
     fn create_replication_subnet_group(
         &self,
-        input: CreateReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError>;
+        input: CreateReplicationSubnetGroupRequest,
+    ) -> Request<CreateReplicationSubnetGroupRequest>;
 
     /// <p>Creates a replication task using the specified parameters.</p>
     fn create_replication_task(
         &self,
-        input: CreateReplicationTaskMessage,
-    ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError>;
+        input: CreateReplicationTaskRequest,
+    ) -> Request<CreateReplicationTaskRequest>;
 
     /// <p>Deletes the specified certificate. </p>
     fn delete_certificate(
         &self,
-        input: DeleteCertificateMessage,
-    ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError>;
+        input: DeleteCertificateRequest,
+    ) -> Request<DeleteCertificateRequest>;
 
     /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
-    fn delete_endpoint(
-        &self,
-        input: DeleteEndpointMessage,
-    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError>;
+    fn delete_endpoint(&self, input: DeleteEndpointRequest) -> Request<DeleteEndpointRequest>;
 
     /// <p> Deletes an AWS DMS event subscription. </p>
     fn delete_event_subscription(
         &self,
-        input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError>;
+        input: DeleteEventSubscriptionRequest,
+    ) -> Request<DeleteEventSubscriptionRequest>;
 
     /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
     fn delete_replication_instance(
         &self,
-        input: DeleteReplicationInstanceMessage,
-    ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError>;
+        input: DeleteReplicationInstanceRequest,
+    ) -> Request<DeleteReplicationInstanceRequest>;
 
     /// <p>Deletes a subnet group.</p>
     fn delete_replication_subnet_group(
         &self,
-        input: DeleteReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError>;
+        input: DeleteReplicationSubnetGroupRequest,
+    ) -> Request<DeleteReplicationSubnetGroupRequest>;
 
     /// <p>Deletes the specified replication task.</p>
     fn delete_replication_task(
         &self,
-        input: DeleteReplicationTaskMessage,
-    ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
+        input: DeleteReplicationTaskRequest,
+    ) -> Request<DeleteReplicationTaskRequest>;
 
     /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
-    fn describe_account_attributes(
-        &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
+    fn describe_account_attributes(&self) -> Request<DescribeAccountAttributesRequest>;
 
     /// <p>Provides a description of the certificate.</p>
     fn describe_certificates(
         &self,
-        input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError>;
+        input: DescribeCertificatesRequest,
+    ) -> Request<DescribeCertificatesRequest>;
 
     /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
     fn describe_connections(
         &self,
-        input: DescribeConnectionsMessage,
-    ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError>;
+        input: DescribeConnectionsRequest,
+    ) -> Request<DescribeConnectionsRequest>;
 
     /// <p>Returns information about the type of endpoints available.</p>
     fn describe_endpoint_types(
         &self,
-        input: DescribeEndpointTypesMessage,
-    ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError>;
+        input: DescribeEndpointTypesRequest,
+    ) -> Request<DescribeEndpointTypesRequest>;
 
     /// <p>Returns information about the endpoints for your account in the current region.</p>
     fn describe_endpoints(
         &self,
-        input: DescribeEndpointsMessage,
-    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
+        input: DescribeEndpointsRequest,
+    ) -> Request<DescribeEndpointsRequest>;
 
     /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn describe_event_categories(
         &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError>;
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest>;
 
     /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
+        input: DescribeEventSubscriptionsRequest,
+    ) -> Request<DescribeEventSubscriptionsRequest>;
 
     /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 
     /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
     fn describe_orderable_replication_instances(
         &self,
-        input: DescribeOrderableReplicationInstancesMessage,
-    ) -> RusotoFuture<
-        DescribeOrderableReplicationInstancesResponse,
-        DescribeOrderableReplicationInstancesError,
-    >;
+        input: DescribeOrderableReplicationInstancesRequest,
+    ) -> Request<DescribeOrderableReplicationInstancesRequest>;
 
     /// <p>For internal use only</p>
     fn describe_pending_maintenance_actions(
         &self,
-        input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<
-        DescribePendingMaintenanceActionsResponse,
-        DescribePendingMaintenanceActionsError,
-    >;
+        input: DescribePendingMaintenanceActionsRequest,
+    ) -> Request<DescribePendingMaintenanceActionsRequest>;
 
     /// <p>Returns the status of the RefreshSchemas operation.</p>
     fn describe_refresh_schemas_status(
         &self,
-        input: DescribeRefreshSchemasStatusMessage,
-    ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
+        input: DescribeRefreshSchemasStatusRequest,
+    ) -> Request<DescribeRefreshSchemasStatusRequest>;
 
     /// <p>Returns information about the task logs for the specified task.</p>
     fn describe_replication_instance_task_logs(
         &self,
-        input: DescribeReplicationInstanceTaskLogsMessage,
-    ) -> RusotoFuture<
-        DescribeReplicationInstanceTaskLogsResponse,
-        DescribeReplicationInstanceTaskLogsError,
-    >;
+        input: DescribeReplicationInstanceTaskLogsRequest,
+    ) -> Request<DescribeReplicationInstanceTaskLogsRequest>;
 
     /// <p>Returns information about replication instances for your account in the current region.</p>
     fn describe_replication_instances(
         &self,
-        input: DescribeReplicationInstancesMessage,
-    ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError>;
+        input: DescribeReplicationInstancesRequest,
+    ) -> Request<DescribeReplicationInstancesRequest>;
 
     /// <p>Returns information about the replication subnet groups.</p>
     fn describe_replication_subnet_groups(
         &self,
-        input: DescribeReplicationSubnetGroupsMessage,
-    ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
+        input: DescribeReplicationSubnetGroupsRequest,
+    ) -> Request<DescribeReplicationSubnetGroupsRequest>;
 
     /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
     fn describe_replication_task_assessment_results(
         &self,
-        input: DescribeReplicationTaskAssessmentResultsMessage,
-    ) -> RusotoFuture<
-        DescribeReplicationTaskAssessmentResultsResponse,
-        DescribeReplicationTaskAssessmentResultsError,
-    >;
+        input: DescribeReplicationTaskAssessmentResultsRequest,
+    ) -> Request<DescribeReplicationTaskAssessmentResultsRequest>;
 
     /// <p>Returns information about replication tasks for your account in the current region.</p>
     fn describe_replication_tasks(
         &self,
-        input: DescribeReplicationTasksMessage,
-    ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError>;
+        input: DescribeReplicationTasksRequest,
+    ) -> Request<DescribeReplicationTasksRequest>;
 
     /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
-    fn describe_schemas(
-        &self,
-        input: DescribeSchemasMessage,
-    ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError>;
+    fn describe_schemas(&self, input: DescribeSchemasRequest) -> Request<DescribeSchemasRequest>;
 
     /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
     fn describe_table_statistics(
         &self,
-        input: DescribeTableStatisticsMessage,
-    ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError>;
+        input: DescribeTableStatisticsRequest,
+    ) -> Request<DescribeTableStatisticsRequest>;
 
     /// <p>Uploads the specified certificate.</p>
     fn import_certificate(
         &self,
-        input: ImportCertificateMessage,
-    ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError>;
+        input: ImportCertificateRequest,
+    ) -> Request<ImportCertificateRequest>;
 
     /// <p>Lists all tags for an AWS DMS resource.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Modifies the specified endpoint.</p>
-    fn modify_endpoint(
-        &self,
-        input: ModifyEndpointMessage,
-    ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError>;
+    fn modify_endpoint(&self, input: ModifyEndpointRequest) -> Request<ModifyEndpointRequest>;
 
     /// <p>Modifies an existing AWS DMS event notification subscription. </p>
     fn modify_event_subscription(
         &self,
-        input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError>;
+        input: ModifyEventSubscriptionRequest,
+    ) -> Request<ModifyEventSubscriptionRequest>;
 
     /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
     fn modify_replication_instance(
         &self,
-        input: ModifyReplicationInstanceMessage,
-    ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError>;
+        input: ModifyReplicationInstanceRequest,
+    ) -> Request<ModifyReplicationInstanceRequest>;
 
     /// <p>Modifies the settings for the specified replication subnet group.</p>
     fn modify_replication_subnet_group(
         &self,
-        input: ModifyReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
+        input: ModifyReplicationSubnetGroupRequest,
+    ) -> Request<ModifyReplicationSubnetGroupRequest>;
 
     /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
     fn modify_replication_task(
         &self,
-        input: ModifyReplicationTaskMessage,
-    ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
+        input: ModifyReplicationTaskRequest,
+    ) -> Request<ModifyReplicationTaskRequest>;
 
     /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
     fn reboot_replication_instance(
         &self,
-        input: RebootReplicationInstanceMessage,
-    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError>;
+        input: RebootReplicationInstanceRequest,
+    ) -> Request<RebootReplicationInstanceRequest>;
 
     /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
-    fn refresh_schemas(
-        &self,
-        input: RefreshSchemasMessage,
-    ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError>;
+    fn refresh_schemas(&self, input: RefreshSchemasRequest) -> Request<RefreshSchemasRequest>;
 
     /// <p>Reloads the target database table with the source data. </p>
-    fn reload_tables(
-        &self,
-        input: ReloadTablesMessage,
-    ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError>;
+    fn reload_tables(&self, input: ReloadTablesRequest) -> Request<ReloadTablesRequest>;
 
     /// <p>Removes metadata tags from a DMS resource.</p>
     fn remove_tags_from_resource(
         &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest>;
 
     /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn start_replication_task(
         &self,
-        input: StartReplicationTaskMessage,
-    ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError>;
+        input: StartReplicationTaskRequest,
+    ) -> Request<StartReplicationTaskRequest>;
 
     /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
     fn start_replication_task_assessment(
         &self,
-        input: StartReplicationTaskAssessmentMessage,
-    ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>;
+        input: StartReplicationTaskAssessmentRequest,
+    ) -> Request<StartReplicationTaskAssessmentRequest>;
 
     /// <p><p>Stops the replication task.</p> <p/></p>
     fn stop_replication_task(
         &self,
-        input: StopReplicationTaskMessage,
-    ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError>;
+        input: StopReplicationTaskRequest,
+    ) -> Request<StopReplicationTaskRequest>;
 
     /// <p>Tests the connection between the replication instance and the endpoint.</p>
-    fn test_connection(
-        &self,
-        input: TestConnectionMessage,
-    ) -> RusotoFuture<TestConnectionResponse, TestConnectionError>;
+    fn test_connection(&self, input: TestConnectionRequest) -> Request<TestConnectionRequest>;
 }
 /// A client for the AWS Database Migration Service API.
 #[derive(Clone)]
@@ -5228,16 +5191,366 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
     /// <p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
-        input: AddTagsToResourceMessage,
-    ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        input: AddTagsToResourceRequest,
+    ) -> Request<AddTagsToResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
+    fn apply_pending_maintenance_action(
+        &self,
+        input: ApplyPendingMaintenanceActionRequest,
+    ) -> Request<ApplyPendingMaintenanceActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an endpoint using the provided settings.</p>
+    fn create_endpoint(&self, input: CreateEndpointRequest) -> Request<CreateEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    fn create_event_subscription(
+        &self,
+        input: CreateEventSubscriptionRequest,
+    ) -> Request<CreateEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates the replication instance using the specified parameters.</p>
+    fn create_replication_instance(
+        &self,
+        input: CreateReplicationInstanceRequest,
+    ) -> Request<CreateReplicationInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
+    fn create_replication_subnet_group(
+        &self,
+        input: CreateReplicationSubnetGroupRequest,
+    ) -> Request<CreateReplicationSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a replication task using the specified parameters.</p>
+    fn create_replication_task(
+        &self,
+        input: CreateReplicationTaskRequest,
+    ) -> Request<CreateReplicationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified certificate. </p>
+    fn delete_certificate(
+        &self,
+        input: DeleteCertificateRequest,
+    ) -> Request<DeleteCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
+    fn delete_endpoint(&self, input: DeleteEndpointRequest) -> Request<DeleteEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Deletes an AWS DMS event subscription. </p>
+    fn delete_event_subscription(
+        &self,
+        input: DeleteEventSubscriptionRequest,
+    ) -> Request<DeleteEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
+    fn delete_replication_instance(
+        &self,
+        input: DeleteReplicationInstanceRequest,
+    ) -> Request<DeleteReplicationInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a subnet group.</p>
+    fn delete_replication_subnet_group(
+        &self,
+        input: DeleteReplicationSubnetGroupRequest,
+    ) -> Request<DeleteReplicationSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified replication task.</p>
+    fn delete_replication_task(
+        &self,
+        input: DeleteReplicationTaskRequest,
+    ) -> Request<DeleteReplicationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
+    fn describe_account_attributes(&self) -> Request<DescribeAccountAttributesRequest> {
+        Request::new(
+            DescribeAccountAttributesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Provides a description of the certificate.</p>
+    fn describe_certificates(
+        &self,
+        input: DescribeCertificatesRequest,
+    ) -> Request<DescribeCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
+    fn describe_connections(
+        &self,
+        input: DescribeConnectionsRequest,
+    ) -> Request<DescribeConnectionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the type of endpoints available.</p>
+    fn describe_endpoint_types(
+        &self,
+        input: DescribeEndpointTypesRequest,
+    ) -> Request<DescribeEndpointTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the endpoints for your account in the current region.</p>
+    fn describe_endpoints(
+        &self,
+        input: DescribeEndpointsRequest,
+    ) -> Request<DescribeEndpointsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    fn describe_event_categories(
+        &self,
+        input: DescribeEventCategoriesRequest,
+    ) -> Request<DescribeEventCategoriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
+    fn describe_event_subscriptions(
+        &self,
+        input: DescribeEventSubscriptionsRequest,
+    ) -> Request<DescribeEventSubscriptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
+    fn describe_orderable_replication_instances(
+        &self,
+        input: DescribeOrderableReplicationInstancesRequest,
+    ) -> Request<DescribeOrderableReplicationInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>For internal use only</p>
+    fn describe_pending_maintenance_actions(
+        &self,
+        input: DescribePendingMaintenanceActionsRequest,
+    ) -> Request<DescribePendingMaintenanceActionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the status of the RefreshSchemas operation.</p>
+    fn describe_refresh_schemas_status(
+        &self,
+        input: DescribeRefreshSchemasStatusRequest,
+    ) -> Request<DescribeRefreshSchemasStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the task logs for the specified task.</p>
+    fn describe_replication_instance_task_logs(
+        &self,
+        input: DescribeReplicationInstanceTaskLogsRequest,
+    ) -> Request<DescribeReplicationInstanceTaskLogsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about replication instances for your account in the current region.</p>
+    fn describe_replication_instances(
+        &self,
+        input: DescribeReplicationInstancesRequest,
+    ) -> Request<DescribeReplicationInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the replication subnet groups.</p>
+    fn describe_replication_subnet_groups(
+        &self,
+        input: DescribeReplicationSubnetGroupsRequest,
+    ) -> Request<DescribeReplicationSubnetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
+    fn describe_replication_task_assessment_results(
+        &self,
+        input: DescribeReplicationTaskAssessmentResultsRequest,
+    ) -> Request<DescribeReplicationTaskAssessmentResultsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about replication tasks for your account in the current region.</p>
+    fn describe_replication_tasks(
+        &self,
+        input: DescribeReplicationTasksRequest,
+    ) -> Request<DescribeReplicationTasksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
+    fn describe_schemas(&self, input: DescribeSchemasRequest) -> Request<DescribeSchemasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
+    fn describe_table_statistics(
+        &self,
+        input: DescribeTableStatisticsRequest,
+    ) -> Request<DescribeTableStatisticsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Uploads the specified certificate.</p>
+    fn import_certificate(
+        &self,
+        input: ImportCertificateRequest,
+    ) -> Request<ImportCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all tags for an AWS DMS resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the specified endpoint.</p>
+    fn modify_endpoint(&self, input: ModifyEndpointRequest) -> Request<ModifyEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies an existing AWS DMS event notification subscription. </p>
+    fn modify_event_subscription(
+        &self,
+        input: ModifyEventSubscriptionRequest,
+    ) -> Request<ModifyEventSubscriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
+    fn modify_replication_instance(
+        &self,
+        input: ModifyReplicationInstanceRequest,
+    ) -> Request<ModifyReplicationInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the settings for the specified replication subnet group.</p>
+    fn modify_replication_subnet_group(
+        &self,
+        input: ModifyReplicationSubnetGroupRequest,
+    ) -> Request<ModifyReplicationSubnetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
+    fn modify_replication_task(
+        &self,
+        input: ModifyReplicationTaskRequest,
+    ) -> Request<ModifyReplicationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
+    fn reboot_replication_instance(
+        &self,
+        input: RebootReplicationInstanceRequest,
+    ) -> Request<RebootReplicationInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
+    fn refresh_schemas(&self, input: RefreshSchemasRequest) -> Request<RefreshSchemasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Reloads the target database table with the source data. </p>
+    fn reload_tables(&self, input: ReloadTablesRequest) -> Request<ReloadTablesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes metadata tags from a DMS resource.</p>
+    fn remove_tags_from_resource(
+        &self,
+        input: RemoveTagsFromResourceRequest,
+    ) -> Request<RemoveTagsFromResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    fn start_replication_task(
+        &self,
+        input: StartReplicationTaskRequest,
+    ) -> Request<StartReplicationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
+    fn start_replication_task_assessment(
+        &self,
+        input: StartReplicationTaskAssessmentRequest,
+    ) -> Request<StartReplicationTaskAssessmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Stops the replication task.</p> <p/></p>
+    fn stop_replication_task(
+        &self,
+        input: StopReplicationTaskRequest,
+    ) -> Request<StopReplicationTaskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tests the connection between the replication instance and the endpoint.</p>
+    fn test_connection(&self, input: TestConnectionRequest) -> Request<TestConnectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsToResourceRequest {
+    type Output = AddTagsToResourceResponse;
+    type Error = AddTagsToResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.AddTagsToResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5253,24 +5566,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
-    fn apply_pending_maintenance_action(
-        &self,
-        input: ApplyPendingMaintenanceActionMessage,
-    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>
-    {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ApplyPendingMaintenanceActionRequest {
+    type Output = ApplyPendingMaintenanceActionResponse;
+    type Error = ApplyPendingMaintenanceActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.ApplyPendingMaintenanceAction",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5283,20 +5600,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Creates an endpoint using the provided settings.</p>
-    fn create_endpoint(
-        &self,
-        input: CreateEndpointMessage,
-    ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for CreateEndpointRequest {
+    type Output = CreateEndpointResponse;
+    type Error = CreateEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5312,20 +5634,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn create_event_subscription(
-        &self,
-        input: CreateEventSubscriptionMessage,
-    ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for CreateEventSubscriptionRequest {
+    type Output = CreateEventSubscriptionResponse;
+    type Error = CreateEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateEventSubscription");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5338,23 +5665,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Creates the replication instance using the specified parameters.</p>
-    fn create_replication_instance(
-        &self,
-        input: CreateReplicationInstanceMessage,
-    ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for CreateReplicationInstanceRequest {
+    type Output = CreateReplicationInstanceResponse;
+    type Error = CreateReplicationInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.CreateReplicationInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5367,23 +5699,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
-    fn create_replication_subnet_group(
-        &self,
-        input: CreateReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for CreateReplicationSubnetGroupRequest {
+    type Output = CreateReplicationSubnetGroupResponse;
+    type Error = CreateReplicationSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.CreateReplicationSubnetGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5396,20 +5733,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Creates a replication task using the specified parameters.</p>
-    fn create_replication_task(
-        &self,
-        input: CreateReplicationTaskMessage,
-    ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for CreateReplicationTaskRequest {
+    type Output = CreateReplicationTaskResponse;
+    type Error = CreateReplicationTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateReplicationTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5424,20 +5766,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified certificate. </p>
-    fn delete_certificate(
-        &self,
-        input: DeleteCertificateMessage,
-    ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DeleteCertificateRequest {
+    type Output = DeleteCertificateResponse;
+    type Error = DeleteCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteCertificate");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5453,20 +5800,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
-    fn delete_endpoint(
-        &self,
-        input: DeleteEndpointMessage,
-    ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DeleteEndpointRequest {
+    type Output = DeleteEndpointResponse;
+    type Error = DeleteEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5482,20 +5834,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p> Deletes an AWS DMS event subscription. </p>
-    fn delete_event_subscription(
-        &self,
-        input: DeleteEventSubscriptionMessage,
-    ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DeleteEventSubscriptionRequest {
+    type Output = DeleteEventSubscriptionResponse;
+    type Error = DeleteEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteEventSubscription");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5508,23 +5865,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
-    fn delete_replication_instance(
-        &self,
-        input: DeleteReplicationInstanceMessage,
-    ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DeleteReplicationInstanceRequest {
+    type Output = DeleteReplicationInstanceResponse;
+    type Error = DeleteReplicationInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DeleteReplicationInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5537,23 +5899,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a subnet group.</p>
-    fn delete_replication_subnet_group(
-        &self,
-        input: DeleteReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DeleteReplicationSubnetGroupRequest {
+    type Output = DeleteReplicationSubnetGroupResponse;
+    type Error = DeleteReplicationSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DeleteReplicationSubnetGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5566,20 +5933,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified replication task.</p>
-    fn delete_replication_task(
-        &self,
-        input: DeleteReplicationTaskMessage,
-    ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DeleteReplicationTaskRequest {
+    type Output = DeleteReplicationTaskResponse;
+    type Error = DeleteReplicationTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteReplicationTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5594,12 +5966,18 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
-    fn describe_account_attributes(
-        &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeAccountAttributesRequest {
+    type Output = DescribeAccountAttributesResponse;
+    type Error = DescribeAccountAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
@@ -5608,7 +5986,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5621,20 +5999,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Provides a description of the certificate.</p>
-    fn describe_certificates(
-        &self,
-        input: DescribeCertificatesMessage,
-    ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeCertificatesRequest {
+    type Output = DescribeCertificatesResponse;
+    type Error = DescribeCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeCertificates");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5649,20 +6032,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
-    fn describe_connections(
-        &self,
-        input: DescribeConnectionsMessage,
-    ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeConnectionsRequest {
+    type Output = DescribeConnectionsResponse;
+    type Error = DescribeConnectionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeConnections");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5677,20 +6065,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the type of endpoints available.</p>
-    fn describe_endpoint_types(
-        &self,
-        input: DescribeEndpointTypesMessage,
-    ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeEndpointTypesRequest {
+    type Output = DescribeEndpointTypesResponse;
+    type Error = DescribeEndpointTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEndpointTypes");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5705,20 +6098,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the endpoints for your account in the current region.</p>
-    fn describe_endpoints(
-        &self,
-        input: DescribeEndpointsMessage,
-    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeEndpointsRequest {
+    type Output = DescribeEndpointsResponse;
+    type Error = DescribeEndpointsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEndpoints");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5734,20 +6132,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn describe_event_categories(
-        &self,
-        input: DescribeEventCategoriesMessage,
-    ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeEventCategoriesRequest {
+    type Output = DescribeEventCategoriesResponse;
+    type Error = DescribeEventCategoriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEventCategories");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5760,23 +6163,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
-    fn describe_event_subscriptions(
-        &self,
-        input: DescribeEventSubscriptionsMessage,
-    ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeEventSubscriptionsRequest {
+    type Output = DescribeEventSubscriptionsResponse;
+    type Error = DescribeEventSubscriptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeEventSubscriptions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5789,20 +6197,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEvents");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5818,26 +6231,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
-    fn describe_orderable_replication_instances(
-        &self,
-        input: DescribeOrderableReplicationInstancesMessage,
-    ) -> RusotoFuture<
-        DescribeOrderableReplicationInstancesResponse,
-        DescribeOrderableReplicationInstancesError,
-    > {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeOrderableReplicationInstancesRequest {
+    type Output = DescribeOrderableReplicationInstancesResponse;
+    type Error = DescribeOrderableReplicationInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeOrderableReplicationInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5852,26 +6267,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>For internal use only</p>
-    fn describe_pending_maintenance_actions(
-        &self,
-        input: DescribePendingMaintenanceActionsMessage,
-    ) -> RusotoFuture<
-        DescribePendingMaintenanceActionsResponse,
-        DescribePendingMaintenanceActionsError,
-    > {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribePendingMaintenanceActionsRequest {
+    type Output = DescribePendingMaintenanceActionsResponse;
+    type Error = DescribePendingMaintenanceActionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribePendingMaintenanceActions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5886,23 +6303,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns the status of the RefreshSchemas operation.</p>
-    fn describe_refresh_schemas_status(
-        &self,
-        input: DescribeRefreshSchemasStatusMessage,
-    ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeRefreshSchemasStatusRequest {
+    type Output = DescribeRefreshSchemasStatusResponse;
+    type Error = DescribeRefreshSchemasStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeRefreshSchemasStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5915,26 +6337,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the task logs for the specified task.</p>
-    fn describe_replication_instance_task_logs(
-        &self,
-        input: DescribeReplicationInstanceTaskLogsMessage,
-    ) -> RusotoFuture<
-        DescribeReplicationInstanceTaskLogsResponse,
-        DescribeReplicationInstanceTaskLogsError,
-    > {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeReplicationInstanceTaskLogsRequest {
+    type Output = DescribeReplicationInstanceTaskLogsResponse;
+    type Error = DescribeReplicationInstanceTaskLogsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationInstanceTaskLogs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5949,23 +6373,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about replication instances for your account in the current region.</p>
-    fn describe_replication_instances(
-        &self,
-        input: DescribeReplicationInstancesMessage,
-    ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeReplicationInstancesRequest {
+    type Output = DescribeReplicationInstancesResponse;
+    type Error = DescribeReplicationInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -5978,24 +6407,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the replication subnet groups.</p>
-    fn describe_replication_subnet_groups(
-        &self,
-        input: DescribeReplicationSubnetGroupsMessage,
-    ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>
-    {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeReplicationSubnetGroupsRequest {
+    type Output = DescribeReplicationSubnetGroupsResponse;
+    type Error = DescribeReplicationSubnetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationSubnetGroups",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6010,26 +6443,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
-    fn describe_replication_task_assessment_results(
-        &self,
-        input: DescribeReplicationTaskAssessmentResultsMessage,
-    ) -> RusotoFuture<
-        DescribeReplicationTaskAssessmentResultsResponse,
-        DescribeReplicationTaskAssessmentResultsError,
-    > {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeReplicationTaskAssessmentResultsRequest {
+    type Output = DescribeReplicationTaskAssessmentResultsResponse;
+    type Error = DescribeReplicationTaskAssessmentResultsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationTaskAssessmentResults",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6042,23 +6477,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about replication tasks for your account in the current region.</p>
-    fn describe_replication_tasks(
-        &self,
-        input: DescribeReplicationTasksMessage,
-    ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeReplicationTasksRequest {
+    type Output = DescribeReplicationTasksResponse;
+    type Error = DescribeReplicationTasksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationTasks",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6071,20 +6511,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
-    fn describe_schemas(
-        &self,
-        input: DescribeSchemasMessage,
-    ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeSchemasRequest {
+    type Output = DescribeSchemasResponse;
+    type Error = DescribeSchemasError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeSchemas");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6100,20 +6545,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
-    fn describe_table_statistics(
-        &self,
-        input: DescribeTableStatisticsMessage,
-    ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for DescribeTableStatisticsRequest {
+    type Output = DescribeTableStatisticsResponse;
+    type Error = DescribeTableStatisticsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeTableStatistics");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6126,20 +6576,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Uploads the specified certificate.</p>
-    fn import_certificate(
-        &self,
-        input: ImportCertificateMessage,
-    ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ImportCertificateRequest {
+    type Output = ImportCertificateResponse;
+    type Error = ImportCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ImportCertificate");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6155,20 +6610,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Lists all tags for an AWS DMS resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ListTagsForResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6183,20 +6643,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Modifies the specified endpoint.</p>
-    fn modify_endpoint(
-        &self,
-        input: ModifyEndpointMessage,
-    ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ModifyEndpointRequest {
+    type Output = ModifyEndpointResponse;
+    type Error = ModifyEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6212,20 +6677,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Modifies an existing AWS DMS event notification subscription. </p>
-    fn modify_event_subscription(
-        &self,
-        input: ModifyEventSubscriptionMessage,
-    ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ModifyEventSubscriptionRequest {
+    type Output = ModifyEventSubscriptionResponse;
+    type Error = ModifyEventSubscriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyEventSubscription");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6238,23 +6708,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
-    fn modify_replication_instance(
-        &self,
-        input: ModifyReplicationInstanceMessage,
-    ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ModifyReplicationInstanceRequest {
+    type Output = ModifyReplicationInstanceResponse;
+    type Error = ModifyReplicationInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.ModifyReplicationInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6267,23 +6742,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Modifies the settings for the specified replication subnet group.</p>
-    fn modify_replication_subnet_group(
-        &self,
-        input: ModifyReplicationSubnetGroupMessage,
-    ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ModifyReplicationSubnetGroupRequest {
+    type Output = ModifyReplicationSubnetGroupResponse;
+    type Error = ModifyReplicationSubnetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.ModifyReplicationSubnetGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6296,20 +6776,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
-    fn modify_replication_task(
-        &self,
-        input: ModifyReplicationTaskMessage,
-    ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ModifyReplicationTaskRequest {
+    type Output = ModifyReplicationTaskResponse;
+    type Error = ModifyReplicationTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyReplicationTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6324,23 +6809,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>
-    fn reboot_replication_instance(
-        &self,
-        input: RebootReplicationInstanceMessage,
-    ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for RebootReplicationInstanceRequest {
+    type Output = RebootReplicationInstanceResponse;
+    type Error = RebootReplicationInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.RebootReplicationInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6353,20 +6843,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
-    fn refresh_schemas(
-        &self,
-        input: RefreshSchemasMessage,
-    ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for RefreshSchemasRequest {
+    type Output = RefreshSchemasResponse;
+    type Error = RefreshSchemasError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.RefreshSchemas");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6382,20 +6877,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Reloads the target database table with the source data. </p>
-    fn reload_tables(
-        &self,
-        input: ReloadTablesMessage,
-    ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for ReloadTablesRequest {
+    type Output = ReloadTablesResponse;
+    type Error = ReloadTablesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ReloadTables");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6411,20 +6911,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Removes metadata tags from a DMS resource.</p>
-    fn remove_tags_from_resource(
-        &self,
-        input: RemoveTagsFromResourceMessage,
-    ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for RemoveTagsFromResourceRequest {
+    type Output = RemoveTagsFromResourceResponse;
+    type Error = RemoveTagsFromResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.RemoveTagsFromResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6439,20 +6944,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
-    fn start_replication_task(
-        &self,
-        input: StartReplicationTaskMessage,
-    ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for StartReplicationTaskRequest {
+    type Output = StartReplicationTaskResponse;
+    type Error = StartReplicationTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.StartReplicationTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6467,24 +6977,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
-    fn start_replication_task_assessment(
-        &self,
-        input: StartReplicationTaskAssessmentMessage,
-    ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>
-    {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for StartReplicationTaskAssessmentRequest {
+    type Output = StartReplicationTaskAssessmentResponse;
+    type Error = StartReplicationTaskAssessmentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.StartReplicationTaskAssessment",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6497,20 +7011,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p><p>Stops the replication task.</p> <p/></p>
-    fn stop_replication_task(
-        &self,
-        input: StopReplicationTaskMessage,
-    ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for StopReplicationTaskRequest {
+    type Output = StopReplicationTaskResponse;
+    type Error = StopReplicationTaskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.StopReplicationTask");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -6525,20 +7044,25 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             }
         })
     }
+}
 
-    /// <p>Tests the connection between the replication instance and the endpoint.</p>
-    fn test_connection(
-        &self,
-        input: TestConnectionMessage,
-    ) -> RusotoFuture<TestConnectionResponse, TestConnectionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+impl ServiceRequest for TestConnectionRequest {
+    type Output = TestConnectionResponse;
+    type Error = TestConnectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "dms", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.TestConnection");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

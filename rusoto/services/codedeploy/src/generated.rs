@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -26,7 +27,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AddTagsToOnPremisesInstancesInput {
+pub struct AddTagsToOnPremisesInstancesRequest {
     /// <p>The names of the on-premises instances to which to add tags.</p>
     #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
@@ -34,6 +35,10 @@ pub struct AddTagsToOnPremisesInstancesInput {
     #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AddTagsToOnPremisesInstancesResponse {}
 
 /// <p>Information about an alarm.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -133,7 +138,7 @@ pub struct AutoScalingGroup {
 
 /// <p>Represents the input of a BatchGetApplicationRevisions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetApplicationRevisionsInput {
+pub struct BatchGetApplicationRevisionsRequest {
     /// <p>The name of an AWS CodeDeploy application about which to get revision information.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -145,7 +150,7 @@ pub struct BatchGetApplicationRevisionsInput {
 /// <p>Represents the output of a BatchGetApplicationRevisions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetApplicationRevisionsOutput {
+pub struct BatchGetApplicationRevisionsResponse {
     /// <p>The name of the application that corresponds to the revisions.</p>
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,7 +167,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 
 /// <p>Represents the input of a BatchGetApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetApplicationsInput {
+pub struct BatchGetApplicationsRequest {
     /// <p>A list of application names separated by spaces. The maximum number of application names you can specify is 25.</p>
     #[serde(rename = "applicationNames")]
     pub application_names: Vec<String>,
@@ -171,7 +176,7 @@ pub struct BatchGetApplicationsInput {
 /// <p>Represents the output of a BatchGetApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetApplicationsOutput {
+pub struct BatchGetApplicationsResponse {
     /// <p>Information about the applications.</p>
     #[serde(rename = "applicationsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -180,7 +185,7 @@ pub struct BatchGetApplicationsOutput {
 
 /// <p>Represents the input of a BatchGetDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetDeploymentGroupsInput {
+pub struct BatchGetDeploymentGroupsRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -192,7 +197,7 @@ pub struct BatchGetDeploymentGroupsInput {
 /// <p>Represents the output of a BatchGetDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetDeploymentGroupsOutput {
+pub struct BatchGetDeploymentGroupsResponse {
     /// <p>Information about the deployment groups.</p>
     #[serde(rename = "deploymentGroupsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -205,7 +210,7 @@ pub struct BatchGetDeploymentGroupsOutput {
 
 /// <p> Represents the input of a BatchGetDeploymentInstances operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetDeploymentInstancesInput {
+pub struct BatchGetDeploymentInstancesRequest {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
@@ -217,7 +222,7 @@ pub struct BatchGetDeploymentInstancesInput {
 /// <p>Represents the output of a BatchGetDeploymentInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetDeploymentInstancesOutput {
+pub struct BatchGetDeploymentInstancesResponse {
     /// <p>Information about errors that might have occurred during the API call.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -229,7 +234,7 @@ pub struct BatchGetDeploymentInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetDeploymentTargetsInput {
+pub struct BatchGetDeploymentTargetsRequest {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -242,7 +247,7 @@ pub struct BatchGetDeploymentTargetsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetDeploymentTargetsOutput {
+pub struct BatchGetDeploymentTargetsResponse {
     /// <p><p> A list of target objects for a deployment. Each target object contains details about the target, such as its status and lifecycle events. The type of the target objects depends on the deployment&#39; compute platform. </p> <ul> <li> <p> <b>EC2/On-premises</b>: Each target object is an EC2 or on-premises instance. </p> </li> <li> <p> <b>AWS Lambda</b>: The target object is a specific version of an AWS Lambda function. </p> </li> <li> <p> <b>Amazon ECS</b>: The target object is an Amazon ECS service. </p> </li> </ul></p>
     #[serde(rename = "deploymentTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -251,7 +256,7 @@ pub struct BatchGetDeploymentTargetsOutput {
 
 /// <p> Represents the input of a BatchGetDeployments operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetDeploymentsInput {
+pub struct BatchGetDeploymentsRequest {
     /// <p> A list of deployment IDs, separated by spaces. The maximum number of deployment IDs you can specify is 25.</p>
     #[serde(rename = "deploymentIds")]
     pub deployment_ids: Vec<String>,
@@ -260,7 +265,7 @@ pub struct BatchGetDeploymentsInput {
 /// <p> Represents the output of a BatchGetDeployments operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetDeploymentsOutput {
+pub struct BatchGetDeploymentsResponse {
     /// <p> Information about the deployments. </p>
     #[serde(rename = "deploymentsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -269,7 +274,7 @@ pub struct BatchGetDeploymentsOutput {
 
 /// <p>Represents the input of a BatchGetOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetOnPremisesInstancesInput {
+pub struct BatchGetOnPremisesInstancesRequest {
     /// <p>The names of the on-premises instances about which to get information. The maximum number of instance names you can specify is 25.</p>
     #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
@@ -278,7 +283,7 @@ pub struct BatchGetOnPremisesInstancesInput {
 /// <p>Represents the output of a BatchGetOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetOnPremisesInstancesOutput {
+pub struct BatchGetOnPremisesInstancesResponse {
     /// <p>Information about the on-premises instances.</p>
     #[serde(rename = "instanceInfos")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -316,7 +321,7 @@ pub struct BlueInstanceTerminationOption {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ContinueDeploymentInput {
+pub struct ContinueDeploymentRequest {
     /// <p> The unique ID of a blue/green deployment for which you want to start rerouting traffic to the replacement environment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -327,9 +332,13 @@ pub struct ContinueDeploymentInput {
     pub deployment_wait_type: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ContinueDeploymentResponse {}
+
 /// <p>Represents the input of a CreateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateApplicationInput {
+pub struct CreateApplicationRequest {
     /// <p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -346,7 +355,7 @@ pub struct CreateApplicationInput {
 /// <p>Represents the output of a CreateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateApplicationOutput {
+pub struct CreateApplicationResponse {
     /// <p>A unique application ID.</p>
     #[serde(rename = "applicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -355,7 +364,7 @@ pub struct CreateApplicationOutput {
 
 /// <p>Represents the input of a CreateDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateDeploymentConfigInput {
+pub struct CreateDeploymentConfigRequest {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -376,7 +385,7 @@ pub struct CreateDeploymentConfigInput {
 /// <p>Represents the output of a CreateDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDeploymentConfigOutput {
+pub struct CreateDeploymentConfigResponse {
     /// <p>A unique deployment configuration ID.</p>
     #[serde(rename = "deploymentConfigId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -385,7 +394,7 @@ pub struct CreateDeploymentConfigOutput {
 
 /// <p>Represents the input of a CreateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateDeploymentGroupInput {
+pub struct CreateDeploymentGroupRequest {
     /// <p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>
     #[serde(rename = "alarmConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -456,7 +465,7 @@ pub struct CreateDeploymentGroupInput {
 /// <p>Represents the output of a CreateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDeploymentGroupOutput {
+pub struct CreateDeploymentGroupResponse {
     /// <p>A unique deployment group ID.</p>
     #[serde(rename = "deploymentGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -465,7 +474,7 @@ pub struct CreateDeploymentGroupOutput {
 
 /// <p>Represents the input of a CreateDeployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateDeploymentInput {
+pub struct CreateDeploymentRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -510,7 +519,7 @@ pub struct CreateDeploymentInput {
 /// <p> Represents the output of a CreateDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDeploymentOutput {
+pub struct CreateDeploymentResponse {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -519,23 +528,31 @@ pub struct CreateDeploymentOutput {
 
 /// <p>Represents the input of a DeleteApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteApplicationInput {
+pub struct DeleteApplicationRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteApplicationResponse {}
+
 /// <p>Represents the input of a DeleteDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteDeploymentConfigInput {
+pub struct DeleteDeploymentConfigRequest {
     /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDeploymentConfigResponse {}
+
 /// <p>Represents the input of a DeleteDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteDeploymentGroupInput {
+pub struct DeleteDeploymentGroupRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -547,7 +564,7 @@ pub struct DeleteDeploymentGroupInput {
 /// <p>Represents the output of a DeleteDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDeploymentGroupOutput {
+pub struct DeleteDeploymentGroupResponse {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>
     #[serde(rename = "hooksNotCleanedUp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -556,7 +573,7 @@ pub struct DeleteDeploymentGroupOutput {
 
 /// <p>Represents the input of a DeleteGitHubAccount operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteGitHubAccountTokenInput {
+pub struct DeleteGitHubAccountTokenRequest {
     /// <p>The name of the GitHub account connection to delete.</p>
     #[serde(rename = "tokenName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -566,7 +583,7 @@ pub struct DeleteGitHubAccountTokenInput {
 /// <p>Represents the output of a DeleteGitHubAccountToken operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteGitHubAccountTokenOutput {
+pub struct DeleteGitHubAccountTokenResponse {
     /// <p>The name of the GitHub account connection that was deleted.</p>
     #[serde(rename = "tokenName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -887,11 +904,15 @@ pub struct DeploymentTarget {
 
 /// <p>Represents the input of a DeregisterOnPremisesInstance operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeregisterOnPremisesInstanceInput {
+pub struct DeregisterOnPremisesInstanceRequest {
     /// <p>The name of the on-premises instance to deregister.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeregisterOnPremisesInstanceResponse {}
 
 /// <p>Diagnostic information about executable scripts that are part of a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1077,7 +1098,7 @@ pub struct GenericRevisionInfo {
 
 /// <p>Represents the input of a GetApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetApplicationInput {
+pub struct GetApplicationRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -1086,7 +1107,7 @@ pub struct GetApplicationInput {
 /// <p>Represents the output of a GetApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetApplicationOutput {
+pub struct GetApplicationResponse {
     /// <p>Information about the application.</p>
     #[serde(rename = "application")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1095,7 +1116,7 @@ pub struct GetApplicationOutput {
 
 /// <p>Represents the input of a GetApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetApplicationRevisionInput {
+pub struct GetApplicationRevisionRequest {
     /// <p>The name of the application that corresponds to the revision.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -1107,7 +1128,7 @@ pub struct GetApplicationRevisionInput {
 /// <p>Represents the output of a GetApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetApplicationRevisionOutput {
+pub struct GetApplicationRevisionResponse {
     /// <p>The name of the application that corresponds to the revision.</p>
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1124,7 +1145,7 @@ pub struct GetApplicationRevisionOutput {
 
 /// <p>Represents the input of a GetDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDeploymentConfigInput {
+pub struct GetDeploymentConfigRequest {
     /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
@@ -1133,7 +1154,7 @@ pub struct GetDeploymentConfigInput {
 /// <p>Represents the output of a GetDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDeploymentConfigOutput {
+pub struct GetDeploymentConfigResponse {
     /// <p>Information about the deployment configuration.</p>
     #[serde(rename = "deploymentConfigInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1142,7 +1163,7 @@ pub struct GetDeploymentConfigOutput {
 
 /// <p>Represents the input of a GetDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDeploymentGroupInput {
+pub struct GetDeploymentGroupRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -1154,24 +1175,16 @@ pub struct GetDeploymentGroupInput {
 /// <p>Represents the output of a GetDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDeploymentGroupOutput {
+pub struct GetDeploymentGroupResponse {
     /// <p>Information about the deployment group.</p>
     #[serde(rename = "deploymentGroupInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_info: Option<DeploymentGroupInfo>,
 }
 
-/// <p>Represents the input of a GetDeployment operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDeploymentInput {
-    /// <p> The unique ID of a deployment associated with the IAM user or AWS account. </p>
-    #[serde(rename = "deploymentId")]
-    pub deployment_id: String,
-}
-
 /// <p> Represents the input of a GetDeploymentInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDeploymentInstanceInput {
+pub struct GetDeploymentInstanceRequest {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
@@ -1183,17 +1196,25 @@ pub struct GetDeploymentInstanceInput {
 /// <p> Represents the output of a GetDeploymentInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDeploymentInstanceOutput {
+pub struct GetDeploymentInstanceResponse {
     /// <p> Information about the instance. </p>
     #[serde(rename = "instanceSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_summary: Option<InstanceSummary>,
 }
 
+/// <p>Represents the input of a GetDeployment operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetDeploymentRequest {
+    /// <p> The unique ID of a deployment associated with the IAM user or AWS account. </p>
+    #[serde(rename = "deploymentId")]
+    pub deployment_id: String,
+}
+
 /// <p>Represents the output of a GetDeployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDeploymentOutput {
+pub struct GetDeploymentResponse {
     /// <p>Information about the deployment.</p>
     #[serde(rename = "deploymentInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1201,7 +1222,7 @@ pub struct GetDeploymentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDeploymentTargetInput {
+pub struct GetDeploymentTargetRequest {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1214,7 +1235,7 @@ pub struct GetDeploymentTargetInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDeploymentTargetOutput {
+pub struct GetDeploymentTargetResponse {
     /// <p> A deployment target that contains information about a deployment such as its status, lifecyle events, and when it was last updated. It also contains metadata about the deployment target. The deployment target metadata depends on the deployment target's type (<code>instanceTarget</code>, <code>lambdaTarget</code>, or <code>ecsTarget</code>). </p>
     #[serde(rename = "deploymentTarget")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1223,7 +1244,7 @@ pub struct GetDeploymentTargetOutput {
 
 /// <p> Represents the input of a GetOnPremisesInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetOnPremisesInstanceInput {
+pub struct GetOnPremisesInstanceRequest {
     /// <p> The name of the on-premises instance about which to get information. </p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
@@ -1232,7 +1253,7 @@ pub struct GetOnPremisesInstanceInput {
 /// <p> Represents the output of a GetOnPremisesInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetOnPremisesInstanceOutput {
+pub struct GetOnPremisesInstanceResponse {
     /// <p> Information about the on-premises instance. </p>
     #[serde(rename = "instanceInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1469,7 +1490,7 @@ pub struct LifecycleEvent {
 
 /// <p> Represents the input of a ListApplicationRevisions operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListApplicationRevisionsInput {
+pub struct ListApplicationRevisionsRequest {
     /// <p> The name of an AWS CodeDeploy application associated with the IAM user or AWS account. </p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -1502,7 +1523,7 @@ pub struct ListApplicationRevisionsInput {
 /// <p>Represents the output of a ListApplicationRevisions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListApplicationRevisionsOutput {
+pub struct ListApplicationRevisionsResponse {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1515,7 +1536,7 @@ pub struct ListApplicationRevisionsOutput {
 
 /// <p>Represents the input of a ListApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListApplicationsInput {
+pub struct ListApplicationsRequest {
     /// <p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1525,7 +1546,7 @@ pub struct ListApplicationsInput {
 /// <p>Represents the output of a ListApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListApplicationsOutput {
+pub struct ListApplicationsResponse {
     /// <p>A list of application names.</p>
     #[serde(rename = "applications")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1538,7 +1559,7 @@ pub struct ListApplicationsOutput {
 
 /// <p>Represents the input of a ListDeploymentConfigs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListDeploymentConfigsInput {
+pub struct ListDeploymentConfigsRequest {
     /// <p>An identifier returned from the previous <code>ListDeploymentConfigs</code> call. It can be used to return the next set of deployment configurations in the list. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1548,7 +1569,7 @@ pub struct ListDeploymentConfigsInput {
 /// <p>Represents the output of a ListDeploymentConfigs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListDeploymentConfigsOutput {
+pub struct ListDeploymentConfigsResponse {
     /// <p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>
     #[serde(rename = "deploymentConfigsList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1561,7 +1582,7 @@ pub struct ListDeploymentConfigsOutput {
 
 /// <p>Represents the input of a ListDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListDeploymentGroupsInput {
+pub struct ListDeploymentGroupsRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -1574,7 +1595,7 @@ pub struct ListDeploymentGroupsInput {
 /// <p>Represents the output of a ListDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListDeploymentGroupsOutput {
+pub struct ListDeploymentGroupsResponse {
     /// <p>The application name.</p>
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1591,7 +1612,7 @@ pub struct ListDeploymentGroupsOutput {
 
 /// <p> Represents the input of a ListDeploymentInstances operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListDeploymentInstancesInput {
+pub struct ListDeploymentInstancesRequest {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
@@ -1612,7 +1633,7 @@ pub struct ListDeploymentInstancesInput {
 /// <p>Represents the output of a ListDeploymentInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListDeploymentInstancesOutput {
+pub struct ListDeploymentInstancesResponse {
     /// <p>A list of instance IDs.</p>
     #[serde(rename = "instancesList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1624,7 +1645,7 @@ pub struct ListDeploymentInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListDeploymentTargetsInput {
+pub struct ListDeploymentTargetsRequest {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1641,7 +1662,7 @@ pub struct ListDeploymentTargetsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListDeploymentTargetsOutput {
+pub struct ListDeploymentTargetsResponse {
     /// <p> If a large amount of information is returned, a token identifier is also returned. It can be used in a subsequent <code>ListDeploymentTargets</code> call to return the next set of deployment targets in the list. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1654,7 +1675,7 @@ pub struct ListDeploymentTargetsOutput {
 
 /// <p>Represents the input of a ListDeployments operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListDeploymentsInput {
+pub struct ListDeploymentsRequest {
     /// <p><p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p> <note> <p>If <code>applicationName</code> is specified, then <code>deploymentGroupName</code> must be specified. If it is not specified, then <code>deploymentGroupName</code> must not be specified. </p> </note></p>
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1680,7 +1701,7 @@ pub struct ListDeploymentsInput {
 /// <p>Represents the output of a ListDeployments operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListDeploymentsOutput {
+pub struct ListDeploymentsResponse {
     /// <p>A list of deployment IDs.</p>
     #[serde(rename = "deployments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1693,7 +1714,7 @@ pub struct ListDeploymentsOutput {
 
 /// <p>Represents the input of a ListGitHubAccountTokenNames operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListGitHubAccountTokenNamesInput {
+pub struct ListGitHubAccountTokenNamesRequest {
     /// <p>An identifier returned from the previous ListGitHubAccountTokenNames call. It can be used to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1703,7 +1724,7 @@ pub struct ListGitHubAccountTokenNamesInput {
 /// <p>Represents the output of a ListGitHubAccountTokenNames operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListGitHubAccountTokenNamesOutput {
+pub struct ListGitHubAccountTokenNamesResponse {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1716,7 +1737,7 @@ pub struct ListGitHubAccountTokenNamesOutput {
 
 /// <p>Represents the input of a ListOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListOnPremisesInstancesInput {
+pub struct ListOnPremisesInstancesRequest {
     /// <p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1734,7 +1755,7 @@ pub struct ListOnPremisesInstancesInput {
 /// <p>Represents the output of the list on-premises instances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListOnPremisesInstancesOutput {
+pub struct ListOnPremisesInstancesResponse {
     /// <p>The list of matching on-premises instance names.</p>
     #[serde(rename = "instanceNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1746,7 +1767,7 @@ pub struct ListOnPremisesInstancesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForResourceInput {
+pub struct ListTagsForResourceRequest {
     /// <p>An identifier returned from the previous <code>ListTagsForResource</code> call. It can be used to return the next set of applications in the list.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1758,7 +1779,7 @@ pub struct ListTagsForResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsForResourceOutput {
+pub struct ListTagsForResourceResponse {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1809,7 +1830,7 @@ pub struct OnPremisesTagSet {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutLifecycleEventHookExecutionStatusInput {
+pub struct PutLifecycleEventHookExecutionStatusRequest {
     /// <p> The unique ID of a deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1826,7 +1847,7 @@ pub struct PutLifecycleEventHookExecutionStatusInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutLifecycleEventHookExecutionStatusOutput {
+pub struct PutLifecycleEventHookExecutionStatusResponse {
     /// <p>The execution ID of the lifecycle event hook. A hook is specified in the <code>hooks</code> section of the deployment's AppSpec file.</p>
     #[serde(rename = "lifecycleEventHookExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1848,7 +1869,7 @@ pub struct RawString {
 
 /// <p>Represents the input of a RegisterApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RegisterApplicationRevisionInput {
+pub struct RegisterApplicationRevisionRequest {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
@@ -1861,9 +1882,13 @@ pub struct RegisterApplicationRevisionInput {
     pub revision: RevisionLocation,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RegisterApplicationRevisionResponse {}
+
 /// <p>Represents the input of the register on-premises instance operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RegisterOnPremisesInstanceInput {
+pub struct RegisterOnPremisesInstanceRequest {
     /// <p>The ARN of the IAM session to associate with the on-premises instance.</p>
     #[serde(rename = "iamSessionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1877,9 +1902,13 @@ pub struct RegisterOnPremisesInstanceInput {
     pub instance_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RegisterOnPremisesInstanceResponse {}
+
 /// <p>Represents the input of a RemoveTagsFromOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct RemoveTagsFromOnPremisesInstancesInput {
+pub struct RemoveTagsFromOnPremisesInstancesRequest {
     /// <p>The names of the on-premises instances from which to remove tags.</p>
     #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
@@ -1887,6 +1916,10 @@ pub struct RemoveTagsFromOnPremisesInstancesInput {
     #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RemoveTagsFromOnPremisesInstancesResponse {}
 
 /// <p>Information about an application revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1971,16 +2004,20 @@ pub struct S3Location {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct SkipWaitTimeForInstanceTerminationInput {
+pub struct SkipWaitTimeForInstanceTerminationRequest {
     /// <p> The unique ID of a blue/green deployment for which you want to skip the instance termination wait time. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SkipWaitTimeForInstanceTerminationResponse {}
+
 /// <p> Represents the input of a StopDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StopDeploymentInput {
+pub struct StopDeploymentRequest {
     /// <p> Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision. </p>
     #[serde(rename = "autoRollbackEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1993,7 +2030,7 @@ pub struct StopDeploymentInput {
 /// <p> Represents the output of a StopDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopDeploymentOutput {
+pub struct StopDeploymentResponse {
     /// <p><p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2035,7 +2072,7 @@ pub struct TagFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagResourceInput {
+pub struct TagResourceRequest {
     /// <p> The ARN of a resource, such as a CodeDeploy application or deployment group. </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -2046,7 +2083,7 @@ pub struct TagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagResourceOutput {}
+pub struct TagResourceResponse {}
 
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2174,7 +2211,7 @@ pub struct TriggerConfig {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagResourceInput {
+pub struct UntagResourceRequest {
     /// <p> The ARN that specifies from which resource to disassociate the tags with the keys in the <code>TagKeys</code> input paramter. </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -2185,11 +2222,11 @@ pub struct UntagResourceInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagResourceOutput {}
+pub struct UntagResourceResponse {}
 
 /// <p>Represents the input of an UpdateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateApplicationInput {
+pub struct UpdateApplicationRequest {
     /// <p>The current name of the application you want to change.</p>
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2200,9 +2237,13 @@ pub struct UpdateApplicationInput {
     pub new_application_name: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateApplicationResponse {}
+
 /// <p>Represents the input of an UpdateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateDeploymentGroupInput {
+pub struct UpdateDeploymentGroupRequest {
     /// <p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>
     #[serde(rename = "alarmConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2274,7 +2315,7 @@ pub struct UpdateDeploymentGroupInput {
 /// <p>Represents the output of an UpdateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateDeploymentGroupOutput {
+pub struct UpdateDeploymentGroupResponse {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>
     #[serde(rename = "hooksNotCleanedUp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6054,281 +6095,256 @@ pub trait CodeDeploy {
     /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(
         &self,
-        input: AddTagsToOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError>;
+        input: AddTagsToOnPremisesInstancesRequest,
+    ) -> Request<AddTagsToOnPremisesInstancesRequest>;
 
     /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
     fn batch_get_application_revisions(
         &self,
-        input: BatchGetApplicationRevisionsInput,
-    ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
+        input: BatchGetApplicationRevisionsRequest,
+    ) -> Request<BatchGetApplicationRevisionsRequest>;
 
     /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
     fn batch_get_applications(
         &self,
-        input: BatchGetApplicationsInput,
-    ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError>;
+        input: BatchGetApplicationsRequest,
+    ) -> Request<BatchGetApplicationsRequest>;
 
     /// <p>Gets information about one or more deployment groups.</p>
     fn batch_get_deployment_groups(
         &self,
-        input: BatchGetDeploymentGroupsInput,
-    ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
+        input: BatchGetDeploymentGroupsRequest,
+    ) -> Request<BatchGetDeploymentGroupsRequest>;
 
     /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
     fn batch_get_deployment_instances(
         &self,
-        input: BatchGetDeploymentInstancesInput,
-    ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
+        input: BatchGetDeploymentInstancesRequest,
+    ) -> Request<BatchGetDeploymentInstancesRequest>;
 
     /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
     fn batch_get_deployment_targets(
         &self,
-        input: BatchGetDeploymentTargetsInput,
-    ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError>;
+        input: BatchGetDeploymentTargetsRequest,
+    ) -> Request<BatchGetDeploymentTargetsRequest>;
 
     /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
     fn batch_get_deployments(
         &self,
-        input: BatchGetDeploymentsInput,
-    ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
+        input: BatchGetDeploymentsRequest,
+    ) -> Request<BatchGetDeploymentsRequest>;
 
     /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
     fn batch_get_on_premises_instances(
         &self,
-        input: BatchGetOnPremisesInstancesInput,
-    ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
+        input: BatchGetOnPremisesInstancesRequest,
+    ) -> Request<BatchGetOnPremisesInstancesRequest>;
 
     /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
     fn continue_deployment(
         &self,
-        input: ContinueDeploymentInput,
-    ) -> RusotoFuture<(), ContinueDeploymentError>;
+        input: ContinueDeploymentRequest,
+    ) -> Request<ContinueDeploymentRequest>;
 
     /// <p>Creates an application.</p>
     fn create_application(
         &self,
-        input: CreateApplicationInput,
-    ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError>;
+        input: CreateApplicationRequest,
+    ) -> Request<CreateApplicationRequest>;
 
     /// <p>Deploys an application revision through the specified deployment group.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentInput,
-    ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError>;
+    fn create_deployment(&self, input: CreateDeploymentRequest)
+        -> Request<CreateDeploymentRequest>;
 
     /// <p> Creates a deployment configuration. </p>
     fn create_deployment_config(
         &self,
-        input: CreateDeploymentConfigInput,
-    ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
+        input: CreateDeploymentConfigRequest,
+    ) -> Request<CreateDeploymentConfigRequest>;
 
     /// <p>Creates a deployment group to which application revisions are deployed.</p>
     fn create_deployment_group(
         &self,
-        input: CreateDeploymentGroupInput,
-    ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError>;
+        input: CreateDeploymentGroupRequest,
+    ) -> Request<CreateDeploymentGroupRequest>;
 
     /// <p>Deletes an application.</p>
     fn delete_application(
         &self,
-        input: DeleteApplicationInput,
-    ) -> RusotoFuture<(), DeleteApplicationError>;
+        input: DeleteApplicationRequest,
+    ) -> Request<DeleteApplicationRequest>;
 
     /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
     fn delete_deployment_config(
         &self,
-        input: DeleteDeploymentConfigInput,
-    ) -> RusotoFuture<(), DeleteDeploymentConfigError>;
+        input: DeleteDeploymentConfigRequest,
+    ) -> Request<DeleteDeploymentConfigRequest>;
 
     /// <p>Deletes a deployment group.</p>
     fn delete_deployment_group(
         &self,
-        input: DeleteDeploymentGroupInput,
-    ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
+        input: DeleteDeploymentGroupRequest,
+    ) -> Request<DeleteDeploymentGroupRequest>;
 
     /// <p>Deletes a GitHub account connection.</p>
     fn delete_git_hub_account_token(
         &self,
-        input: DeleteGitHubAccountTokenInput,
-    ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError>;
+        input: DeleteGitHubAccountTokenRequest,
+    ) -> Request<DeleteGitHubAccountTokenRequest>;
 
     /// <p>Deregisters an on-premises instance.</p>
     fn deregister_on_premises_instance(
         &self,
-        input: DeregisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError>;
+        input: DeregisterOnPremisesInstanceRequest,
+    ) -> Request<DeregisterOnPremisesInstanceRequest>;
 
     /// <p>Gets information about an application.</p>
-    fn get_application(
-        &self,
-        input: GetApplicationInput,
-    ) -> RusotoFuture<GetApplicationOutput, GetApplicationError>;
+    fn get_application(&self, input: GetApplicationRequest) -> Request<GetApplicationRequest>;
 
     /// <p>Gets information about an application revision.</p>
     fn get_application_revision(
         &self,
-        input: GetApplicationRevisionInput,
-    ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError>;
+        input: GetApplicationRevisionRequest,
+    ) -> Request<GetApplicationRevisionRequest>;
 
     /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
-    fn get_deployment(
-        &self,
-        input: GetDeploymentInput,
-    ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError>;
+    fn get_deployment(&self, input: GetDeploymentRequest) -> Request<GetDeploymentRequest>;
 
     /// <p>Gets information about a deployment configuration.</p>
     fn get_deployment_config(
         &self,
-        input: GetDeploymentConfigInput,
-    ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError>;
+        input: GetDeploymentConfigRequest,
+    ) -> Request<GetDeploymentConfigRequest>;
 
     /// <p>Gets information about a deployment group.</p>
     fn get_deployment_group(
         &self,
-        input: GetDeploymentGroupInput,
-    ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError>;
+        input: GetDeploymentGroupRequest,
+    ) -> Request<GetDeploymentGroupRequest>;
 
     /// <p>Gets information about an instance as part of a deployment.</p>
     fn get_deployment_instance(
         &self,
-        input: GetDeploymentInstanceInput,
-    ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
+        input: GetDeploymentInstanceRequest,
+    ) -> Request<GetDeploymentInstanceRequest>;
 
     /// <p> Returns information about a deployment target. </p>
     fn get_deployment_target(
         &self,
-        input: GetDeploymentTargetInput,
-    ) -> RusotoFuture<GetDeploymentTargetOutput, GetDeploymentTargetError>;
+        input: GetDeploymentTargetRequest,
+    ) -> Request<GetDeploymentTargetRequest>;
 
     /// <p> Gets information about an on-premises instance. </p>
     fn get_on_premises_instance(
         &self,
-        input: GetOnPremisesInstanceInput,
-    ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError>;
+        input: GetOnPremisesInstanceRequest,
+    ) -> Request<GetOnPremisesInstanceRequest>;
 
     /// <p>Lists information about revisions for an application.</p>
     fn list_application_revisions(
         &self,
-        input: ListApplicationRevisionsInput,
-    ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
+        input: ListApplicationRevisionsRequest,
+    ) -> Request<ListApplicationRevisionsRequest>;
 
     /// <p>Lists the applications registered with the IAM user or AWS account.</p>
-    fn list_applications(
-        &self,
-        input: ListApplicationsInput,
-    ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError>;
+    fn list_applications(&self, input: ListApplicationsRequest)
+        -> Request<ListApplicationsRequest>;
 
     /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
     fn list_deployment_configs(
         &self,
-        input: ListDeploymentConfigsInput,
-    ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
+        input: ListDeploymentConfigsRequest,
+    ) -> Request<ListDeploymentConfigsRequest>;
 
     /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
     fn list_deployment_groups(
         &self,
-        input: ListDeploymentGroupsInput,
-    ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
+        input: ListDeploymentGroupsRequest,
+    ) -> Request<ListDeploymentGroupsRequest>;
 
     /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
     fn list_deployment_instances(
         &self,
-        input: ListDeploymentInstancesInput,
-    ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
+        input: ListDeploymentInstancesRequest,
+    ) -> Request<ListDeploymentInstancesRequest>;
 
     /// <p> Returns an array of target IDs that are associated a deployment. </p>
     fn list_deployment_targets(
         &self,
-        input: ListDeploymentTargetsInput,
-    ) -> RusotoFuture<ListDeploymentTargetsOutput, ListDeploymentTargetsError>;
+        input: ListDeploymentTargetsRequest,
+    ) -> Request<ListDeploymentTargetsRequest>;
 
     /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
-    fn list_deployments(
-        &self,
-        input: ListDeploymentsInput,
-    ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError>;
+    fn list_deployments(&self, input: ListDeploymentsRequest) -> Request<ListDeploymentsRequest>;
 
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
     fn list_git_hub_account_token_names(
         &self,
-        input: ListGitHubAccountTokenNamesInput,
-    ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
+        input: ListGitHubAccountTokenNamesRequest,
+    ) -> Request<ListGitHubAccountTokenNamesRequest>;
 
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     fn list_on_premises_instances(
         &self,
-        input: ListOnPremisesInstancesInput,
-    ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
+        input: ListOnPremisesInstancesRequest,
+    ) -> Request<ListOnPremisesInstancesRequest>;
 
     /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
     fn put_lifecycle_event_hook_execution_status(
         &self,
-        input: PutLifecycleEventHookExecutionStatusInput,
-    ) -> RusotoFuture<
-        PutLifecycleEventHookExecutionStatusOutput,
-        PutLifecycleEventHookExecutionStatusError,
-    >;
+        input: PutLifecycleEventHookExecutionStatusRequest,
+    ) -> Request<PutLifecycleEventHookExecutionStatusRequest>;
 
     /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
     fn register_application_revision(
         &self,
-        input: RegisterApplicationRevisionInput,
-    ) -> RusotoFuture<(), RegisterApplicationRevisionError>;
+        input: RegisterApplicationRevisionRequest,
+    ) -> Request<RegisterApplicationRevisionRequest>;
 
     /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
     fn register_on_premises_instance(
         &self,
-        input: RegisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), RegisterOnPremisesInstanceError>;
+        input: RegisterOnPremisesInstanceRequest,
+    ) -> Request<RegisterOnPremisesInstanceRequest>;
 
     /// <p>Removes one or more tags from one or more on-premises instances.</p>
     fn remove_tags_from_on_premises_instances(
         &self,
-        input: RemoveTagsFromOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError>;
+        input: RemoveTagsFromOnPremisesInstancesRequest,
+    ) -> Request<RemoveTagsFromOnPremisesInstancesRequest>;
 
     /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
     fn skip_wait_time_for_instance_termination(
         &self,
-        input: SkipWaitTimeForInstanceTerminationInput,
-    ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError>;
+        input: SkipWaitTimeForInstanceTerminationRequest,
+    ) -> Request<SkipWaitTimeForInstanceTerminationRequest>;
 
     /// <p>Attempts to stop an ongoing deployment.</p>
-    fn stop_deployment(
-        &self,
-        input: StopDeploymentInput,
-    ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError>;
+    fn stop_deployment(&self, input: StopDeploymentRequest) -> Request<StopDeploymentRequest>;
 
     /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Changes the name of an application.</p>
     fn update_application(
         &self,
-        input: UpdateApplicationInput,
-    ) -> RusotoFuture<(), UpdateApplicationError>;
+        input: UpdateApplicationRequest,
+    ) -> Request<UpdateApplicationRequest>;
 
     /// <p>Changes information about a deployment group.</p>
     fn update_deployment_group(
         &self,
-        input: UpdateDeploymentGroupInput,
-    ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError>;
+        input: UpdateDeploymentGroupRequest,
+    ) -> Request<UpdateDeploymentGroupRequest>;
 }
 /// A client for the CodeDeploy API.
 #[derive(Clone)]
@@ -6370,21 +6386,379 @@ impl CodeDeploy for CodeDeployClient {
     /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(
         &self,
-        input: AddTagsToOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        input: AddTagsToOnPremisesInstancesRequest,
+    ) -> Request<AddTagsToOnPremisesInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
+    fn batch_get_application_revisions(
+        &self,
+        input: BatchGetApplicationRevisionsRequest,
+    ) -> Request<BatchGetApplicationRevisionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
+    fn batch_get_applications(
+        &self,
+        input: BatchGetApplicationsRequest,
+    ) -> Request<BatchGetApplicationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more deployment groups.</p>
+    fn batch_get_deployment_groups(
+        &self,
+        input: BatchGetDeploymentGroupsRequest,
+    ) -> Request<BatchGetDeploymentGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
+    fn batch_get_deployment_instances(
+        &self,
+        input: BatchGetDeploymentInstancesRequest,
+    ) -> Request<BatchGetDeploymentInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
+    fn batch_get_deployment_targets(
+        &self,
+        input: BatchGetDeploymentTargetsRequest,
+    ) -> Request<BatchGetDeploymentTargetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
+    fn batch_get_deployments(
+        &self,
+        input: BatchGetDeploymentsRequest,
+    ) -> Request<BatchGetDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
+    fn batch_get_on_premises_instances(
+        &self,
+        input: BatchGetOnPremisesInstancesRequest,
+    ) -> Request<BatchGetOnPremisesInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
+    fn continue_deployment(
+        &self,
+        input: ContinueDeploymentRequest,
+    ) -> Request<ContinueDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an application.</p>
+    fn create_application(
+        &self,
+        input: CreateApplicationRequest,
+    ) -> Request<CreateApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deploys an application revision through the specified deployment group.</p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> Request<CreateDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Creates a deployment configuration. </p>
+    fn create_deployment_config(
+        &self,
+        input: CreateDeploymentConfigRequest,
+    ) -> Request<CreateDeploymentConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a deployment group to which application revisions are deployed.</p>
+    fn create_deployment_group(
+        &self,
+        input: CreateDeploymentGroupRequest,
+    ) -> Request<CreateDeploymentGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an application.</p>
+    fn delete_application(
+        &self,
+        input: DeleteApplicationRequest,
+    ) -> Request<DeleteApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
+    fn delete_deployment_config(
+        &self,
+        input: DeleteDeploymentConfigRequest,
+    ) -> Request<DeleteDeploymentConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a deployment group.</p>
+    fn delete_deployment_group(
+        &self,
+        input: DeleteDeploymentGroupRequest,
+    ) -> Request<DeleteDeploymentGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a GitHub account connection.</p>
+    fn delete_git_hub_account_token(
+        &self,
+        input: DeleteGitHubAccountTokenRequest,
+    ) -> Request<DeleteGitHubAccountTokenRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters an on-premises instance.</p>
+    fn deregister_on_premises_instance(
+        &self,
+        input: DeregisterOnPremisesInstanceRequest,
+    ) -> Request<DeregisterOnPremisesInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about an application.</p>
+    fn get_application(&self, input: GetApplicationRequest) -> Request<GetApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about an application revision.</p>
+    fn get_application_revision(
+        &self,
+        input: GetApplicationRevisionRequest,
+    ) -> Request<GetApplicationRevisionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
+    fn get_deployment(&self, input: GetDeploymentRequest) -> Request<GetDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a deployment configuration.</p>
+    fn get_deployment_config(
+        &self,
+        input: GetDeploymentConfigRequest,
+    ) -> Request<GetDeploymentConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a deployment group.</p>
+    fn get_deployment_group(
+        &self,
+        input: GetDeploymentGroupRequest,
+    ) -> Request<GetDeploymentGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about an instance as part of a deployment.</p>
+    fn get_deployment_instance(
+        &self,
+        input: GetDeploymentInstanceRequest,
+    ) -> Request<GetDeploymentInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns information about a deployment target. </p>
+    fn get_deployment_target(
+        &self,
+        input: GetDeploymentTargetRequest,
+    ) -> Request<GetDeploymentTargetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Gets information about an on-premises instance. </p>
+    fn get_on_premises_instance(
+        &self,
+        input: GetOnPremisesInstanceRequest,
+    ) -> Request<GetOnPremisesInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists information about revisions for an application.</p>
+    fn list_application_revisions(
+        &self,
+        input: ListApplicationRevisionsRequest,
+    ) -> Request<ListApplicationRevisionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the applications registered with the IAM user or AWS account.</p>
+    fn list_applications(
+        &self,
+        input: ListApplicationsRequest,
+    ) -> Request<ListApplicationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
+    fn list_deployment_configs(
+        &self,
+        input: ListDeploymentConfigsRequest,
+    ) -> Request<ListDeploymentConfigsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
+    fn list_deployment_groups(
+        &self,
+        input: ListDeploymentGroupsRequest,
+    ) -> Request<ListDeploymentGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
+    fn list_deployment_instances(
+        &self,
+        input: ListDeploymentInstancesRequest,
+    ) -> Request<ListDeploymentInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns an array of target IDs that are associated a deployment. </p>
+    fn list_deployment_targets(
+        &self,
+        input: ListDeploymentTargetsRequest,
+    ) -> Request<ListDeploymentTargetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
+    fn list_deployments(&self, input: ListDeploymentsRequest) -> Request<ListDeploymentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the names of stored connections to GitHub accounts.</p>
+    fn list_git_hub_account_token_names(
+        &self,
+        input: ListGitHubAccountTokenNamesRequest,
+    ) -> Request<ListGitHubAccountTokenNamesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
+    fn list_on_premises_instances(
+        &self,
+        input: ListOnPremisesInstancesRequest,
+    ) -> Request<ListOnPremisesInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
+    fn put_lifecycle_event_hook_execution_status(
+        &self,
+        input: PutLifecycleEventHookExecutionStatusRequest,
+    ) -> Request<PutLifecycleEventHookExecutionStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
+    fn register_application_revision(
+        &self,
+        input: RegisterApplicationRevisionRequest,
+    ) -> Request<RegisterApplicationRevisionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
+    fn register_on_premises_instance(
+        &self,
+        input: RegisterOnPremisesInstanceRequest,
+    ) -> Request<RegisterOnPremisesInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes one or more tags from one or more on-premises instances.</p>
+    fn remove_tags_from_on_premises_instances(
+        &self,
+        input: RemoveTagsFromOnPremisesInstancesRequest,
+    ) -> Request<RemoveTagsFromOnPremisesInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
+    fn skip_wait_time_for_instance_termination(
+        &self,
+        input: SkipWaitTimeForInstanceTerminationRequest,
+    ) -> Request<SkipWaitTimeForInstanceTerminationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attempts to stop an ongoing deployment.</p>
+    fn stop_deployment(&self, input: StopDeploymentRequest) -> Request<StopDeploymentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the name of an application.</p>
+    fn update_application(
+        &self,
+        input: UpdateApplicationRequest,
+    ) -> Request<UpdateApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes information about a deployment group.</p>
+    fn update_deployment_group(
+        &self,
+        input: UpdateDeploymentGroupRequest,
+    ) -> Request<UpdateDeploymentGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsToOnPremisesInstancesRequest {
+    type Output = AddTagsToOnPremisesInstancesResponse;
+    type Error = AddTagsToOnPremisesInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.AddTagsToOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AddTagsToOnPremisesInstancesResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AddTagsToOnPremisesInstancesError::from_response(response))
@@ -6392,27 +6766,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
-    fn batch_get_application_revisions(
-        &self,
-        input: BatchGetApplicationRevisionsInput,
-    ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for BatchGetApplicationRevisionsRequest {
+    type Output = BatchGetApplicationRevisionsResponse;
+    type Error = BatchGetApplicationRevisionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetApplicationRevisions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetApplicationRevisionsOutput, _>()
+                        .deserialize::<BatchGetApplicationRevisionsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6421,24 +6800,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
-    fn batch_get_applications(
-        &self,
-        input: BatchGetApplicationsInput,
-    ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for BatchGetApplicationsRequest {
+    type Output = BatchGetApplicationsResponse;
+    type Error = BatchGetApplicationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetApplications");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetApplicationsOutput, _>()
+                        .deserialize::<BatchGetApplicationsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6449,27 +6833,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more deployment groups.</p>
-    fn batch_get_deployment_groups(
-        &self,
-        input: BatchGetDeploymentGroupsInput,
-    ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for BatchGetDeploymentGroupsRequest {
+    type Output = BatchGetDeploymentGroupsResponse;
+    type Error = BatchGetDeploymentGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentGroups",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetDeploymentGroupsOutput, _>()
+                        .deserialize::<BatchGetDeploymentGroupsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6478,27 +6867,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
-    fn batch_get_deployment_instances(
-        &self,
-        input: BatchGetDeploymentInstancesInput,
-    ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for BatchGetDeploymentInstancesRequest {
+    type Output = BatchGetDeploymentInstancesResponse;
+    type Error = BatchGetDeploymentInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetDeploymentInstancesOutput, _>()
+                        .deserialize::<BatchGetDeploymentInstancesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6507,27 +6901,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
-    fn batch_get_deployment_targets(
-        &self,
-        input: BatchGetDeploymentTargetsInput,
-    ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for BatchGetDeploymentTargetsRequest {
+    type Output = BatchGetDeploymentTargetsResponse;
+    type Error = BatchGetDeploymentTargetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentTargets",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetDeploymentTargetsOutput, _>()
+                        .deserialize::<BatchGetDeploymentTargetsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6536,24 +6935,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
-    fn batch_get_deployments(
-        &self,
-        input: BatchGetDeploymentsInput,
-    ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for BatchGetDeploymentsRequest {
+    type Output = BatchGetDeploymentsResponse;
+    type Error = BatchGetDeploymentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetDeployments");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetDeploymentsOutput, _>()
+                        .deserialize::<BatchGetDeploymentsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6564,27 +6968,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
-    fn batch_get_on_premises_instances(
-        &self,
-        input: BatchGetOnPremisesInstancesInput,
-    ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for BatchGetOnPremisesInstancesRequest {
+    type Output = BatchGetOnPremisesInstancesResponse;
+    type Error = BatchGetOnPremisesInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetOnPremisesInstancesOutput, _>()
+                        .deserialize::<BatchGetOnPremisesInstancesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6593,22 +7002,30 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
-    fn continue_deployment(
-        &self,
-        input: ContinueDeploymentInput,
-    ) -> RusotoFuture<(), ContinueDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ContinueDeploymentRequest {
+    type Output = ContinueDeploymentResponse;
+    type Error = ContinueDeploymentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ContinueDeployment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ContinueDeploymentResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6619,24 +7036,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Creates an application.</p>
-    fn create_application(
-        &self,
-        input: CreateApplicationInput,
-    ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for CreateApplicationRequest {
+    type Output = CreateApplicationResponse;
+    type Error = CreateApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateApplication");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateApplicationOutput, _>()
+                        .deserialize::<CreateApplicationResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6648,24 +7070,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Deploys an application revision through the specified deployment group.</p>
-    fn create_deployment(
-        &self,
-        input: CreateDeploymentInput,
-    ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for CreateDeploymentRequest {
+    type Output = CreateDeploymentResponse;
+    type Error = CreateDeploymentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeployment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDeploymentOutput, _>()
+                        .deserialize::<CreateDeploymentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6677,24 +7104,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Creates a deployment configuration. </p>
-    fn create_deployment_config(
-        &self,
-        input: CreateDeploymentConfigInput,
-    ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for CreateDeploymentConfigRequest {
+    type Output = CreateDeploymentConfigResponse;
+    type Error = CreateDeploymentConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentConfig");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDeploymentConfigOutput, _>()
+                        .deserialize::<CreateDeploymentConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6705,24 +7137,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Creates a deployment group to which application revisions are deployed.</p>
-    fn create_deployment_group(
-        &self,
-        input: CreateDeploymentGroupInput,
-    ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for CreateDeploymentGroupRequest {
+    type Output = CreateDeploymentGroupResponse;
+    type Error = CreateDeploymentGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDeploymentGroupOutput, _>()
+                        .deserialize::<CreateDeploymentGroupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6733,22 +7170,30 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an application.</p>
-    fn delete_application(
-        &self,
-        input: DeleteApplicationInput,
-    ) -> RusotoFuture<(), DeleteApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for DeleteApplicationRequest {
+    type Output = DeleteApplicationResponse;
+    type Error = DeleteApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteApplication");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteApplicationResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -6759,22 +7204,30 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
-    fn delete_deployment_config(
-        &self,
-        input: DeleteDeploymentConfigInput,
-    ) -> RusotoFuture<(), DeleteDeploymentConfigError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for DeleteDeploymentConfigRequest {
+    type Output = DeleteDeploymentConfigResponse;
+    type Error = DeleteDeploymentConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentConfig");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteDeploymentConfigResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -6784,24 +7237,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a deployment group.</p>
-    fn delete_deployment_group(
-        &self,
-        input: DeleteDeploymentGroupInput,
-    ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for DeleteDeploymentGroupRequest {
+    type Output = DeleteDeploymentGroupResponse;
+    type Error = DeleteDeploymentGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDeploymentGroupOutput, _>()
+                        .deserialize::<DeleteDeploymentGroupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6812,27 +7270,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a GitHub account connection.</p>
-    fn delete_git_hub_account_token(
-        &self,
-        input: DeleteGitHubAccountTokenInput,
-    ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for DeleteGitHubAccountTokenRequest {
+    type Output = DeleteGitHubAccountTokenResponse;
+    type Error = DeleteGitHubAccountTokenError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.DeleteGitHubAccountToken",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteGitHubAccountTokenOutput, _>()
+                        .deserialize::<DeleteGitHubAccountTokenResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -6841,25 +7304,33 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Deregisters an on-premises instance.</p>
-    fn deregister_on_premises_instance(
-        &self,
-        input: DeregisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for DeregisterOnPremisesInstanceRequest {
+    type Output = DeregisterOnPremisesInstanceResponse;
+    type Error = DeregisterOnPremisesInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.DeregisterOnPremisesInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeregisterOnPremisesInstanceResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeregisterOnPremisesInstanceError::from_response(response))
@@ -6867,24 +7338,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about an application.</p>
-    fn get_application(
-        &self,
-        input: GetApplicationInput,
-    ) -> RusotoFuture<GetApplicationOutput, GetApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetApplicationRequest {
+    type Output = GetApplicationResponse;
+    type Error = GetApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplication");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetApplicationOutput, _>()
+                        .deserialize::<GetApplicationResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6896,24 +7372,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about an application revision.</p>
-    fn get_application_revision(
-        &self,
-        input: GetApplicationRevisionInput,
-    ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetApplicationRevisionRequest {
+    type Output = GetApplicationRevisionResponse;
+    type Error = GetApplicationRevisionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplicationRevision");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetApplicationRevisionOutput, _>()
+                        .deserialize::<GetApplicationRevisionResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6924,24 +7405,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
-    fn get_deployment(
-        &self,
-        input: GetDeploymentInput,
-    ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetDeploymentRequest {
+    type Output = GetDeploymentResponse;
+    type Error = GetDeploymentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeployment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDeploymentOutput, _>()
+                        .deserialize::<GetDeploymentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6953,24 +7439,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a deployment configuration.</p>
-    fn get_deployment_config(
-        &self,
-        input: GetDeploymentConfigInput,
-    ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetDeploymentConfigRequest {
+    type Output = GetDeploymentConfigResponse;
+    type Error = GetDeploymentConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentConfig");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDeploymentConfigOutput, _>()
+                        .deserialize::<GetDeploymentConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -6981,24 +7472,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a deployment group.</p>
-    fn get_deployment_group(
-        &self,
-        input: GetDeploymentGroupInput,
-    ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetDeploymentGroupRequest {
+    type Output = GetDeploymentGroupResponse;
+    type Error = GetDeploymentGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDeploymentGroupOutput, _>()
+                        .deserialize::<GetDeploymentGroupResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7010,24 +7506,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about an instance as part of a deployment.</p>
-    fn get_deployment_instance(
-        &self,
-        input: GetDeploymentInstanceInput,
-    ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetDeploymentInstanceRequest {
+    type Output = GetDeploymentInstanceResponse;
+    type Error = GetDeploymentInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDeploymentInstanceOutput, _>()
+                        .deserialize::<GetDeploymentInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7038,24 +7539,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Returns information about a deployment target. </p>
-    fn get_deployment_target(
-        &self,
-        input: GetDeploymentTargetInput,
-    ) -> RusotoFuture<GetDeploymentTargetOutput, GetDeploymentTargetError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetDeploymentTargetRequest {
+    type Output = GetDeploymentTargetResponse;
+    type Error = GetDeploymentTargetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentTarget");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDeploymentTargetOutput, _>()
+                        .deserialize::<GetDeploymentTargetResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7066,24 +7572,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Gets information about an on-premises instance. </p>
-    fn get_on_premises_instance(
-        &self,
-        input: GetOnPremisesInstanceInput,
-    ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for GetOnPremisesInstanceRequest {
+    type Output = GetOnPremisesInstanceResponse;
+    type Error = GetOnPremisesInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetOnPremisesInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetOnPremisesInstanceOutput, _>()
+                        .deserialize::<GetOnPremisesInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7094,27 +7605,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Lists information about revisions for an application.</p>
-    fn list_application_revisions(
-        &self,
-        input: ListApplicationRevisionsInput,
-    ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListApplicationRevisionsRequest {
+    type Output = ListApplicationRevisionsResponse;
+    type Error = ListApplicationRevisionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListApplicationRevisions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListApplicationRevisionsOutput, _>()
+                        .deserialize::<ListApplicationRevisionsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7123,24 +7639,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Lists the applications registered with the IAM user or AWS account.</p>
-    fn list_applications(
-        &self,
-        input: ListApplicationsInput,
-    ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListApplicationsRequest {
+    type Output = ListApplicationsResponse;
+    type Error = ListApplicationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListApplications");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListApplicationsOutput, _>()
+                        .deserialize::<ListApplicationsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7152,24 +7673,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
-    fn list_deployment_configs(
-        &self,
-        input: ListDeploymentConfigsInput,
-    ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListDeploymentConfigsRequest {
+    type Output = ListDeploymentConfigsResponse;
+    type Error = ListDeploymentConfigsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentConfigs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDeploymentConfigsOutput, _>()
+                        .deserialize::<ListDeploymentConfigsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7180,24 +7706,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
-    fn list_deployment_groups(
-        &self,
-        input: ListDeploymentGroupsInput,
-    ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListDeploymentGroupsRequest {
+    type Output = ListDeploymentGroupsResponse;
+    type Error = ListDeploymentGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentGroups");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDeploymentGroupsOutput, _>()
+                        .deserialize::<ListDeploymentGroupsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7208,27 +7739,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
-    fn list_deployment_instances(
-        &self,
-        input: ListDeploymentInstancesInput,
-    ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListDeploymentInstancesRequest {
+    type Output = ListDeploymentInstancesResponse;
+    type Error = ListDeploymentInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListDeploymentInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDeploymentInstancesOutput, _>()
+                        .deserialize::<ListDeploymentInstancesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7237,24 +7773,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Returns an array of target IDs that are associated a deployment. </p>
-    fn list_deployment_targets(
-        &self,
-        input: ListDeploymentTargetsInput,
-    ) -> RusotoFuture<ListDeploymentTargetsOutput, ListDeploymentTargetsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListDeploymentTargetsRequest {
+    type Output = ListDeploymentTargetsResponse;
+    type Error = ListDeploymentTargetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentTargets");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDeploymentTargetsOutput, _>()
+                        .deserialize::<ListDeploymentTargetsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7265,24 +7806,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
-    fn list_deployments(
-        &self,
-        input: ListDeploymentsInput,
-    ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListDeploymentsRequest {
+    type Output = ListDeploymentsResponse;
+    type Error = ListDeploymentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeployments");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListDeploymentsOutput, _>()
+                        .deserialize::<ListDeploymentsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7294,27 +7840,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Lists the names of stored connections to GitHub accounts.</p>
-    fn list_git_hub_account_token_names(
-        &self,
-        input: ListGitHubAccountTokenNamesInput,
-    ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListGitHubAccountTokenNamesRequest {
+    type Output = ListGitHubAccountTokenNamesResponse;
+    type Error = ListGitHubAccountTokenNamesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListGitHubAccountTokenNames",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListGitHubAccountTokenNamesOutput, _>()
+                        .deserialize::<ListGitHubAccountTokenNamesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7323,27 +7874,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
-    fn list_on_premises_instances(
-        &self,
-        input: ListOnPremisesInstancesInput,
-    ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListOnPremisesInstancesRequest {
+    type Output = ListOnPremisesInstancesResponse;
+    type Error = ListOnPremisesInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListOnPremisesInstancesOutput, _>()
+                        .deserialize::<ListOnPremisesInstancesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7352,24 +7908,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceInput,
-    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListTagsForResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForResourceOutput, _>()
+                        .deserialize::<ListTagsForResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7380,30 +7941,32 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
-    fn put_lifecycle_event_hook_execution_status(
-        &self,
-        input: PutLifecycleEventHookExecutionStatusInput,
-    ) -> RusotoFuture<
-        PutLifecycleEventHookExecutionStatusOutput,
-        PutLifecycleEventHookExecutionStatusError,
-    > {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for PutLifecycleEventHookExecutionStatusRequest {
+    type Output = PutLifecycleEventHookExecutionStatusResponse;
+    type Error = PutLifecycleEventHookExecutionStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.PutLifecycleEventHookExecutionStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutLifecycleEventHookExecutionStatusOutput, _>()
+                        .deserialize::<PutLifecycleEventHookExecutionStatusResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7414,25 +7977,33 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
-    fn register_application_revision(
-        &self,
-        input: RegisterApplicationRevisionInput,
-    ) -> RusotoFuture<(), RegisterApplicationRevisionError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for RegisterApplicationRevisionRequest {
+    type Output = RegisterApplicationRevisionResponse;
+    type Error = RegisterApplicationRevisionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RegisterApplicationRevision",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterApplicationRevisionResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RegisterApplicationRevisionError::from_response(response))
@@ -7440,25 +8011,33 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
-    fn register_on_premises_instance(
-        &self,
-        input: RegisterOnPremisesInstanceInput,
-    ) -> RusotoFuture<(), RegisterOnPremisesInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for RegisterOnPremisesInstanceRequest {
+    type Output = RegisterOnPremisesInstanceResponse;
+    type Error = RegisterOnPremisesInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RegisterOnPremisesInstance",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RegisterOnPremisesInstanceResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RegisterOnPremisesInstanceError::from_response(response))
@@ -7466,25 +8045,33 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Removes one or more tags from one or more on-premises instances.</p>
-    fn remove_tags_from_on_premises_instances(
-        &self,
-        input: RemoveTagsFromOnPremisesInstancesInput,
-    ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for RemoveTagsFromOnPremisesInstancesRequest {
+    type Output = RemoveTagsFromOnPremisesInstancesResponse;
+    type Error = RemoveTagsFromOnPremisesInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RemoveTagsFromOnPremisesInstances",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RemoveTagsFromOnPremisesInstancesResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RemoveTagsFromOnPremisesInstancesError::from_response(
@@ -7494,25 +8081,33 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
-    fn skip_wait_time_for_instance_termination(
-        &self,
-        input: SkipWaitTimeForInstanceTerminationInput,
-    ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for SkipWaitTimeForInstanceTerminationRequest {
+    type Output = SkipWaitTimeForInstanceTerminationResponse;
+    type Error = SkipWaitTimeForInstanceTerminationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.SkipWaitTimeForInstanceTermination",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SkipWaitTimeForInstanceTerminationResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SkipWaitTimeForInstanceTerminationError::from_response(
@@ -7522,24 +8117,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Attempts to stop an ongoing deployment.</p>
-    fn stop_deployment(
-        &self,
-        input: StopDeploymentInput,
-    ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for StopDeploymentRequest {
+    type Output = StopDeploymentResponse;
+    type Error = StopDeploymentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.StopDeployment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopDeploymentOutput, _>()
+                        .deserialize::<StopDeploymentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7551,24 +8151,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
-    fn tag_resource(
-        &self,
-        input: TagResourceInput,
-    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceOutput, _>()
+                        .deserialize::<TagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7580,24 +8185,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceInput,
-    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceOutput, _>()
+                        .deserialize::<UntagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7609,22 +8219,30 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Changes the name of an application.</p>
-    fn update_application(
-        &self,
-        input: UpdateApplicationInput,
-    ) -> RusotoFuture<(), UpdateApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for UpdateApplicationRequest {
+    type Output = UpdateApplicationResponse;
+    type Error = UpdateApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateApplication");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateApplicationResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7635,24 +8253,29 @@ impl CodeDeploy for CodeDeployClient {
             }
         })
     }
+}
 
-    /// <p>Changes information about a deployment group.</p>
-    fn update_deployment_group(
-        &self,
-        input: UpdateDeploymentGroupInput,
-    ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+impl ServiceRequest for UpdateDeploymentGroupRequest {
+    type Output = UpdateDeploymentGroupResponse;
+    type Error = UpdateDeploymentGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codedeploy", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateDeploymentGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDeploymentGroupOutput, _>()
+                        .deserialize::<UpdateDeploymentGroupResponse, _>()
                 }))
             } else {
                 Box::new(

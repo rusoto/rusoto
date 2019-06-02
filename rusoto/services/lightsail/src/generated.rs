@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -33,7 +34,7 @@ pub struct AllocateStaticIpRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AllocateStaticIpResult {
+pub struct AllocateStaticIpResponse {
     /// <p>An array of key-value pairs containing information about the static IP address you allocated.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -55,7 +56,7 @@ pub struct AttachDiskRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AttachDiskResult {
+pub struct AttachDiskResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -74,7 +75,7 @@ pub struct AttachInstancesToLoadBalancerRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AttachInstancesToLoadBalancerResult {
+pub struct AttachInstancesToLoadBalancerResponse {
     /// <p>An object representing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,7 +94,7 @@ pub struct AttachLoadBalancerTlsCertificateRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AttachLoadBalancerTlsCertificateResult {
+pub struct AttachLoadBalancerTlsCertificateResponse {
     /// <p>An object representing the API operations.</p> <p>These SSL/TLS certificates are only usable by Lightsail load balancers. You can't get the certificate and use it for another purpose.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -112,7 +113,7 @@ pub struct AttachStaticIpRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AttachStaticIpResult {
+pub struct AttachStaticIpResponse {
     /// <p>An array of key-value pairs containing information about your API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -249,7 +250,7 @@ pub struct CloseInstancePublicPortsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CloseInstancePublicPortsResult {
+pub struct CloseInstancePublicPortsResponse {
     /// <p>An array of key-value pairs that contains information about the operation.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -327,7 +328,7 @@ pub struct CopySnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CopySnapshotResult {
+pub struct CopySnapshotResponse {
     /// <p>A list of objects describing the API operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -343,7 +344,7 @@ pub struct CreateCloudFormationStackRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateCloudFormationStackResult {
+pub struct CreateCloudFormationStackResponse {
     /// <p>A list of objects describing the API operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -372,7 +373,7 @@ pub struct CreateDiskFromSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDiskFromSnapshotResult {
+pub struct CreateDiskFromSnapshotResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -398,7 +399,7 @@ pub struct CreateDiskRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDiskResult {
+pub struct CreateDiskResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -426,7 +427,7 @@ pub struct CreateDiskSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDiskSnapshotResult {
+pub struct CreateDiskSnapshotResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -445,7 +446,7 @@ pub struct CreateDomainEntryRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDomainEntryResult {
+pub struct CreateDomainEntryResponse {
     /// <p>An array of key-value pairs containing information about the operation.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -465,7 +466,7 @@ pub struct CreateDomainRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateDomainResult {
+pub struct CreateDomainResponse {
     /// <p>An array of key-value pairs containing information about the domain resource you created.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -488,7 +489,7 @@ pub struct CreateInstanceSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateInstanceSnapshotResult {
+pub struct CreateInstanceSnapshotResponse {
     /// <p>An array of key-value pairs containing information about the results of your create instances snapshot request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -529,7 +530,7 @@ pub struct CreateInstancesFromSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateInstancesFromSnapshotResult {
+pub struct CreateInstancesFromSnapshotResponse {
     /// <p>An array of key-value pairs containing information about the results of your create instances from snapshot request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -566,7 +567,7 @@ pub struct CreateInstancesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateInstancesResult {
+pub struct CreateInstancesResponse {
     /// <p>An array of key-value pairs containing information about the results of your create instances request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -586,7 +587,7 @@ pub struct CreateKeyPairRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateKeyPairResult {
+pub struct CreateKeyPairResponse {
     /// <p>An array of key-value pairs containing information about the new key pair you just created.</p>
     #[serde(rename = "keyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -637,7 +638,7 @@ pub struct CreateLoadBalancerRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateLoadBalancerResult {
+pub struct CreateLoadBalancerResponse {
     /// <p>An object containing information about the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -667,7 +668,7 @@ pub struct CreateLoadBalancerTlsCertificateRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateLoadBalancerTlsCertificateResult {
+pub struct CreateLoadBalancerTlsCertificateResponse {
     /// <p>An object containing information about the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -715,7 +716,7 @@ pub struct CreateRelationalDatabaseFromSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateRelationalDatabaseFromSnapshotResult {
+pub struct CreateRelationalDatabaseFromSnapshotResponse {
     /// <p>An object describing the result of your create relational database from snapshot request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -767,7 +768,7 @@ pub struct CreateRelationalDatabaseRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateRelationalDatabaseResult {
+pub struct CreateRelationalDatabaseResponse {
     /// <p>An object describing the result of your create relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -790,7 +791,7 @@ pub struct CreateRelationalDatabaseSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateRelationalDatabaseSnapshotResult {
+pub struct CreateRelationalDatabaseSnapshotResponse {
     /// <p>An object describing the result of your create relational database snapshot request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -806,7 +807,7 @@ pub struct DeleteDiskRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDiskResult {
+pub struct DeleteDiskResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -822,7 +823,7 @@ pub struct DeleteDiskSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDiskSnapshotResult {
+pub struct DeleteDiskSnapshotResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -841,7 +842,7 @@ pub struct DeleteDomainEntryRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDomainEntryResult {
+pub struct DeleteDomainEntryResponse {
     /// <p>An array of key-value pairs containing information about the results of your delete domain entry request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -857,7 +858,7 @@ pub struct DeleteDomainRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteDomainResult {
+pub struct DeleteDomainResponse {
     /// <p>An array of key-value pairs containing information about the results of your delete domain request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -873,7 +874,7 @@ pub struct DeleteInstanceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteInstanceResult {
+pub struct DeleteInstanceResponse {
     /// <p>An array of key-value pairs containing information about the results of your delete instance request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -889,7 +890,7 @@ pub struct DeleteInstanceSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteInstanceSnapshotResult {
+pub struct DeleteInstanceSnapshotResponse {
     /// <p>An array of key-value pairs containing information about the results of your delete instance snapshot request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -905,7 +906,7 @@ pub struct DeleteKeyPairRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteKeyPairResult {
+pub struct DeleteKeyPairResponse {
     /// <p>An array of key-value pairs containing information about the results of your delete key pair request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -921,7 +922,7 @@ pub struct DeleteKnownHostKeysRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteKnownHostKeysResult {
+pub struct DeleteKnownHostKeysResponse {
     /// <p>A list of objects describing the API operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -937,7 +938,7 @@ pub struct DeleteLoadBalancerRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteLoadBalancerResult {
+pub struct DeleteLoadBalancerResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -960,7 +961,7 @@ pub struct DeleteLoadBalancerTlsCertificateRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteLoadBalancerTlsCertificateResult {
+pub struct DeleteLoadBalancerTlsCertificateResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -984,7 +985,7 @@ pub struct DeleteRelationalDatabaseRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteRelationalDatabaseResult {
+pub struct DeleteRelationalDatabaseResponse {
     /// <p>An object describing the result of your delete relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1000,7 +1001,7 @@ pub struct DeleteRelationalDatabaseSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteRelationalDatabaseSnapshotResult {
+pub struct DeleteRelationalDatabaseSnapshotResponse {
     /// <p>An object describing the result of your delete relational database snapshot request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1030,7 +1031,7 @@ pub struct DetachDiskRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DetachDiskResult {
+pub struct DetachDiskResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1049,7 +1050,7 @@ pub struct DetachInstancesFromLoadBalancerRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DetachInstancesFromLoadBalancerResult {
+pub struct DetachInstancesFromLoadBalancerResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1065,7 +1066,7 @@ pub struct DetachStaticIpRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DetachStaticIpResult {
+pub struct DetachStaticIpResponse {
     /// <p>An array of key-value pairs containing information about the results of your detach static IP request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1309,7 +1310,7 @@ pub struct DownloadDefaultKeyPairRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DownloadDefaultKeyPairResult {
+pub struct DownloadDefaultKeyPairResponse {
     /// <p>A base64-encoded RSA private key.</p>
     #[serde(rename = "privateKeyBase64")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1405,7 +1406,7 @@ pub struct ExportSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ExportSnapshotResult {
+pub struct ExportSnapshotResponse {
     /// <p>A list of objects describing the API operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1422,7 +1423,7 @@ pub struct GetActiveNamesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetActiveNamesResult {
+pub struct GetActiveNamesResponse {
     /// <p>The list of active names returned by the get active names request.</p>
     #[serde(rename = "activeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1447,7 +1448,7 @@ pub struct GetBlueprintsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetBlueprintsResult {
+pub struct GetBlueprintsResponse {
     /// <p>An array of key-value pairs that contains information about the available blueprints.</p>
     #[serde(rename = "blueprints")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1472,7 +1473,7 @@ pub struct GetBundlesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetBundlesResult {
+pub struct GetBundlesResponse {
     /// <p>An array of key-value pairs that contains information about the available bundles.</p>
     #[serde(rename = "bundles")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1493,7 +1494,7 @@ pub struct GetCloudFormationStackRecordsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetCloudFormationStackRecordsResult {
+pub struct GetCloudFormationStackRecordsResponse {
     /// <p>A list of objects describing the CloudFormation stack records.</p>
     #[serde(rename = "cloudFormationStackRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1513,7 +1514,7 @@ pub struct GetDiskRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDiskResult {
+pub struct GetDiskResponse {
     /// <p>An object containing information about the disk.</p>
     #[serde(rename = "disk")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1529,7 +1530,7 @@ pub struct GetDiskSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDiskSnapshotResult {
+pub struct GetDiskSnapshotResponse {
     /// <p>An object containing information about the disk snapshot.</p>
     #[serde(rename = "diskSnapshot")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1546,7 +1547,7 @@ pub struct GetDiskSnapshotsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDiskSnapshotsResult {
+pub struct GetDiskSnapshotsResponse {
     /// <p>An array of objects containing information about all block storage disk snapshots.</p>
     #[serde(rename = "diskSnapshots")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1567,7 +1568,7 @@ pub struct GetDisksRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDisksResult {
+pub struct GetDisksResponse {
     /// <p>An array of objects containing information about all block storage disks.</p>
     #[serde(rename = "disks")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1587,7 +1588,7 @@ pub struct GetDomainRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDomainResult {
+pub struct GetDomainResponse {
     /// <p>An array of key-value pairs containing information about your get domain request.</p>
     #[serde(rename = "domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1604,7 +1605,7 @@ pub struct GetDomainsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDomainsResult {
+pub struct GetDomainsResponse {
     /// <p>An array of key-value pairs containing information about each of the domain entries in the user's account.</p>
     #[serde(rename = "domains")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1625,7 +1626,7 @@ pub struct GetExportSnapshotRecordsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetExportSnapshotRecordsResult {
+pub struct GetExportSnapshotRecordsResponse {
     /// <p>A list of objects describing the export snapshot records.</p>
     #[serde(rename = "exportSnapshotRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1649,7 +1650,7 @@ pub struct GetInstanceAccessDetailsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstanceAccessDetailsResult {
+pub struct GetInstanceAccessDetailsResponse {
     /// <p>An array of key-value pairs containing information about a get instance access request.</p>
     #[serde(rename = "accessDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1683,7 +1684,7 @@ pub struct GetInstanceMetricDataRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstanceMetricDataResult {
+pub struct GetInstanceMetricDataResponse {
     /// <p>An array of key-value pairs containing information about the results of your get instance metric data request.</p>
     #[serde(rename = "metricData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1703,7 +1704,7 @@ pub struct GetInstancePortStatesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstancePortStatesResult {
+pub struct GetInstancePortStatesResponse {
     /// <p>Information about the port states resulting from your request.</p>
     #[serde(rename = "portStates")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1719,7 +1720,7 @@ pub struct GetInstanceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstanceResult {
+pub struct GetInstanceResponse {
     /// <p>An array of key-value pairs containing information about the specified instance.</p>
     #[serde(rename = "instance")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1735,7 +1736,7 @@ pub struct GetInstanceSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstanceSnapshotResult {
+pub struct GetInstanceSnapshotResponse {
     /// <p>An array of key-value pairs containing information about the results of your get instance snapshot request.</p>
     #[serde(rename = "instanceSnapshot")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1752,7 +1753,7 @@ pub struct GetInstanceSnapshotsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstanceSnapshotsResult {
+pub struct GetInstanceSnapshotsResponse {
     /// <p>An array of key-value pairs containing information about the results of your get instance snapshots request.</p>
     #[serde(rename = "instanceSnapshots")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1772,7 +1773,7 @@ pub struct GetInstanceStateRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstanceStateResult {
+pub struct GetInstanceStateResponse {
     /// <p>The state of the instance.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1789,7 +1790,7 @@ pub struct GetInstancesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetInstancesResult {
+pub struct GetInstancesResponse {
     /// <p>An array of key-value pairs containing information about your instances.</p>
     #[serde(rename = "instances")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1809,7 +1810,7 @@ pub struct GetKeyPairRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetKeyPairResult {
+pub struct GetKeyPairResponse {
     /// <p>An array of key-value pairs containing information about the key pair.</p>
     #[serde(rename = "keyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1826,7 +1827,7 @@ pub struct GetKeyPairsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetKeyPairsResult {
+pub struct GetKeyPairsResponse {
     /// <p>An array of key-value pairs containing information about the key pairs.</p>
     #[serde(rename = "keyPairs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1864,7 +1865,7 @@ pub struct GetLoadBalancerMetricDataRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetLoadBalancerMetricDataResult {
+pub struct GetLoadBalancerMetricDataResponse {
     /// <p>An array of metric datapoint objects.</p>
     #[serde(rename = "metricData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1884,7 +1885,7 @@ pub struct GetLoadBalancerRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetLoadBalancerResult {
+pub struct GetLoadBalancerResponse {
     /// <p>An object containing information about your load balancer.</p>
     #[serde(rename = "loadBalancer")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1900,7 +1901,7 @@ pub struct GetLoadBalancerTlsCertificatesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetLoadBalancerTlsCertificatesResult {
+pub struct GetLoadBalancerTlsCertificatesResponse {
     /// <p>An array of LoadBalancerTlsCertificate objects describing your SSL/TLS certificates.</p>
     #[serde(rename = "tlsCertificates")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1917,7 +1918,7 @@ pub struct GetLoadBalancersRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetLoadBalancersResult {
+pub struct GetLoadBalancersResponse {
     /// <p>An array of LoadBalancer objects describing your load balancers.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1937,7 +1938,7 @@ pub struct GetOperationRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetOperationResult {
+pub struct GetOperationResponse {
     /// <p>An array of key-value pairs containing information about the results of your get operation request.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1957,7 +1958,7 @@ pub struct GetOperationsForResourceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetOperationsForResourceResult {
+pub struct GetOperationsForResourceResponse {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1978,7 +1979,7 @@ pub struct GetOperationsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetOperationsResult {
+pub struct GetOperationsResponse {
     /// <p>A token used for advancing to the next page of results from your get operations request.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2003,7 +2004,7 @@ pub struct GetRegionsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRegionsResult {
+pub struct GetRegionsResponse {
     /// <p>An array of key-value pairs containing information about your get regions request.</p>
     #[serde(rename = "regions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2020,7 +2021,7 @@ pub struct GetRelationalDatabaseBlueprintsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseBlueprintsResult {
+pub struct GetRelationalDatabaseBlueprintsResponse {
     /// <p>An object describing the result of your get relational database blueprints request.</p>
     #[serde(rename = "blueprints")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2041,7 +2042,7 @@ pub struct GetRelationalDatabaseBundlesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseBundlesResult {
+pub struct GetRelationalDatabaseBundlesResponse {
     /// <p>An object describing the result of your get relational database bundles request.</p>
     #[serde(rename = "bundles")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2069,7 +2070,7 @@ pub struct GetRelationalDatabaseEventsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseEventsResult {
+pub struct GetRelationalDatabaseEventsResponse {
     /// <p>A token used for advancing to the next page of results from your get relational database events request.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2108,7 +2109,7 @@ pub struct GetRelationalDatabaseLogEventsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseLogEventsResult {
+pub struct GetRelationalDatabaseLogEventsResponse {
     /// <p>A token used for advancing to the previous page of results from your get relational database log events request.</p>
     #[serde(rename = "nextBackwardToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2132,7 +2133,7 @@ pub struct GetRelationalDatabaseLogStreamsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseLogStreamsResult {
+pub struct GetRelationalDatabaseLogStreamsResponse {
     /// <p>An object describing the result of your get relational database log streams request.</p>
     #[serde(rename = "logStreams")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2152,7 +2153,7 @@ pub struct GetRelationalDatabaseMasterUserPasswordRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseMasterUserPasswordResult {
+pub struct GetRelationalDatabaseMasterUserPasswordResponse {
     /// <p>The timestamp when the specified version of the master user password was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2190,7 +2191,7 @@ pub struct GetRelationalDatabaseMetricDataRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseMetricDataResult {
+pub struct GetRelationalDatabaseMetricDataResponse {
     /// <p>An object describing the result of your get relational database metric data request.</p>
     #[serde(rename = "metricData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2214,7 +2215,7 @@ pub struct GetRelationalDatabaseParametersRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseParametersResult {
+pub struct GetRelationalDatabaseParametersResponse {
     /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2234,7 +2235,7 @@ pub struct GetRelationalDatabaseRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseResult {
+pub struct GetRelationalDatabaseResponse {
     /// <p>An object describing the specified database.</p>
     #[serde(rename = "relationalDatabase")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2250,7 +2251,7 @@ pub struct GetRelationalDatabaseSnapshotRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseSnapshotResult {
+pub struct GetRelationalDatabaseSnapshotResponse {
     /// <p>An object describing the specified database snapshot.</p>
     #[serde(rename = "relationalDatabaseSnapshot")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2267,7 +2268,7 @@ pub struct GetRelationalDatabaseSnapshotsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabaseSnapshotsResult {
+pub struct GetRelationalDatabaseSnapshotsResponse {
     /// <p>A token used for advancing to the next page of results from your get relational database snapshots request.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2288,7 +2289,7 @@ pub struct GetRelationalDatabasesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRelationalDatabasesResult {
+pub struct GetRelationalDatabasesResponse {
     /// <p>A token used for advancing to the next page of results from your get relational databases request.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2308,7 +2309,7 @@ pub struct GetStaticIpRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetStaticIpResult {
+pub struct GetStaticIpResponse {
     /// <p>An array of key-value pairs containing information about the requested static IP.</p>
     #[serde(rename = "staticIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2325,7 +2326,7 @@ pub struct GetStaticIpsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetStaticIpsResult {
+pub struct GetStaticIpsResponse {
     /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2382,7 +2383,7 @@ pub struct ImportKeyPairRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ImportKeyPairResult {
+pub struct ImportKeyPairResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2747,7 +2748,7 @@ pub struct IsVpcPeeredRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct IsVpcPeeredResult {
+pub struct IsVpcPeeredResponse {
     /// <p>Returns <code>true</code> if the Lightsail VPC is peered; otherwise, <code>false</code>.</p>
     #[serde(rename = "isPeered")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3106,7 +3107,7 @@ pub struct OpenInstancePublicPortsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct OpenInstancePublicPortsResult {
+pub struct OpenInstancePublicPortsResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3186,7 +3187,7 @@ pub struct PeerVpcRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PeerVpcResult {
+pub struct PeerVpcResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3258,7 +3259,7 @@ pub struct PutInstancePublicPortsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutInstancePublicPortsResult {
+pub struct PutInstancePublicPortsResponse {
     /// <p>Describes metadata about the operation you just executed.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3274,7 +3275,7 @@ pub struct RebootInstanceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RebootInstanceResult {
+pub struct RebootInstanceResponse {
     /// <p>An array of key-value pairs containing information about the request operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3290,7 +3291,7 @@ pub struct RebootRelationalDatabaseRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct RebootRelationalDatabaseResult {
+pub struct RebootRelationalDatabaseResponse {
     /// <p>An object describing the result of your reboot relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3671,7 +3672,7 @@ pub struct ReleaseStaticIpRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ReleaseStaticIpResult {
+pub struct ReleaseStaticIpResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3701,7 +3702,7 @@ pub struct StartInstanceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartInstanceResult {
+pub struct StartInstanceResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3717,7 +3718,7 @@ pub struct StartRelationalDatabaseRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StartRelationalDatabaseResult {
+pub struct StartRelationalDatabaseResponse {
     /// <p>An object describing the result of your start relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3779,7 +3780,7 @@ pub struct StopInstanceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopInstanceResult {
+pub struct StopInstanceResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3799,7 +3800,7 @@ pub struct StopRelationalDatabaseRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct StopRelationalDatabaseResult {
+pub struct StopRelationalDatabaseResponse {
     /// <p>An object describing the result of your stop relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3831,7 +3832,7 @@ pub struct TagResourceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagResourceResult {
+pub struct TagResourceResponse {
     /// <p>A list of objects describing the API operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3843,7 +3844,7 @@ pub struct UnpeerVpcRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UnpeerVpcResult {
+pub struct UnpeerVpcResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3862,7 +3863,7 @@ pub struct UntagResourceRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagResourceResult {
+pub struct UntagResourceResponse {
     /// <p>A list of objects describing the API operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3881,7 +3882,7 @@ pub struct UpdateDomainEntryRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateDomainEntryResult {
+pub struct UpdateDomainEntryResponse {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3903,7 +3904,7 @@ pub struct UpdateLoadBalancerAttributeRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateLoadBalancerAttributeResult {
+pub struct UpdateLoadBalancerAttributeResponse {
     /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3922,7 +3923,7 @@ pub struct UpdateRelationalDatabaseParametersRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateRelationalDatabaseParametersResult {
+pub struct UpdateRelationalDatabaseParametersResponse {
     /// <p>An object describing the result of your update relational database parameters request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3970,7 +3971,7 @@ pub struct UpdateRelationalDatabaseRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateRelationalDatabaseResult {
+pub struct UpdateRelationalDatabaseResponse {
     /// <p>An object describing the result of your update relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -11562,597 +11563,478 @@ pub trait Lightsail {
     fn allocate_static_ip(
         &self,
         input: AllocateStaticIpRequest,
-    ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError>;
+    ) -> Request<AllocateStaticIpRequest>;
 
     /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn attach_disk(
-        &self,
-        input: AttachDiskRequest,
-    ) -> RusotoFuture<AttachDiskResult, AttachDiskError>;
+    fn attach_disk(&self, input: AttachDiskRequest) -> Request<AttachDiskRequest>;
 
     /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_instances_to_load_balancer(
         &self,
         input: AttachInstancesToLoadBalancerRequest,
-    ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError>;
+    ) -> Request<AttachInstancesToLoadBalancerRequest>;
 
     /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
         input: AttachLoadBalancerTlsCertificateRequest,
-    ) -> RusotoFuture<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError>;
+    ) -> Request<AttachLoadBalancerTlsCertificateRequest>;
 
     /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
-    fn attach_static_ip(
-        &self,
-        input: AttachStaticIpRequest,
-    ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError>;
+    fn attach_static_ip(&self, input: AttachStaticIpRequest) -> Request<AttachStaticIpRequest>;
 
     /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn close_instance_public_ports(
         &self,
         input: CloseInstancePublicPortsRequest,
-    ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError>;
+    ) -> Request<CloseInstancePublicPortsRequest>;
 
     /// <p>Copies an instance or disk snapshot from one AWS Region to another in Amazon Lightsail.</p>
-    fn copy_snapshot(
-        &self,
-        input: CopySnapshotRequest,
-    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError>;
+    fn copy_snapshot(&self, input: CopySnapshotRequest) -> Request<CopySnapshotRequest>;
 
     /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
     fn create_cloud_formation_stack(
         &self,
         input: CreateCloudFormationStackRequest,
-    ) -> RusotoFuture<CreateCloudFormationStackResult, CreateCloudFormationStackError>;
+    ) -> Request<CreateCloudFormationStackRequest>;
 
     /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_disk(
-        &self,
-        input: CreateDiskRequest,
-    ) -> RusotoFuture<CreateDiskResult, CreateDiskError>;
+    fn create_disk(&self, input: CreateDiskRequest) -> Request<CreateDiskRequest>;
 
     /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_from_snapshot(
         &self,
         input: CreateDiskFromSnapshotRequest,
-    ) -> RusotoFuture<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError>;
+    ) -> Request<CreateDiskFromSnapshotRequest>;
 
     /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p> <p>You can also use this operation to create a snapshot of an instance's system volume. You might want to do this, for example, to recover data from the system volume of a botched instance or to create a backup of the system volume like you would for a block storage disk. To create a snapshot of a system volume, just define the <code>instance name</code> parameter when issuing the snapshot command, and a snapshot of the defined instance's system volume will be created. After the snapshot is available, you can create a block storage disk from the snapshot and attach it to a running instance to access the data on the disk.</p> <p>The <code>create disk snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_snapshot(
         &self,
         input: CreateDiskSnapshotRequest,
-    ) -> RusotoFuture<CreateDiskSnapshotResult, CreateDiskSnapshotError>;
+    ) -> Request<CreateDiskSnapshotRequest>;
 
     /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_domain(
-        &self,
-        input: CreateDomainRequest,
-    ) -> RusotoFuture<CreateDomainResult, CreateDomainError>;
+    fn create_domain(&self, input: CreateDomainRequest) -> Request<CreateDomainRequest>;
 
     /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain_entry(
         &self,
         input: CreateDomainEntryRequest,
-    ) -> RusotoFuture<CreateDomainEntryResult, CreateDomainEntryError>;
+    ) -> Request<CreateDomainEntryRequest>;
 
     /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p> <p>The <code>create instance snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instance_snapshot(
         &self,
         input: CreateInstanceSnapshotRequest,
-    ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError>;
+    ) -> Request<CreateInstanceSnapshotRequest>;
 
     /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>. Create instances using active blueprints. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases. Use the get blueprints operation to return a list of available blueprints.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_instances(
-        &self,
-        input: CreateInstancesRequest,
-    ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError>;
+    fn create_instances(&self, input: CreateInstancesRequest) -> Request<CreateInstancesRequest>;
 
     /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances_from_snapshot(
         &self,
         input: CreateInstancesFromSnapshotRequest,
-    ) -> RusotoFuture<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError>;
+    ) -> Request<CreateInstancesFromSnapshotRequest>;
 
     /// <p>Creates an SSH key pair.</p> <p>The <code>create key pair</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_key_pair(
-        &self,
-        input: CreateKeyPairRequest,
-    ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError>;
+    fn create_key_pair(&self, input: CreateKeyPairRequest) -> Request<CreateKeyPairRequest>;
 
     /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p> <p>The <code>create load balancer</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer(
         &self,
         input: CreateLoadBalancerRequest,
-    ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError>;
+    ) -> Request<CreateLoadBalancerRequest>;
 
     /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer_tls_certificate(
         &self,
         input: CreateLoadBalancerTlsCertificateRequest,
-    ) -> RusotoFuture<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>;
+    ) -> Request<CreateLoadBalancerTlsCertificateRequest>;
 
     /// <p>Creates a new database in Amazon Lightsail.</p> <p>The <code>create relational database</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_relational_database(
         &self,
         input: CreateRelationalDatabaseRequest,
-    ) -> RusotoFuture<CreateRelationalDatabaseResult, CreateRelationalDatabaseError>;
+    ) -> Request<CreateRelationalDatabaseRequest>;
 
     /// <p>Creates a new database from an existing database snapshot in Amazon Lightsail.</p> <p>You can create a new database from a snapshot in if something goes wrong with your original database, or to change it to a different plan, such as a high availability or standard plan.</p> <p>The <code>create relational database from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by relationalDatabaseSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_relational_database_from_snapshot(
         &self,
         input: CreateRelationalDatabaseFromSnapshotRequest,
-    ) -> RusotoFuture<
-        CreateRelationalDatabaseFromSnapshotResult,
-        CreateRelationalDatabaseFromSnapshotError,
-    >;
+    ) -> Request<CreateRelationalDatabaseFromSnapshotRequest>;
 
     /// <p>Creates a snapshot of your database in Amazon Lightsail. You can use snapshots for backups, to make copies of a database, and to save data before deleting a database.</p> <p>The <code>create relational database snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_relational_database_snapshot(
         &self,
         input: CreateRelationalDatabaseSnapshotRequest,
-    ) -> RusotoFuture<CreateRelationalDatabaseSnapshotResult, CreateRelationalDatabaseSnapshotError>;
+    ) -> Request<CreateRelationalDatabaseSnapshotRequest>;
 
     /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_disk(
-        &self,
-        input: DeleteDiskRequest,
-    ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError>;
+    fn delete_disk(&self, input: DeleteDiskRequest) -> Request<DeleteDiskRequest>;
 
     /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk_snapshot(
         &self,
         input: DeleteDiskSnapshotRequest,
-    ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError>;
+    ) -> Request<DeleteDiskSnapshotRequest>;
 
     /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_domain(
-        &self,
-        input: DeleteDomainRequest,
-    ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError>;
+    fn delete_domain(&self, input: DeleteDomainRequest) -> Request<DeleteDomainRequest>;
 
     /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain_entry(
         &self,
         input: DeleteDomainEntryRequest,
-    ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError>;
+    ) -> Request<DeleteDomainEntryRequest>;
 
     /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_instance(
-        &self,
-        input: DeleteInstanceRequest,
-    ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError>;
+    fn delete_instance(&self, input: DeleteInstanceRequest) -> Request<DeleteInstanceRequest>;
 
     /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance_snapshot(
         &self,
         input: DeleteInstanceSnapshotRequest,
-    ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError>;
+    ) -> Request<DeleteInstanceSnapshotRequest>;
 
     /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by keyPairName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_key_pair(
-        &self,
-        input: DeleteKeyPairRequest,
-    ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError>;
+    fn delete_key_pair(&self, input: DeleteKeyPairRequest) -> Request<DeleteKeyPairRequest>;
 
     /// <p><p>Deletes the known host key or certificate used by the Amazon Lightsail browser-based SSH or RDP clients to authenticate an instance. This operation enables the Lightsail browser-based SSH or RDP clients to connect to the instance after a host key mismatch.</p> <important> <p>Perform this operation only if you were expecting the host key or certificate mismatch or if you are familiar with the new host key or certificate on the instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection">Troubleshooting connection issues when using the Amazon Lightsail browser-based SSH or RDP client</a>.</p> </important></p>
     fn delete_known_host_keys(
         &self,
         input: DeleteKnownHostKeysRequest,
-    ) -> RusotoFuture<DeleteKnownHostKeysResult, DeleteKnownHostKeysError>;
+    ) -> Request<DeleteKnownHostKeysRequest>;
 
     /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerRequest,
-    ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError>;
+    ) -> Request<DeleteLoadBalancerRequest>;
 
     /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
         input: DeleteLoadBalancerTlsCertificateRequest,
-    ) -> RusotoFuture<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>;
+    ) -> Request<DeleteLoadBalancerTlsCertificateRequest>;
 
     /// <p>Deletes a database in Amazon Lightsail.</p> <p>The <code>delete relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_relational_database(
         &self,
         input: DeleteRelationalDatabaseRequest,
-    ) -> RusotoFuture<DeleteRelationalDatabaseResult, DeleteRelationalDatabaseError>;
+    ) -> Request<DeleteRelationalDatabaseRequest>;
 
     /// <p>Deletes a database snapshot in Amazon Lightsail.</p> <p>The <code>delete relational database snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_relational_database_snapshot(
         &self,
         input: DeleteRelationalDatabaseSnapshotRequest,
-    ) -> RusotoFuture<DeleteRelationalDatabaseSnapshotResult, DeleteRelationalDatabaseSnapshotError>;
+    ) -> Request<DeleteRelationalDatabaseSnapshotRequest>;
 
     /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn detach_disk(
-        &self,
-        input: DetachDiskRequest,
-    ) -> RusotoFuture<DetachDiskResult, DetachDiskError>;
+    fn detach_disk(&self, input: DetachDiskRequest) -> Request<DetachDiskRequest>;
 
     /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_instances_from_load_balancer(
         &self,
         input: DetachInstancesFromLoadBalancerRequest,
-    ) -> RusotoFuture<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError>;
+    ) -> Request<DetachInstancesFromLoadBalancerRequest>;
 
     /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
-    fn detach_static_ip(
-        &self,
-        input: DetachStaticIpRequest,
-    ) -> RusotoFuture<DetachStaticIpResult, DetachStaticIpError>;
+    fn detach_static_ip(&self, input: DetachStaticIpRequest) -> Request<DetachStaticIpRequest>;
 
     /// <p>Downloads the default SSH key pair from the user's account.</p>
-    fn download_default_key_pair(
-        &self,
-    ) -> RusotoFuture<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError>;
+    fn download_default_key_pair(&self) -> Request<DownloadDefaultKeyPairRequest>;
 
     /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by sourceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
-    fn export_snapshot(
-        &self,
-        input: ExportSnapshotRequest,
-    ) -> RusotoFuture<ExportSnapshotResult, ExportSnapshotError>;
+    fn export_snapshot(&self, input: ExportSnapshotRequest) -> Request<ExportSnapshotRequest>;
 
     /// <p>Returns the names of all active (not deleted) resources.</p>
-    fn get_active_names(
-        &self,
-        input: GetActiveNamesRequest,
-    ) -> RusotoFuture<GetActiveNamesResult, GetActiveNamesError>;
+    fn get_active_names(&self, input: GetActiveNamesRequest) -> Request<GetActiveNamesRequest>;
 
     /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
-    fn get_blueprints(
-        &self,
-        input: GetBlueprintsRequest,
-    ) -> RusotoFuture<GetBlueprintsResult, GetBlueprintsError>;
+    fn get_blueprints(&self, input: GetBlueprintsRequest) -> Request<GetBlueprintsRequest>;
 
     /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
-    fn get_bundles(
-        &self,
-        input: GetBundlesRequest,
-    ) -> RusotoFuture<GetBundlesResult, GetBundlesError>;
+    fn get_bundles(&self, input: GetBundlesRequest) -> Request<GetBundlesRequest>;
 
     /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
     fn get_cloud_formation_stack_records(
         &self,
         input: GetCloudFormationStackRecordsRequest,
-    ) -> RusotoFuture<GetCloudFormationStackRecordsResult, GetCloudFormationStackRecordsError>;
+    ) -> Request<GetCloudFormationStackRecordsRequest>;
 
     /// <p>Returns information about a specific block storage disk.</p>
-    fn get_disk(&self, input: GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError>;
+    fn get_disk(&self, input: GetDiskRequest) -> Request<GetDiskRequest>;
 
     /// <p>Returns information about a specific block storage disk snapshot.</p>
-    fn get_disk_snapshot(
-        &self,
-        input: GetDiskSnapshotRequest,
-    ) -> RusotoFuture<GetDiskSnapshotResult, GetDiskSnapshotError>;
+    fn get_disk_snapshot(&self, input: GetDiskSnapshotRequest) -> Request<GetDiskSnapshotRequest>;
 
     /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
     fn get_disk_snapshots(
         &self,
         input: GetDiskSnapshotsRequest,
-    ) -> RusotoFuture<GetDiskSnapshotsResult, GetDiskSnapshotsError>;
+    ) -> Request<GetDiskSnapshotsRequest>;
 
     /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
-    fn get_disks(&self, input: GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError>;
+    fn get_disks(&self, input: GetDisksRequest) -> Request<GetDisksRequest>;
 
     /// <p>Returns information about a specific domain recordset.</p>
-    fn get_domain(&self, input: GetDomainRequest) -> RusotoFuture<GetDomainResult, GetDomainError>;
+    fn get_domain(&self, input: GetDomainRequest) -> Request<GetDomainRequest>;
 
     /// <p>Returns a list of all domains in the user's account.</p>
-    fn get_domains(
-        &self,
-        input: GetDomainsRequest,
-    ) -> RusotoFuture<GetDomainsResult, GetDomainsError>;
+    fn get_domains(&self, input: GetDomainsRequest) -> Request<GetDomainsRequest>;
 
     /// <p>Returns the export snapshot record created as a result of the <code>export snapshot</code> operation.</p> <p>An export snapshot record can be used to create a new Amazon EC2 instance and its related resources with the <code>create cloud formation stack</code> operation.</p>
     fn get_export_snapshot_records(
         &self,
         input: GetExportSnapshotRecordsRequest,
-    ) -> RusotoFuture<GetExportSnapshotRecordsResult, GetExportSnapshotRecordsError>;
+    ) -> Request<GetExportSnapshotRecordsRequest>;
 
     /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
-    fn get_instance(
-        &self,
-        input: GetInstanceRequest,
-    ) -> RusotoFuture<GetInstanceResult, GetInstanceError>;
+    fn get_instance(&self, input: GetInstanceRequest) -> Request<GetInstanceRequest>;
 
     /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn get_instance_access_details(
         &self,
         input: GetInstanceAccessDetailsRequest,
-    ) -> RusotoFuture<GetInstanceAccessDetailsResult, GetInstanceAccessDetailsError>;
+    ) -> Request<GetInstanceAccessDetailsRequest>;
 
     /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
     fn get_instance_metric_data(
         &self,
         input: GetInstanceMetricDataRequest,
-    ) -> RusotoFuture<GetInstanceMetricDataResult, GetInstanceMetricDataError>;
+    ) -> Request<GetInstanceMetricDataRequest>;
 
     /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
     fn get_instance_port_states(
         &self,
         input: GetInstancePortStatesRequest,
-    ) -> RusotoFuture<GetInstancePortStatesResult, GetInstancePortStatesError>;
+    ) -> Request<GetInstancePortStatesRequest>;
 
     /// <p>Returns information about a specific instance snapshot.</p>
     fn get_instance_snapshot(
         &self,
         input: GetInstanceSnapshotRequest,
-    ) -> RusotoFuture<GetInstanceSnapshotResult, GetInstanceSnapshotError>;
+    ) -> Request<GetInstanceSnapshotRequest>;
 
     /// <p>Returns all instance snapshots for the user's account.</p>
     fn get_instance_snapshots(
         &self,
         input: GetInstanceSnapshotsRequest,
-    ) -> RusotoFuture<GetInstanceSnapshotsResult, GetInstanceSnapshotsError>;
+    ) -> Request<GetInstanceSnapshotsRequest>;
 
     /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
     fn get_instance_state(
         &self,
         input: GetInstanceStateRequest,
-    ) -> RusotoFuture<GetInstanceStateResult, GetInstanceStateError>;
+    ) -> Request<GetInstanceStateRequest>;
 
     /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
-    fn get_instances(
-        &self,
-        input: GetInstancesRequest,
-    ) -> RusotoFuture<GetInstancesResult, GetInstancesError>;
+    fn get_instances(&self, input: GetInstancesRequest) -> Request<GetInstancesRequest>;
 
     /// <p>Returns information about a specific key pair.</p>
-    fn get_key_pair(
-        &self,
-        input: GetKeyPairRequest,
-    ) -> RusotoFuture<GetKeyPairResult, GetKeyPairError>;
+    fn get_key_pair(&self, input: GetKeyPairRequest) -> Request<GetKeyPairRequest>;
 
     /// <p>Returns information about all key pairs in the user's account.</p>
-    fn get_key_pairs(
-        &self,
-        input: GetKeyPairsRequest,
-    ) -> RusotoFuture<GetKeyPairsResult, GetKeyPairsError>;
+    fn get_key_pairs(&self, input: GetKeyPairsRequest) -> Request<GetKeyPairsRequest>;
 
     /// <p>Returns information about the specified Lightsail load balancer.</p>
-    fn get_load_balancer(
-        &self,
-        input: GetLoadBalancerRequest,
-    ) -> RusotoFuture<GetLoadBalancerResult, GetLoadBalancerError>;
+    fn get_load_balancer(&self, input: GetLoadBalancerRequest) -> Request<GetLoadBalancerRequest>;
 
     /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
     fn get_load_balancer_metric_data(
         &self,
         input: GetLoadBalancerMetricDataRequest,
-    ) -> RusotoFuture<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError>;
+    ) -> Request<GetLoadBalancerMetricDataRequest>;
 
     /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
     fn get_load_balancer_tls_certificates(
         &self,
         input: GetLoadBalancerTlsCertificatesRequest,
-    ) -> RusotoFuture<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError>;
+    ) -> Request<GetLoadBalancerTlsCertificatesRequest>;
 
     /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
     fn get_load_balancers(
         &self,
         input: GetLoadBalancersRequest,
-    ) -> RusotoFuture<GetLoadBalancersResult, GetLoadBalancersError>;
+    ) -> Request<GetLoadBalancersRequest>;
 
     /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
-    fn get_operation(
-        &self,
-        input: GetOperationRequest,
-    ) -> RusotoFuture<GetOperationResult, GetOperationError>;
+    fn get_operation(&self, input: GetOperationRequest) -> Request<GetOperationRequest>;
 
     /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
-    fn get_operations(
-        &self,
-        input: GetOperationsRequest,
-    ) -> RusotoFuture<GetOperationsResult, GetOperationsError>;
+    fn get_operations(&self, input: GetOperationsRequest) -> Request<GetOperationsRequest>;
 
     /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
     fn get_operations_for_resource(
         &self,
         input: GetOperationsForResourceRequest,
-    ) -> RusotoFuture<GetOperationsForResourceResult, GetOperationsForResourceError>;
+    ) -> Request<GetOperationsForResourceRequest>;
 
     /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the Availability Zones in a region.</p>
-    fn get_regions(
-        &self,
-        input: GetRegionsRequest,
-    ) -> RusotoFuture<GetRegionsResult, GetRegionsError>;
+    fn get_regions(&self, input: GetRegionsRequest) -> Request<GetRegionsRequest>;
 
     /// <p>Returns information about a specific database in Amazon Lightsail.</p>
     fn get_relational_database(
         &self,
         input: GetRelationalDatabaseRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseResult, GetRelationalDatabaseError>;
+    ) -> Request<GetRelationalDatabaseRequest>;
 
     /// <p>Returns a list of available database blueprints in Amazon Lightsail. A blueprint describes the major engine version of a database.</p> <p>You can use a blueprint ID to create a new database that runs a specific database engine.</p>
     fn get_relational_database_blueprints(
         &self,
         input: GetRelationalDatabaseBlueprintsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseBlueprintsResult, GetRelationalDatabaseBlueprintsError>;
+    ) -> Request<GetRelationalDatabaseBlueprintsRequest>;
 
     /// <p>Returns the list of bundles that are available in Amazon Lightsail. A bundle describes the performance specifications for a database.</p> <p>You can use a bundle ID to create a new database with explicit performance specifications.</p>
     fn get_relational_database_bundles(
         &self,
         input: GetRelationalDatabaseBundlesRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseBundlesResult, GetRelationalDatabaseBundlesError>;
+    ) -> Request<GetRelationalDatabaseBundlesRequest>;
 
     /// <p>Returns a list of events for a specific database in Amazon Lightsail.</p>
     fn get_relational_database_events(
         &self,
         input: GetRelationalDatabaseEventsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseEventsResult, GetRelationalDatabaseEventsError>;
+    ) -> Request<GetRelationalDatabaseEventsRequest>;
 
     /// <p>Returns a list of log events for a database in Amazon Lightsail.</p>
     fn get_relational_database_log_events(
         &self,
         input: GetRelationalDatabaseLogEventsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseLogEventsResult, GetRelationalDatabaseLogEventsError>;
+    ) -> Request<GetRelationalDatabaseLogEventsRequest>;
 
     /// <p>Returns a list of available log streams for a specific database in Amazon Lightsail.</p>
     fn get_relational_database_log_streams(
         &self,
         input: GetRelationalDatabaseLogStreamsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseLogStreamsResult, GetRelationalDatabaseLogStreamsError>;
+    ) -> Request<GetRelationalDatabaseLogStreamsRequest>;
 
     /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>asdf</code> operation GetRelationalDatabaseMasterUserPassword supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
     fn get_relational_database_master_user_password(
         &self,
         input: GetRelationalDatabaseMasterUserPasswordRequest,
-    ) -> RusotoFuture<
-        GetRelationalDatabaseMasterUserPasswordResult,
-        GetRelationalDatabaseMasterUserPasswordError,
-    >;
+    ) -> Request<GetRelationalDatabaseMasterUserPasswordRequest>;
 
     /// <p>Returns the data points of the specified metric for a database in Amazon Lightsail.</p>
     fn get_relational_database_metric_data(
         &self,
         input: GetRelationalDatabaseMetricDataRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseMetricDataResult, GetRelationalDatabaseMetricDataError>;
+    ) -> Request<GetRelationalDatabaseMetricDataRequest>;
 
     /// <p>Returns all of the runtime parameters offered by the underlying database software, or engine, for a specific database in Amazon Lightsail.</p> <p>In addition to the parameter names and values, this operation returns other information about each parameter. This information includes whether changes require a reboot, whether the parameter is modifiable, the allowed values, and the data types.</p>
     fn get_relational_database_parameters(
         &self,
         input: GetRelationalDatabaseParametersRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseParametersResult, GetRelationalDatabaseParametersError>;
+    ) -> Request<GetRelationalDatabaseParametersRequest>;
 
     /// <p>Returns information about a specific database snapshot in Amazon Lightsail.</p>
     fn get_relational_database_snapshot(
         &self,
         input: GetRelationalDatabaseSnapshotRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseSnapshotResult, GetRelationalDatabaseSnapshotError>;
+    ) -> Request<GetRelationalDatabaseSnapshotRequest>;
 
     /// <p>Returns information about all of your database snapshots in Amazon Lightsail.</p>
     fn get_relational_database_snapshots(
         &self,
         input: GetRelationalDatabaseSnapshotsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseSnapshotsResult, GetRelationalDatabaseSnapshotsError>;
+    ) -> Request<GetRelationalDatabaseSnapshotsRequest>;
 
     /// <p>Returns information about all of your databases in Amazon Lightsail.</p>
     fn get_relational_databases(
         &self,
         input: GetRelationalDatabasesRequest,
-    ) -> RusotoFuture<GetRelationalDatabasesResult, GetRelationalDatabasesError>;
+    ) -> Request<GetRelationalDatabasesRequest>;
 
     /// <p>Returns information about a specific static IP.</p>
-    fn get_static_ip(
-        &self,
-        input: GetStaticIpRequest,
-    ) -> RusotoFuture<GetStaticIpResult, GetStaticIpError>;
+    fn get_static_ip(&self, input: GetStaticIpRequest) -> Request<GetStaticIpRequest>;
 
     /// <p>Returns information about all static IPs in the user's account.</p>
-    fn get_static_ips(
-        &self,
-        input: GetStaticIpsRequest,
-    ) -> RusotoFuture<GetStaticIpsResult, GetStaticIpsError>;
+    fn get_static_ips(&self, input: GetStaticIpsRequest) -> Request<GetStaticIpsRequest>;
 
     /// <p>Imports a public SSH key from a specific key pair.</p>
-    fn import_key_pair(
-        &self,
-        input: ImportKeyPairRequest,
-    ) -> RusotoFuture<ImportKeyPairResult, ImportKeyPairError>;
+    fn import_key_pair(&self, input: ImportKeyPairRequest) -> Request<ImportKeyPairRequest>;
 
     /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
-    fn is_vpc_peered(&self) -> RusotoFuture<IsVpcPeeredResult, IsVpcPeeredError>;
+    fn is_vpc_peered(&self) -> Request<IsVpcPeeredRequest>;
 
     /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn open_instance_public_ports(
         &self,
         input: OpenInstancePublicPortsRequest,
-    ) -> RusotoFuture<OpenInstancePublicPortsResult, OpenInstancePublicPortsError>;
+    ) -> Request<OpenInstancePublicPortsRequest>;
 
     /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
-    fn peer_vpc(&self) -> RusotoFuture<PeerVpcResult, PeerVpcError>;
+    fn peer_vpc(&self) -> Request<PeerVpcRequest>;
 
     /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn put_instance_public_ports(
         &self,
         input: PutInstancePublicPortsRequest,
-    ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError>;
+    ) -> Request<PutInstancePublicPortsRequest>;
 
     /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn reboot_instance(
-        &self,
-        input: RebootInstanceRequest,
-    ) -> RusotoFuture<RebootInstanceResult, RebootInstanceError>;
+    fn reboot_instance(&self, input: RebootInstanceRequest) -> Request<RebootInstanceRequest>;
 
     /// <p>Restarts a specific database in Amazon Lightsail.</p> <p>The <code>reboot relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn reboot_relational_database(
         &self,
         input: RebootRelationalDatabaseRequest,
-    ) -> RusotoFuture<RebootRelationalDatabaseResult, RebootRelationalDatabaseError>;
+    ) -> Request<RebootRelationalDatabaseRequest>;
 
     /// <p>Deletes a specific static IP from your account.</p>
-    fn release_static_ip(
-        &self,
-        input: ReleaseStaticIpRequest,
-    ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError>;
+    fn release_static_ip(&self, input: ReleaseStaticIpRequest) -> Request<ReleaseStaticIpRequest>;
 
     /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn start_instance(
-        &self,
-        input: StartInstanceRequest,
-    ) -> RusotoFuture<StartInstanceResult, StartInstanceError>;
+    fn start_instance(&self, input: StartInstanceRequest) -> Request<StartInstanceRequest>;
 
     /// <p>Starts a specific database from a stopped state in Amazon Lightsail. To restart a database, use the <code>reboot relational database</code> operation.</p> <p>The <code>start relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn start_relational_database(
         &self,
         input: StartRelationalDatabaseRequest,
-    ) -> RusotoFuture<StartRelationalDatabaseResult, StartRelationalDatabaseError>;
+    ) -> Request<StartRelationalDatabaseRequest>;
 
     /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn stop_instance(
-        &self,
-        input: StopInstanceRequest,
-    ) -> RusotoFuture<StopInstanceResult, StopInstanceError>;
+    fn stop_instance(&self, input: StopInstanceRequest) -> Request<StopInstanceRequest>;
 
     /// <p>Stops a specific database that is currently running in Amazon Lightsail.</p> <p>The <code>stop relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn stop_relational_database(
         &self,
         input: StopRelationalDatabaseRequest,
-    ) -> RusotoFuture<StopRelationalDatabaseResult, StopRelationalDatabaseError>;
+    ) -> Request<StopRelationalDatabaseRequest>;
 
     /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResult, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
-    fn unpeer_vpc(&self) -> RusotoFuture<UnpeerVpcResult, UnpeerVpcError>;
+    fn unpeer_vpc(&self) -> Request<UnpeerVpcRequest>;
 
     /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResult, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_domain_entry(
         &self,
         input: UpdateDomainEntryRequest,
-    ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError>;
+    ) -> Request<UpdateDomainEntryRequest>;
 
     /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_load_balancer_attribute(
         &self,
         input: UpdateLoadBalancerAttributeRequest,
-    ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError>;
+    ) -> Request<UpdateLoadBalancerAttributeRequest>;
 
     /// <p>Allows the update of one or more attributes of a database in Amazon Lightsail.</p> <p>Updates are applied immediately, or in cases where the updates could result in an outage, are applied during the database's predefined maintenance window.</p> <p>The <code>update relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_relational_database(
         &self,
         input: UpdateRelationalDatabaseRequest,
-    ) -> RusotoFuture<UpdateRelationalDatabaseResult, UpdateRelationalDatabaseError>;
+    ) -> Request<UpdateRelationalDatabaseRequest>;
 
     /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which paramater updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_relational_database_parameters(
         &self,
         input: UpdateRelationalDatabaseParametersRequest,
-    ) -> RusotoFuture<
-        UpdateRelationalDatabaseParametersResult,
-        UpdateRelationalDatabaseParametersError,
-    >;
+    ) -> Request<UpdateRelationalDatabaseParametersRequest>;
 }
 /// A client for the Amazon Lightsail API.
 #[derive(Clone)]
@@ -12195,19 +12077,715 @@ impl Lightsail for LightsailClient {
     fn allocate_static_ip(
         &self,
         input: AllocateStaticIpRequest,
-    ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+    ) -> Request<AllocateStaticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn attach_disk(&self, input: AttachDiskRequest) -> Request<AttachDiskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn attach_instances_to_load_balancer(
+        &self,
+        input: AttachInstancesToLoadBalancerRequest,
+    ) -> Request<AttachInstancesToLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn attach_load_balancer_tls_certificate(
+        &self,
+        input: AttachLoadBalancerTlsCertificateRequest,
+    ) -> Request<AttachLoadBalancerTlsCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
+    fn attach_static_ip(&self, input: AttachStaticIpRequest) -> Request<AttachStaticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn close_instance_public_ports(
+        &self,
+        input: CloseInstancePublicPortsRequest,
+    ) -> Request<CloseInstancePublicPortsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Copies an instance or disk snapshot from one AWS Region to another in Amazon Lightsail.</p>
+    fn copy_snapshot(&self, input: CopySnapshotRequest) -> Request<CopySnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
+    fn create_cloud_formation_stack(
+        &self,
+        input: CreateCloudFormationStackRequest,
+    ) -> Request<CreateCloudFormationStackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_disk(&self, input: CreateDiskRequest) -> Request<CreateDiskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_disk_from_snapshot(
+        &self,
+        input: CreateDiskFromSnapshotRequest,
+    ) -> Request<CreateDiskFromSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p> <p>You can also use this operation to create a snapshot of an instance's system volume. You might want to do this, for example, to recover data from the system volume of a botched instance or to create a backup of the system volume like you would for a block storage disk. To create a snapshot of a system volume, just define the <code>instance name</code> parameter when issuing the snapshot command, and a snapshot of the defined instance's system volume will be created. After the snapshot is available, you can create a block storage disk from the snapshot and attach it to a running instance to access the data on the disk.</p> <p>The <code>create disk snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_disk_snapshot(
+        &self,
+        input: CreateDiskSnapshotRequest,
+    ) -> Request<CreateDiskSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_domain(&self, input: CreateDomainRequest) -> Request<CreateDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_domain_entry(
+        &self,
+        input: CreateDomainEntryRequest,
+    ) -> Request<CreateDomainEntryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p> <p>The <code>create instance snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_instance_snapshot(
+        &self,
+        input: CreateInstanceSnapshotRequest,
+    ) -> Request<CreateInstanceSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>. Create instances using active blueprints. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases. Use the get blueprints operation to return a list of available blueprints.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_instances(&self, input: CreateInstancesRequest) -> Request<CreateInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_instances_from_snapshot(
+        &self,
+        input: CreateInstancesFromSnapshotRequest,
+    ) -> Request<CreateInstancesFromSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an SSH key pair.</p> <p>The <code>create key pair</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_key_pair(&self, input: CreateKeyPairRequest) -> Request<CreateKeyPairRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p> <p>The <code>create load balancer</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_load_balancer(
+        &self,
+        input: CreateLoadBalancerRequest,
+    ) -> Request<CreateLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_load_balancer_tls_certificate(
+        &self,
+        input: CreateLoadBalancerTlsCertificateRequest,
+    ) -> Request<CreateLoadBalancerTlsCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new database in Amazon Lightsail.</p> <p>The <code>create relational database</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database(
+        &self,
+        input: CreateRelationalDatabaseRequest,
+    ) -> Request<CreateRelationalDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new database from an existing database snapshot in Amazon Lightsail.</p> <p>You can create a new database from a snapshot in if something goes wrong with your original database, or to change it to a different plan, such as a high availability or standard plan.</p> <p>The <code>create relational database from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by relationalDatabaseSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database_from_snapshot(
+        &self,
+        input: CreateRelationalDatabaseFromSnapshotRequest,
+    ) -> Request<CreateRelationalDatabaseFromSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a snapshot of your database in Amazon Lightsail. You can use snapshots for backups, to make copies of a database, and to save data before deleting a database.</p> <p>The <code>create relational database snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database_snapshot(
+        &self,
+        input: CreateRelationalDatabaseSnapshotRequest,
+    ) -> Request<CreateRelationalDatabaseSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_disk(&self, input: DeleteDiskRequest) -> Request<DeleteDiskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_disk_snapshot(
+        &self,
+        input: DeleteDiskSnapshotRequest,
+    ) -> Request<DeleteDiskSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_domain(&self, input: DeleteDomainRequest) -> Request<DeleteDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_domain_entry(
+        &self,
+        input: DeleteDomainEntryRequest,
+    ) -> Request<DeleteDomainEntryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_instance(&self, input: DeleteInstanceRequest) -> Request<DeleteInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_instance_snapshot(
+        &self,
+        input: DeleteInstanceSnapshotRequest,
+    ) -> Request<DeleteInstanceSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by keyPairName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_key_pair(&self, input: DeleteKeyPairRequest) -> Request<DeleteKeyPairRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the known host key or certificate used by the Amazon Lightsail browser-based SSH or RDP clients to authenticate an instance. This operation enables the Lightsail browser-based SSH or RDP clients to connect to the instance after a host key mismatch.</p> <important> <p>Perform this operation only if you were expecting the host key or certificate mismatch or if you are familiar with the new host key or certificate on the instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection">Troubleshooting connection issues when using the Amazon Lightsail browser-based SSH or RDP client</a>.</p> </important></p>
+    fn delete_known_host_keys(
+        &self,
+        input: DeleteKnownHostKeysRequest,
+    ) -> Request<DeleteKnownHostKeysRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_load_balancer(
+        &self,
+        input: DeleteLoadBalancerRequest,
+    ) -> Request<DeleteLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_load_balancer_tls_certificate(
+        &self,
+        input: DeleteLoadBalancerTlsCertificateRequest,
+    ) -> Request<DeleteLoadBalancerTlsCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a database in Amazon Lightsail.</p> <p>The <code>delete relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_relational_database(
+        &self,
+        input: DeleteRelationalDatabaseRequest,
+    ) -> Request<DeleteRelationalDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a database snapshot in Amazon Lightsail.</p> <p>The <code>delete relational database snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_relational_database_snapshot(
+        &self,
+        input: DeleteRelationalDatabaseSnapshotRequest,
+    ) -> Request<DeleteRelationalDatabaseSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn detach_disk(&self, input: DetachDiskRequest) -> Request<DetachDiskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn detach_instances_from_load_balancer(
+        &self,
+        input: DetachInstancesFromLoadBalancerRequest,
+    ) -> Request<DetachInstancesFromLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
+    fn detach_static_ip(&self, input: DetachStaticIpRequest) -> Request<DetachStaticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Downloads the default SSH key pair from the user's account.</p>
+    fn download_default_key_pair(&self) -> Request<DownloadDefaultKeyPairRequest> {
+        Request::new(
+            DownloadDefaultKeyPairRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by sourceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
+    fn export_snapshot(&self, input: ExportSnapshotRequest) -> Request<ExportSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the names of all active (not deleted) resources.</p>
+    fn get_active_names(&self, input: GetActiveNamesRequest) -> Request<GetActiveNamesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
+    fn get_blueprints(&self, input: GetBlueprintsRequest) -> Request<GetBlueprintsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
+    fn get_bundles(&self, input: GetBundlesRequest) -> Request<GetBundlesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
+    fn get_cloud_formation_stack_records(
+        &self,
+        input: GetCloudFormationStackRecordsRequest,
+    ) -> Request<GetCloudFormationStackRecordsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific block storage disk.</p>
+    fn get_disk(&self, input: GetDiskRequest) -> Request<GetDiskRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific block storage disk snapshot.</p>
+    fn get_disk_snapshot(&self, input: GetDiskSnapshotRequest) -> Request<GetDiskSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disk_snapshots(
+        &self,
+        input: GetDiskSnapshotsRequest,
+    ) -> Request<GetDiskSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disks(&self, input: GetDisksRequest) -> Request<GetDisksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific domain recordset.</p>
+    fn get_domain(&self, input: GetDomainRequest) -> Request<GetDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of all domains in the user's account.</p>
+    fn get_domains(&self, input: GetDomainsRequest) -> Request<GetDomainsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the export snapshot record created as a result of the <code>export snapshot</code> operation.</p> <p>An export snapshot record can be used to create a new Amazon EC2 instance and its related resources with the <code>create cloud formation stack</code> operation.</p>
+    fn get_export_snapshot_records(
+        &self,
+        input: GetExportSnapshotRecordsRequest,
+    ) -> Request<GetExportSnapshotRecordsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
+    fn get_instance(&self, input: GetInstanceRequest) -> Request<GetInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn get_instance_access_details(
+        &self,
+        input: GetInstanceAccessDetailsRequest,
+    ) -> Request<GetInstanceAccessDetailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
+    fn get_instance_metric_data(
+        &self,
+        input: GetInstanceMetricDataRequest,
+    ) -> Request<GetInstanceMetricDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
+    fn get_instance_port_states(
+        &self,
+        input: GetInstancePortStatesRequest,
+    ) -> Request<GetInstancePortStatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific instance snapshot.</p>
+    fn get_instance_snapshot(
+        &self,
+        input: GetInstanceSnapshotRequest,
+    ) -> Request<GetInstanceSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns all instance snapshots for the user's account.</p>
+    fn get_instance_snapshots(
+        &self,
+        input: GetInstanceSnapshotsRequest,
+    ) -> Request<GetInstanceSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
+    fn get_instance_state(
+        &self,
+        input: GetInstanceStateRequest,
+    ) -> Request<GetInstanceStateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
+    fn get_instances(&self, input: GetInstancesRequest) -> Request<GetInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific key pair.</p>
+    fn get_key_pair(&self, input: GetKeyPairRequest) -> Request<GetKeyPairRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all key pairs in the user's account.</p>
+    fn get_key_pairs(&self, input: GetKeyPairsRequest) -> Request<GetKeyPairsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the specified Lightsail load balancer.</p>
+    fn get_load_balancer(&self, input: GetLoadBalancerRequest) -> Request<GetLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
+    fn get_load_balancer_metric_data(
+        &self,
+        input: GetLoadBalancerMetricDataRequest,
+    ) -> Request<GetLoadBalancerMetricDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
+    fn get_load_balancer_tls_certificates(
+        &self,
+        input: GetLoadBalancerTlsCertificatesRequest,
+    ) -> Request<GetLoadBalancerTlsCertificatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_load_balancers(
+        &self,
+        input: GetLoadBalancersRequest,
+    ) -> Request<GetLoadBalancersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
+    fn get_operation(&self, input: GetOperationRequest) -> Request<GetOperationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
+    fn get_operations(&self, input: GetOperationsRequest) -> Request<GetOperationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
+    fn get_operations_for_resource(
+        &self,
+        input: GetOperationsForResourceRequest,
+    ) -> Request<GetOperationsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the Availability Zones in a region.</p>
+    fn get_regions(&self, input: GetRegionsRequest) -> Request<GetRegionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific database in Amazon Lightsail.</p>
+    fn get_relational_database(
+        &self,
+        input: GetRelationalDatabaseRequest,
+    ) -> Request<GetRelationalDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of available database blueprints in Amazon Lightsail. A blueprint describes the major engine version of a database.</p> <p>You can use a blueprint ID to create a new database that runs a specific database engine.</p>
+    fn get_relational_database_blueprints(
+        &self,
+        input: GetRelationalDatabaseBlueprintsRequest,
+    ) -> Request<GetRelationalDatabaseBlueprintsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the list of bundles that are available in Amazon Lightsail. A bundle describes the performance specifications for a database.</p> <p>You can use a bundle ID to create a new database with explicit performance specifications.</p>
+    fn get_relational_database_bundles(
+        &self,
+        input: GetRelationalDatabaseBundlesRequest,
+    ) -> Request<GetRelationalDatabaseBundlesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of events for a specific database in Amazon Lightsail.</p>
+    fn get_relational_database_events(
+        &self,
+        input: GetRelationalDatabaseEventsRequest,
+    ) -> Request<GetRelationalDatabaseEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of log events for a database in Amazon Lightsail.</p>
+    fn get_relational_database_log_events(
+        &self,
+        input: GetRelationalDatabaseLogEventsRequest,
+    ) -> Request<GetRelationalDatabaseLogEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of available log streams for a specific database in Amazon Lightsail.</p>
+    fn get_relational_database_log_streams(
+        &self,
+        input: GetRelationalDatabaseLogStreamsRequest,
+    ) -> Request<GetRelationalDatabaseLogStreamsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>asdf</code> operation GetRelationalDatabaseMasterUserPassword supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
+    fn get_relational_database_master_user_password(
+        &self,
+        input: GetRelationalDatabaseMasterUserPasswordRequest,
+    ) -> Request<GetRelationalDatabaseMasterUserPasswordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the data points of the specified metric for a database in Amazon Lightsail.</p>
+    fn get_relational_database_metric_data(
+        &self,
+        input: GetRelationalDatabaseMetricDataRequest,
+    ) -> Request<GetRelationalDatabaseMetricDataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns all of the runtime parameters offered by the underlying database software, or engine, for a specific database in Amazon Lightsail.</p> <p>In addition to the parameter names and values, this operation returns other information about each parameter. This information includes whether changes require a reboot, whether the parameter is modifiable, the allowed values, and the data types.</p>
+    fn get_relational_database_parameters(
+        &self,
+        input: GetRelationalDatabaseParametersRequest,
+    ) -> Request<GetRelationalDatabaseParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific database snapshot in Amazon Lightsail.</p>
+    fn get_relational_database_snapshot(
+        &self,
+        input: GetRelationalDatabaseSnapshotRequest,
+    ) -> Request<GetRelationalDatabaseSnapshotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all of your database snapshots in Amazon Lightsail.</p>
+    fn get_relational_database_snapshots(
+        &self,
+        input: GetRelationalDatabaseSnapshotsRequest,
+    ) -> Request<GetRelationalDatabaseSnapshotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all of your databases in Amazon Lightsail.</p>
+    fn get_relational_databases(
+        &self,
+        input: GetRelationalDatabasesRequest,
+    ) -> Request<GetRelationalDatabasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific static IP.</p>
+    fn get_static_ip(&self, input: GetStaticIpRequest) -> Request<GetStaticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about all static IPs in the user's account.</p>
+    fn get_static_ips(&self, input: GetStaticIpsRequest) -> Request<GetStaticIpsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Imports a public SSH key from a specific key pair.</p>
+    fn import_key_pair(&self, input: ImportKeyPairRequest) -> Request<ImportKeyPairRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
+    fn is_vpc_peered(&self) -> Request<IsVpcPeeredRequest> {
+        Request::new(
+            IsVpcPeeredRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn open_instance_public_ports(
+        &self,
+        input: OpenInstancePublicPortsRequest,
+    ) -> Request<OpenInstancePublicPortsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
+    fn peer_vpc(&self) -> Request<PeerVpcRequest> {
+        Request::new(PeerVpcRequest {}, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn put_instance_public_ports(
+        &self,
+        input: PutInstancePublicPortsRequest,
+    ) -> Request<PutInstancePublicPortsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn reboot_instance(&self, input: RebootInstanceRequest) -> Request<RebootInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Restarts a specific database in Amazon Lightsail.</p> <p>The <code>reboot relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn reboot_relational_database(
+        &self,
+        input: RebootRelationalDatabaseRequest,
+    ) -> Request<RebootRelationalDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific static IP from your account.</p>
+    fn release_static_ip(&self, input: ReleaseStaticIpRequest) -> Request<ReleaseStaticIpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn start_instance(&self, input: StartInstanceRequest) -> Request<StartInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a specific database from a stopped state in Amazon Lightsail. To restart a database, use the <code>reboot relational database</code> operation.</p> <p>The <code>start relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn start_relational_database(
+        &self,
+        input: StartRelationalDatabaseRequest,
+    ) -> Request<StartRelationalDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn stop_instance(&self, input: StopInstanceRequest) -> Request<StopInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a specific database that is currently running in Amazon Lightsail.</p> <p>The <code>stop relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn stop_relational_database(
+        &self,
+        input: StopRelationalDatabaseRequest,
+    ) -> Request<StopRelationalDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
+    fn unpeer_vpc(&self) -> Request<UnpeerVpcRequest> {
+        Request::new(
+            UnpeerVpcRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_domain_entry(
+        &self,
+        input: UpdateDomainEntryRequest,
+    ) -> Request<UpdateDomainEntryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_load_balancer_attribute(
+        &self,
+        input: UpdateLoadBalancerAttributeRequest,
+    ) -> Request<UpdateLoadBalancerAttributeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows the update of one or more attributes of a database in Amazon Lightsail.</p> <p>Updates are applied immediately, or in cases where the updates could result in an outage, are applied during the database's predefined maintenance window.</p> <p>The <code>update relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_relational_database(
+        &self,
+        input: UpdateRelationalDatabaseRequest,
+    ) -> Request<UpdateRelationalDatabaseRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which paramater updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_relational_database_parameters(
+        &self,
+        input: UpdateRelationalDatabaseParametersRequest,
+    ) -> Request<UpdateRelationalDatabaseParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AllocateStaticIpRequest {
+    type Output = AllocateStaticIpResponse;
+    type Error = AllocateStaticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AllocateStaticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AllocateStaticIpResult, _>()
+                        .deserialize::<AllocateStaticIpResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12219,24 +12797,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn attach_disk(
-        &self,
-        input: AttachDiskRequest,
-    ) -> RusotoFuture<AttachDiskResult, AttachDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for AttachDiskRequest {
+    type Output = AttachDiskResponse;
+    type Error = AttachDiskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AttachDisk");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AttachDiskResult, _>()
+                        .deserialize::<AttachDiskResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12248,27 +12831,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn attach_instances_to_load_balancer(
-        &self,
-        input: AttachInstancesToLoadBalancerRequest,
-    ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for AttachInstancesToLoadBalancerRequest {
+    type Output = AttachInstancesToLoadBalancerResponse;
+    type Error = AttachInstancesToLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.AttachInstancesToLoadBalancer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AttachInstancesToLoadBalancerResult, _>()
+                        .deserialize::<AttachInstancesToLoadBalancerResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12277,28 +12865,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn attach_load_balancer_tls_certificate(
-        &self,
-        input: AttachLoadBalancerTlsCertificateRequest,
-    ) -> RusotoFuture<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for AttachLoadBalancerTlsCertificateRequest {
+    type Output = AttachLoadBalancerTlsCertificateResponse;
+    type Error = AttachLoadBalancerTlsCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.AttachLoadBalancerTlsCertificate",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AttachLoadBalancerTlsCertificateResult, _>()
+                        .deserialize::<AttachLoadBalancerTlsCertificateResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12309,24 +12901,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
-    fn attach_static_ip(
-        &self,
-        input: AttachStaticIpRequest,
-    ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for AttachStaticIpRequest {
+    type Output = AttachStaticIpResponse;
+    type Error = AttachStaticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AttachStaticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AttachStaticIpResult, _>()
+                        .deserialize::<AttachStaticIpResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12338,27 +12935,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn close_instance_public_ports(
-        &self,
-        input: CloseInstancePublicPortsRequest,
-    ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CloseInstancePublicPortsRequest {
+    type Output = CloseInstancePublicPortsResponse;
+    type Error = CloseInstancePublicPortsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CloseInstancePublicPorts",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CloseInstancePublicPortsResult, _>()
+                        .deserialize::<CloseInstancePublicPortsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12367,24 +12969,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Copies an instance or disk snapshot from one AWS Region to another in Amazon Lightsail.</p>
-    fn copy_snapshot(
-        &self,
-        input: CopySnapshotRequest,
-    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CopySnapshotRequest {
+    type Output = CopySnapshotResponse;
+    type Error = CopySnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CopySnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CopySnapshotResult, _>()
+                        .deserialize::<CopySnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12396,27 +13003,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
-    fn create_cloud_formation_stack(
-        &self,
-        input: CreateCloudFormationStackRequest,
-    ) -> RusotoFuture<CreateCloudFormationStackResult, CreateCloudFormationStackError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateCloudFormationStackRequest {
+    type Output = CreateCloudFormationStackResponse;
+    type Error = CreateCloudFormationStackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateCloudFormationStack",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCloudFormationStackResult, _>()
+                        .deserialize::<CreateCloudFormationStackResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12425,24 +13037,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_disk(
-        &self,
-        input: CreateDiskRequest,
-    ) -> RusotoFuture<CreateDiskResult, CreateDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateDiskRequest {
+    type Output = CreateDiskResponse;
+    type Error = CreateDiskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDisk");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDiskResult, _>()
+                        .deserialize::<CreateDiskResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12454,24 +13071,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_disk_from_snapshot(
-        &self,
-        input: CreateDiskFromSnapshotRequest,
-    ) -> RusotoFuture<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateDiskFromSnapshotRequest {
+    type Output = CreateDiskFromSnapshotResponse;
+    type Error = CreateDiskFromSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskFromSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDiskFromSnapshotResult, _>()
+                        .deserialize::<CreateDiskFromSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12482,24 +13104,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p> <p>You can also use this operation to create a snapshot of an instance's system volume. You might want to do this, for example, to recover data from the system volume of a botched instance or to create a backup of the system volume like you would for a block storage disk. To create a snapshot of a system volume, just define the <code>instance name</code> parameter when issuing the snapshot command, and a snapshot of the defined instance's system volume will be created. After the snapshot is available, you can create a block storage disk from the snapshot and attach it to a running instance to access the data on the disk.</p> <p>The <code>create disk snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_disk_snapshot(
-        &self,
-        input: CreateDiskSnapshotRequest,
-    ) -> RusotoFuture<CreateDiskSnapshotResult, CreateDiskSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateDiskSnapshotRequest {
+    type Output = CreateDiskSnapshotResponse;
+    type Error = CreateDiskSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDiskSnapshotResult, _>()
+                        .deserialize::<CreateDiskSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12511,24 +13138,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_domain(
-        &self,
-        input: CreateDomainRequest,
-    ) -> RusotoFuture<CreateDomainResult, CreateDomainError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateDomainRequest {
+    type Output = CreateDomainResponse;
+    type Error = CreateDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomain");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDomainResult, _>()
+                        .deserialize::<CreateDomainResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12540,24 +13172,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_domain_entry(
-        &self,
-        input: CreateDomainEntryRequest,
-    ) -> RusotoFuture<CreateDomainEntryResult, CreateDomainEntryError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateDomainEntryRequest {
+    type Output = CreateDomainEntryResponse;
+    type Error = CreateDomainEntryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomainEntry");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateDomainEntryResult, _>()
+                        .deserialize::<CreateDomainEntryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12569,24 +13206,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p> <p>The <code>create instance snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_instance_snapshot(
-        &self,
-        input: CreateInstanceSnapshotRequest,
-    ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateInstanceSnapshotRequest {
+    type Output = CreateInstanceSnapshotResponse;
+    type Error = CreateInstanceSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstanceSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateInstanceSnapshotResult, _>()
+                        .deserialize::<CreateInstanceSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12597,24 +13239,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>. Create instances using active blueprints. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases. Use the get blueprints operation to return a list of available blueprints.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_instances(
-        &self,
-        input: CreateInstancesRequest,
-    ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateInstancesRequest {
+    type Output = CreateInstancesResponse;
+    type Error = CreateInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstances");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateInstancesResult, _>()
+                        .deserialize::<CreateInstancesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12626,27 +13273,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_instances_from_snapshot(
-        &self,
-        input: CreateInstancesFromSnapshotRequest,
-    ) -> RusotoFuture<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateInstancesFromSnapshotRequest {
+    type Output = CreateInstancesFromSnapshotResponse;
+    type Error = CreateInstancesFromSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateInstancesFromSnapshot",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateInstancesFromSnapshotResult, _>()
+                        .deserialize::<CreateInstancesFromSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12655,24 +13307,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates an SSH key pair.</p> <p>The <code>create key pair</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_key_pair(
-        &self,
-        input: CreateKeyPairRequest,
-    ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateKeyPairRequest {
+    type Output = CreateKeyPairResponse;
+    type Error = CreateKeyPairError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateKeyPair");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateKeyPairResult, _>()
+                        .deserialize::<CreateKeyPairResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12684,24 +13341,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p> <p>The <code>create load balancer</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_load_balancer(
-        &self,
-        input: CreateLoadBalancerRequest,
-    ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateLoadBalancerRequest {
+    type Output = CreateLoadBalancerResponse;
+    type Error = CreateLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateLoadBalancer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateLoadBalancerResult, _>()
+                        .deserialize::<CreateLoadBalancerResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12713,28 +13375,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_load_balancer_tls_certificate(
-        &self,
-        input: CreateLoadBalancerTlsCertificateRequest,
-    ) -> RusotoFuture<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateLoadBalancerTlsCertificateRequest {
+    type Output = CreateLoadBalancerTlsCertificateResponse;
+    type Error = CreateLoadBalancerTlsCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateLoadBalancerTlsCertificate",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateLoadBalancerTlsCertificateResult, _>()
+                        .deserialize::<CreateLoadBalancerTlsCertificateResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12745,27 +13411,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new database in Amazon Lightsail.</p> <p>The <code>create relational database</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_relational_database(
-        &self,
-        input: CreateRelationalDatabaseRequest,
-    ) -> RusotoFuture<CreateRelationalDatabaseResult, CreateRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateRelationalDatabaseRequest {
+    type Output = CreateRelationalDatabaseResponse;
+    type Error = CreateRelationalDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabase",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRelationalDatabaseResult, _>()
+                        .deserialize::<CreateRelationalDatabaseResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12774,30 +13445,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new database from an existing database snapshot in Amazon Lightsail.</p> <p>You can create a new database from a snapshot in if something goes wrong with your original database, or to change it to a different plan, such as a high availability or standard plan.</p> <p>The <code>create relational database from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by relationalDatabaseSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_relational_database_from_snapshot(
-        &self,
-        input: CreateRelationalDatabaseFromSnapshotRequest,
-    ) -> RusotoFuture<
-        CreateRelationalDatabaseFromSnapshotResult,
-        CreateRelationalDatabaseFromSnapshotError,
-    > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateRelationalDatabaseFromSnapshotRequest {
+    type Output = CreateRelationalDatabaseFromSnapshotResponse;
+    type Error = CreateRelationalDatabaseFromSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabaseFromSnapshot",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRelationalDatabaseFromSnapshotResult, _>()
+                        .deserialize::<CreateRelationalDatabaseFromSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12808,28 +13481,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Creates a snapshot of your database in Amazon Lightsail. You can use snapshots for backups, to make copies of a database, and to save data before deleting a database.</p> <p>The <code>create relational database snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn create_relational_database_snapshot(
-        &self,
-        input: CreateRelationalDatabaseSnapshotRequest,
-    ) -> RusotoFuture<CreateRelationalDatabaseSnapshotResult, CreateRelationalDatabaseSnapshotError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for CreateRelationalDatabaseSnapshotRequest {
+    type Output = CreateRelationalDatabaseSnapshotResponse;
+    type Error = CreateRelationalDatabaseSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabaseSnapshot",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRelationalDatabaseSnapshotResult, _>()
+                        .deserialize::<CreateRelationalDatabaseSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -12840,24 +13517,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_disk(
-        &self,
-        input: DeleteDiskRequest,
-    ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteDiskRequest {
+    type Output = DeleteDiskResponse;
+    type Error = DeleteDiskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDisk");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDiskResult, _>()
+                        .deserialize::<DeleteDiskResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12869,24 +13551,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_disk_snapshot(
-        &self,
-        input: DeleteDiskSnapshotRequest,
-    ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteDiskSnapshotRequest {
+    type Output = DeleteDiskSnapshotResponse;
+    type Error = DeleteDiskSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDiskSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDiskSnapshotResult, _>()
+                        .deserialize::<DeleteDiskSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12898,24 +13585,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_domain(
-        &self,
-        input: DeleteDomainRequest,
-    ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteDomainRequest {
+    type Output = DeleteDomainResponse;
+    type Error = DeleteDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomain");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDomainResult, _>()
+                        .deserialize::<DeleteDomainResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12927,24 +13619,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_domain_entry(
-        &self,
-        input: DeleteDomainEntryRequest,
-    ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteDomainEntryRequest {
+    type Output = DeleteDomainEntryResponse;
+    type Error = DeleteDomainEntryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomainEntry");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteDomainEntryResult, _>()
+                        .deserialize::<DeleteDomainEntryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12956,24 +13653,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_instance(
-        &self,
-        input: DeleteInstanceRequest,
-    ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteInstanceRequest {
+    type Output = DeleteInstanceResponse;
+    type Error = DeleteInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteInstanceResult, _>()
+                        .deserialize::<DeleteInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -12985,24 +13687,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_instance_snapshot(
-        &self,
-        input: DeleteInstanceSnapshotRequest,
-    ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteInstanceSnapshotRequest {
+    type Output = DeleteInstanceSnapshotResponse;
+    type Error = DeleteInstanceSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstanceSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteInstanceSnapshotResult, _>()
+                        .deserialize::<DeleteInstanceSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13013,24 +13720,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by keyPairName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_key_pair(
-        &self,
-        input: DeleteKeyPairRequest,
-    ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteKeyPairRequest {
+    type Output = DeleteKeyPairResponse;
+    type Error = DeleteKeyPairError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteKeyPair");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteKeyPairResult, _>()
+                        .deserialize::<DeleteKeyPairResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13042,24 +13754,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes the known host key or certificate used by the Amazon Lightsail browser-based SSH or RDP clients to authenticate an instance. This operation enables the Lightsail browser-based SSH or RDP clients to connect to the instance after a host key mismatch.</p> <important> <p>Perform this operation only if you were expecting the host key or certificate mismatch or if you are familiar with the new host key or certificate on the instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection">Troubleshooting connection issues when using the Amazon Lightsail browser-based SSH or RDP client</a>.</p> </important></p>
-    fn delete_known_host_keys(
-        &self,
-        input: DeleteKnownHostKeysRequest,
-    ) -> RusotoFuture<DeleteKnownHostKeysResult, DeleteKnownHostKeysError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteKnownHostKeysRequest {
+    type Output = DeleteKnownHostKeysResponse;
+    type Error = DeleteKnownHostKeysError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteKnownHostKeys");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteKnownHostKeysResult, _>()
+                        .deserialize::<DeleteKnownHostKeysResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13070,24 +13787,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_load_balancer(
-        &self,
-        input: DeleteLoadBalancerRequest,
-    ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteLoadBalancerRequest {
+    type Output = DeleteLoadBalancerResponse;
+    type Error = DeleteLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteLoadBalancer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteLoadBalancerResult, _>()
+                        .deserialize::<DeleteLoadBalancerResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13099,28 +13821,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_load_balancer_tls_certificate(
-        &self,
-        input: DeleteLoadBalancerTlsCertificateRequest,
-    ) -> RusotoFuture<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteLoadBalancerTlsCertificateRequest {
+    type Output = DeleteLoadBalancerTlsCertificateResponse;
+    type Error = DeleteLoadBalancerTlsCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteLoadBalancerTlsCertificate",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteLoadBalancerTlsCertificateResult, _>()
+                        .deserialize::<DeleteLoadBalancerTlsCertificateResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13131,27 +13857,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a database in Amazon Lightsail.</p> <p>The <code>delete relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_relational_database(
-        &self,
-        input: DeleteRelationalDatabaseRequest,
-    ) -> RusotoFuture<DeleteRelationalDatabaseResult, DeleteRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteRelationalDatabaseRequest {
+    type Output = DeleteRelationalDatabaseResponse;
+    type Error = DeleteRelationalDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteRelationalDatabase",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRelationalDatabaseResult, _>()
+                        .deserialize::<DeleteRelationalDatabaseResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13160,28 +13891,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a database snapshot in Amazon Lightsail.</p> <p>The <code>delete relational database snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn delete_relational_database_snapshot(
-        &self,
-        input: DeleteRelationalDatabaseSnapshotRequest,
-    ) -> RusotoFuture<DeleteRelationalDatabaseSnapshotResult, DeleteRelationalDatabaseSnapshotError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DeleteRelationalDatabaseSnapshotRequest {
+    type Output = DeleteRelationalDatabaseSnapshotResponse;
+    type Error = DeleteRelationalDatabaseSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteRelationalDatabaseSnapshot",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRelationalDatabaseSnapshotResult, _>()
+                        .deserialize::<DeleteRelationalDatabaseSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13192,24 +13927,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn detach_disk(
-        &self,
-        input: DetachDiskRequest,
-    ) -> RusotoFuture<DetachDiskResult, DetachDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DetachDiskRequest {
+    type Output = DetachDiskResponse;
+    type Error = DetachDiskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DetachDisk");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetachDiskResult, _>()
+                        .deserialize::<DetachDiskResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13221,28 +13961,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn detach_instances_from_load_balancer(
-        &self,
-        input: DetachInstancesFromLoadBalancerRequest,
-    ) -> RusotoFuture<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DetachInstancesFromLoadBalancerRequest {
+    type Output = DetachInstancesFromLoadBalancerResponse;
+    type Error = DetachInstancesFromLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DetachInstancesFromLoadBalancer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetachInstancesFromLoadBalancerResult, _>()
+                        .deserialize::<DetachInstancesFromLoadBalancerResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13253,24 +13997,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
-    fn detach_static_ip(
-        &self,
-        input: DetachStaticIpRequest,
-    ) -> RusotoFuture<DetachStaticIpResult, DetachStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DetachStaticIpRequest {
+    type Output = DetachStaticIpResponse;
+    type Error = DetachStaticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DetachStaticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DetachStaticIpResult, _>()
+                        .deserialize::<DetachStaticIpResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13282,22 +14031,28 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Downloads the default SSH key pair from the user's account.</p>
-    fn download_default_key_pair(
-        &self,
-    ) -> RusotoFuture<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for DownloadDefaultKeyPairRequest {
+    type Output = DownloadDefaultKeyPairResponse;
+    type Error = DownloadDefaultKeyPairError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DownloadDefaultKeyPair");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DownloadDefaultKeyPairResult, _>()
+                        .deserialize::<DownloadDefaultKeyPairResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13308,24 +14063,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by sourceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
-    fn export_snapshot(
-        &self,
-        input: ExportSnapshotRequest,
-    ) -> RusotoFuture<ExportSnapshotResult, ExportSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for ExportSnapshotRequest {
+    type Output = ExportSnapshotResponse;
+    type Error = ExportSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ExportSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ExportSnapshotResult, _>()
+                        .deserialize::<ExportSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13337,24 +14097,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the names of all active (not deleted) resources.</p>
-    fn get_active_names(
-        &self,
-        input: GetActiveNamesRequest,
-    ) -> RusotoFuture<GetActiveNamesResult, GetActiveNamesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetActiveNamesRequest {
+    type Output = GetActiveNamesResponse;
+    type Error = GetActiveNamesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetActiveNames");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetActiveNamesResult, _>()
+                        .deserialize::<GetActiveNamesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13366,24 +14131,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the list of available instance images, or <i>blueprints</i>. You can use a blueprint to create a new virtual private server already running a specific operating system, as well as a preinstalled app or development stack. The software each instance is running depends on the blueprint image you choose.</p>
-    fn get_blueprints(
-        &self,
-        input: GetBlueprintsRequest,
-    ) -> RusotoFuture<GetBlueprintsResult, GetBlueprintsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetBlueprintsRequest {
+    type Output = GetBlueprintsResponse;
+    type Error = GetBlueprintsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetBlueprints");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetBlueprintsResult, _>()
+                        .deserialize::<GetBlueprintsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13395,24 +14165,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
-    fn get_bundles(
-        &self,
-        input: GetBundlesRequest,
-    ) -> RusotoFuture<GetBundlesResult, GetBundlesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetBundlesRequest {
+    type Output = GetBundlesResponse;
+    type Error = GetBundlesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetBundles");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetBundlesResult, _>()
+                        .deserialize::<GetBundlesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13424,27 +14199,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
-    fn get_cloud_formation_stack_records(
-        &self,
-        input: GetCloudFormationStackRecordsRequest,
-    ) -> RusotoFuture<GetCloudFormationStackRecordsResult, GetCloudFormationStackRecordsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetCloudFormationStackRecordsRequest {
+    type Output = GetCloudFormationStackRecordsResponse;
+    type Error = GetCloudFormationStackRecordsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetCloudFormationStackRecords",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCloudFormationStackRecordsResult, _>()
+                        .deserialize::<GetCloudFormationStackRecordsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13453,20 +14233,28 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific block storage disk.</p>
-    fn get_disk(&self, input: GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetDiskRequest {
+    type Output = GetDiskResponse;
+    type Error = GetDiskError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisk");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetDiskResult, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetDiskResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13478,24 +14266,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific block storage disk snapshot.</p>
-    fn get_disk_snapshot(
-        &self,
-        input: GetDiskSnapshotRequest,
-    ) -> RusotoFuture<GetDiskSnapshotResult, GetDiskSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetDiskSnapshotRequest {
+    type Output = GetDiskSnapshotResponse;
+    type Error = GetDiskSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDiskSnapshotResult, _>()
+                        .deserialize::<GetDiskSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13507,24 +14300,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
-    fn get_disk_snapshots(
-        &self,
-        input: GetDiskSnapshotsRequest,
-    ) -> RusotoFuture<GetDiskSnapshotsResult, GetDiskSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetDiskSnapshotsRequest {
+    type Output = GetDiskSnapshotsResponse;
+    type Error = GetDiskSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshots");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDiskSnapshotsResult, _>()
+                        .deserialize::<GetDiskSnapshotsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13536,20 +14334,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
-    fn get_disks(&self, input: GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetDisksRequest {
+    type Output = GetDisksResponse;
+    type Error = GetDisksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisks");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetDisksResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDisksResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13561,20 +14368,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific domain recordset.</p>
-    fn get_domain(&self, input: GetDomainRequest) -> RusotoFuture<GetDomainResult, GetDomainError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetDomainRequest {
+    type Output = GetDomainResponse;
+    type Error = GetDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomain");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetDomainResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetDomainResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13586,24 +14402,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of all domains in the user's account.</p>
-    fn get_domains(
-        &self,
-        input: GetDomainsRequest,
-    ) -> RusotoFuture<GetDomainsResult, GetDomainsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetDomainsRequest {
+    type Output = GetDomainsResponse;
+    type Error = GetDomainsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomains");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDomainsResult, _>()
+                        .deserialize::<GetDomainsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13615,27 +14436,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the export snapshot record created as a result of the <code>export snapshot</code> operation.</p> <p>An export snapshot record can be used to create a new Amazon EC2 instance and its related resources with the <code>create cloud formation stack</code> operation.</p>
-    fn get_export_snapshot_records(
-        &self,
-        input: GetExportSnapshotRecordsRequest,
-    ) -> RusotoFuture<GetExportSnapshotRecordsResult, GetExportSnapshotRecordsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetExportSnapshotRecordsRequest {
+    type Output = GetExportSnapshotRecordsResponse;
+    type Error = GetExportSnapshotRecordsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetExportSnapshotRecords",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetExportSnapshotRecordsResult, _>()
+                        .deserialize::<GetExportSnapshotRecordsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13644,24 +14470,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
-    fn get_instance(
-        &self,
-        input: GetInstanceRequest,
-    ) -> RusotoFuture<GetInstanceResult, GetInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstanceRequest {
+    type Output = GetInstanceResponse;
+    type Error = GetInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstanceResult, _>()
+                        .deserialize::<GetInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13673,27 +14504,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn get_instance_access_details(
-        &self,
-        input: GetInstanceAccessDetailsRequest,
-    ) -> RusotoFuture<GetInstanceAccessDetailsResult, GetInstanceAccessDetailsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstanceAccessDetailsRequest {
+    type Output = GetInstanceAccessDetailsResponse;
+    type Error = GetInstanceAccessDetailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetInstanceAccessDetails",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstanceAccessDetailsResult, _>()
+                        .deserialize::<GetInstanceAccessDetailsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13702,24 +14538,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the data points for the specified Amazon Lightsail instance metric, given an instance name.</p>
-    fn get_instance_metric_data(
-        &self,
-        input: GetInstanceMetricDataRequest,
-    ) -> RusotoFuture<GetInstanceMetricDataResult, GetInstanceMetricDataError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstanceMetricDataRequest {
+    type Output = GetInstanceMetricDataResponse;
+    type Error = GetInstanceMetricDataError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceMetricData");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstanceMetricDataResult, _>()
+                        .deserialize::<GetInstanceMetricDataResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13730,24 +14571,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the port states for a specific virtual private server, or <i>instance</i>.</p>
-    fn get_instance_port_states(
-        &self,
-        input: GetInstancePortStatesRequest,
-    ) -> RusotoFuture<GetInstancePortStatesResult, GetInstancePortStatesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstancePortStatesRequest {
+    type Output = GetInstancePortStatesResponse;
+    type Error = GetInstancePortStatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstancePortStates");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstancePortStatesResult, _>()
+                        .deserialize::<GetInstancePortStatesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13758,24 +14604,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific instance snapshot.</p>
-    fn get_instance_snapshot(
-        &self,
-        input: GetInstanceSnapshotRequest,
-    ) -> RusotoFuture<GetInstanceSnapshotResult, GetInstanceSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstanceSnapshotRequest {
+    type Output = GetInstanceSnapshotResponse;
+    type Error = GetInstanceSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshot");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstanceSnapshotResult, _>()
+                        .deserialize::<GetInstanceSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13786,24 +14637,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns all instance snapshots for the user's account.</p>
-    fn get_instance_snapshots(
-        &self,
-        input: GetInstanceSnapshotsRequest,
-    ) -> RusotoFuture<GetInstanceSnapshotsResult, GetInstanceSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstanceSnapshotsRequest {
+    type Output = GetInstanceSnapshotsResponse;
+    type Error = GetInstanceSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshots");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstanceSnapshotsResult, _>()
+                        .deserialize::<GetInstanceSnapshotsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13814,24 +14670,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the state of a specific instance. Works on one instance at a time.</p>
-    fn get_instance_state(
-        &self,
-        input: GetInstanceStateRequest,
-    ) -> RusotoFuture<GetInstanceStateResult, GetInstanceStateError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstanceStateRequest {
+    type Output = GetInstanceStateResponse;
+    type Error = GetInstanceStateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceState");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstanceStateResult, _>()
+                        .deserialize::<GetInstanceStateResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13843,24 +14704,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
-    fn get_instances(
-        &self,
-        input: GetInstancesRequest,
-    ) -> RusotoFuture<GetInstancesResult, GetInstancesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetInstancesRequest {
+    type Output = GetInstancesResponse;
+    type Error = GetInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstances");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetInstancesResult, _>()
+                        .deserialize::<GetInstancesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13872,24 +14738,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific key pair.</p>
-    fn get_key_pair(
-        &self,
-        input: GetKeyPairRequest,
-    ) -> RusotoFuture<GetKeyPairResult, GetKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetKeyPairRequest {
+    type Output = GetKeyPairResponse;
+    type Error = GetKeyPairError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPair");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetKeyPairResult, _>()
+                        .deserialize::<GetKeyPairResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13901,24 +14772,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all key pairs in the user's account.</p>
-    fn get_key_pairs(
-        &self,
-        input: GetKeyPairsRequest,
-    ) -> RusotoFuture<GetKeyPairsResult, GetKeyPairsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetKeyPairsRequest {
+    type Output = GetKeyPairsResponse;
+    type Error = GetKeyPairsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPairs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetKeyPairsResult, _>()
+                        .deserialize::<GetKeyPairsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13930,24 +14806,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the specified Lightsail load balancer.</p>
-    fn get_load_balancer(
-        &self,
-        input: GetLoadBalancerRequest,
-    ) -> RusotoFuture<GetLoadBalancerResult, GetLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetLoadBalancerRequest {
+    type Output = GetLoadBalancerResponse;
+    type Error = GetLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancer");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLoadBalancerResult, _>()
+                        .deserialize::<GetLoadBalancerResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -13959,27 +14840,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
-    fn get_load_balancer_metric_data(
-        &self,
-        input: GetLoadBalancerMetricDataRequest,
-    ) -> RusotoFuture<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetLoadBalancerMetricDataRequest {
+    type Output = GetLoadBalancerMetricDataResponse;
+    type Error = GetLoadBalancerMetricDataError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerMetricData",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLoadBalancerMetricDataResult, _>()
+                        .deserialize::<GetLoadBalancerMetricDataResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -13988,28 +14874,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>You can have a maximum of 2 certificates associated with a Lightsail load balancer. One is active and the other is inactive.</p>
-    fn get_load_balancer_tls_certificates(
-        &self,
-        input: GetLoadBalancerTlsCertificatesRequest,
-    ) -> RusotoFuture<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetLoadBalancerTlsCertificatesRequest {
+    type Output = GetLoadBalancerTlsCertificatesResponse;
+    type Error = GetLoadBalancerTlsCertificatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerTlsCertificates",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLoadBalancerTlsCertificatesResult, _>()
+                        .deserialize::<GetLoadBalancerTlsCertificatesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14018,24 +14908,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
-    fn get_load_balancers(
-        &self,
-        input: GetLoadBalancersRequest,
-    ) -> RusotoFuture<GetLoadBalancersResult, GetLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetLoadBalancersRequest {
+    type Output = GetLoadBalancersResponse;
+    type Error = GetLoadBalancersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetLoadBalancersResult, _>()
+                        .deserialize::<GetLoadBalancersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14047,24 +14942,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
-    fn get_operation(
-        &self,
-        input: GetOperationRequest,
-    ) -> RusotoFuture<GetOperationResult, GetOperationError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetOperationRequest {
+    type Output = GetOperationResponse;
+    type Error = GetOperationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperation");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetOperationResult, _>()
+                        .deserialize::<GetOperationResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14076,24 +14976,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all operations.</p> <p>Results are returned from oldest to newest, up to a maximum of 200. Results can be paged by making each subsequent call to <code>GetOperations</code> use the maximum (last) <code>statusChangedAt</code> value from the previous request.</p>
-    fn get_operations(
-        &self,
-        input: GetOperationsRequest,
-    ) -> RusotoFuture<GetOperationsResult, GetOperationsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetOperationsRequest {
+    type Output = GetOperationsResponse;
+    type Error = GetOperationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperations");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetOperationsResult, _>()
+                        .deserialize::<GetOperationsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14105,27 +15010,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Gets operations for a specific resource (e.g., an instance or a static IP).</p>
-    fn get_operations_for_resource(
-        &self,
-        input: GetOperationsForResourceRequest,
-    ) -> RusotoFuture<GetOperationsForResourceResult, GetOperationsForResourceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetOperationsForResourceRequest {
+    type Output = GetOperationsForResourceResponse;
+    type Error = GetOperationsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetOperationsForResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetOperationsForResourceResult, _>()
+                        .deserialize::<GetOperationsForResourceResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14134,24 +15044,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the Availability Zones in a region.</p>
-    fn get_regions(
-        &self,
-        input: GetRegionsRequest,
-    ) -> RusotoFuture<GetRegionsResult, GetRegionsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRegionsRequest {
+    type Output = GetRegionsResponse;
+    type Error = GetRegionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetRegions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRegionsResult, _>()
+                        .deserialize::<GetRegionsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14163,24 +15078,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific database in Amazon Lightsail.</p>
-    fn get_relational_database(
-        &self,
-        input: GetRelationalDatabaseRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseResult, GetRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseRequest {
+    type Output = GetRelationalDatabaseResponse;
+    type Error = GetRelationalDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabase");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseResult, _>()
+                        .deserialize::<GetRelationalDatabaseResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14191,28 +15111,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of available database blueprints in Amazon Lightsail. A blueprint describes the major engine version of a database.</p> <p>You can use a blueprint ID to create a new database that runs a specific database engine.</p>
-    fn get_relational_database_blueprints(
-        &self,
-        input: GetRelationalDatabaseBlueprintsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseBlueprintsResult, GetRelationalDatabaseBlueprintsError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseBlueprintsRequest {
+    type Output = GetRelationalDatabaseBlueprintsResponse;
+    type Error = GetRelationalDatabaseBlueprintsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseBlueprints",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseBlueprintsResult, _>()
+                        .deserialize::<GetRelationalDatabaseBlueprintsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14223,27 +15147,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the list of bundles that are available in Amazon Lightsail. A bundle describes the performance specifications for a database.</p> <p>You can use a bundle ID to create a new database with explicit performance specifications.</p>
-    fn get_relational_database_bundles(
-        &self,
-        input: GetRelationalDatabaseBundlesRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseBundlesResult, GetRelationalDatabaseBundlesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseBundlesRequest {
+    type Output = GetRelationalDatabaseBundlesResponse;
+    type Error = GetRelationalDatabaseBundlesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseBundles",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseBundlesResult, _>()
+                        .deserialize::<GetRelationalDatabaseBundlesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14252,27 +15181,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of events for a specific database in Amazon Lightsail.</p>
-    fn get_relational_database_events(
-        &self,
-        input: GetRelationalDatabaseEventsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseEventsResult, GetRelationalDatabaseEventsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseEventsRequest {
+    type Output = GetRelationalDatabaseEventsResponse;
+    type Error = GetRelationalDatabaseEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseEvents",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseEventsResult, _>()
+                        .deserialize::<GetRelationalDatabaseEventsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14281,28 +15215,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of log events for a database in Amazon Lightsail.</p>
-    fn get_relational_database_log_events(
-        &self,
-        input: GetRelationalDatabaseLogEventsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseLogEventsResult, GetRelationalDatabaseLogEventsError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseLogEventsRequest {
+    type Output = GetRelationalDatabaseLogEventsResponse;
+    type Error = GetRelationalDatabaseLogEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseLogEvents",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseLogEventsResult, _>()
+                        .deserialize::<GetRelationalDatabaseLogEventsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14311,28 +15249,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of available log streams for a specific database in Amazon Lightsail.</p>
-    fn get_relational_database_log_streams(
-        &self,
-        input: GetRelationalDatabaseLogStreamsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseLogStreamsResult, GetRelationalDatabaseLogStreamsError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseLogStreamsRequest {
+    type Output = GetRelationalDatabaseLogStreamsResponse;
+    type Error = GetRelationalDatabaseLogStreamsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseLogStreams",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseLogStreamsResult, _>()
+                        .deserialize::<GetRelationalDatabaseLogStreamsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14343,30 +15285,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>asdf</code> operation GetRelationalDatabaseMasterUserPassword supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
-    fn get_relational_database_master_user_password(
-        &self,
-        input: GetRelationalDatabaseMasterUserPasswordRequest,
-    ) -> RusotoFuture<
-        GetRelationalDatabaseMasterUserPasswordResult,
-        GetRelationalDatabaseMasterUserPasswordError,
-    > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseMasterUserPasswordRequest {
+    type Output = GetRelationalDatabaseMasterUserPasswordResponse;
+    type Error = GetRelationalDatabaseMasterUserPasswordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseMasterUserPassword",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseMasterUserPasswordResult, _>()
+                        .deserialize::<GetRelationalDatabaseMasterUserPasswordResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14377,28 +15321,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns the data points of the specified metric for a database in Amazon Lightsail.</p>
-    fn get_relational_database_metric_data(
-        &self,
-        input: GetRelationalDatabaseMetricDataRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseMetricDataResult, GetRelationalDatabaseMetricDataError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseMetricDataRequest {
+    type Output = GetRelationalDatabaseMetricDataResponse;
+    type Error = GetRelationalDatabaseMetricDataError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseMetricData",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseMetricDataResult, _>()
+                        .deserialize::<GetRelationalDatabaseMetricDataResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14409,28 +15357,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns all of the runtime parameters offered by the underlying database software, or engine, for a specific database in Amazon Lightsail.</p> <p>In addition to the parameter names and values, this operation returns other information about each parameter. This information includes whether changes require a reboot, whether the parameter is modifiable, the allowed values, and the data types.</p>
-    fn get_relational_database_parameters(
-        &self,
-        input: GetRelationalDatabaseParametersRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseParametersResult, GetRelationalDatabaseParametersError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseParametersRequest {
+    type Output = GetRelationalDatabaseParametersResponse;
+    type Error = GetRelationalDatabaseParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseParameters",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseParametersResult, _>()
+                        .deserialize::<GetRelationalDatabaseParametersResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14441,27 +15393,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific database snapshot in Amazon Lightsail.</p>
-    fn get_relational_database_snapshot(
-        &self,
-        input: GetRelationalDatabaseSnapshotRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseSnapshotResult, GetRelationalDatabaseSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseSnapshotRequest {
+    type Output = GetRelationalDatabaseSnapshotResponse;
+    type Error = GetRelationalDatabaseSnapshotError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseSnapshot",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseSnapshotResult, _>()
+                        .deserialize::<GetRelationalDatabaseSnapshotResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14470,28 +15427,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all of your database snapshots in Amazon Lightsail.</p>
-    fn get_relational_database_snapshots(
-        &self,
-        input: GetRelationalDatabaseSnapshotsRequest,
-    ) -> RusotoFuture<GetRelationalDatabaseSnapshotsResult, GetRelationalDatabaseSnapshotsError>
-    {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabaseSnapshotsRequest {
+    type Output = GetRelationalDatabaseSnapshotsResponse;
+    type Error = GetRelationalDatabaseSnapshotsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseSnapshots",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabaseSnapshotsResult, _>()
+                        .deserialize::<GetRelationalDatabaseSnapshotsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14500,24 +15461,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all of your databases in Amazon Lightsail.</p>
-    fn get_relational_databases(
-        &self,
-        input: GetRelationalDatabasesRequest,
-    ) -> RusotoFuture<GetRelationalDatabasesResult, GetRelationalDatabasesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetRelationalDatabasesRequest {
+    type Output = GetRelationalDatabasesResponse;
+    type Error = GetRelationalDatabasesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabases");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRelationalDatabasesResult, _>()
+                        .deserialize::<GetRelationalDatabasesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14528,24 +15494,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific static IP.</p>
-    fn get_static_ip(
-        &self,
-        input: GetStaticIpRequest,
-    ) -> RusotoFuture<GetStaticIpResult, GetStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetStaticIpRequest {
+    type Output = GetStaticIpResponse;
+    type Error = GetStaticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetStaticIpResult, _>()
+                        .deserialize::<GetStaticIpResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14557,24 +15528,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about all static IPs in the user's account.</p>
-    fn get_static_ips(
-        &self,
-        input: GetStaticIpsRequest,
-    ) -> RusotoFuture<GetStaticIpsResult, GetStaticIpsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for GetStaticIpsRequest {
+    type Output = GetStaticIpsResponse;
+    type Error = GetStaticIpsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIps");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetStaticIpsResult, _>()
+                        .deserialize::<GetStaticIpsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14586,24 +15562,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Imports a public SSH key from a specific key pair.</p>
-    fn import_key_pair(
-        &self,
-        input: ImportKeyPairRequest,
-    ) -> RusotoFuture<ImportKeyPairResult, ImportKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for ImportKeyPairRequest {
+    type Output = ImportKeyPairResponse;
+    type Error = ImportKeyPairError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ImportKeyPair");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ImportKeyPairResult, _>()
+                        .deserialize::<ImportKeyPairResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14615,20 +15596,28 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
-    fn is_vpc_peered(&self) -> RusotoFuture<IsVpcPeeredResult, IsVpcPeeredError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for IsVpcPeeredRequest {
+    type Output = IsVpcPeeredResponse;
+    type Error = IsVpcPeeredError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.IsVpcPeered");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<IsVpcPeeredResult, _>()
+                        .deserialize::<IsVpcPeeredResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14640,24 +15629,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn open_instance_public_ports(
-        &self,
-        input: OpenInstancePublicPortsRequest,
-    ) -> RusotoFuture<OpenInstancePublicPortsResult, OpenInstancePublicPortsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for OpenInstancePublicPortsRequest {
+    type Output = OpenInstancePublicPortsResponse;
+    type Error = OpenInstancePublicPortsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.OpenInstancePublicPorts");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<OpenInstancePublicPortsResult, _>()
+                        .deserialize::<OpenInstancePublicPortsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14666,19 +15660,27 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
-    fn peer_vpc(&self) -> RusotoFuture<PeerVpcResult, PeerVpcError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for PeerVpcRequest {
+    type Output = PeerVpcResponse;
+    type Error = PeerVpcError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.PeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<PeerVpcResult, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<PeerVpcResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14690,24 +15692,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn put_instance_public_ports(
-        &self,
-        input: PutInstancePublicPortsRequest,
-    ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for PutInstancePublicPortsRequest {
+    type Output = PutInstancePublicPortsResponse;
+    type Error = PutInstancePublicPortsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.PutInstancePublicPorts");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutInstancePublicPortsResult, _>()
+                        .deserialize::<PutInstancePublicPortsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14718,24 +15725,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn reboot_instance(
-        &self,
-        input: RebootInstanceRequest,
-    ) -> RusotoFuture<RebootInstanceResult, RebootInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for RebootInstanceRequest {
+    type Output = RebootInstanceResponse;
+    type Error = RebootInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.RebootInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RebootInstanceResult, _>()
+                        .deserialize::<RebootInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14747,27 +15759,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Restarts a specific database in Amazon Lightsail.</p> <p>The <code>reboot relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn reboot_relational_database(
-        &self,
-        input: RebootRelationalDatabaseRequest,
-    ) -> RusotoFuture<RebootRelationalDatabaseResult, RebootRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for RebootRelationalDatabaseRequest {
+    type Output = RebootRelationalDatabaseResponse;
+    type Error = RebootRelationalDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.RebootRelationalDatabase",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<RebootRelationalDatabaseResult, _>()
+                        .deserialize::<RebootRelationalDatabaseResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14776,24 +15793,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific static IP from your account.</p>
-    fn release_static_ip(
-        &self,
-        input: ReleaseStaticIpRequest,
-    ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for ReleaseStaticIpRequest {
+    type Output = ReleaseStaticIpResponse;
+    type Error = ReleaseStaticIpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ReleaseStaticIp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ReleaseStaticIpResult, _>()
+                        .deserialize::<ReleaseStaticIpResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14805,24 +15827,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn start_instance(
-        &self,
-        input: StartInstanceRequest,
-    ) -> RusotoFuture<StartInstanceResult, StartInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for StartInstanceRequest {
+    type Output = StartInstanceResponse;
+    type Error = StartInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StartInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartInstanceResult, _>()
+                        .deserialize::<StartInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14834,24 +15861,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Starts a specific database from a stopped state in Amazon Lightsail. To restart a database, use the <code>reboot relational database</code> operation.</p> <p>The <code>start relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn start_relational_database(
-        &self,
-        input: StartRelationalDatabaseRequest,
-    ) -> RusotoFuture<StartRelationalDatabaseResult, StartRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for StartRelationalDatabaseRequest {
+    type Output = StartRelationalDatabaseResponse;
+    type Error = StartRelationalDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StartRelationalDatabase");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StartRelationalDatabaseResult, _>()
+                        .deserialize::<StartRelationalDatabaseResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -14860,24 +15892,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn stop_instance(
-        &self,
-        input: StopInstanceRequest,
-    ) -> RusotoFuture<StopInstanceResult, StopInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for StopInstanceRequest {
+    type Output = StopInstanceResponse;
+    type Error = StopInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StopInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopInstanceResult, _>()
+                        .deserialize::<StopInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14889,24 +15926,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Stops a specific database that is currently running in Amazon Lightsail.</p> <p>The <code>stop relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn stop_relational_database(
-        &self,
-        input: StopRelationalDatabaseRequest,
-    ) -> RusotoFuture<StopRelationalDatabaseResult, StopRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for StopRelationalDatabaseRequest {
+    type Output = StopRelationalDatabaseResponse;
+    type Error = StopRelationalDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StopRelationalDatabase");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<StopRelationalDatabaseResult, _>()
+                        .deserialize::<StopRelationalDatabaseResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14917,24 +15959,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResult, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagResourceResult, _>()
+                        .deserialize::<TagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14946,19 +15993,28 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
-    fn unpeer_vpc(&self) -> RusotoFuture<UnpeerVpcResult, UnpeerVpcError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for UnpeerVpcRequest {
+    type Output = UnpeerVpcResponse;
+    type Error = UnpeerVpcError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UnpeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<UnpeerVpcResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UnpeerVpcResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14970,24 +16026,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResult, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagResourceResult, _>()
+                        .deserialize::<UntagResourceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -14999,24 +16060,29 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn update_domain_entry(
-        &self,
-        input: UpdateDomainEntryRequest,
-    ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for UpdateDomainEntryRequest {
+    type Output = UpdateDomainEntryResponse;
+    type Error = UpdateDomainEntryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UpdateDomainEntry");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDomainEntryResult, _>()
+                        .deserialize::<UpdateDomainEntryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -15028,27 +16094,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn update_load_balancer_attribute(
-        &self,
-        input: UpdateLoadBalancerAttributeRequest,
-    ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for UpdateLoadBalancerAttributeRequest {
+    type Output = UpdateLoadBalancerAttributeResponse;
+    type Error = UpdateLoadBalancerAttributeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateLoadBalancerAttribute",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateLoadBalancerAttributeResult, _>()
+                        .deserialize::<UpdateLoadBalancerAttributeResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15057,27 +16128,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Allows the update of one or more attributes of a database in Amazon Lightsail.</p> <p>Updates are applied immediately, or in cases where the updates could result in an outage, are applied during the database's predefined maintenance window.</p> <p>The <code>update relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn update_relational_database(
-        &self,
-        input: UpdateRelationalDatabaseRequest,
-    ) -> RusotoFuture<UpdateRelationalDatabaseResult, UpdateRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for UpdateRelationalDatabaseRequest {
+    type Output = UpdateRelationalDatabaseResponse;
+    type Error = UpdateRelationalDatabaseError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateRelationalDatabase",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRelationalDatabaseResult, _>()
+                        .deserialize::<UpdateRelationalDatabaseResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -15086,30 +16162,32 @@ impl Lightsail for LightsailClient {
             }
         })
     }
+}
 
-    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which paramater updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
-    fn update_relational_database_parameters(
-        &self,
-        input: UpdateRelationalDatabaseParametersRequest,
-    ) -> RusotoFuture<
-        UpdateRelationalDatabaseParametersResult,
-        UpdateRelationalDatabaseParametersError,
-    > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+impl ServiceRequest for UpdateRelationalDatabaseParametersRequest {
+    type Output = UpdateRelationalDatabaseParametersResponse;
+    type Error = UpdateRelationalDatabaseParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "lightsail", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateRelationalDatabaseParameters",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRelationalDatabaseParametersResult, _>()
+                        .deserialize::<UpdateRelationalDatabaseParametersResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {

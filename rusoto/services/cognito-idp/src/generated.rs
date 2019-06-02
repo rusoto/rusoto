@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -92,6 +93,10 @@ pub struct AdminAddUserToGroupRequest {
     #[serde(rename = "Username")]
     pub username: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AdminAddUserToGroupResponse {}
 
 /// <p>Represents the request to confirm user registration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -201,6 +206,10 @@ pub struct AdminDeleteUserRequest {
     pub username: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AdminDeleteUserResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AdminDisableProviderForUserRequest {
     /// <p>The user to be disabled.</p>
@@ -260,6 +269,10 @@ pub struct AdminForgetDeviceRequest {
     #[serde(rename = "Username")]
     pub username: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AdminForgetDeviceResponse {}
 
 /// <p>Represents the request to get the device, as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -512,6 +525,10 @@ pub struct AdminRemoveUserFromGroupRequest {
     #[serde(rename = "Username")]
     pub username: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AdminRemoveUserFromGroupResponse {}
 
 /// <p>Represents the request to reset a user's password as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1355,6 +1372,10 @@ pub struct DeleteGroupRequest {
     pub user_pool_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteGroupResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIdentityProviderRequest {
     /// <p>The identity provider name.</p>
@@ -1365,6 +1386,10 @@ pub struct DeleteIdentityProviderRequest {
     pub user_pool_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIdentityProviderResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteResourceServerRequest {
     /// <p>The identifier for the resource server.</p>
@@ -1374,6 +1399,10 @@ pub struct DeleteResourceServerRequest {
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteResourceServerResponse {}
 
 /// <p>Represents the request to delete user attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1402,6 +1431,10 @@ pub struct DeleteUserPoolClientRequest {
     pub user_pool_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUserPoolClientResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserPoolDomainRequest {
     /// <p>The domain string.</p>
@@ -1424,6 +1457,10 @@ pub struct DeleteUserPoolRequest {
     pub user_pool_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUserPoolResponse {}
+
 /// <p>Represents the request to delete a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserRequest {
@@ -1431,6 +1468,10 @@ pub struct DeleteUserRequest {
     #[serde(rename = "AccessToken")]
     pub access_token: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeIdentityProviderRequest {
@@ -1737,6 +1778,10 @@ pub struct ForgetDeviceRequest {
     #[serde(rename = "DeviceKey")]
     pub device_key: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ForgetDeviceResponse {}
 
 /// <p>Represents the request to reset a user's password.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -11981,582 +12026,507 @@ pub trait CognitoIdentityProvider {
     fn add_custom_attributes(
         &self,
         input: AddCustomAttributesRequest,
-    ) -> RusotoFuture<AddCustomAttributesResponse, AddCustomAttributesError>;
+    ) -> Request<AddCustomAttributesRequest>;
 
     /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
     fn admin_add_user_to_group(
         &self,
         input: AdminAddUserToGroupRequest,
-    ) -> RusotoFuture<(), AdminAddUserToGroupError>;
+    ) -> Request<AdminAddUserToGroupRequest>;
 
     /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_confirm_sign_up(
         &self,
         input: AdminConfirmSignUpRequest,
-    ) -> RusotoFuture<AdminConfirmSignUpResponse, AdminConfirmSignUpError>;
+    ) -> Request<AdminConfirmSignUpRequest>;
 
     /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
-    fn admin_create_user(
-        &self,
-        input: AdminCreateUserRequest,
-    ) -> RusotoFuture<AdminCreateUserResponse, AdminCreateUserError>;
+    fn admin_create_user(&self, input: AdminCreateUserRequest) -> Request<AdminCreateUserRequest>;
 
     /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_delete_user(
-        &self,
-        input: AdminDeleteUserRequest,
-    ) -> RusotoFuture<(), AdminDeleteUserError>;
+    fn admin_delete_user(&self, input: AdminDeleteUserRequest) -> Request<AdminDeleteUserRequest>;
 
     /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_delete_user_attributes(
         &self,
         input: AdminDeleteUserAttributesRequest,
-    ) -> RusotoFuture<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
+    ) -> Request<AdminDeleteUserAttributesRequest>;
 
     /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
     fn admin_disable_provider_for_user(
         &self,
         input: AdminDisableProviderForUserRequest,
-    ) -> RusotoFuture<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError>;
+    ) -> Request<AdminDisableProviderForUserRequest>;
 
     /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_disable_user(
         &self,
         input: AdminDisableUserRequest,
-    ) -> RusotoFuture<AdminDisableUserResponse, AdminDisableUserError>;
+    ) -> Request<AdminDisableUserRequest>;
 
     /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_enable_user(
-        &self,
-        input: AdminEnableUserRequest,
-    ) -> RusotoFuture<AdminEnableUserResponse, AdminEnableUserError>;
+    fn admin_enable_user(&self, input: AdminEnableUserRequest) -> Request<AdminEnableUserRequest>;
 
     /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_forget_device(
         &self,
         input: AdminForgetDeviceRequest,
-    ) -> RusotoFuture<(), AdminForgetDeviceError>;
+    ) -> Request<AdminForgetDeviceRequest>;
 
     /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_get_device(
-        &self,
-        input: AdminGetDeviceRequest,
-    ) -> RusotoFuture<AdminGetDeviceResponse, AdminGetDeviceError>;
+    fn admin_get_device(&self, input: AdminGetDeviceRequest) -> Request<AdminGetDeviceRequest>;
 
     /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_get_user(
-        &self,
-        input: AdminGetUserRequest,
-    ) -> RusotoFuture<AdminGetUserResponse, AdminGetUserError>;
+    fn admin_get_user(&self, input: AdminGetUserRequest) -> Request<AdminGetUserRequest>;
 
     /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_initiate_auth(
         &self,
         input: AdminInitiateAuthRequest,
-    ) -> RusotoFuture<AdminInitiateAuthResponse, AdminInitiateAuthError>;
+    ) -> Request<AdminInitiateAuthRequest>;
 
     /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
     fn admin_link_provider_for_user(
         &self,
         input: AdminLinkProviderForUserRequest,
-    ) -> RusotoFuture<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError>;
+    ) -> Request<AdminLinkProviderForUserRequest>;
 
     /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_list_devices(
         &self,
         input: AdminListDevicesRequest,
-    ) -> RusotoFuture<AdminListDevicesResponse, AdminListDevicesError>;
+    ) -> Request<AdminListDevicesRequest>;
 
     /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
     fn admin_list_groups_for_user(
         &self,
         input: AdminListGroupsForUserRequest,
-    ) -> RusotoFuture<AdminListGroupsForUserResponse, AdminListGroupsForUserError>;
+    ) -> Request<AdminListGroupsForUserRequest>;
 
     /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
     fn admin_list_user_auth_events(
         &self,
         input: AdminListUserAuthEventsRequest,
-    ) -> RusotoFuture<AdminListUserAuthEventsResponse, AdminListUserAuthEventsError>;
+    ) -> Request<AdminListUserAuthEventsRequest>;
 
     /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
     fn admin_remove_user_from_group(
         &self,
         input: AdminRemoveUserFromGroupRequest,
-    ) -> RusotoFuture<(), AdminRemoveUserFromGroupError>;
+    ) -> Request<AdminRemoveUserFromGroupRequest>;
 
     /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
     fn admin_reset_user_password(
         &self,
         input: AdminResetUserPasswordRequest,
-    ) -> RusotoFuture<AdminResetUserPasswordResponse, AdminResetUserPasswordError>;
+    ) -> Request<AdminResetUserPasswordRequest>;
 
     /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_respond_to_auth_challenge(
         &self,
         input: AdminRespondToAuthChallengeRequest,
-    ) -> RusotoFuture<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
+    ) -> Request<AdminRespondToAuthChallengeRequest>;
 
     /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
     fn admin_set_user_mfa_preference(
         &self,
         input: AdminSetUserMFAPreferenceRequest,
-    ) -> RusotoFuture<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError>;
+    ) -> Request<AdminSetUserMFAPreferenceRequest>;
 
     fn admin_set_user_password(
         &self,
         input: AdminSetUserPasswordRequest,
-    ) -> RusotoFuture<AdminSetUserPasswordResponse, AdminSetUserPasswordError>;
+    ) -> Request<AdminSetUserPasswordRequest>;
 
     /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_set_user_settings(
         &self,
         input: AdminSetUserSettingsRequest,
-    ) -> RusotoFuture<AdminSetUserSettingsResponse, AdminSetUserSettingsError>;
+    ) -> Request<AdminSetUserSettingsRequest>;
 
     /// <p>Provides feedback for an authentication event as to whether it was from a valid user. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
     fn admin_update_auth_event_feedback(
         &self,
         input: AdminUpdateAuthEventFeedbackRequest,
-    ) -> RusotoFuture<AdminUpdateAuthEventFeedbackResponse, AdminUpdateAuthEventFeedbackError>;
+    ) -> Request<AdminUpdateAuthEventFeedbackRequest>;
 
     /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_update_device_status(
         &self,
         input: AdminUpdateDeviceStatusRequest,
-    ) -> RusotoFuture<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError>;
+    ) -> Request<AdminUpdateDeviceStatusRequest>;
 
     /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
     fn admin_update_user_attributes(
         &self,
         input: AdminUpdateUserAttributesRequest,
-    ) -> RusotoFuture<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError>;
+    ) -> Request<AdminUpdateUserAttributesRequest>;
 
     /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_user_global_sign_out(
         &self,
         input: AdminUserGlobalSignOutRequest,
-    ) -> RusotoFuture<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError>;
+    ) -> Request<AdminUserGlobalSignOutRequest>;
 
     /// <p>Returns a unique generated shared secret key code for the user account. The request takes an access token or a session string, but not both.</p>
     fn associate_software_token(
         &self,
         input: AssociateSoftwareTokenRequest,
-    ) -> RusotoFuture<AssociateSoftwareTokenResponse, AssociateSoftwareTokenError>;
+    ) -> Request<AssociateSoftwareTokenRequest>;
 
     /// <p>Changes the password for a specified user in a user pool.</p>
-    fn change_password(
-        &self,
-        input: ChangePasswordRequest,
-    ) -> RusotoFuture<ChangePasswordResponse, ChangePasswordError>;
+    fn change_password(&self, input: ChangePasswordRequest) -> Request<ChangePasswordRequest>;
 
     /// <p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>
-    fn confirm_device(
-        &self,
-        input: ConfirmDeviceRequest,
-    ) -> RusotoFuture<ConfirmDeviceResponse, ConfirmDeviceError>;
+    fn confirm_device(&self, input: ConfirmDeviceRequest) -> Request<ConfirmDeviceRequest>;
 
     /// <p>Allows a user to enter a confirmation code to reset a forgotten password.</p>
     fn confirm_forgot_password(
         &self,
         input: ConfirmForgotPasswordRequest,
-    ) -> RusotoFuture<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError>;
+    ) -> Request<ConfirmForgotPasswordRequest>;
 
     /// <p>Confirms registration of a user and handles the existing alias from a previous user.</p>
-    fn confirm_sign_up(
-        &self,
-        input: ConfirmSignUpRequest,
-    ) -> RusotoFuture<ConfirmSignUpResponse, ConfirmSignUpError>;
+    fn confirm_sign_up(&self, input: ConfirmSignUpRequest) -> Request<ConfirmSignUpRequest>;
 
     /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
-    fn create_group(
-        &self,
-        input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest>;
 
     /// <p>Creates an identity provider for a user pool.</p>
     fn create_identity_provider(
         &self,
         input: CreateIdentityProviderRequest,
-    ) -> RusotoFuture<CreateIdentityProviderResponse, CreateIdentityProviderError>;
+    ) -> Request<CreateIdentityProviderRequest>;
 
     /// <p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>
     fn create_resource_server(
         &self,
         input: CreateResourceServerRequest,
-    ) -> RusotoFuture<CreateResourceServerResponse, CreateResourceServerError>;
+    ) -> Request<CreateResourceServerRequest>;
 
     /// <p>Creates the user import job.</p>
     fn create_user_import_job(
         &self,
         input: CreateUserImportJobRequest,
-    ) -> RusotoFuture<CreateUserImportJobResponse, CreateUserImportJobError>;
+    ) -> Request<CreateUserImportJobRequest>;
 
     /// <p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>
-    fn create_user_pool(
-        &self,
-        input: CreateUserPoolRequest,
-    ) -> RusotoFuture<CreateUserPoolResponse, CreateUserPoolError>;
+    fn create_user_pool(&self, input: CreateUserPoolRequest) -> Request<CreateUserPoolRequest>;
 
     /// <p>Creates the user pool client.</p>
     fn create_user_pool_client(
         &self,
         input: CreateUserPoolClientRequest,
-    ) -> RusotoFuture<CreateUserPoolClientResponse, CreateUserPoolClientError>;
+    ) -> Request<CreateUserPoolClientRequest>;
 
     /// <p>Creates a new domain for a user pool.</p>
     fn create_user_pool_domain(
         &self,
         input: CreateUserPoolDomainRequest,
-    ) -> RusotoFuture<CreateUserPoolDomainResponse, CreateUserPoolDomainError>;
+    ) -> Request<CreateUserPoolDomainRequest>;
 
     /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
-    fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError>;
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest>;
 
     /// <p>Deletes an identity provider for a user pool.</p>
     fn delete_identity_provider(
         &self,
         input: DeleteIdentityProviderRequest,
-    ) -> RusotoFuture<(), DeleteIdentityProviderError>;
+    ) -> Request<DeleteIdentityProviderRequest>;
 
     /// <p>Deletes a resource server.</p>
     fn delete_resource_server(
         &self,
         input: DeleteResourceServerRequest,
-    ) -> RusotoFuture<(), DeleteResourceServerError>;
+    ) -> Request<DeleteResourceServerRequest>;
 
     /// <p>Allows a user to delete himself or herself.</p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest>;
 
     /// <p>Deletes the attributes for a user.</p>
     fn delete_user_attributes(
         &self,
         input: DeleteUserAttributesRequest,
-    ) -> RusotoFuture<DeleteUserAttributesResponse, DeleteUserAttributesError>;
+    ) -> Request<DeleteUserAttributesRequest>;
 
     /// <p>Deletes the specified Amazon Cognito user pool.</p>
-    fn delete_user_pool(
-        &self,
-        input: DeleteUserPoolRequest,
-    ) -> RusotoFuture<(), DeleteUserPoolError>;
+    fn delete_user_pool(&self, input: DeleteUserPoolRequest) -> Request<DeleteUserPoolRequest>;
 
     /// <p>Allows the developer to delete the user pool client.</p>
     fn delete_user_pool_client(
         &self,
         input: DeleteUserPoolClientRequest,
-    ) -> RusotoFuture<(), DeleteUserPoolClientError>;
+    ) -> Request<DeleteUserPoolClientRequest>;
 
     /// <p>Deletes a domain for a user pool.</p>
     fn delete_user_pool_domain(
         &self,
         input: DeleteUserPoolDomainRequest,
-    ) -> RusotoFuture<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError>;
+    ) -> Request<DeleteUserPoolDomainRequest>;
 
     /// <p>Gets information about a specific identity provider.</p>
     fn describe_identity_provider(
         &self,
         input: DescribeIdentityProviderRequest,
-    ) -> RusotoFuture<DescribeIdentityProviderResponse, DescribeIdentityProviderError>;
+    ) -> Request<DescribeIdentityProviderRequest>;
 
     /// <p>Describes a resource server.</p>
     fn describe_resource_server(
         &self,
         input: DescribeResourceServerRequest,
-    ) -> RusotoFuture<DescribeResourceServerResponse, DescribeResourceServerError>;
+    ) -> Request<DescribeResourceServerRequest>;
 
     /// <p>Describes the risk configuration.</p>
     fn describe_risk_configuration(
         &self,
         input: DescribeRiskConfigurationRequest,
-    ) -> RusotoFuture<DescribeRiskConfigurationResponse, DescribeRiskConfigurationError>;
+    ) -> Request<DescribeRiskConfigurationRequest>;
 
     /// <p>Describes the user import job.</p>
     fn describe_user_import_job(
         &self,
         input: DescribeUserImportJobRequest,
-    ) -> RusotoFuture<DescribeUserImportJobResponse, DescribeUserImportJobError>;
+    ) -> Request<DescribeUserImportJobRequest>;
 
     /// <p>Returns the configuration information and metadata of the specified user pool.</p>
     fn describe_user_pool(
         &self,
         input: DescribeUserPoolRequest,
-    ) -> RusotoFuture<DescribeUserPoolResponse, DescribeUserPoolError>;
+    ) -> Request<DescribeUserPoolRequest>;
 
     /// <p>Client method for returning the configuration information and metadata of the specified user pool app client.</p>
     fn describe_user_pool_client(
         &self,
         input: DescribeUserPoolClientRequest,
-    ) -> RusotoFuture<DescribeUserPoolClientResponse, DescribeUserPoolClientError>;
+    ) -> Request<DescribeUserPoolClientRequest>;
 
     /// <p>Gets information about a domain.</p>
     fn describe_user_pool_domain(
         &self,
         input: DescribeUserPoolDomainRequest,
-    ) -> RusotoFuture<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError>;
+    ) -> Request<DescribeUserPoolDomainRequest>;
 
     /// <p>Forgets the specified device.</p>
-    fn forget_device(&self, input: ForgetDeviceRequest) -> RusotoFuture<(), ForgetDeviceError>;
+    fn forget_device(&self, input: ForgetDeviceRequest) -> Request<ForgetDeviceRequest>;
 
     /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
-    fn forgot_password(
-        &self,
-        input: ForgotPasswordRequest,
-    ) -> RusotoFuture<ForgotPasswordResponse, ForgotPasswordError>;
+    fn forgot_password(&self, input: ForgotPasswordRequest) -> Request<ForgotPasswordRequest>;
 
     /// <p>Gets the header information for the .csv file to be used as input for the user import job.</p>
-    fn get_csv_header(
-        &self,
-        input: GetCSVHeaderRequest,
-    ) -> RusotoFuture<GetCSVHeaderResponse, GetCSVHeaderError>;
+    fn get_csv_header(&self, input: GetCSVHeaderRequest) -> Request<GetCSVHeaderRequest>;
 
     /// <p>Gets the device.</p>
-    fn get_device(
-        &self,
-        input: GetDeviceRequest,
-    ) -> RusotoFuture<GetDeviceResponse, GetDeviceError>;
+    fn get_device(&self, input: GetDeviceRequest) -> Request<GetDeviceRequest>;
 
     /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest>;
 
     /// <p>Gets the specified identity provider.</p>
     fn get_identity_provider_by_identifier(
         &self,
         input: GetIdentityProviderByIdentifierRequest,
-    ) -> RusotoFuture<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>;
+    ) -> Request<GetIdentityProviderByIdentifierRequest>;
 
     /// <p>This method takes a user pool ID, and returns the signing certificate.</p>
     fn get_signing_certificate(
         &self,
         input: GetSigningCertificateRequest,
-    ) -> RusotoFuture<GetSigningCertificateResponse, GetSigningCertificateError>;
+    ) -> Request<GetSigningCertificateRequest>;
 
     /// <p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>
     fn get_ui_customization(
         &self,
         input: GetUICustomizationRequest,
-    ) -> RusotoFuture<GetUICustomizationResponse, GetUICustomizationError>;
+    ) -> Request<GetUICustomizationRequest>;
 
     /// <p>Gets the user attributes and metadata for a user.</p>
-    fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError>;
+    fn get_user(&self, input: GetUserRequest) -> Request<GetUserRequest>;
 
     /// <p>Gets the user attribute verification code for the specified attribute name.</p>
     fn get_user_attribute_verification_code(
         &self,
         input: GetUserAttributeVerificationCodeRequest,
-    ) -> RusotoFuture<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>;
+    ) -> Request<GetUserAttributeVerificationCodeRequest>;
 
     /// <p>Gets the user pool multi-factor authentication (MFA) configuration.</p>
     fn get_user_pool_mfa_config(
         &self,
         input: GetUserPoolMfaConfigRequest,
-    ) -> RusotoFuture<GetUserPoolMfaConfigResponse, GetUserPoolMfaConfigError>;
+    ) -> Request<GetUserPoolMfaConfigRequest>;
 
     /// <p>Signs out users from all devices.</p>
-    fn global_sign_out(
-        &self,
-        input: GlobalSignOutRequest,
-    ) -> RusotoFuture<GlobalSignOutResponse, GlobalSignOutError>;
+    fn global_sign_out(&self, input: GlobalSignOutRequest) -> Request<GlobalSignOutRequest>;
 
     /// <p>Initiates the authentication flow.</p>
-    fn initiate_auth(
-        &self,
-        input: InitiateAuthRequest,
-    ) -> RusotoFuture<InitiateAuthResponse, InitiateAuthError>;
+    fn initiate_auth(&self, input: InitiateAuthRequest) -> Request<InitiateAuthRequest>;
 
     /// <p>Lists the devices.</p>
-    fn list_devices(
-        &self,
-        input: ListDevicesRequest,
-    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError>;
+    fn list_devices(&self, input: ListDevicesRequest) -> Request<ListDevicesRequest>;
 
     /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest>;
 
     /// <p>Lists information about all identity providers for a user pool.</p>
     fn list_identity_providers(
         &self,
         input: ListIdentityProvidersRequest,
-    ) -> RusotoFuture<ListIdentityProvidersResponse, ListIdentityProvidersError>;
+    ) -> Request<ListIdentityProvidersRequest>;
 
     /// <p>Lists the resource servers for a user pool.</p>
     fn list_resource_servers(
         &self,
         input: ListResourceServersRequest,
-    ) -> RusotoFuture<ListResourceServersResponse, ListResourceServersError>;
+    ) -> Request<ListResourceServersRequest>;
 
     /// <p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Lists the user import jobs.</p>
     fn list_user_import_jobs(
         &self,
         input: ListUserImportJobsRequest,
-    ) -> RusotoFuture<ListUserImportJobsResponse, ListUserImportJobsError>;
+    ) -> Request<ListUserImportJobsRequest>;
 
     /// <p>Lists the clients that have been created for the specified user pool.</p>
     fn list_user_pool_clients(
         &self,
         input: ListUserPoolClientsRequest,
-    ) -> RusotoFuture<ListUserPoolClientsResponse, ListUserPoolClientsError>;
+    ) -> Request<ListUserPoolClientsRequest>;
 
     /// <p>Lists the user pools associated with an AWS account.</p>
-    fn list_user_pools(
-        &self,
-        input: ListUserPoolsRequest,
-    ) -> RusotoFuture<ListUserPoolsResponse, ListUserPoolsError>;
+    fn list_user_pools(&self, input: ListUserPoolsRequest) -> Request<ListUserPoolsRequest>;
 
     /// <p>Lists the users in the Amazon Cognito user pool.</p>
-    fn list_users(
-        &self,
-        input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
+    fn list_users(&self, input: ListUsersRequest) -> Request<ListUsersRequest>;
 
     /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
     fn list_users_in_group(
         &self,
         input: ListUsersInGroupRequest,
-    ) -> RusotoFuture<ListUsersInGroupResponse, ListUsersInGroupError>;
+    ) -> Request<ListUsersInGroupRequest>;
 
     /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>
     fn resend_confirmation_code(
         &self,
         input: ResendConfirmationCodeRequest,
-    ) -> RusotoFuture<ResendConfirmationCodeResponse, ResendConfirmationCodeError>;
+    ) -> Request<ResendConfirmationCodeRequest>;
 
     /// <p>Responds to the authentication challenge.</p>
     fn respond_to_auth_challenge(
         &self,
         input: RespondToAuthChallengeRequest,
-    ) -> RusotoFuture<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
+    ) -> Request<RespondToAuthChallengeRequest>;
 
     /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
     fn set_risk_configuration(
         &self,
         input: SetRiskConfigurationRequest,
-    ) -> RusotoFuture<SetRiskConfigurationResponse, SetRiskConfigurationError>;
+    ) -> Request<SetRiskConfigurationRequest>;
 
     /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
     fn set_ui_customization(
         &self,
         input: SetUICustomizationRequest,
-    ) -> RusotoFuture<SetUICustomizationResponse, SetUICustomizationError>;
+    ) -> Request<SetUICustomizationRequest>;
 
     /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
     fn set_user_mfa_preference(
         &self,
         input: SetUserMFAPreferenceRequest,
-    ) -> RusotoFuture<SetUserMFAPreferenceResponse, SetUserMFAPreferenceError>;
+    ) -> Request<SetUserMFAPreferenceRequest>;
 
     /// <p>Set the user pool MFA configuration.</p>
     fn set_user_pool_mfa_config(
         &self,
         input: SetUserPoolMfaConfigRequest,
-    ) -> RusotoFuture<SetUserPoolMfaConfigResponse, SetUserPoolMfaConfigError>;
+    ) -> Request<SetUserPoolMfaConfigRequest>;
 
     /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
-    fn set_user_settings(
-        &self,
-        input: SetUserSettingsRequest,
-    ) -> RusotoFuture<SetUserSettingsResponse, SetUserSettingsError>;
+    fn set_user_settings(&self, input: SetUserSettingsRequest) -> Request<SetUserSettingsRequest>;
 
     /// <p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>
-    fn sign_up(&self, input: SignUpRequest) -> RusotoFuture<SignUpResponse, SignUpError>;
+    fn sign_up(&self, input: SignUpRequest) -> Request<SignUpRequest>;
 
     /// <p>Starts the user import.</p>
     fn start_user_import_job(
         &self,
         input: StartUserImportJobRequest,
-    ) -> RusotoFuture<StartUserImportJobResponse, StartUserImportJobError>;
+    ) -> Request<StartUserImportJobRequest>;
 
     /// <p>Stops the user import job.</p>
     fn stop_user_import_job(
         &self,
         input: StopUserImportJobRequest,
-    ) -> RusotoFuture<StopUserImportJobResponse, StopUserImportJobError>;
+    ) -> Request<StopUserImportJobRequest>;
 
     /// <p>Assigns a set of tags to an Amazon Cognito user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of a user pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both user pools. The value of this key might be <code>Test</code> for one user pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your user pools. In an IAM policy, you can constrain permissions for user pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. A user pool can have as many as 50 tags.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes the specified tags from an Amazon Cognito user pool. You can use this action up to 5 times per second, per account</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
     fn update_auth_event_feedback(
         &self,
         input: UpdateAuthEventFeedbackRequest,
-    ) -> RusotoFuture<UpdateAuthEventFeedbackResponse, UpdateAuthEventFeedbackError>;
+    ) -> Request<UpdateAuthEventFeedbackRequest>;
 
     /// <p>Updates the device status.</p>
     fn update_device_status(
         &self,
         input: UpdateDeviceStatusRequest,
-    ) -> RusotoFuture<UpdateDeviceStatusResponse, UpdateDeviceStatusError>;
+    ) -> Request<UpdateDeviceStatusRequest>;
 
     /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
-    fn update_group(
-        &self,
-        input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError>;
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest>;
 
     /// <p>Updates identity provider information for a user pool.</p>
     fn update_identity_provider(
         &self,
         input: UpdateIdentityProviderRequest,
-    ) -> RusotoFuture<UpdateIdentityProviderResponse, UpdateIdentityProviderError>;
+    ) -> Request<UpdateIdentityProviderRequest>;
 
     /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
     fn update_resource_server(
         &self,
         input: UpdateResourceServerRequest,
-    ) -> RusotoFuture<UpdateResourceServerResponse, UpdateResourceServerError>;
+    ) -> Request<UpdateResourceServerRequest>;
 
     /// <p>Allows a user to update a specific attribute (one at a time).</p>
     fn update_user_attributes(
         &self,
         input: UpdateUserAttributesRequest,
-    ) -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError>;
+    ) -> Request<UpdateUserAttributesRequest>;
 
     /// <p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>
-    fn update_user_pool(
-        &self,
-        input: UpdateUserPoolRequest,
-    ) -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError>;
+    fn update_user_pool(&self, input: UpdateUserPoolRequest) -> Request<UpdateUserPoolRequest>;
 
     /// <p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>
     fn update_user_pool_client(
         &self,
         input: UpdateUserPoolClientRequest,
-    ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
+    ) -> Request<UpdateUserPoolClientRequest>;
 
     /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
     fn update_user_pool_domain(
         &self,
         input: UpdateUserPoolDomainRequest,
-    ) -> RusotoFuture<UpdateUserPoolDomainResponse, UpdateUserPoolDomainError>;
+    ) -> Request<UpdateUserPoolDomainRequest>;
 
     /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
     fn verify_software_token(
         &self,
         input: VerifySoftwareTokenRequest,
-    ) -> RusotoFuture<VerifySoftwareTokenResponse, VerifySoftwareTokenError>;
+    ) -> Request<VerifySoftwareTokenRequest>;
 
     /// <p>Verifies the specified user attributes in the user pool.</p>
     fn verify_user_attribute(
         &self,
         input: VerifyUserAttributeRequest,
-    ) -> RusotoFuture<VerifyUserAttributeResponse, VerifyUserAttributeError>;
+    ) -> Request<VerifyUserAttributeRequest>;
 }
 /// A client for the Amazon Cognito Identity Provider API.
 #[derive(Clone)]
@@ -12599,18 +12569,729 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
     fn add_custom_attributes(
         &self,
         input: AddCustomAttributesRequest,
-    ) -> RusotoFuture<AddCustomAttributesResponse, AddCustomAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+    ) -> Request<AddCustomAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
+    fn admin_add_user_to_group(
+        &self,
+        input: AdminAddUserToGroupRequest,
+    ) -> Request<AdminAddUserToGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_confirm_sign_up(
+        &self,
+        input: AdminConfirmSignUpRequest,
+    ) -> Request<AdminConfirmSignUpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
+    fn admin_create_user(&self, input: AdminCreateUserRequest) -> Request<AdminCreateUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_delete_user(&self, input: AdminDeleteUserRequest) -> Request<AdminDeleteUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_delete_user_attributes(
+        &self,
+        input: AdminDeleteUserAttributesRequest,
+    ) -> Request<AdminDeleteUserAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+    fn admin_disable_provider_for_user(
+        &self,
+        input: AdminDisableProviderForUserRequest,
+    ) -> Request<AdminDisableProviderForUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_disable_user(
+        &self,
+        input: AdminDisableUserRequest,
+    ) -> Request<AdminDisableUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_enable_user(&self, input: AdminEnableUserRequest) -> Request<AdminEnableUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_forget_device(
+        &self,
+        input: AdminForgetDeviceRequest,
+    ) -> Request<AdminForgetDeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_get_device(&self, input: AdminGetDeviceRequest) -> Request<AdminGetDeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_get_user(&self, input: AdminGetUserRequest) -> Request<AdminGetUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_initiate_auth(
+        &self,
+        input: AdminInitiateAuthRequest,
+    ) -> Request<AdminInitiateAuthRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
+    fn admin_link_provider_for_user(
+        &self,
+        input: AdminLinkProviderForUserRequest,
+    ) -> Request<AdminLinkProviderForUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_list_devices(
+        &self,
+        input: AdminListDevicesRequest,
+    ) -> Request<AdminListDevicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
+    fn admin_list_groups_for_user(
+        &self,
+        input: AdminListGroupsForUserRequest,
+    ) -> Request<AdminListGroupsForUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
+    fn admin_list_user_auth_events(
+        &self,
+        input: AdminListUserAuthEventsRequest,
+    ) -> Request<AdminListUserAuthEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
+    fn admin_remove_user_from_group(
+        &self,
+        input: AdminRemoveUserFromGroupRequest,
+    ) -> Request<AdminRemoveUserFromGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
+    fn admin_reset_user_password(
+        &self,
+        input: AdminResetUserPasswordRequest,
+    ) -> Request<AdminResetUserPasswordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_respond_to_auth_challenge(
+        &self,
+        input: AdminRespondToAuthChallengeRequest,
+    ) -> Request<AdminRespondToAuthChallengeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
+    fn admin_set_user_mfa_preference(
+        &self,
+        input: AdminSetUserMFAPreferenceRequest,
+    ) -> Request<AdminSetUserMFAPreferenceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn admin_set_user_password(
+        &self,
+        input: AdminSetUserPasswordRequest,
+    ) -> Request<AdminSetUserPasswordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
+    fn admin_set_user_settings(
+        &self,
+        input: AdminSetUserSettingsRequest,
+    ) -> Request<AdminSetUserSettingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides feedback for an authentication event as to whether it was from a valid user. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn admin_update_auth_event_feedback(
+        &self,
+        input: AdminUpdateAuthEventFeedbackRequest,
+    ) -> Request<AdminUpdateAuthEventFeedbackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_update_device_status(
+        &self,
+        input: AdminUpdateDeviceStatusRequest,
+    ) -> Request<AdminUpdateDeviceStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
+    fn admin_update_user_attributes(
+        &self,
+        input: AdminUpdateUserAttributesRequest,
+    ) -> Request<AdminUpdateUserAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
+    fn admin_user_global_sign_out(
+        &self,
+        input: AdminUserGlobalSignOutRequest,
+    ) -> Request<AdminUserGlobalSignOutRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a unique generated shared secret key code for the user account. The request takes an access token or a session string, but not both.</p>
+    fn associate_software_token(
+        &self,
+        input: AssociateSoftwareTokenRequest,
+    ) -> Request<AssociateSoftwareTokenRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the password for a specified user in a user pool.</p>
+    fn change_password(&self, input: ChangePasswordRequest) -> Request<ChangePasswordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>
+    fn confirm_device(&self, input: ConfirmDeviceRequest) -> Request<ConfirmDeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows a user to enter a confirmation code to reset a forgotten password.</p>
+    fn confirm_forgot_password(
+        &self,
+        input: ConfirmForgotPasswordRequest,
+    ) -> Request<ConfirmForgotPasswordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Confirms registration of a user and handles the existing alias from a previous user.</p>
+    fn confirm_sign_up(&self, input: ConfirmSignUpRequest) -> Request<ConfirmSignUpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
+    fn create_group(&self, input: CreateGroupRequest) -> Request<CreateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an identity provider for a user pool.</p>
+    fn create_identity_provider(
+        &self,
+        input: CreateIdentityProviderRequest,
+    ) -> Request<CreateIdentityProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>
+    fn create_resource_server(
+        &self,
+        input: CreateResourceServerRequest,
+    ) -> Request<CreateResourceServerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates the user import job.</p>
+    fn create_user_import_job(
+        &self,
+        input: CreateUserImportJobRequest,
+    ) -> Request<CreateUserImportJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>
+    fn create_user_pool(&self, input: CreateUserPoolRequest) -> Request<CreateUserPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates the user pool client.</p>
+    fn create_user_pool_client(
+        &self,
+        input: CreateUserPoolClientRequest,
+    ) -> Request<CreateUserPoolClientRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new domain for a user pool.</p>
+    fn create_user_pool_domain(
+        &self,
+        input: CreateUserPoolDomainRequest,
+    ) -> Request<CreateUserPoolDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
+    fn delete_group(&self, input: DeleteGroupRequest) -> Request<DeleteGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an identity provider for a user pool.</p>
+    fn delete_identity_provider(
+        &self,
+        input: DeleteIdentityProviderRequest,
+    ) -> Request<DeleteIdentityProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a resource server.</p>
+    fn delete_resource_server(
+        &self,
+        input: DeleteResourceServerRequest,
+    ) -> Request<DeleteResourceServerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows a user to delete himself or herself.</p>
+    fn delete_user(&self, input: DeleteUserRequest) -> Request<DeleteUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the attributes for a user.</p>
+    fn delete_user_attributes(
+        &self,
+        input: DeleteUserAttributesRequest,
+    ) -> Request<DeleteUserAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified Amazon Cognito user pool.</p>
+    fn delete_user_pool(&self, input: DeleteUserPoolRequest) -> Request<DeleteUserPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows the developer to delete the user pool client.</p>
+    fn delete_user_pool_client(
+        &self,
+        input: DeleteUserPoolClientRequest,
+    ) -> Request<DeleteUserPoolClientRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a domain for a user pool.</p>
+    fn delete_user_pool_domain(
+        &self,
+        input: DeleteUserPoolDomainRequest,
+    ) -> Request<DeleteUserPoolDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a specific identity provider.</p>
+    fn describe_identity_provider(
+        &self,
+        input: DescribeIdentityProviderRequest,
+    ) -> Request<DescribeIdentityProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a resource server.</p>
+    fn describe_resource_server(
+        &self,
+        input: DescribeResourceServerRequest,
+    ) -> Request<DescribeResourceServerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the risk configuration.</p>
+    fn describe_risk_configuration(
+        &self,
+        input: DescribeRiskConfigurationRequest,
+    ) -> Request<DescribeRiskConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the user import job.</p>
+    fn describe_user_import_job(
+        &self,
+        input: DescribeUserImportJobRequest,
+    ) -> Request<DescribeUserImportJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the configuration information and metadata of the specified user pool.</p>
+    fn describe_user_pool(
+        &self,
+        input: DescribeUserPoolRequest,
+    ) -> Request<DescribeUserPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Client method for returning the configuration information and metadata of the specified user pool app client.</p>
+    fn describe_user_pool_client(
+        &self,
+        input: DescribeUserPoolClientRequest,
+    ) -> Request<DescribeUserPoolClientRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a domain.</p>
+    fn describe_user_pool_domain(
+        &self,
+        input: DescribeUserPoolDomainRequest,
+    ) -> Request<DescribeUserPoolDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Forgets the specified device.</p>
+    fn forget_device(&self, input: ForgetDeviceRequest) -> Request<ForgetDeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
+    fn forgot_password(&self, input: ForgotPasswordRequest) -> Request<ForgotPasswordRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the header information for the .csv file to be used as input for the user import job.</p>
+    fn get_csv_header(&self, input: GetCSVHeaderRequest) -> Request<GetCSVHeaderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the device.</p>
+    fn get_device(&self, input: GetDeviceRequest) -> Request<GetDeviceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
+    fn get_group(&self, input: GetGroupRequest) -> Request<GetGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the specified identity provider.</p>
+    fn get_identity_provider_by_identifier(
+        &self,
+        input: GetIdentityProviderByIdentifierRequest,
+    ) -> Request<GetIdentityProviderByIdentifierRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This method takes a user pool ID, and returns the signing certificate.</p>
+    fn get_signing_certificate(
+        &self,
+        input: GetSigningCertificateRequest,
+    ) -> Request<GetSigningCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>
+    fn get_ui_customization(
+        &self,
+        input: GetUICustomizationRequest,
+    ) -> Request<GetUICustomizationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the user attributes and metadata for a user.</p>
+    fn get_user(&self, input: GetUserRequest) -> Request<GetUserRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the user attribute verification code for the specified attribute name.</p>
+    fn get_user_attribute_verification_code(
+        &self,
+        input: GetUserAttributeVerificationCodeRequest,
+    ) -> Request<GetUserAttributeVerificationCodeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the user pool multi-factor authentication (MFA) configuration.</p>
+    fn get_user_pool_mfa_config(
+        &self,
+        input: GetUserPoolMfaConfigRequest,
+    ) -> Request<GetUserPoolMfaConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Signs out users from all devices.</p>
+    fn global_sign_out(&self, input: GlobalSignOutRequest) -> Request<GlobalSignOutRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Initiates the authentication flow.</p>
+    fn initiate_auth(&self, input: InitiateAuthRequest) -> Request<InitiateAuthRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the devices.</p>
+    fn list_devices(&self, input: ListDevicesRequest) -> Request<ListDevicesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
+    fn list_groups(&self, input: ListGroupsRequest) -> Request<ListGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists information about all identity providers for a user pool.</p>
+    fn list_identity_providers(
+        &self,
+        input: ListIdentityProvidersRequest,
+    ) -> Request<ListIdentityProvidersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the resource servers for a user pool.</p>
+    fn list_resource_servers(
+        &self,
+        input: ListResourceServersRequest,
+    ) -> Request<ListResourceServersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the user import jobs.</p>
+    fn list_user_import_jobs(
+        &self,
+        input: ListUserImportJobsRequest,
+    ) -> Request<ListUserImportJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the clients that have been created for the specified user pool.</p>
+    fn list_user_pool_clients(
+        &self,
+        input: ListUserPoolClientsRequest,
+    ) -> Request<ListUserPoolClientsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the user pools associated with an AWS account.</p>
+    fn list_user_pools(&self, input: ListUserPoolsRequest) -> Request<ListUserPoolsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the users in the Amazon Cognito user pool.</p>
+    fn list_users(&self, input: ListUsersRequest) -> Request<ListUsersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
+    fn list_users_in_group(
+        &self,
+        input: ListUsersInGroupRequest,
+    ) -> Request<ListUsersInGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>
+    fn resend_confirmation_code(
+        &self,
+        input: ResendConfirmationCodeRequest,
+    ) -> Request<ResendConfirmationCodeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Responds to the authentication challenge.</p>
+    fn respond_to_auth_challenge(
+        &self,
+        input: RespondToAuthChallengeRequest,
+    ) -> Request<RespondToAuthChallengeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
+    fn set_risk_configuration(
+        &self,
+        input: SetRiskConfigurationRequest,
+    ) -> Request<SetRiskConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
+    fn set_ui_customization(
+        &self,
+        input: SetUICustomizationRequest,
+    ) -> Request<SetUICustomizationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
+    fn set_user_mfa_preference(
+        &self,
+        input: SetUserMFAPreferenceRequest,
+    ) -> Request<SetUserMFAPreferenceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Set the user pool MFA configuration.</p>
+    fn set_user_pool_mfa_config(
+        &self,
+        input: SetUserPoolMfaConfigRequest,
+    ) -> Request<SetUserPoolMfaConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
+    fn set_user_settings(&self, input: SetUserSettingsRequest) -> Request<SetUserSettingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>
+    fn sign_up(&self, input: SignUpRequest) -> Request<SignUpRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts the user import.</p>
+    fn start_user_import_job(
+        &self,
+        input: StartUserImportJobRequest,
+    ) -> Request<StartUserImportJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops the user import job.</p>
+    fn stop_user_import_job(
+        &self,
+        input: StopUserImportJobRequest,
+    ) -> Request<StopUserImportJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Assigns a set of tags to an Amazon Cognito user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of a user pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both user pools. The value of this key might be <code>Test</code> for one user pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your user pools. In an IAM policy, you can constrain permissions for user pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. A user pool can have as many as 50 tags.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified tags from an Amazon Cognito user pool. You can use this action up to 5 times per second, per account</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn update_auth_event_feedback(
+        &self,
+        input: UpdateAuthEventFeedbackRequest,
+    ) -> Request<UpdateAuthEventFeedbackRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the device status.</p>
+    fn update_device_status(
+        &self,
+        input: UpdateDeviceStatusRequest,
+    ) -> Request<UpdateDeviceStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
+    fn update_group(&self, input: UpdateGroupRequest) -> Request<UpdateGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates identity provider information for a user pool.</p>
+    fn update_identity_provider(
+        &self,
+        input: UpdateIdentityProviderRequest,
+    ) -> Request<UpdateIdentityProviderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
+    fn update_resource_server(
+        &self,
+        input: UpdateResourceServerRequest,
+    ) -> Request<UpdateResourceServerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Allows a user to update a specific attribute (one at a time).</p>
+    fn update_user_attributes(
+        &self,
+        input: UpdateUserAttributesRequest,
+    ) -> Request<UpdateUserAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>
+    fn update_user_pool(&self, input: UpdateUserPoolRequest) -> Request<UpdateUserPoolRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>
+    fn update_user_pool_client(
+        &self,
+        input: UpdateUserPoolClientRequest,
+    ) -> Request<UpdateUserPoolClientRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
+    fn update_user_pool_domain(
+        &self,
+        input: UpdateUserPoolDomainRequest,
+    ) -> Request<UpdateUserPoolDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
+    fn verify_software_token(
+        &self,
+        input: VerifySoftwareTokenRequest,
+    ) -> Request<VerifySoftwareTokenRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Verifies the specified user attributes in the user pool.</p>
+    fn verify_user_attribute(
+        &self,
+        input: VerifyUserAttributeRequest,
+    ) -> Request<VerifyUserAttributeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddCustomAttributesRequest {
+    type Output = AddCustomAttributesResponse;
+    type Error = AddCustomAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AddCustomAttributes",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12625,25 +13306,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Adds the specified user to the specified group.</p> <p>Requires developer credentials.</p>
-    fn admin_add_user_to_group(
-        &self,
-        input: AdminAddUserToGroupRequest,
-    ) -> RusotoFuture<(), AdminAddUserToGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminAddUserToGroupRequest {
+    type Output = AdminAddUserToGroupResponse;
+    type Error = AdminAddUserToGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminAddUserToGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AdminAddUserToGroupResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -12653,23 +13342,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Confirms user registration as an admin without using a confirmation code. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_confirm_sign_up(
-        &self,
-        input: AdminConfirmSignUpRequest,
-    ) -> RusotoFuture<AdminConfirmSignUpResponse, AdminConfirmSignUpError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminConfirmSignUpRequest {
+    type Output = AdminConfirmSignUpResponse;
+    type Error = AdminConfirmSignUpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminConfirmSignUp",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12685,23 +13379,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
-    fn admin_create_user(
-        &self,
-        input: AdminCreateUserRequest,
-    ) -> RusotoFuture<AdminCreateUserResponse, AdminCreateUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminCreateUserRequest {
+    type Output = AdminCreateUserResponse;
+    type Error = AdminCreateUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminCreateUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12717,25 +13416,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_delete_user(
-        &self,
-        input: AdminDeleteUserRequest,
-    ) -> RusotoFuture<(), AdminDeleteUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminDeleteUserRequest {
+    type Output = AdminDeleteUserResponse;
+    type Error = AdminDeleteUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDeleteUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AdminDeleteUserResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -12746,23 +13453,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the user attributes in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_delete_user_attributes(
-        &self,
-        input: AdminDeleteUserAttributesRequest,
-    ) -> RusotoFuture<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminDeleteUserAttributesRequest {
+    type Output = AdminDeleteUserAttributesResponse;
+    type Error = AdminDeleteUserAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDeleteUserAttributes",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12775,23 +13487,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
-    fn admin_disable_provider_for_user(
-        &self,
-        input: AdminDisableProviderForUserRequest,
-    ) -> RusotoFuture<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminDisableProviderForUserRequest {
+    type Output = AdminDisableProviderForUserResponse;
+    type Error = AdminDisableProviderForUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDisableProviderForUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12804,23 +13521,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Disables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_disable_user(
-        &self,
-        input: AdminDisableUserRequest,
-    ) -> RusotoFuture<AdminDisableUserResponse, AdminDisableUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminDisableUserRequest {
+    type Output = AdminDisableUserResponse;
+    type Error = AdminDisableUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDisableUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12836,23 +13558,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Enables the specified user as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_enable_user(
-        &self,
-        input: AdminEnableUserRequest,
-    ) -> RusotoFuture<AdminEnableUserResponse, AdminEnableUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminEnableUserRequest {
+    type Output = AdminEnableUserResponse;
+    type Error = AdminEnableUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminEnableUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12868,25 +13595,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Forgets the device, as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_forget_device(
-        &self,
-        input: AdminForgetDeviceRequest,
-    ) -> RusotoFuture<(), AdminForgetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminForgetDeviceRequest {
+    type Output = AdminForgetDeviceResponse;
+    type Error = AdminForgetDeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminForgetDevice",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AdminForgetDeviceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -12897,23 +13632,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the device, as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_get_device(
-        &self,
-        input: AdminGetDeviceRequest,
-    ) -> RusotoFuture<AdminGetDeviceResponse, AdminGetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminGetDeviceRequest {
+    type Output = AdminGetDeviceResponse;
+    type Error = AdminGetDeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminGetDevice",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12929,23 +13669,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the specified user by user name in a user pool as an administrator. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_get_user(
-        &self,
-        input: AdminGetUserRequest,
-    ) -> RusotoFuture<AdminGetUserResponse, AdminGetUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminGetUserRequest {
+    type Output = AdminGetUserResponse;
+    type Error = AdminGetUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminGetUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12961,23 +13706,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Initiates the authentication flow, as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_initiate_auth(
-        &self,
-        input: AdminInitiateAuthRequest,
-    ) -> RusotoFuture<AdminInitiateAuthResponse, AdminInitiateAuthError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminInitiateAuthRequest {
+    type Output = AdminInitiateAuthResponse;
+    type Error = AdminInitiateAuthError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminInitiateAuth",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -12993,23 +13743,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
-    fn admin_link_provider_for_user(
-        &self,
-        input: AdminLinkProviderForUserRequest,
-    ) -> RusotoFuture<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminLinkProviderForUserRequest {
+    type Output = AdminLinkProviderForUserResponse;
+    type Error = AdminLinkProviderForUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminLinkProviderForUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13022,23 +13777,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists devices, as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_list_devices(
-        &self,
-        input: AdminListDevicesRequest,
-    ) -> RusotoFuture<AdminListDevicesResponse, AdminListDevicesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminListDevicesRequest {
+    type Output = AdminListDevicesResponse;
+    type Error = AdminListDevicesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminListDevices",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13054,23 +13814,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the groups that the user belongs to.</p> <p>Requires developer credentials.</p>
-    fn admin_list_groups_for_user(
-        &self,
-        input: AdminListGroupsForUserRequest,
-    ) -> RusotoFuture<AdminListGroupsForUserResponse, AdminListGroupsForUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminListGroupsForUserRequest {
+    type Output = AdminListGroupsForUserResponse;
+    type Error = AdminListGroupsForUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminListGroupsForUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13085,23 +13850,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
-    fn admin_list_user_auth_events(
-        &self,
-        input: AdminListUserAuthEventsRequest,
-    ) -> RusotoFuture<AdminListUserAuthEventsResponse, AdminListUserAuthEventsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminListUserAuthEventsRequest {
+    type Output = AdminListUserAuthEventsResponse;
+    type Error = AdminListUserAuthEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminListUserAuthEvents",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13114,25 +13884,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
-    fn admin_remove_user_from_group(
-        &self,
-        input: AdminRemoveUserFromGroupRequest,
-    ) -> RusotoFuture<(), AdminRemoveUserFromGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminRemoveUserFromGroupRequest {
+    type Output = AdminRemoveUserFromGroupResponse;
+    type Error = AdminRemoveUserFromGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminRemoveUserFromGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AdminRemoveUserFromGroupResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AdminRemoveUserFromGroupError::from_response(response))
@@ -13140,23 +13918,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>
-    fn admin_reset_user_password(
-        &self,
-        input: AdminResetUserPasswordRequest,
-    ) -> RusotoFuture<AdminResetUserPasswordResponse, AdminResetUserPasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminResetUserPasswordRequest {
+    type Output = AdminResetUserPasswordResponse;
+    type Error = AdminResetUserPasswordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminResetUserPassword",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13171,23 +13954,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_respond_to_auth_challenge(
-        &self,
-        input: AdminRespondToAuthChallengeRequest,
-    ) -> RusotoFuture<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminRespondToAuthChallengeRequest {
+    type Output = AdminRespondToAuthChallengeResponse;
+    type Error = AdminRespondToAuthChallengeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminRespondToAuthChallenge",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13200,23 +13988,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
-    fn admin_set_user_mfa_preference(
-        &self,
-        input: AdminSetUserMFAPreferenceRequest,
-    ) -> RusotoFuture<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminSetUserMFAPreferenceRequest {
+    type Output = AdminSetUserMFAPreferenceResponse;
+    type Error = AdminSetUserMFAPreferenceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminSetUserMFAPreference",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13229,22 +14022,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    fn admin_set_user_password(
-        &self,
-        input: AdminSetUserPasswordRequest,
-    ) -> RusotoFuture<AdminSetUserPasswordResponse, AdminSetUserPasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminSetUserPasswordRequest {
+    type Output = AdminSetUserPasswordResponse;
+    type Error = AdminSetUserPasswordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminSetUserPassword",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13259,23 +14058,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
-    fn admin_set_user_settings(
-        &self,
-        input: AdminSetUserSettingsRequest,
-    ) -> RusotoFuture<AdminSetUserSettingsResponse, AdminSetUserSettingsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminSetUserSettingsRequest {
+    type Output = AdminSetUserSettingsResponse;
+    type Error = AdminSetUserSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminSetUserSettings",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13290,23 +14094,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Provides feedback for an authentication event as to whether it was from a valid user. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
-    fn admin_update_auth_event_feedback(
-        &self,
-        input: AdminUpdateAuthEventFeedbackRequest,
-    ) -> RusotoFuture<AdminUpdateAuthEventFeedbackResponse, AdminUpdateAuthEventFeedbackError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminUpdateAuthEventFeedbackRequest {
+    type Output = AdminUpdateAuthEventFeedbackResponse;
+    type Error = AdminUpdateAuthEventFeedbackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUpdateAuthEventFeedback",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13319,23 +14128,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_update_device_status(
-        &self,
-        input: AdminUpdateDeviceStatusRequest,
-    ) -> RusotoFuture<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminUpdateDeviceStatusRequest {
+    type Output = AdminUpdateDeviceStatusResponse;
+    type Error = AdminUpdateDeviceStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUpdateDeviceStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13348,23 +14162,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified user's attributes, including developer attributes, as an administrator. Works on any user.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>In addition to updating user attributes, this API can also be used to mark phone and email as verified.</p> <p>Requires developer credentials.</p>
-    fn admin_update_user_attributes(
-        &self,
-        input: AdminUpdateUserAttributesRequest,
-    ) -> RusotoFuture<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminUpdateUserAttributesRequest {
+    type Output = AdminUpdateUserAttributesResponse;
+    type Error = AdminUpdateUserAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUpdateUserAttributes",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13377,23 +14196,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Signs out users from all devices, as an administrator.</p> <p>Requires developer credentials.</p>
-    fn admin_user_global_sign_out(
-        &self,
-        input: AdminUserGlobalSignOutRequest,
-    ) -> RusotoFuture<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AdminUserGlobalSignOutRequest {
+    type Output = AdminUserGlobalSignOutResponse;
+    type Error = AdminUserGlobalSignOutError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUserGlobalSignOut",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13408,23 +14232,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Returns a unique generated shared secret key code for the user account. The request takes an access token or a session string, but not both.</p>
-    fn associate_software_token(
-        &self,
-        input: AssociateSoftwareTokenRequest,
-    ) -> RusotoFuture<AssociateSoftwareTokenResponse, AssociateSoftwareTokenError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for AssociateSoftwareTokenRequest {
+    type Output = AssociateSoftwareTokenResponse;
+    type Error = AssociateSoftwareTokenError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AssociateSoftwareToken",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13439,23 +14268,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Changes the password for a specified user in a user pool.</p>
-    fn change_password(
-        &self,
-        input: ChangePasswordRequest,
-    ) -> RusotoFuture<ChangePasswordResponse, ChangePasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ChangePasswordRequest {
+    type Output = ChangePasswordResponse;
+    type Error = ChangePasswordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ChangePassword",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13471,23 +14305,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Confirms tracking of the device. This API call is the call that begins device tracking.</p>
-    fn confirm_device(
-        &self,
-        input: ConfirmDeviceRequest,
-    ) -> RusotoFuture<ConfirmDeviceResponse, ConfirmDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ConfirmDeviceRequest {
+    type Output = ConfirmDeviceResponse;
+    type Error = ConfirmDeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ConfirmDevice",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13503,23 +14342,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Allows a user to enter a confirmation code to reset a forgotten password.</p>
-    fn confirm_forgot_password(
-        &self,
-        input: ConfirmForgotPasswordRequest,
-    ) -> RusotoFuture<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ConfirmForgotPasswordRequest {
+    type Output = ConfirmForgotPasswordResponse;
+    type Error = ConfirmForgotPasswordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ConfirmForgotPassword",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13534,23 +14378,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Confirms registration of a user and handles the existing alias from a previous user.</p>
-    fn confirm_sign_up(
-        &self,
-        input: ConfirmSignUpRequest,
-    ) -> RusotoFuture<ConfirmSignUpResponse, ConfirmSignUpError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ConfirmSignUpRequest {
+    type Output = ConfirmSignUpResponse;
+    type Error = ConfirmSignUpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ConfirmSignUp",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13566,23 +14415,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new group in the specified user pool.</p> <p>Requires developer credentials.</p>
-    fn create_group(
-        &self,
-        input: CreateGroupRequest,
-    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for CreateGroupRequest {
+    type Output = CreateGroupResponse;
+    type Error = CreateGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13598,23 +14452,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates an identity provider for a user pool.</p>
-    fn create_identity_provider(
-        &self,
-        input: CreateIdentityProviderRequest,
-    ) -> RusotoFuture<CreateIdentityProviderResponse, CreateIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for CreateIdentityProviderRequest {
+    type Output = CreateIdentityProviderResponse;
+    type Error = CreateIdentityProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateIdentityProvider",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13629,23 +14488,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new OAuth2.0 resource server and defines custom scopes in it.</p>
-    fn create_resource_server(
-        &self,
-        input: CreateResourceServerRequest,
-    ) -> RusotoFuture<CreateResourceServerResponse, CreateResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for CreateResourceServerRequest {
+    type Output = CreateResourceServerResponse;
+    type Error = CreateResourceServerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateResourceServer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13660,23 +14524,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates the user import job.</p>
-    fn create_user_import_job(
-        &self,
-        input: CreateUserImportJobRequest,
-    ) -> RusotoFuture<CreateUserImportJobResponse, CreateUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for CreateUserImportJobRequest {
+    type Output = CreateUserImportJobResponse;
+    type Error = CreateUserImportJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserImportJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13691,23 +14560,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new Amazon Cognito user pool and sets the password policy for the pool.</p>
-    fn create_user_pool(
-        &self,
-        input: CreateUserPoolRequest,
-    ) -> RusotoFuture<CreateUserPoolResponse, CreateUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for CreateUserPoolRequest {
+    type Output = CreateUserPoolResponse;
+    type Error = CreateUserPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13723,23 +14597,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates the user pool client.</p>
-    fn create_user_pool_client(
-        &self,
-        input: CreateUserPoolClientRequest,
-    ) -> RusotoFuture<CreateUserPoolClientResponse, CreateUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for CreateUserPoolClientRequest {
+    type Output = CreateUserPoolClientResponse;
+    type Error = CreateUserPoolClientError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserPoolClient",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13754,23 +14633,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new domain for a user pool.</p>
-    fn create_user_pool_domain(
-        &self,
-        input: CreateUserPoolDomainRequest,
-    ) -> RusotoFuture<CreateUserPoolDomainResponse, CreateUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for CreateUserPoolDomainRequest {
+    type Output = CreateUserPoolDomainResponse;
+    type Error = CreateUserPoolDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserPoolDomain",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13785,22 +14669,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
-    fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteGroupRequest {
+    type Output = DeleteGroupResponse;
+    type Error = DeleteGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteGroupResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -13811,25 +14706,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an identity provider for a user pool.</p>
-    fn delete_identity_provider(
-        &self,
-        input: DeleteIdentityProviderRequest,
-    ) -> RusotoFuture<(), DeleteIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteIdentityProviderRequest {
+    type Output = DeleteIdentityProviderResponse;
+    type Error = DeleteIdentityProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteIdentityProvider",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteIdentityProviderResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -13839,25 +14742,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a resource server.</p>
-    fn delete_resource_server(
-        &self,
-        input: DeleteResourceServerRequest,
-    ) -> RusotoFuture<(), DeleteResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteResourceServerRequest {
+    type Output = DeleteResourceServerResponse;
+    type Error = DeleteResourceServerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteResourceServer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteResourceServerResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -13867,22 +14778,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Allows a user to delete himself or herself.</p>
-    fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteUserRequest {
+    type Output = DeleteUserResponse;
+    type Error = DeleteUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUser",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteUserResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -13893,23 +14815,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the attributes for a user.</p>
-    fn delete_user_attributes(
-        &self,
-        input: DeleteUserAttributesRequest,
-    ) -> RusotoFuture<DeleteUserAttributesResponse, DeleteUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteUserAttributesRequest {
+    type Output = DeleteUserAttributesResponse;
+    type Error = DeleteUserAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserAttributes",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -13924,25 +14851,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified Amazon Cognito user pool.</p>
-    fn delete_user_pool(
-        &self,
-        input: DeleteUserPoolRequest,
-    ) -> RusotoFuture<(), DeleteUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteUserPoolRequest {
+    type Output = DeleteUserPoolResponse;
+    type Error = DeleteUserPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteUserPoolResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -13953,25 +14888,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Allows the developer to delete the user pool client.</p>
-    fn delete_user_pool_client(
-        &self,
-        input: DeleteUserPoolClientRequest,
-    ) -> RusotoFuture<(), DeleteUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteUserPoolClientRequest {
+    type Output = DeleteUserPoolClientResponse;
+    type Error = DeleteUserPoolClientError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserPoolClient",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteUserPoolClientResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -13981,23 +14924,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a domain for a user pool.</p>
-    fn delete_user_pool_domain(
-        &self,
-        input: DeleteUserPoolDomainRequest,
-    ) -> RusotoFuture<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DeleteUserPoolDomainRequest {
+    type Output = DeleteUserPoolDomainResponse;
+    type Error = DeleteUserPoolDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserPoolDomain",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14012,23 +14960,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a specific identity provider.</p>
-    fn describe_identity_provider(
-        &self,
-        input: DescribeIdentityProviderRequest,
-    ) -> RusotoFuture<DescribeIdentityProviderResponse, DescribeIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DescribeIdentityProviderRequest {
+    type Output = DescribeIdentityProviderResponse;
+    type Error = DescribeIdentityProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeIdentityProvider",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14041,23 +14994,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Describes a resource server.</p>
-    fn describe_resource_server(
-        &self,
-        input: DescribeResourceServerRequest,
-    ) -> RusotoFuture<DescribeResourceServerResponse, DescribeResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DescribeResourceServerRequest {
+    type Output = DescribeResourceServerResponse;
+    type Error = DescribeResourceServerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeResourceServer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14072,23 +15030,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Describes the risk configuration.</p>
-    fn describe_risk_configuration(
-        &self,
-        input: DescribeRiskConfigurationRequest,
-    ) -> RusotoFuture<DescribeRiskConfigurationResponse, DescribeRiskConfigurationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DescribeRiskConfigurationRequest {
+    type Output = DescribeRiskConfigurationResponse;
+    type Error = DescribeRiskConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeRiskConfiguration",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14101,23 +15064,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Describes the user import job.</p>
-    fn describe_user_import_job(
-        &self,
-        input: DescribeUserImportJobRequest,
-    ) -> RusotoFuture<DescribeUserImportJobResponse, DescribeUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DescribeUserImportJobRequest {
+    type Output = DescribeUserImportJobResponse;
+    type Error = DescribeUserImportJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserImportJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14132,23 +15100,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Returns the configuration information and metadata of the specified user pool.</p>
-    fn describe_user_pool(
-        &self,
-        input: DescribeUserPoolRequest,
-    ) -> RusotoFuture<DescribeUserPoolResponse, DescribeUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DescribeUserPoolRequest {
+    type Output = DescribeUserPoolResponse;
+    type Error = DescribeUserPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14164,23 +15137,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Client method for returning the configuration information and metadata of the specified user pool app client.</p>
-    fn describe_user_pool_client(
-        &self,
-        input: DescribeUserPoolClientRequest,
-    ) -> RusotoFuture<DescribeUserPoolClientResponse, DescribeUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DescribeUserPoolClientRequest {
+    type Output = DescribeUserPoolClientResponse;
+    type Error = DescribeUserPoolClientError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserPoolClient",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14195,23 +15173,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a domain.</p>
-    fn describe_user_pool_domain(
-        &self,
-        input: DescribeUserPoolDomainRequest,
-    ) -> RusotoFuture<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for DescribeUserPoolDomainRequest {
+    type Output = DescribeUserPoolDomainResponse;
+    type Error = DescribeUserPoolDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserPoolDomain",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14226,22 +15209,33 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Forgets the specified device.</p>
-    fn forget_device(&self, input: ForgetDeviceRequest) -> RusotoFuture<(), ForgetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ForgetDeviceRequest {
+    type Output = ForgetDeviceResponse;
+    type Error = ForgetDeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ForgetDevice",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ForgetDeviceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -14252,23 +15246,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
-    fn forgot_password(
-        &self,
-        input: ForgotPasswordRequest,
-    ) -> RusotoFuture<ForgotPasswordResponse, ForgotPasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ForgotPasswordRequest {
+    type Output = ForgotPasswordResponse;
+    type Error = ForgotPasswordError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ForgotPassword",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14284,23 +15283,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the header information for the .csv file to be used as input for the user import job.</p>
-    fn get_csv_header(
-        &self,
-        input: GetCSVHeaderRequest,
-    ) -> RusotoFuture<GetCSVHeaderResponse, GetCSVHeaderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetCSVHeaderRequest {
+    type Output = GetCSVHeaderResponse;
+    type Error = GetCSVHeaderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetCSVHeader",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14316,23 +15320,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the device.</p>
-    fn get_device(
-        &self,
-        input: GetDeviceRequest,
-    ) -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetDeviceRequest {
+    type Output = GetDeviceResponse;
+    type Error = GetDeviceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetDevice",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14348,17 +15357,25 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
-    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetGroupRequest {
+    type Output = GetGroupResponse;
+    type Error = GetGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityProviderService.GetGroup");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14374,24 +15391,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the specified identity provider.</p>
-    fn get_identity_provider_by_identifier(
-        &self,
-        input: GetIdentityProviderByIdentifierRequest,
-    ) -> RusotoFuture<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>
-    {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetIdentityProviderByIdentifierRequest {
+    type Output = GetIdentityProviderByIdentifierResponse;
+    type Error = GetIdentityProviderByIdentifierError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetIdentityProviderByIdentifier",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14406,23 +15427,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>This method takes a user pool ID, and returns the signing certificate.</p>
-    fn get_signing_certificate(
-        &self,
-        input: GetSigningCertificateRequest,
-    ) -> RusotoFuture<GetSigningCertificateResponse, GetSigningCertificateError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetSigningCertificateRequest {
+    type Output = GetSigningCertificateResponse;
+    type Error = GetSigningCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetSigningCertificate",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14437,23 +15463,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the UI Customization information for a particular app client's app UI, if there is something set. If nothing is set for the particular client, but there is an existing pool level customization (app <code>clientId</code> will be <code>ALL</code>), then that is returned. If nothing is present, then an empty shape is returned.</p>
-    fn get_ui_customization(
-        &self,
-        input: GetUICustomizationRequest,
-    ) -> RusotoFuture<GetUICustomizationResponse, GetUICustomizationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetUICustomizationRequest {
+    type Output = GetUICustomizationResponse;
+    type Error = GetUICustomizationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetUICustomization",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14469,17 +15500,25 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the user attributes and metadata for a user.</p>
-    fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetUserRequest {
+    type Output = GetUserResponse;
+    type Error = GetUserError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityProviderService.GetUser");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<GetUserResponse, _>()
@@ -14494,24 +15533,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the user attribute verification code for the specified attribute name.</p>
-    fn get_user_attribute_verification_code(
-        &self,
-        input: GetUserAttributeVerificationCodeRequest,
-    ) -> RusotoFuture<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>
-    {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetUserAttributeVerificationCodeRequest {
+    type Output = GetUserAttributeVerificationCodeResponse;
+    type Error = GetUserAttributeVerificationCodeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetUserAttributeVerificationCode",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14526,23 +15569,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Gets the user pool multi-factor authentication (MFA) configuration.</p>
-    fn get_user_pool_mfa_config(
-        &self,
-        input: GetUserPoolMfaConfigRequest,
-    ) -> RusotoFuture<GetUserPoolMfaConfigResponse, GetUserPoolMfaConfigError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GetUserPoolMfaConfigRequest {
+    type Output = GetUserPoolMfaConfigResponse;
+    type Error = GetUserPoolMfaConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetUserPoolMfaConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14557,23 +15605,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Signs out users from all devices.</p>
-    fn global_sign_out(
-        &self,
-        input: GlobalSignOutRequest,
-    ) -> RusotoFuture<GlobalSignOutResponse, GlobalSignOutError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for GlobalSignOutRequest {
+    type Output = GlobalSignOutResponse;
+    type Error = GlobalSignOutError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GlobalSignOut",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14589,23 +15642,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Initiates the authentication flow.</p>
-    fn initiate_auth(
-        &self,
-        input: InitiateAuthRequest,
-    ) -> RusotoFuture<InitiateAuthResponse, InitiateAuthError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for InitiateAuthRequest {
+    type Output = InitiateAuthResponse;
+    type Error = InitiateAuthError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.InitiateAuth",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14621,23 +15679,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the devices.</p>
-    fn list_devices(
-        &self,
-        input: ListDevicesRequest,
-    ) -> RusotoFuture<ListDevicesResponse, ListDevicesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListDevicesRequest {
+    type Output = ListDevicesResponse;
+    type Error = ListDevicesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListDevices",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14653,23 +15716,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>
-    fn list_groups(
-        &self,
-        input: ListGroupsRequest,
-    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListGroupsRequest {
+    type Output = ListGroupsResponse;
+    type Error = ListGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListGroups",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14685,23 +15753,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists information about all identity providers for a user pool.</p>
-    fn list_identity_providers(
-        &self,
-        input: ListIdentityProvidersRequest,
-    ) -> RusotoFuture<ListIdentityProvidersResponse, ListIdentityProvidersError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListIdentityProvidersRequest {
+    type Output = ListIdentityProvidersResponse;
+    type Error = ListIdentityProvidersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListIdentityProviders",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14716,23 +15789,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the resource servers for a user pool.</p>
-    fn list_resource_servers(
-        &self,
-        input: ListResourceServersRequest,
-    ) -> RusotoFuture<ListResourceServersResponse, ListResourceServersError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListResourceServersRequest {
+    type Output = ListResourceServersResponse;
+    type Error = ListResourceServersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListResourceServers",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14747,23 +15825,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListTagsForResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14778,23 +15861,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the user import jobs.</p>
-    fn list_user_import_jobs(
-        &self,
-        input: ListUserImportJobsRequest,
-    ) -> RusotoFuture<ListUserImportJobsResponse, ListUserImportJobsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListUserImportJobsRequest {
+    type Output = ListUserImportJobsResponse;
+    type Error = ListUserImportJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUserImportJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14810,23 +15898,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the clients that have been created for the specified user pool.</p>
-    fn list_user_pool_clients(
-        &self,
-        input: ListUserPoolClientsRequest,
-    ) -> RusotoFuture<ListUserPoolClientsResponse, ListUserPoolClientsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListUserPoolClientsRequest {
+    type Output = ListUserPoolClientsResponse;
+    type Error = ListUserPoolClientsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUserPoolClients",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14841,23 +15934,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the user pools associated with an AWS account.</p>
-    fn list_user_pools(
-        &self,
-        input: ListUserPoolsRequest,
-    ) -> RusotoFuture<ListUserPoolsResponse, ListUserPoolsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListUserPoolsRequest {
+    type Output = ListUserPoolsResponse;
+    type Error = ListUserPoolsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUserPools",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14873,23 +15971,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the users in the Amazon Cognito user pool.</p>
-    fn list_users(
-        &self,
-        input: ListUsersRequest,
-    ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListUsersRequest {
+    type Output = ListUsersResponse;
+    type Error = ListUsersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUsers",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14905,23 +16008,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Lists the users in the specified group.</p> <p>Requires developer credentials.</p>
-    fn list_users_in_group(
-        &self,
-        input: ListUsersInGroupRequest,
-    ) -> RusotoFuture<ListUsersInGroupResponse, ListUsersInGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ListUsersInGroupRequest {
+    type Output = ListUsersInGroupResponse;
+    type Error = ListUsersInGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUsersInGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14937,23 +16045,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Resends the confirmation (for confirmation of registration) to a specific user in the user pool.</p>
-    fn resend_confirmation_code(
-        &self,
-        input: ResendConfirmationCodeRequest,
-    ) -> RusotoFuture<ResendConfirmationCodeResponse, ResendConfirmationCodeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for ResendConfirmationCodeRequest {
+    type Output = ResendConfirmationCodeResponse;
+    type Error = ResendConfirmationCodeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ResendConfirmationCode",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14968,23 +16081,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Responds to the authentication challenge.</p>
-    fn respond_to_auth_challenge(
-        &self,
-        input: RespondToAuthChallengeRequest,
-    ) -> RusotoFuture<RespondToAuthChallengeResponse, RespondToAuthChallengeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for RespondToAuthChallengeRequest {
+    type Output = RespondToAuthChallengeResponse;
+    type Error = RespondToAuthChallengeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.RespondToAuthChallenge",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -14999,23 +16117,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
-    fn set_risk_configuration(
-        &self,
-        input: SetRiskConfigurationRequest,
-    ) -> RusotoFuture<SetRiskConfigurationResponse, SetRiskConfigurationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for SetRiskConfigurationRequest {
+    type Output = SetRiskConfigurationResponse;
+    type Error = SetRiskConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetRiskConfiguration",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15030,23 +16153,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
-    fn set_ui_customization(
-        &self,
-        input: SetUICustomizationRequest,
-    ) -> RusotoFuture<SetUICustomizationResponse, SetUICustomizationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for SetUICustomizationRequest {
+    type Output = SetUICustomizationResponse;
+    type Error = SetUICustomizationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUICustomization",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15062,23 +16190,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
-    fn set_user_mfa_preference(
-        &self,
-        input: SetUserMFAPreferenceRequest,
-    ) -> RusotoFuture<SetUserMFAPreferenceResponse, SetUserMFAPreferenceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for SetUserMFAPreferenceRequest {
+    type Output = SetUserMFAPreferenceResponse;
+    type Error = SetUserMFAPreferenceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUserMFAPreference",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15093,23 +16226,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Set the user pool MFA configuration.</p>
-    fn set_user_pool_mfa_config(
-        &self,
-        input: SetUserPoolMfaConfigRequest,
-    ) -> RusotoFuture<SetUserPoolMfaConfigResponse, SetUserPoolMfaConfigError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for SetUserPoolMfaConfigRequest {
+    type Output = SetUserPoolMfaConfigResponse;
+    type Error = SetUserPoolMfaConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUserPoolMfaConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15124,23 +16262,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
-    fn set_user_settings(
-        &self,
-        input: SetUserSettingsRequest,
-    ) -> RusotoFuture<SetUserSettingsResponse, SetUserSettingsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for SetUserSettingsRequest {
+    type Output = SetUserSettingsResponse;
+    type Error = SetUserSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUserSettings",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15156,17 +16299,25 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>
-    fn sign_up(&self, input: SignUpRequest) -> RusotoFuture<SignUpResponse, SignUpError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for SignUpRequest {
+    type Output = SignUpResponse;
+    type Error = SignUpError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityProviderService.SignUp");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<SignUpResponse, _>()
@@ -15181,23 +16332,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Starts the user import.</p>
-    fn start_user_import_job(
-        &self,
-        input: StartUserImportJobRequest,
-    ) -> RusotoFuture<StartUserImportJobResponse, StartUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for StartUserImportJobRequest {
+    type Output = StartUserImportJobResponse;
+    type Error = StartUserImportJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.StartUserImportJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15213,23 +16369,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Stops the user import job.</p>
-    fn stop_user_import_job(
-        &self,
-        input: StopUserImportJobRequest,
-    ) -> RusotoFuture<StopUserImportJobResponse, StopUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for StopUserImportJobRequest {
+    type Output = StopUserImportJobResponse;
+    type Error = StopUserImportJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.StopUserImportJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15245,23 +16406,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Assigns a set of tags to an Amazon Cognito user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of a user pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both user pools. The value of this key might be <code>Test</code> for one user pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your user pools. In an IAM policy, you can constrain permissions for user pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. A user pool can have as many as 50 tags.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.TagResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15277,23 +16443,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified tags from an Amazon Cognito user pool. You can use this action up to 5 times per second, per account</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UntagResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15309,23 +16480,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
-    fn update_auth_event_feedback(
-        &self,
-        input: UpdateAuthEventFeedbackRequest,
-    ) -> RusotoFuture<UpdateAuthEventFeedbackResponse, UpdateAuthEventFeedbackError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateAuthEventFeedbackRequest {
+    type Output = UpdateAuthEventFeedbackResponse;
+    type Error = UpdateAuthEventFeedbackError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateAuthEventFeedback",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15338,23 +16514,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the device status.</p>
-    fn update_device_status(
-        &self,
-        input: UpdateDeviceStatusRequest,
-    ) -> RusotoFuture<UpdateDeviceStatusResponse, UpdateDeviceStatusError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateDeviceStatusRequest {
+    type Output = UpdateDeviceStatusResponse;
+    type Error = UpdateDeviceStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateDeviceStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15370,23 +16551,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>
-    fn update_group(
-        &self,
-        input: UpdateGroupRequest,
-    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateGroupRequest {
+    type Output = UpdateGroupResponse;
+    type Error = UpdateGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateGroup",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15402,23 +16588,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates identity provider information for a user pool.</p>
-    fn update_identity_provider(
-        &self,
-        input: UpdateIdentityProviderRequest,
-    ) -> RusotoFuture<UpdateIdentityProviderResponse, UpdateIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateIdentityProviderRequest {
+    type Output = UpdateIdentityProviderResponse;
+    type Error = UpdateIdentityProviderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateIdentityProvider",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15433,23 +16624,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the name and scopes of resource server. All other fields are read-only.</p>
-    fn update_resource_server(
-        &self,
-        input: UpdateResourceServerRequest,
-    ) -> RusotoFuture<UpdateResourceServerResponse, UpdateResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateResourceServerRequest {
+    type Output = UpdateResourceServerResponse;
+    type Error = UpdateResourceServerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateResourceServer",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15464,23 +16660,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Allows a user to update a specific attribute (one at a time).</p>
-    fn update_user_attributes(
-        &self,
-        input: UpdateUserAttributesRequest,
-    ) -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateUserAttributesRequest {
+    type Output = UpdateUserAttributesResponse;
+    type Error = UpdateUserAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserAttributes",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15495,23 +16696,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>
-    fn update_user_pool(
-        &self,
-        input: UpdateUserPoolRequest,
-    ) -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateUserPoolRequest {
+    type Output = UpdateUserPoolResponse;
+    type Error = UpdateUserPoolError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserPool",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15527,23 +16733,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>
-    fn update_user_pool_client(
-        &self,
-        input: UpdateUserPoolClientRequest,
-    ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateUserPoolClientRequest {
+    type Output = UpdateUserPoolClientResponse;
+    type Error = UpdateUserPoolClientError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserPoolClient",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15558,23 +16769,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
-    fn update_user_pool_domain(
-        &self,
-        input: UpdateUserPoolDomainRequest,
-    ) -> RusotoFuture<UpdateUserPoolDomainResponse, UpdateUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for UpdateUserPoolDomainRequest {
+    type Output = UpdateUserPoolDomainResponse;
+    type Error = UpdateUserPoolDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserPoolDomain",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15589,23 +16805,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
-    fn verify_software_token(
-        &self,
-        input: VerifySoftwareTokenRequest,
-    ) -> RusotoFuture<VerifySoftwareTokenResponse, VerifySoftwareTokenError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for VerifySoftwareTokenRequest {
+    type Output = VerifySoftwareTokenResponse;
+    type Error = VerifySoftwareTokenError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.VerifySoftwareToken",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -15620,23 +16841,28 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             }
         })
     }
+}
 
-    /// <p>Verifies the specified user attributes in the user pool.</p>
-    fn verify_user_attribute(
-        &self,
-        input: VerifyUserAttributeRequest,
-    ) -> RusotoFuture<VerifyUserAttributeResponse, VerifyUserAttributeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+impl ServiceRequest for VerifyUserAttributeRequest {
+    type Output = VerifyUserAttributeResponse;
+    type Error = VerifyUserAttributeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.VerifyUserAttribute",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -184,6 +185,19 @@ impl BatchDeleteAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchDeleteAttributesResponse {}
+
+struct BatchDeleteAttributesResponseDeserializer;
+impl BatchDeleteAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BatchDeleteAttributesResponse, XmlParseError> {
+        Ok(BatchDeleteAttributesResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct BatchPutAttributesRequest {
     /// <p>The name of the domain in which the attributes are being stored.</p>
     pub domain_name: String,
@@ -210,6 +224,19 @@ impl BatchPutAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchPutAttributesResponse {}
+
+struct BatchPutAttributesResponseDeserializer;
+impl BatchPutAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BatchPutAttributesResponse, XmlParseError> {
+        Ok(BatchPutAttributesResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDomainRequest {
     /// <p>The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, &#39;_&#39;, &#39;-&#39;, and &#39;.&#39;.</p>
     pub domain_name: String,
@@ -228,6 +255,19 @@ impl CreateDomainRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateDomainResponse {}
+
+struct CreateDomainResponseDeserializer;
+impl CreateDomainResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDomainResponse, XmlParseError> {
+        Ok(CreateDomainResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletableItem {
     pub attributes: Option<Vec<Attribute>>,
@@ -306,6 +346,19 @@ impl DeleteAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteAttributesResponse {}
+
+struct DeleteAttributesResponseDeserializer;
+impl DeleteAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteAttributesResponse, XmlParseError> {
+        Ok(DeleteAttributesResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDomainRequest {
     /// <p>The name of the domain to delete.</p>
     pub domain_name: String,
@@ -324,6 +377,19 @@ impl DeleteDomainRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDomainResponse {}
+
+struct DeleteDomainResponseDeserializer;
+impl DeleteDomainResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDomainResponse, XmlParseError> {
+        Ok(DeleteDomainResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DomainMetadataRequest {
     /// <p>The name of the domain for which to display the metadata of.</p>
@@ -344,7 +410,7 @@ impl DomainMetadataRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DomainMetadataResult {
+pub struct DomainMetadataResponse {
     /// <p>The number of unique attribute names in the domain.</p>
     pub attribute_name_count: Option<i64>,
     /// <p>The total size of all unique attribute names in the domain, in bytes.</p>
@@ -361,14 +427,14 @@ pub struct DomainMetadataResult {
     pub timestamp: Option<i64>,
 }
 
-struct DomainMetadataResultDeserializer;
-impl DomainMetadataResultDeserializer {
+struct DomainMetadataResponseDeserializer;
+impl DomainMetadataResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DomainMetadataResult, XmlParseError> {
-        deserialize_elements::<_, DomainMetadataResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DomainMetadataResponse, XmlParseError> {
+        deserialize_elements::<_, DomainMetadataResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AttributeNameCount" => {
                     obj.attribute_name_count = Some(IntegerDeserializer::deserialize(
@@ -474,19 +540,19 @@ impl GetAttributesRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetAttributesResult {
+pub struct GetAttributesResponse {
     /// <p>The list of attributes returned by the operation.</p>
     pub attributes: Option<Vec<Attribute>>,
 }
 
-struct GetAttributesResultDeserializer;
-impl GetAttributesResultDeserializer {
+struct GetAttributesResponseDeserializer;
+impl GetAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetAttributesResult, XmlParseError> {
-        deserialize_elements::<_, GetAttributesResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<GetAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, GetAttributesResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Attribute" => {
                     obj.attributes
@@ -600,21 +666,21 @@ impl ListDomainsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListDomainsResult {
+pub struct ListDomainsResponse {
     /// <p>A list of domain names that match the expression.</p>
     pub domain_names: Option<Vec<String>>,
     /// <p>An opaque token indicating that there are more domains than the specified <code>MaxNumberOfDomains</code> still available.</p>
     pub next_token: Option<String>,
 }
 
-struct ListDomainsResultDeserializer;
-impl ListDomainsResultDeserializer {
+struct ListDomainsResponseDeserializer;
+impl ListDomainsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListDomainsResult, XmlParseError> {
-        deserialize_elements::<_, ListDomainsResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<ListDomainsResponse, XmlParseError> {
+        deserialize_elements::<_, ListDomainsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DomainName" => {
                     obj.domain_names.get_or_insert(vec![]).extend(
@@ -679,6 +745,19 @@ impl PutAttributesRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutAttributesResponse {}
+
+struct PutAttributesResponseDeserializer;
+impl PutAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutAttributesResponse, XmlParseError> {
+        Ok(PutAttributesResponse::default())
+    }
+}
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplaceableAttribute {
@@ -789,21 +868,21 @@ impl SelectRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SelectResult {
+pub struct SelectResponse {
     /// <p>A list of items that match the select expression.</p>
     pub items: Option<Vec<Item>>,
     /// <p>An opaque token indicating that more items than <code>MaxNumberOfItems</code> were matched, the response size exceeded 1 megabyte, or the execution time exceeded 5 seconds.</p>
     pub next_token: Option<String>,
 }
 
-struct SelectResultDeserializer;
-impl SelectResultDeserializer {
+struct SelectResponseDeserializer;
+impl SelectResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SelectResult, XmlParseError> {
-        deserialize_elements::<_, SelectResult, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<SelectResponse, XmlParseError> {
+        deserialize_elements::<_, SelectResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Item" => {
                     obj.items
@@ -1588,49 +1667,38 @@ pub trait SimpleDb {
     fn batch_delete_attributes(
         &self,
         input: BatchDeleteAttributesRequest,
-    ) -> RusotoFuture<(), BatchDeleteAttributesError>;
+    ) -> Request<BatchDeleteAttributesRequest>;
 
     /// <p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", "second_value" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>
     fn batch_put_attributes(
         &self,
         input: BatchPutAttributesRequest,
-    ) -> RusotoFuture<(), BatchPutAttributesError>;
+    ) -> Request<BatchPutAttributesRequest>;
 
     /// <p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href="http://aws.amazon.com/contact-us/simpledb-limit-request/"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>
-    fn create_domain(&self, input: CreateDomainRequest) -> RusotoFuture<(), CreateDomainError>;
+    fn create_domain(&self, input: CreateDomainRequest) -> Request<CreateDomainRequest>;
 
     /// <p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>
-    fn delete_attributes(
-        &self,
-        input: DeleteAttributesRequest,
-    ) -> RusotoFuture<(), DeleteAttributesError>;
+    fn delete_attributes(&self, input: DeleteAttributesRequest)
+        -> Request<DeleteAttributesRequest>;
 
     /// <p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>
-    fn delete_domain(&self, input: DeleteDomainRequest) -> RusotoFuture<(), DeleteDomainError>;
+    fn delete_domain(&self, input: DeleteDomainRequest) -> Request<DeleteDomainRequest>;
 
     /// <p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>
-    fn domain_metadata(
-        &self,
-        input: DomainMetadataRequest,
-    ) -> RusotoFuture<DomainMetadataResult, DomainMetadataError>;
+    fn domain_metadata(&self, input: DomainMetadataRequest) -> Request<DomainMetadataRequest>;
 
     /// <p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>
-    fn get_attributes(
-        &self,
-        input: GetAttributesRequest,
-    ) -> RusotoFuture<GetAttributesResult, GetAttributesError>;
+    fn get_attributes(&self, input: GetAttributesRequest) -> Request<GetAttributesRequest>;
 
     /// <p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href="#MaxNumberOfDomains">MaxNumberOfDomains</a>. A <a href="#NextToken">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>
-    fn list_domains(
-        &self,
-        input: ListDomainsRequest,
-    ) -> RusotoFuture<ListDomainsResult, ListDomainsError>;
+    fn list_domains(&self, input: ListDomainsRequest) -> Request<ListDomainsRequest>;
 
     /// <p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", second_value" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>
-    fn put_attributes(&self, input: PutAttributesRequest) -> RusotoFuture<(), PutAttributesError>;
+    fn put_attributes(&self, input: PutAttributesRequest) -> Request<PutAttributesRequest>;
 
     /// <p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>
-    fn select(&self, input: SelectRequest) -> RusotoFuture<SelectResult, SelectError>;
+    fn select(&self, input: SelectRequest) -> Request<SelectRequest>;
 }
 /// A client for the Amazon SimpleDB API.
 #[derive(Clone)]
@@ -1673,42 +1741,131 @@ impl SimpleDb for SimpleDbClient {
     fn batch_delete_attributes(
         &self,
         input: BatchDeleteAttributesRequest,
-    ) -> RusotoFuture<(), BatchDeleteAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "BatchDeleteAttributes");
-        params.put("Version", "2009-04-15");
-        BatchDeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
-        request.set_content_type("application/x-www-form-urlencoded".to_owned());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(BatchDeleteAttributesError::from_response(response))
-                }));
-            }
-
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+    ) -> Request<BatchDeleteAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
     }
 
     /// <p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", "second_value" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>
     fn batch_put_attributes(
         &self,
         input: BatchPutAttributesRequest,
-    ) -> RusotoFuture<(), BatchPutAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+    ) -> Request<BatchPutAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href="http://aws.amazon.com/contact-us/simpledb-limit-request/"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>
+    fn create_domain(&self, input: CreateDomainRequest) -> Request<CreateDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>
+    fn delete_attributes(
+        &self,
+        input: DeleteAttributesRequest,
+    ) -> Request<DeleteAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>
+    fn delete_domain(&self, input: DeleteDomainRequest) -> Request<DeleteDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>
+    fn domain_metadata(&self, input: DomainMetadataRequest) -> Request<DomainMetadataRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>
+    fn get_attributes(&self, input: GetAttributesRequest) -> Request<GetAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href="#MaxNumberOfDomains">MaxNumberOfDomains</a>. A <a href="#NextToken">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>
+    fn list_domains(&self, input: ListDomainsRequest) -> Request<ListDomainsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", second_value" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>
+    fn put_attributes(&self, input: PutAttributesRequest) -> Request<PutAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>
+    fn select(&self, input: SelectRequest) -> Request<SelectRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchDeleteAttributesRequest {
+    type Output = BatchDeleteAttributesResponse;
+    type Error = BatchDeleteAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "BatchDeleteAttributes");
+        params.put("Version", "2009-04-15");
+        BatchDeleteAttributesRequestSerializer::serialize(&mut params, "", &self);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        dispatcher.dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(BatchDeleteAttributesError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = BatchDeleteAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = BatchDeleteAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+}
+
+impl ServiceRequest for BatchPutAttributesRequest {
+    type Output = BatchPutAttributesResponse;
+    type Error = BatchPutAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BatchPutAttributes");
         params.put("Version", "2009-04-15");
-        BatchPutAttributesRequestSerializer::serialize(&mut params, "", &input);
+        BatchPutAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1718,22 +1875,50 @@ impl SimpleDb for SimpleDbClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = BatchPutAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = BatchPutAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href="http://aws.amazon.com/contact-us/simpledb-limit-request/"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>
-    fn create_domain(&self, input: CreateDomainRequest) -> RusotoFuture<(), CreateDomainError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for CreateDomainRequest {
+    type Output = CreateDomainResponse;
+    type Error = CreateDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDomain");
         params.put("Version", "2009-04-15");
-        CreateDomainRequestSerializer::serialize(&mut params, "", &input);
+        CreateDomainRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1743,25 +1928,50 @@ impl SimpleDb for SimpleDbClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateDomainResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateDomainResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>
-    fn delete_attributes(
-        &self,
-        input: DeleteAttributesRequest,
-    ) -> RusotoFuture<(), DeleteAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for DeleteAttributesRequest {
+    type Output = DeleteAttributesResponse;
+    type Error = DeleteAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAttributes");
         params.put("Version", "2009-04-15");
-        DeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
+        DeleteAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1771,22 +1981,50 @@ impl SimpleDb for SimpleDbClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>
-    fn delete_domain(&self, input: DeleteDomainRequest) -> RusotoFuture<(), DeleteDomainError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for DeleteDomainRequest {
+    type Output = DeleteDomainResponse;
+    type Error = DeleteDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDomain");
         params.put("Version", "2009-04-15");
-        DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
+        DeleteDomainRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1796,25 +2034,50 @@ impl SimpleDb for SimpleDbClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteDomainResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDomainResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>
-    fn domain_metadata(
-        &self,
-        input: DomainMetadataRequest,
-    ) -> RusotoFuture<DomainMetadataResult, DomainMetadataError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for DomainMetadataRequest {
+    type Output = DomainMetadataResponse;
+    type Error = DomainMetadataError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DomainMetadata");
         params.put("Version", "2009-04-15");
-        DomainMetadataRequestSerializer::serialize(&mut params, "", &input);
+        DomainMetadataRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1828,7 +2091,7 @@ impl SimpleDb for SimpleDbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DomainMetadataResult::default();
+                    result = DomainMetadataResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1838,7 +2101,7 @@ impl SimpleDb for SimpleDbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DomainMetadataResultDeserializer::deserialize(
+                    result = DomainMetadataResponseDeserializer::deserialize(
                         "DomainMetadataResult",
                         &mut stack,
                     )?;
@@ -1850,22 +2113,27 @@ impl SimpleDb for SimpleDbClient {
             }))
         })
     }
+}
 
-    /// <p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>
-    fn get_attributes(
-        &self,
-        input: GetAttributesRequest,
-    ) -> RusotoFuture<GetAttributesResult, GetAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for GetAttributesRequest {
+    type Output = GetAttributesResponse;
+    type Error = GetAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "GetAttributes");
         params.put("Version", "2009-04-15");
-        GetAttributesRequestSerializer::serialize(&mut params, "", &input);
+        GetAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1879,7 +2147,7 @@ impl SimpleDb for SimpleDbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = GetAttributesResult::default();
+                    result = GetAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1889,7 +2157,7 @@ impl SimpleDb for SimpleDbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = GetAttributesResultDeserializer::deserialize(
+                    result = GetAttributesResponseDeserializer::deserialize(
                         "GetAttributesResult",
                         &mut stack,
                     )?;
@@ -1901,22 +2169,27 @@ impl SimpleDb for SimpleDbClient {
             }))
         })
     }
+}
 
-    /// <p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href="#MaxNumberOfDomains">MaxNumberOfDomains</a>. A <a href="#NextToken">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>
-    fn list_domains(
-        &self,
-        input: ListDomainsRequest,
-    ) -> RusotoFuture<ListDomainsResult, ListDomainsError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for ListDomainsRequest {
+    type Output = ListDomainsResponse;
+    type Error = ListDomainsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListDomains");
         params.put("Version", "2009-04-15");
-        ListDomainsRequestSerializer::serialize(&mut params, "", &input);
+        ListDomainsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1930,7 +2203,7 @@ impl SimpleDb for SimpleDbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ListDomainsResult::default();
+                    result = ListDomainsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -1940,7 +2213,7 @@ impl SimpleDb for SimpleDbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ListDomainsResultDeserializer::deserialize(
+                    result = ListDomainsResponseDeserializer::deserialize(
                         "ListDomainsResult",
                         &mut stack,
                     )?;
@@ -1952,19 +2225,27 @@ impl SimpleDb for SimpleDbClient {
             }))
         })
     }
+}
 
-    /// <p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", second_value" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>
-    fn put_attributes(&self, input: PutAttributesRequest) -> RusotoFuture<(), PutAttributesError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for PutAttributesRequest {
+    type Output = PutAttributesResponse;
+    type Error = PutAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutAttributes");
         params.put("Version", "2009-04-15");
-        PutAttributesRequestSerializer::serialize(&mut params, "", &input);
+        PutAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -1974,22 +2255,50 @@ impl SimpleDb for SimpleDbClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutAttributesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutAttributesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>
-    fn select(&self, input: SelectRequest) -> RusotoFuture<SelectResult, SelectError> {
-        let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
+impl ServiceRequest for SelectRequest {
+    type Output = SelectResponse;
+    type Error = SelectError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sdb", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "Select");
         params.put("Version", "2009-04-15");
-        SelectRequestSerializer::serialize(&mut params, "", &input);
+        SelectRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -2003,7 +2312,7 @@ impl SimpleDb for SimpleDbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SelectResult::default();
+                    result = SelectResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -2013,7 +2322,7 @@ impl SimpleDb for SimpleDbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SelectResultDeserializer::deserialize("SelectResult", &mut stack)?;
+                    result = SelectResponseDeserializer::deserialize("SelectResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }

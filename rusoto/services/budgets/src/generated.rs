@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -1337,91 +1338,67 @@ impl Error for UpdateSubscriberError {
 /// Trait representing the capabilities of the AWSBudgets API. AWSBudgets clients implement this trait.
 pub trait Budgets {
     /// <p><p>Creates a budget and, if included, notifications and subscribers. </p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_CreateBudget.html#API_CreateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn create_budget(
-        &self,
-        input: CreateBudgetRequest,
-    ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError>;
+    fn create_budget(&self, input: CreateBudgetRequest) -> Request<CreateBudgetRequest>;
 
     /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
     fn create_notification(
         &self,
         input: CreateNotificationRequest,
-    ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError>;
+    ) -> Request<CreateNotificationRequest>;
 
     /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
-    fn create_subscriber(
-        &self,
-        input: CreateSubscriberRequest,
-    ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError>;
+    fn create_subscriber(&self, input: CreateSubscriberRequest)
+        -> Request<CreateSubscriberRequest>;
 
     /// <p><p>Deletes a budget. You can delete your budget at any time.</p> <important> <p>Deleting a budget also deletes the notifications and subscribers that are associated with that budget.</p> </important></p>
-    fn delete_budget(
-        &self,
-        input: DeleteBudgetRequest,
-    ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError>;
+    fn delete_budget(&self, input: DeleteBudgetRequest) -> Request<DeleteBudgetRequest>;
 
     /// <p><p>Deletes a notification.</p> <important> <p>Deleting a notification also deletes the subscribers that are associated with the notification.</p> </important></p>
     fn delete_notification(
         &self,
         input: DeleteNotificationRequest,
-    ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError>;
+    ) -> Request<DeleteNotificationRequest>;
 
     /// <p><p>Deletes a subscriber.</p> <important> <p>Deleting the last subscriber to a notification also deletes the notification.</p> </important></p>
-    fn delete_subscriber(
-        &self,
-        input: DeleteSubscriberRequest,
-    ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError>;
+    fn delete_subscriber(&self, input: DeleteSubscriberRequest)
+        -> Request<DeleteSubscriberRequest>;
 
     /// <p><p>Describes a budget.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudget.html#API_DescribeBudget_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budget(
-        &self,
-        input: DescribeBudgetRequest,
-    ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError>;
+    fn describe_budget(&self, input: DescribeBudgetRequest) -> Request<DescribeBudgetRequest>;
 
     /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
     fn describe_budget_performance_history(
         &self,
         input: DescribeBudgetPerformanceHistoryRequest,
-    ) -> RusotoFuture<DescribeBudgetPerformanceHistoryResponse, DescribeBudgetPerformanceHistoryError>;
+    ) -> Request<DescribeBudgetPerformanceHistoryRequest>;
 
     /// <p><p>Lists the budgets that are associated with an account.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudgets.html#API_DescribeBudgets_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budgets(
-        &self,
-        input: DescribeBudgetsRequest,
-    ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError>;
+    fn describe_budgets(&self, input: DescribeBudgetsRequest) -> Request<DescribeBudgetsRequest>;
 
     /// <p>Lists the notifications that are associated with a budget.</p>
     fn describe_notifications_for_budget(
         &self,
         input: DescribeNotificationsForBudgetRequest,
-    ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
+    ) -> Request<DescribeNotificationsForBudgetRequest>;
 
     /// <p>Lists the subscribers that are associated with a notification.</p>
     fn describe_subscribers_for_notification(
         &self,
         input: DescribeSubscribersForNotificationRequest,
-    ) -> RusotoFuture<
-        DescribeSubscribersForNotificationResponse,
-        DescribeSubscribersForNotificationError,
-    >;
+    ) -> Request<DescribeSubscribersForNotificationRequest>;
 
     /// <p><p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When you modify a budget, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_UpdateBudget.html#API_UpdateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn update_budget(
-        &self,
-        input: UpdateBudgetRequest,
-    ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError>;
+    fn update_budget(&self, input: UpdateBudgetRequest) -> Request<UpdateBudgetRequest>;
 
     /// <p>Updates a notification.</p>
     fn update_notification(
         &self,
         input: UpdateNotificationRequest,
-    ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError>;
+    ) -> Request<UpdateNotificationRequest>;
 
     /// <p>Updates a subscriber.</p>
-    fn update_subscriber(
-        &self,
-        input: UpdateSubscriberRequest,
-    ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError>;
+    fn update_subscriber(&self, input: UpdateSubscriberRequest)
+        -> Request<UpdateSubscriberRequest>;
 }
 /// A client for the AWSBudgets API.
 #[derive(Clone)]
@@ -1461,18 +1438,120 @@ impl BudgetsClient {
 
 impl Budgets for BudgetsClient {
     /// <p><p>Creates a budget and, if included, notifications and subscribers. </p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_CreateBudget.html#API_CreateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn create_budget(
+    fn create_budget(&self, input: CreateBudgetRequest) -> Request<CreateBudgetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
+    fn create_notification(
         &self,
-        input: CreateBudgetRequest,
-    ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        input: CreateNotificationRequest,
+    ) -> Request<CreateNotificationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
+    fn create_subscriber(
+        &self,
+        input: CreateSubscriberRequest,
+    ) -> Request<CreateSubscriberRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a budget. You can delete your budget at any time.</p> <important> <p>Deleting a budget also deletes the notifications and subscribers that are associated with that budget.</p> </important></p>
+    fn delete_budget(&self, input: DeleteBudgetRequest) -> Request<DeleteBudgetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a notification.</p> <important> <p>Deleting a notification also deletes the subscribers that are associated with the notification.</p> </important></p>
+    fn delete_notification(
+        &self,
+        input: DeleteNotificationRequest,
+    ) -> Request<DeleteNotificationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a subscriber.</p> <important> <p>Deleting the last subscriber to a notification also deletes the notification.</p> </important></p>
+    fn delete_subscriber(
+        &self,
+        input: DeleteSubscriberRequest,
+    ) -> Request<DeleteSubscriberRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describes a budget.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudget.html#API_DescribeBudget_Examples">Examples</a> section. </p> </important></p>
+    fn describe_budget(&self, input: DescribeBudgetRequest) -> Request<DescribeBudgetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
+    fn describe_budget_performance_history(
+        &self,
+        input: DescribeBudgetPerformanceHistoryRequest,
+    ) -> Request<DescribeBudgetPerformanceHistoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Lists the budgets that are associated with an account.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudgets.html#API_DescribeBudgets_Examples">Examples</a> section. </p> </important></p>
+    fn describe_budgets(&self, input: DescribeBudgetsRequest) -> Request<DescribeBudgetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the notifications that are associated with a budget.</p>
+    fn describe_notifications_for_budget(
+        &self,
+        input: DescribeNotificationsForBudgetRequest,
+    ) -> Request<DescribeNotificationsForBudgetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the subscribers that are associated with a notification.</p>
+    fn describe_subscribers_for_notification(
+        &self,
+        input: DescribeSubscribersForNotificationRequest,
+    ) -> Request<DescribeSubscribersForNotificationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When you modify a budget, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_UpdateBudget.html#API_UpdateBudget_Examples">Examples</a> section. </p> </important></p>
+    fn update_budget(&self, input: UpdateBudgetRequest) -> Request<UpdateBudgetRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a notification.</p>
+    fn update_notification(
+        &self,
+        input: UpdateNotificationRequest,
+    ) -> Request<UpdateNotificationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a subscriber.</p>
+    fn update_subscriber(
+        &self,
+        input: UpdateSubscriberRequest,
+    ) -> Request<UpdateSubscriberRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateBudgetRequest {
+    type Output = CreateBudgetResponse;
+    type Error = CreateBudgetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateBudget");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1488,20 +1567,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a notification. You must create the budget before you create the associated notification.</p>
-    fn create_notification(
-        &self,
-        input: CreateNotificationRequest,
-    ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for CreateNotificationRequest {
+    type Output = CreateNotificationResponse;
+    type Error = CreateNotificationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateNotification");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1517,20 +1601,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a subscriber. You must create the associated budget and notification before you create the subscriber.</p>
-    fn create_subscriber(
-        &self,
-        input: CreateSubscriberRequest,
-    ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for CreateSubscriberRequest {
+    type Output = CreateSubscriberResponse;
+    type Error = CreateSubscriberError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateSubscriber");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1546,20 +1635,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a budget. You can delete your budget at any time.</p> <important> <p>Deleting a budget also deletes the notifications and subscribers that are associated with that budget.</p> </important></p>
-    fn delete_budget(
-        &self,
-        input: DeleteBudgetRequest,
-    ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DeleteBudgetRequest {
+    type Output = DeleteBudgetResponse;
+    type Error = DeleteBudgetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteBudget");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1575,20 +1669,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a notification.</p> <important> <p>Deleting a notification also deletes the subscribers that are associated with the notification.</p> </important></p>
-    fn delete_notification(
-        &self,
-        input: DeleteNotificationRequest,
-    ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DeleteNotificationRequest {
+    type Output = DeleteNotificationResponse;
+    type Error = DeleteNotificationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteNotification");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1604,20 +1703,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a subscriber.</p> <important> <p>Deleting the last subscriber to a notification also deletes the notification.</p> </important></p>
-    fn delete_subscriber(
-        &self,
-        input: DeleteSubscriberRequest,
-    ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DeleteSubscriberRequest {
+    type Output = DeleteSubscriberResponse;
+    type Error = DeleteSubscriberError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteSubscriber");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1633,20 +1737,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p><p>Describes a budget.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudget.html#API_DescribeBudget_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budget(
-        &self,
-        input: DescribeBudgetRequest,
-    ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DescribeBudgetRequest {
+    type Output = DescribeBudgetResponse;
+    type Error = DescribeBudgetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DescribeBudget");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1662,24 +1771,28 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
-    fn describe_budget_performance_history(
-        &self,
-        input: DescribeBudgetPerformanceHistoryRequest,
-    ) -> RusotoFuture<DescribeBudgetPerformanceHistoryResponse, DescribeBudgetPerformanceHistoryError>
-    {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DescribeBudgetPerformanceHistoryRequest {
+    type Output = DescribeBudgetPerformanceHistoryResponse;
+    type Error = DescribeBudgetPerformanceHistoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeBudgetPerformanceHistory",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1694,20 +1807,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p><p>Lists the budgets that are associated with an account.</p> <important> <p>The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_DescribeBudgets.html#API_DescribeBudgets_Examples">Examples</a> section. </p> </important></p>
-    fn describe_budgets(
-        &self,
-        input: DescribeBudgetsRequest,
-    ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DescribeBudgetsRequest {
+    type Output = DescribeBudgetsResponse;
+    type Error = DescribeBudgetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DescribeBudgets");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1723,24 +1841,28 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the notifications that are associated with a budget.</p>
-    fn describe_notifications_for_budget(
-        &self,
-        input: DescribeNotificationsForBudgetRequest,
-    ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>
-    {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DescribeNotificationsForBudgetRequest {
+    type Output = DescribeNotificationsForBudgetResponse;
+    type Error = DescribeNotificationsForBudgetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeNotificationsForBudget",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1753,26 +1875,28 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p>Lists the subscribers that are associated with a notification.</p>
-    fn describe_subscribers_for_notification(
-        &self,
-        input: DescribeSubscribersForNotificationRequest,
-    ) -> RusotoFuture<
-        DescribeSubscribersForNotificationResponse,
-        DescribeSubscribersForNotificationError,
-    > {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for DescribeSubscribersForNotificationRequest {
+    type Output = DescribeSubscribersForNotificationResponse;
+    type Error = DescribeSubscribersForNotificationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeSubscribersForNotification",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1787,20 +1911,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p><p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When you modify a budget, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p> <important> <p>Only one of <code>BudgetLimit</code> or <code>PlannedBudgetLimits</code> can be present in the syntax at one time. Use the syntax that matches your case. The Request Syntax section shows the <code>BudgetLimit</code> syntax. For <code>PlannedBudgetLimits</code>, see the <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_budgets_UpdateBudget.html#API_UpdateBudget_Examples">Examples</a> section. </p> </important></p>
-    fn update_budget(
-        &self,
-        input: UpdateBudgetRequest,
-    ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for UpdateBudgetRequest {
+    type Output = UpdateBudgetResponse;
+    type Error = UpdateBudgetError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateBudget");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1816,20 +1945,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p>Updates a notification.</p>
-    fn update_notification(
-        &self,
-        input: UpdateNotificationRequest,
-    ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for UpdateNotificationRequest {
+    type Output = UpdateNotificationResponse;
+    type Error = UpdateNotificationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateNotification");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1845,20 +1979,25 @@ impl Budgets for BudgetsClient {
             }
         })
     }
+}
 
-    /// <p>Updates a subscriber.</p>
-    fn update_subscriber(
-        &self,
-        input: UpdateSubscriberRequest,
-    ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+impl ServiceRequest for UpdateSubscriberRequest {
+    type Output = UpdateSubscriberResponse;
+    type Error = UpdateSubscriberError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "budgets", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateSubscriber");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

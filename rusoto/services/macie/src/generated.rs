@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -30,6 +31,10 @@ pub struct AssociateMemberAccountRequest {
     #[serde(rename = "memberAccountId")]
     pub member_account_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateMemberAccountResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateS3ResourcesRequest {
@@ -44,7 +49,7 @@ pub struct AssociateS3ResourcesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AssociateS3ResourcesResult {
+pub struct AssociateS3ResourcesResponse {
     /// <p>S3 resources that couldn't be associated with Amazon Macie. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -82,6 +87,10 @@ pub struct DisassociateMemberAccountRequest {
     pub member_account_id: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateMemberAccountResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateS3ResourcesRequest {
     /// <p>The S3 resources (buckets or prefixes) that you want to remove from being monitored and classified by Amazon Macie. </p>
@@ -95,7 +104,7 @@ pub struct DisassociateS3ResourcesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DisassociateS3ResourcesResult {
+pub struct DisassociateS3ResourcesResponse {
     /// <p>S3 resources that couldn't be removed from being monitored and classified by Amazon Macie. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -134,7 +143,7 @@ pub struct ListMemberAccountsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListMemberAccountsResult {
+pub struct ListMemberAccountsResponse {
     /// <p>A list of the Amazon Macie member accounts returned by the action. The current master account is also included in this list. </p>
     #[serde(rename = "memberAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,7 +172,7 @@ pub struct ListS3ResourcesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListS3ResourcesResult {
+pub struct ListS3ResourcesResponse {
     /// <p>When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the nextToken parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -239,7 +248,7 @@ pub struct UpdateS3ResourcesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateS3ResourcesResult {
+pub struct UpdateS3ResourcesResponse {
     /// <p>The S3 resources whose classification types can't be updated. An error code and an error message are provided for each failed item. </p>
     #[serde(rename = "failedS3Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -569,43 +578,40 @@ pub trait Macie {
     fn associate_member_account(
         &self,
         input: AssociateMemberAccountRequest,
-    ) -> RusotoFuture<(), AssociateMemberAccountError>;
+    ) -> Request<AssociateMemberAccountRequest>;
 
     /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
     fn associate_s3_resources(
         &self,
         input: AssociateS3ResourcesRequest,
-    ) -> RusotoFuture<AssociateS3ResourcesResult, AssociateS3ResourcesError>;
+    ) -> Request<AssociateS3ResourcesRequest>;
 
     /// <p>Removes the specified member account from Amazon Macie.</p>
     fn disassociate_member_account(
         &self,
         input: DisassociateMemberAccountRequest,
-    ) -> RusotoFuture<(), DisassociateMemberAccountError>;
+    ) -> Request<DisassociateMemberAccountRequest>;
 
     /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
     fn disassociate_s3_resources(
         &self,
         input: DisassociateS3ResourcesRequest,
-    ) -> RusotoFuture<DisassociateS3ResourcesResult, DisassociateS3ResourcesError>;
+    ) -> Request<DisassociateS3ResourcesRequest>;
 
     /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
     fn list_member_accounts(
         &self,
         input: ListMemberAccountsRequest,
-    ) -> RusotoFuture<ListMemberAccountsResult, ListMemberAccountsError>;
+    ) -> Request<ListMemberAccountsRequest>;
 
     /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
-    fn list_s3_resources(
-        &self,
-        input: ListS3ResourcesRequest,
-    ) -> RusotoFuture<ListS3ResourcesResult, ListS3ResourcesError>;
+    fn list_s3_resources(&self, input: ListS3ResourcesRequest) -> Request<ListS3ResourcesRequest>;
 
     /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
     fn update_s3_resources(
         &self,
         input: UpdateS3ResourcesRequest,
-    ) -> RusotoFuture<UpdateS3ResourcesResult, UpdateS3ResourcesError>;
+    ) -> Request<UpdateS3ResourcesRequest>;
 }
 /// A client for the Amazon Macie API.
 #[derive(Clone)]
@@ -648,17 +654,78 @@ impl Macie for MacieClient {
     fn associate_member_account(
         &self,
         input: AssociateMemberAccountRequest,
-    ) -> RusotoFuture<(), AssociateMemberAccountError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+    ) -> Request<AssociateMemberAccountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
+    fn associate_s3_resources(
+        &self,
+        input: AssociateS3ResourcesRequest,
+    ) -> Request<AssociateS3ResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified member account from Amazon Macie.</p>
+    fn disassociate_member_account(
+        &self,
+        input: DisassociateMemberAccountRequest,
+    ) -> Request<DisassociateMemberAccountRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
+    fn disassociate_s3_resources(
+        &self,
+        input: DisassociateS3ResourcesRequest,
+    ) -> Request<DisassociateS3ResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
+    fn list_member_accounts(
+        &self,
+        input: ListMemberAccountsRequest,
+    ) -> Request<ListMemberAccountsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
+    fn list_s3_resources(&self, input: ListS3ResourcesRequest) -> Request<ListS3ResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
+    fn update_s3_resources(
+        &self,
+        input: UpdateS3ResourcesRequest,
+    ) -> Request<UpdateS3ResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AssociateMemberAccountRequest {
+    type Output = AssociateMemberAccountResponse;
+    type Error = AssociateMemberAccountError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "macie", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.AssociateMemberAccount");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateMemberAccountResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -668,24 +735,29 @@ impl Macie for MacieClient {
             }
         })
     }
+}
 
-    /// <p>Associates specified S3 resources with Amazon Macie for monitoring and data classification. If memberAccountId isn't specified, the action associates specified S3 resources with Macie for the current master account. If memberAccountId is specified, the action associates specified S3 resources with Macie for the specified member account. </p>
-    fn associate_s3_resources(
-        &self,
-        input: AssociateS3ResourcesRequest,
-    ) -> RusotoFuture<AssociateS3ResourcesResult, AssociateS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+impl ServiceRequest for AssociateS3ResourcesRequest {
+    type Output = AssociateS3ResourcesResponse;
+    type Error = AssociateS3ResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "macie", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.AssociateS3Resources");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<AssociateS3ResourcesResult, _>()
+                        .deserialize::<AssociateS3ResourcesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -696,22 +768,30 @@ impl Macie for MacieClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified member account from Amazon Macie.</p>
-    fn disassociate_member_account(
-        &self,
-        input: DisassociateMemberAccountRequest,
-    ) -> RusotoFuture<(), DisassociateMemberAccountError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+impl ServiceRequest for DisassociateMemberAccountRequest {
+    type Output = DisassociateMemberAccountResponse;
+    type Error = DisassociateMemberAccountError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "macie", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.DisassociateMemberAccount");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateMemberAccountResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisassociateMemberAccountError::from_response(response))
@@ -719,24 +799,29 @@ impl Macie for MacieClient {
             }
         })
     }
+}
 
-    /// <p>Removes specified S3 resources from being monitored by Amazon Macie. If memberAccountId isn't specified, the action removes specified S3 resources from Macie for the current master account. If memberAccountId is specified, the action removes specified S3 resources from Macie for the specified member account.</p>
-    fn disassociate_s3_resources(
-        &self,
-        input: DisassociateS3ResourcesRequest,
-    ) -> RusotoFuture<DisassociateS3ResourcesResult, DisassociateS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+impl ServiceRequest for DisassociateS3ResourcesRequest {
+    type Output = DisassociateS3ResourcesResponse;
+    type Error = DisassociateS3ResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "macie", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.DisassociateS3Resources");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DisassociateS3ResourcesResult, _>()
+                        .deserialize::<DisassociateS3ResourcesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -745,24 +830,29 @@ impl Macie for MacieClient {
             }
         })
     }
+}
 
-    /// <p>Lists all Amazon Macie member accounts for the current Amazon Macie master account.</p>
-    fn list_member_accounts(
-        &self,
-        input: ListMemberAccountsRequest,
-    ) -> RusotoFuture<ListMemberAccountsResult, ListMemberAccountsError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+impl ServiceRequest for ListMemberAccountsRequest {
+    type Output = ListMemberAccountsResponse;
+    type Error = ListMemberAccountsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "macie", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.ListMemberAccounts");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListMemberAccountsResult, _>()
+                        .deserialize::<ListMemberAccountsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -774,24 +864,29 @@ impl Macie for MacieClient {
             }
         })
     }
+}
 
-    /// <p>Lists all the S3 resources associated with Amazon Macie. If memberAccountId isn't specified, the action lists the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action lists the S3 resources associated with Amazon Macie for the specified member account. </p>
-    fn list_s3_resources(
-        &self,
-        input: ListS3ResourcesRequest,
-    ) -> RusotoFuture<ListS3ResourcesResult, ListS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+impl ServiceRequest for ListS3ResourcesRequest {
+    type Output = ListS3ResourcesResponse;
+    type Error = ListS3ResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "macie", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.ListS3Resources");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListS3ResourcesResult, _>()
+                        .deserialize::<ListS3ResourcesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -803,24 +898,29 @@ impl Macie for MacieClient {
             }
         })
     }
+}
 
-    /// <p>Updates the classification types for the specified S3 resources. If memberAccountId isn't specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the current master account. If memberAccountId is specified, the action updates the classification types of the S3 resources associated with Amazon Macie for the specified member account. </p>
-    fn update_s3_resources(
-        &self,
-        input: UpdateS3ResourcesRequest,
-    ) -> RusotoFuture<UpdateS3ResourcesResult, UpdateS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+impl ServiceRequest for UpdateS3ResourcesRequest {
+    type Output = UpdateS3ResourcesResponse;
+    type Error = UpdateS3ResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "macie", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.UpdateS3Resources");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateS3ResourcesResult, _>()
+                        .deserialize::<UpdateS3ResourcesResponse, _>()
                 }))
             } else {
                 Box::new(

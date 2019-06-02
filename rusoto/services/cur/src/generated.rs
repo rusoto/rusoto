@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -237,19 +238,19 @@ pub trait CostAndUsageReport {
     fn delete_report_definition(
         &self,
         input: DeleteReportDefinitionRequest,
-    ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
+    ) -> Request<DeleteReportDefinitionRequest>;
 
     /// <p>Lists the AWS Cost and Usage reports available to this account.</p>
     fn describe_report_definitions(
         &self,
         input: DescribeReportDefinitionsRequest,
-    ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
+    ) -> Request<DescribeReportDefinitionsRequest>;
 
     /// <p>Creates a new report using the description that you provide.</p>
     fn put_report_definition(
         &self,
         input: PutReportDefinitionRequest,
-    ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError>;
+    ) -> Request<PutReportDefinitionRequest>;
 }
 /// A client for the AWS Cost and Usage Report Service API.
 #[derive(Clone)]
@@ -292,18 +293,47 @@ impl CostAndUsageReport for CostAndUsageReportClient {
     fn delete_report_definition(
         &self,
         input: DeleteReportDefinitionRequest,
-    ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
-        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
+    ) -> Request<DeleteReportDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the AWS Cost and Usage reports available to this account.</p>
+    fn describe_report_definitions(
+        &self,
+        input: DescribeReportDefinitionsRequest,
+    ) -> Request<DescribeReportDefinitionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new report using the description that you provide.</p>
+    fn put_report_definition(
+        &self,
+        input: PutReportDefinitionRequest,
+    ) -> Request<PutReportDefinitionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DeleteReportDefinitionRequest {
+    type Output = DeleteReportDefinitionResponse;
+    type Error = DeleteReportDefinitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cur", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.DeleteReportDefinition",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -318,23 +348,28 @@ impl CostAndUsageReport for CostAndUsageReportClient {
             }
         })
     }
+}
 
-    /// <p>Lists the AWS Cost and Usage reports available to this account.</p>
-    fn describe_report_definitions(
-        &self,
-        input: DescribeReportDefinitionsRequest,
-    ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
-        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
+impl ServiceRequest for DescribeReportDefinitionsRequest {
+    type Output = DescribeReportDefinitionsResponse;
+    type Error = DescribeReportDefinitionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cur", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.DescribeReportDefinitions",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -347,23 +382,28 @@ impl CostAndUsageReport for CostAndUsageReportClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new report using the description that you provide.</p>
-    fn put_report_definition(
-        &self,
-        input: PutReportDefinitionRequest,
-    ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError> {
-        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
+impl ServiceRequest for PutReportDefinitionRequest {
+    type Output = PutReportDefinitionResponse;
+    type Error = PutReportDefinitionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cur", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.PutReportDefinition",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

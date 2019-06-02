@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -910,6 +911,10 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
     #[serde(rename = "ResourceArn")]
@@ -918,6 +923,10 @@ pub struct UntagResourceRequest {
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 /// <p>Configuration parameters used to update the Channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1948,85 +1957,70 @@ impl Error for UpdateOriginEndpointError {
 /// Trait representing the capabilities of the MediaPackage API. MediaPackage clients implement this trait.
 pub trait MediaPackage {
     /// <p>Creates a new Channel.</p>
-    fn create_channel(
-        &self,
-        input: CreateChannelRequest,
-    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError>;
+    fn create_channel(&self, input: CreateChannelRequest) -> Request<CreateChannelRequest>;
 
     /// <p>Creates a new OriginEndpoint record.</p>
     fn create_origin_endpoint(
         &self,
         input: CreateOriginEndpointRequest,
-    ) -> RusotoFuture<CreateOriginEndpointResponse, CreateOriginEndpointError>;
+    ) -> Request<CreateOriginEndpointRequest>;
 
     /// <p>Deletes an existing Channel.</p>
-    fn delete_channel(
-        &self,
-        input: DeleteChannelRequest,
-    ) -> RusotoFuture<DeleteChannelResponse, DeleteChannelError>;
+    fn delete_channel(&self, input: DeleteChannelRequest) -> Request<DeleteChannelRequest>;
 
     /// <p>Deletes an existing OriginEndpoint.</p>
     fn delete_origin_endpoint(
         &self,
         input: DeleteOriginEndpointRequest,
-    ) -> RusotoFuture<DeleteOriginEndpointResponse, DeleteOriginEndpointError>;
+    ) -> Request<DeleteOriginEndpointRequest>;
 
     /// <p>Gets details about a Channel.</p>
-    fn describe_channel(
-        &self,
-        input: DescribeChannelRequest,
-    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError>;
+    fn describe_channel(&self, input: DescribeChannelRequest) -> Request<DescribeChannelRequest>;
 
     /// <p>Gets details about an existing OriginEndpoint.</p>
     fn describe_origin_endpoint(
         &self,
         input: DescribeOriginEndpointRequest,
-    ) -> RusotoFuture<DescribeOriginEndpointResponse, DescribeOriginEndpointError>;
+    ) -> Request<DescribeOriginEndpointRequest>;
 
     /// <p>Returns a collection of Channels.</p>
-    fn list_channels(
-        &self,
-        input: ListChannelsRequest,
-    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError>;
+    fn list_channels(&self, input: ListChannelsRequest) -> Request<ListChannelsRequest>;
 
     /// <p>Returns a collection of OriginEndpoint records.</p>
     fn list_origin_endpoints(
         &self,
         input: ListOriginEndpointsRequest,
-    ) -> RusotoFuture<ListOriginEndpointsResponse, ListOriginEndpointsError>;
+    ) -> Request<ListOriginEndpointsRequest>;
 
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
     fn rotate_channel_credentials(
         &self,
         input: RotateChannelCredentialsRequest,
-    ) -> RusotoFuture<RotateChannelCredentialsResponse, RotateChannelCredentialsError>;
+    ) -> Request<RotateChannelCredentialsRequest>;
 
     /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
     fn rotate_ingest_endpoint_credentials(
         &self,
         input: RotateIngestEndpointCredentialsRequest,
-    ) -> RusotoFuture<RotateIngestEndpointCredentialsResponse, RotateIngestEndpointCredentialsError>;
+    ) -> Request<RotateIngestEndpointCredentialsRequest>;
 
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Updates an existing Channel.</p>
-    fn update_channel(
-        &self,
-        input: UpdateChannelRequest,
-    ) -> RusotoFuture<UpdateChannelResponse, UpdateChannelError>;
+    fn update_channel(&self, input: UpdateChannelRequest) -> Request<UpdateChannelRequest>;
 
     /// <p>Updates an existing OriginEndpoint.</p>
     fn update_origin_endpoint(
         &self,
         input: UpdateOriginEndpointRequest,
-    ) -> RusotoFuture<UpdateOriginEndpointResponse, UpdateOriginEndpointError>;
+    ) -> Request<UpdateOriginEndpointRequest>;
 }
 /// A client for the MediaPackage API.
 #[derive(Clone)]
@@ -2066,19 +2060,121 @@ impl MediaPackageClient {
 
 impl MediaPackage for MediaPackageClient {
     /// <p>Creates a new Channel.</p>
-    fn create_channel(
+    fn create_channel(&self, input: CreateChannelRequest) -> Request<CreateChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new OriginEndpoint record.</p>
+    fn create_origin_endpoint(
         &self,
-        input: CreateChannelRequest,
-    ) -> RusotoFuture<CreateChannelResponse, CreateChannelError> {
+        input: CreateOriginEndpointRequest,
+    ) -> Request<CreateOriginEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing Channel.</p>
+    fn delete_channel(&self, input: DeleteChannelRequest) -> Request<DeleteChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing OriginEndpoint.</p>
+    fn delete_origin_endpoint(
+        &self,
+        input: DeleteOriginEndpointRequest,
+    ) -> Request<DeleteOriginEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets details about a Channel.</p>
+    fn describe_channel(&self, input: DescribeChannelRequest) -> Request<DescribeChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets details about an existing OriginEndpoint.</p>
+    fn describe_origin_endpoint(
+        &self,
+        input: DescribeOriginEndpointRequest,
+    ) -> Request<DescribeOriginEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a collection of Channels.</p>
+    fn list_channels(&self, input: ListChannelsRequest) -> Request<ListChannelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a collection of OriginEndpoint records.</p>
+    fn list_origin_endpoints(
+        &self,
+        input: ListOriginEndpointsRequest,
+    ) -> Request<ListOriginEndpointsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
+    fn rotate_channel_credentials(
+        &self,
+        input: RotateChannelCredentialsRequest,
+    ) -> Request<RotateChannelCredentialsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
+    fn rotate_ingest_endpoint_credentials(
+        &self,
+        input: RotateIngestEndpointCredentialsRequest,
+    ) -> Request<RotateIngestEndpointCredentialsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing Channel.</p>
+    fn update_channel(&self, input: UpdateChannelRequest) -> Request<UpdateChannelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing OriginEndpoint.</p>
+    fn update_origin_endpoint(
+        &self,
+        input: UpdateOriginEndpointRequest,
+    ) -> Request<UpdateOriginEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateChannelRequest {
+    type Output = CreateChannelResponse;
+    type Error = CreateChannelError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/channels";
 
-        let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2096,21 +2192,27 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new OriginEndpoint record.</p>
-    fn create_origin_endpoint(
-        &self,
-        input: CreateOriginEndpointRequest,
-    ) -> RusotoFuture<CreateOriginEndpointResponse, CreateOriginEndpointError> {
+impl ServiceRequest for CreateOriginEndpointRequest {
+    type Output = CreateOriginEndpointResponse;
+    type Error = CreateOriginEndpointError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/origin_endpoints";
 
-        let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2127,18 +2229,24 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing Channel.</p>
-    fn delete_channel(
-        &self,
-        input: DeleteChannelRequest,
-    ) -> RusotoFuture<DeleteChannelResponse, DeleteChannelError> {
-        let request_uri = format!("/channels/{id}", id = input.id);
+impl ServiceRequest for DeleteChannelRequest {
+    type Output = DeleteChannelResponse;
+    type Error = DeleteChannelError;
 
-        let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/channels/{id}", id = self.id);
+
+        let mut request = SignedRequest::new("DELETE", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2156,18 +2264,24 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing OriginEndpoint.</p>
-    fn delete_origin_endpoint(
-        &self,
-        input: DeleteOriginEndpointRequest,
-    ) -> RusotoFuture<DeleteOriginEndpointResponse, DeleteOriginEndpointError> {
-        let request_uri = format!("/origin_endpoints/{id}", id = input.id);
+impl ServiceRequest for DeleteOriginEndpointRequest {
+    type Output = DeleteOriginEndpointResponse;
+    type Error = DeleteOriginEndpointError;
 
-        let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/origin_endpoints/{id}", id = self.id);
+
+        let mut request = SignedRequest::new("DELETE", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 202 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2184,18 +2298,24 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Gets details about a Channel.</p>
-    fn describe_channel(
-        &self,
-        input: DescribeChannelRequest,
-    ) -> RusotoFuture<DescribeChannelResponse, DescribeChannelError> {
-        let request_uri = format!("/channels/{id}", id = input.id);
+impl ServiceRequest for DescribeChannelRequest {
+    type Output = DescribeChannelResponse;
+    type Error = DescribeChannelError;
 
-        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/channels/{id}", id = self.id);
+
+        let mut request = SignedRequest::new("GET", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2213,18 +2333,24 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Gets details about an existing OriginEndpoint.</p>
-    fn describe_origin_endpoint(
-        &self,
-        input: DescribeOriginEndpointRequest,
-    ) -> RusotoFuture<DescribeOriginEndpointResponse, DescribeOriginEndpointError> {
-        let request_uri = format!("/origin_endpoints/{id}", id = input.id);
+impl ServiceRequest for DescribeOriginEndpointRequest {
+    type Output = DescribeOriginEndpointResponse;
+    type Error = DescribeOriginEndpointError;
 
-        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/origin_endpoints/{id}", id = self.id);
+
+        let mut request = SignedRequest::new("GET", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2241,27 +2367,33 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Returns a collection of Channels.</p>
-    fn list_channels(
-        &self,
-        input: ListChannelsRequest,
-    ) -> RusotoFuture<ListChannelsResponse, ListChannelsError> {
+impl ServiceRequest for ListChannelsRequest {
+    type Output = ListChannelsResponse;
+    type Error = ListChannelsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/channels";
 
-        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2279,30 +2411,36 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Returns a collection of OriginEndpoint records.</p>
-    fn list_origin_endpoints(
-        &self,
-        input: ListOriginEndpointsRequest,
-    ) -> RusotoFuture<ListOriginEndpointsResponse, ListOriginEndpointsError> {
+impl ServiceRequest for ListOriginEndpointsRequest {
+    type Output = ListOriginEndpointsResponse;
+    type Error = ListOriginEndpointsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/origin_endpoints";
 
-        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.channel_id {
+        if let Some(ref x) = self.channel_id {
             params.put("channelId", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2319,17 +2457,24 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
 
-        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2346,18 +2491,24 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
-    fn rotate_channel_credentials(
-        &self,
-        input: RotateChannelCredentialsRequest,
-    ) -> RusotoFuture<RotateChannelCredentialsResponse, RotateChannelCredentialsError> {
-        let request_uri = format!("/channels/{id}/credentials", id = input.id);
+impl ServiceRequest for RotateChannelCredentialsRequest {
+    type Output = RotateChannelCredentialsResponse;
+    type Error = RotateChannelCredentialsError;
 
-        let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/channels/{id}/credentials", id = self.id);
+
+        let mut request = SignedRequest::new("PUT", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2372,23 +2523,28 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
-    fn rotate_ingest_endpoint_credentials(
-        &self,
-        input: RotateIngestEndpointCredentialsRequest,
-    ) -> RusotoFuture<RotateIngestEndpointCredentialsResponse, RotateIngestEndpointCredentialsError>
-    {
+impl ServiceRequest for RotateIngestEndpointCredentialsRequest {
+    type Output = RotateIngestEndpointCredentialsResponse;
+    type Error = RotateIngestEndpointCredentialsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/channels/{id}/ingest_endpoints/{ingest_endpoint_id}/credentials",
-            id = input.id,
-            ingest_endpoint_id = input.ingest_endpoint_id
+            id = self.id,
+            ingest_endpoint_id = self.ingest_endpoint_id
         );
 
-        let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2405,20 +2561,30 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = TagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -2432,23 +2598,33 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UntagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -2462,21 +2638,27 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing Channel.</p>
-    fn update_channel(
-        &self,
-        input: UpdateChannelRequest,
-    ) -> RusotoFuture<UpdateChannelResponse, UpdateChannelError> {
-        let request_uri = format!("/channels/{id}", id = input.id);
+impl ServiceRequest for UpdateChannelRequest {
+    type Output = UpdateChannelResponse;
+    type Error = UpdateChannelError;
 
-        let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/channels/{id}", id = self.id);
+
+        let mut request = SignedRequest::new("PUT", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -2494,21 +2676,27 @@ impl MediaPackage for MediaPackageClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing OriginEndpoint.</p>
-    fn update_origin_endpoint(
-        &self,
-        input: UpdateOriginEndpointRequest,
-    ) -> RusotoFuture<UpdateOriginEndpointResponse, UpdateOriginEndpointError> {
-        let request_uri = format!("/origin_endpoints/{id}", id = input.id);
+impl ServiceRequest for UpdateOriginEndpointRequest {
+    type Output = UpdateOriginEndpointResponse;
+    type Error = UpdateOriginEndpointError;
 
-        let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/origin_endpoints/{id}", id = self.id);
+
+        let mut request = SignedRequest::new("PUT", "mediapackage", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

@@ -19,13 +19,14 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateStreamInput {
+pub struct CreateStreamRequest {
     /// <p>The number of hours that you want to retain the data in the stream. Kinesis Video Streams retains the data in a data store that is associated with the stream.</p> <p>The default value is 0, indicating that the stream does not persist data.</p> <p>When the <code>DataRetentionInHours</code> value is 0, consumers can still consume the fragments that remain in the service host buffer, which has a retention time limit of 5 minutes and a retention memory limit of 200 MB. Fragments are removed from the buffer when either limit is reached.</p>
     #[serde(rename = "DataRetentionInHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -53,7 +54,7 @@ pub struct CreateStreamInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateStreamOutput {
+pub struct CreateStreamResponse {
     /// <p>The Amazon Resource Name (ARN) of the stream.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -61,7 +62,7 @@ pub struct CreateStreamOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteStreamInput {
+pub struct DeleteStreamRequest {
     /// <p>Optional: The version of the stream that you want to delete. </p> <p>Specify the version as a safeguard to ensure that your are deleting the correct stream. To get the stream version, use the <code>DescribeStream</code> API.</p> <p>If not specified, only the <code>CreationTime</code> is checked before deleting the stream.</p>
     #[serde(rename = "CurrentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -73,10 +74,10 @@ pub struct DeleteStreamInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteStreamOutput {}
+pub struct DeleteStreamResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeStreamInput {
+pub struct DescribeStreamRequest {
     /// <p>The Amazon Resource Name (ARN) of the stream.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -89,7 +90,7 @@ pub struct DescribeStreamInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeStreamOutput {
+pub struct DescribeStreamResponse {
     /// <p>An object that describes the stream.</p>
     #[serde(rename = "StreamInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -97,7 +98,7 @@ pub struct DescribeStreamOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDataEndpointInput {
+pub struct GetDataEndpointRequest {
     /// <p>The name of the API action for which to get an endpoint.</p>
     #[serde(rename = "APIName")]
     pub api_name: String,
@@ -113,7 +114,7 @@ pub struct GetDataEndpointInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDataEndpointOutput {
+pub struct GetDataEndpointResponse {
     /// <p>The endpoint value. To read data from the stream or to write data to it, specify this endpoint in your application.</p>
     #[serde(rename = "DataEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -121,7 +122,7 @@ pub struct GetDataEndpointOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListStreamsInput {
+pub struct ListStreamsRequest {
     /// <p>The maximum number of streams to return in the response. The default is 10,000.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -138,7 +139,7 @@ pub struct ListStreamsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListStreamsOutput {
+pub struct ListStreamsResponse {
     /// <p>If the response is truncated, the call returns this element with a token. To get the next batch of streams, use this token in your next request. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -150,7 +151,7 @@ pub struct ListStreamsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsForStreamInput {
+pub struct ListTagsForStreamRequest {
     /// <p>If you specify this parameter and the result of a <code>ListTagsForStream</code> call is truncated, the response includes a token that you can use in the next request to fetch the next batch of tags.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -167,7 +168,7 @@ pub struct ListTagsForStreamInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsForStreamOutput {
+pub struct ListTagsForStreamResponse {
     /// <p>If you specify this parameter and the result of a <code>ListTags</code> call is truncated, the response includes a token that you can use in the next request to fetch the next set of tags.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -234,7 +235,7 @@ pub struct StreamNameCondition {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TagStreamInput {
+pub struct TagStreamRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to add the tag or tags to.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -250,10 +251,10 @@ pub struct TagStreamInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TagStreamOutput {}
+pub struct TagStreamResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UntagStreamInput {
+pub struct UntagStreamRequest {
     /// <p>The Amazon Resource Name (ARN) of the stream that you want to remove tags from.</p>
     #[serde(rename = "StreamARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -269,10 +270,10 @@ pub struct UntagStreamInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UntagStreamOutput {}
+pub struct UntagStreamResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateDataRetentionInput {
+pub struct UpdateDataRetentionRequest {
     /// <p>The version of the stream whose retention period you want to change. To get the version, call either the <code>DescribeStream</code> or the <code>ListStreams</code> API.</p>
     #[serde(rename = "CurrentVersion")]
     pub current_version: String,
@@ -294,10 +295,10 @@ pub struct UpdateDataRetentionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateDataRetentionOutput {}
+pub struct UpdateDataRetentionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateStreamInput {
+pub struct UpdateStreamRequest {
     /// <p>The version of the stream whose metadata you want to update.</p>
     #[serde(rename = "CurrentVersion")]
     pub current_version: String,
@@ -321,7 +322,7 @@ pub struct UpdateStreamInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateStreamOutput {}
+pub struct UpdateStreamResponse {}
 
 /// Errors returned by CreateStream
 #[derive(Debug, PartialEq)]
@@ -912,61 +913,40 @@ impl Error for UpdateStreamError {
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
 pub trait KinesisVideo {
     /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
-    fn create_stream(
-        &self,
-        input: CreateStreamInput,
-    ) -> RusotoFuture<CreateStreamOutput, CreateStreamError>;
+    fn create_stream(&self, input: CreateStreamRequest) -> Request<CreateStreamRequest>;
 
     /// <p>Deletes a Kinesis video stream and the data contained in the stream. </p> <p>This method marks the stream for deletion, and makes the data in the stream inaccessible immediately.</p> <p> </p> <p> To ensure that you have the latest version of the stream before deleting it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p>This operation requires permission for the <code>KinesisVideo:DeleteStream</code> action.</p>
-    fn delete_stream(
-        &self,
-        input: DeleteStreamInput,
-    ) -> RusotoFuture<DeleteStreamOutput, DeleteStreamError>;
+    fn delete_stream(&self, input: DeleteStreamRequest) -> Request<DeleteStreamRequest>;
 
     /// <p>Returns the most current information about the specified stream. You must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
-    fn describe_stream(
-        &self,
-        input: DescribeStreamInput,
-    ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError>;
+    fn describe_stream(&self, input: DescribeStreamRequest) -> Request<DescribeStreamRequest>;
 
     /// <p>Gets an endpoint for a specified stream for either reading or writing. Use this endpoint in your application to read from the specified stream (using the <code>GetMedia</code> or <code>GetMediaForFragmentList</code> operations) or write to it (using the <code>PutMedia</code> operation). </p> <note> <p>The returned endpoint does not have the API name appended. The client needs to add the API name to the returned endpoint.</p> </note> <p>In the request, specify the stream either by <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn get_data_endpoint(
-        &self,
-        input: GetDataEndpointInput,
-    ) -> RusotoFuture<GetDataEndpointOutput, GetDataEndpointError>;
+    fn get_data_endpoint(&self, input: GetDataEndpointRequest) -> Request<GetDataEndpointRequest>;
 
     /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
-    fn list_streams(
-        &self,
-        input: ListStreamsInput,
-    ) -> RusotoFuture<ListStreamsOutput, ListStreamsError>;
+    fn list_streams(&self, input: ListStreamsRequest) -> Request<ListStreamsRequest>;
 
     /// <p>Returns a list of tags associated with the specified stream.</p> <p>In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
     fn list_tags_for_stream(
         &self,
-        input: ListTagsForStreamInput,
-    ) -> RusotoFuture<ListTagsForStreamOutput, ListTagsForStreamError>;
+        input: ListTagsForStreamRequest,
+    ) -> Request<ListTagsForStreamRequest>;
 
     /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
-    fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError>;
+    fn tag_stream(&self, input: TagStreamRequest) -> Request<TagStreamRequest>;
 
     /// <p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn untag_stream(
-        &self,
-        input: UntagStreamInput,
-    ) -> RusotoFuture<UntagStreamOutput, UntagStreamError>;
+    fn untag_stream(&self, input: UntagStreamRequest) -> Request<UntagStreamRequest>;
 
     /// <p><p> Increases or decreases the stream&#39;s data retention period by the value that you specify. To indicate whether you want to increase or decrease the data retention period, specify the <code>Operation</code> parameter in the request body. In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p> <note> <p>The retention period that you specify replaces the current value.</p> </note> <p>This operation requires permission for the <code>KinesisVideo:UpdateDataRetention</code> action.</p> <p>Changing the data retention period affects the data in the stream as follows:</p> <ul> <li> <p>If the data retention period is increased, existing data is retained for the new retention period. For example, if the data retention period is increased from one hour to seven hours, all existing data is retained for seven hours.</p> </li> <li> <p>If the data retention period is decreased, existing data is retained for the new retention period. For example, if the data retention period is decreased from seven hours to one hour, all existing data is retained for one hour, and any data older than one hour is deleted immediately.</p> </li> </ul></p>
     fn update_data_retention(
         &self,
-        input: UpdateDataRetentionInput,
-    ) -> RusotoFuture<UpdateDataRetentionOutput, UpdateDataRetentionError>;
+        input: UpdateDataRetentionRequest,
+    ) -> Request<UpdateDataRetentionRequest>;
 
     /// <p>Updates stream metadata, such as the device name and media type.</p> <p>You must provide the stream name or the Amazon Resource Name (ARN) of the stream.</p> <p>To make sure that you have the latest version of the stream before updating it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p> <code>UpdateStream</code> is an asynchronous operation, and takes time to complete.</p>
-    fn update_stream(
-        &self,
-        input: UpdateStreamInput,
-    ) -> RusotoFuture<UpdateStreamOutput, UpdateStreamError>;
+    fn update_stream(&self, input: UpdateStreamRequest) -> Request<UpdateStreamRequest>;
 }
 /// A client for the Kinesis Video API.
 #[derive(Clone)]
@@ -1006,23 +986,85 @@ impl KinesisVideoClient {
 
 impl KinesisVideo for KinesisVideoClient {
     /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
-    fn create_stream(
+    fn create_stream(&self, input: CreateStreamRequest) -> Request<CreateStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a Kinesis video stream and the data contained in the stream. </p> <p>This method marks the stream for deletion, and makes the data in the stream inaccessible immediately.</p> <p> </p> <p> To ensure that you have the latest version of the stream before deleting it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p>This operation requires permission for the <code>KinesisVideo:DeleteStream</code> action.</p>
+    fn delete_stream(&self, input: DeleteStreamRequest) -> Request<DeleteStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the most current information about the specified stream. You must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
+    fn describe_stream(&self, input: DescribeStreamRequest) -> Request<DescribeStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets an endpoint for a specified stream for either reading or writing. Use this endpoint in your application to read from the specified stream (using the <code>GetMedia</code> or <code>GetMediaForFragmentList</code> operations) or write to it (using the <code>PutMedia</code> operation). </p> <note> <p>The returned endpoint does not have the API name appended. The client needs to add the API name to the returned endpoint.</p> </note> <p>In the request, specify the stream either by <code>StreamName</code> or <code>StreamARN</code>.</p>
+    fn get_data_endpoint(&self, input: GetDataEndpointRequest) -> Request<GetDataEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
+    fn list_streams(&self, input: ListStreamsRequest) -> Request<ListStreamsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of tags associated with the specified stream.</p> <p>In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
+    fn list_tags_for_stream(
         &self,
-        input: CreateStreamInput,
-    ) -> RusotoFuture<CreateStreamOutput, CreateStreamError> {
+        input: ListTagsForStreamRequest,
+    ) -> Request<ListTagsForStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
+    fn tag_stream(&self, input: TagStreamRequest) -> Request<TagStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>
+    fn untag_stream(&self, input: UntagStreamRequest) -> Request<UntagStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Increases or decreases the stream&#39;s data retention period by the value that you specify. To indicate whether you want to increase or decrease the data retention period, specify the <code>Operation</code> parameter in the request body. In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p> <note> <p>The retention period that you specify replaces the current value.</p> </note> <p>This operation requires permission for the <code>KinesisVideo:UpdateDataRetention</code> action.</p> <p>Changing the data retention period affects the data in the stream as follows:</p> <ul> <li> <p>If the data retention period is increased, existing data is retained for the new retention period. For example, if the data retention period is increased from one hour to seven hours, all existing data is retained for seven hours.</p> </li> <li> <p>If the data retention period is decreased, existing data is retained for the new retention period. For example, if the data retention period is decreased from seven hours to one hour, all existing data is retained for one hour, and any data older than one hour is deleted immediately.</p> </li> </ul></p>
+    fn update_data_retention(
+        &self,
+        input: UpdateDataRetentionRequest,
+    ) -> Request<UpdateDataRetentionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates stream metadata, such as the device name and media type.</p> <p>You must provide the stream name or the Amazon Resource Name (ARN) of the stream.</p> <p>To make sure that you have the latest version of the stream before updating it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p> <code>UpdateStream</code> is an asynchronous operation, and takes time to complete.</p>
+    fn update_stream(&self, input: UpdateStreamRequest) -> Request<UpdateStreamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateStreamRequest {
+    type Output = CreateStreamResponse;
+    type Error = CreateStreamError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/createStream";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateStreamOutput, _>()?;
+                        .deserialize::<CreateStreamResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1036,25 +1078,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a Kinesis video stream and the data contained in the stream. </p> <p>This method marks the stream for deletion, and makes the data in the stream inaccessible immediately.</p> <p> </p> <p> To ensure that you have the latest version of the stream before deleting it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p>This operation requires permission for the <code>KinesisVideo:DeleteStream</code> action.</p>
-    fn delete_stream(
-        &self,
-        input: DeleteStreamInput,
-    ) -> RusotoFuture<DeleteStreamOutput, DeleteStreamError> {
+impl ServiceRequest for DeleteStreamRequest {
+    type Output = DeleteStreamResponse;
+    type Error = DeleteStreamError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/deleteStream";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteStreamOutput, _>()?;
+                        .deserialize::<DeleteStreamResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1068,25 +1116,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Returns the most current information about the specified stream. You must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
-    fn describe_stream(
-        &self,
-        input: DescribeStreamInput,
-    ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError> {
+impl ServiceRequest for DescribeStreamRequest {
+    type Output = DescribeStreamResponse;
+    type Error = DescribeStreamError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/describeStream";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeStreamOutput, _>()?;
+                        .deserialize::<DescribeStreamResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1100,25 +1154,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Gets an endpoint for a specified stream for either reading or writing. Use this endpoint in your application to read from the specified stream (using the <code>GetMedia</code> or <code>GetMediaForFragmentList</code> operations) or write to it (using the <code>PutMedia</code> operation). </p> <note> <p>The returned endpoint does not have the API name appended. The client needs to add the API name to the returned endpoint.</p> </note> <p>In the request, specify the stream either by <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn get_data_endpoint(
-        &self,
-        input: GetDataEndpointInput,
-    ) -> RusotoFuture<GetDataEndpointOutput, GetDataEndpointError> {
+impl ServiceRequest for GetDataEndpointRequest {
+    type Output = GetDataEndpointResponse;
+    type Error = GetDataEndpointError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/getDataEndpoint";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDataEndpointOutput, _>()?;
+                        .deserialize::<GetDataEndpointResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1132,25 +1192,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>
-    fn list_streams(
-        &self,
-        input: ListStreamsInput,
-    ) -> RusotoFuture<ListStreamsOutput, ListStreamsError> {
+impl ServiceRequest for ListStreamsRequest {
+    type Output = ListStreamsResponse;
+    type Error = ListStreamsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/listStreams";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListStreamsOutput, _>()?;
+                        .deserialize::<ListStreamsResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1164,25 +1230,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of tags associated with the specified stream.</p> <p>In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>
-    fn list_tags_for_stream(
-        &self,
-        input: ListTagsForStreamInput,
-    ) -> RusotoFuture<ListTagsForStreamOutput, ListTagsForStreamError> {
+impl ServiceRequest for ListTagsForStreamRequest {
+    type Output = ListTagsForStreamResponse;
+    type Error = ListTagsForStreamError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/listTagsForStream";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListTagsForStreamOutput, _>()?;
+                        .deserialize::<ListTagsForStreamResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1196,22 +1268,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
-    fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError> {
+impl ServiceRequest for TagStreamRequest {
+    type Output = TagStreamResponse;
+    type Error = TagStreamError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/tagStream";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TagStreamOutput, _>()?;
+                        .deserialize::<TagStreamResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1225,25 +1306,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>
-    fn untag_stream(
-        &self,
-        input: UntagStreamInput,
-    ) -> RusotoFuture<UntagStreamOutput, UntagStreamError> {
+impl ServiceRequest for UntagStreamRequest {
+    type Output = UntagStreamResponse;
+    type Error = UntagStreamError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/untagStream";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UntagStreamOutput, _>()?;
+                        .deserialize::<UntagStreamResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1257,25 +1344,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p><p> Increases or decreases the stream&#39;s data retention period by the value that you specify. To indicate whether you want to increase or decrease the data retention period, specify the <code>Operation</code> parameter in the request body. In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p> <note> <p>The retention period that you specify replaces the current value.</p> </note> <p>This operation requires permission for the <code>KinesisVideo:UpdateDataRetention</code> action.</p> <p>Changing the data retention period affects the data in the stream as follows:</p> <ul> <li> <p>If the data retention period is increased, existing data is retained for the new retention period. For example, if the data retention period is increased from one hour to seven hours, all existing data is retained for seven hours.</p> </li> <li> <p>If the data retention period is decreased, existing data is retained for the new retention period. For example, if the data retention period is decreased from seven hours to one hour, all existing data is retained for one hour, and any data older than one hour is deleted immediately.</p> </li> </ul></p>
-    fn update_data_retention(
-        &self,
-        input: UpdateDataRetentionInput,
-    ) -> RusotoFuture<UpdateDataRetentionOutput, UpdateDataRetentionError> {
+impl ServiceRequest for UpdateDataRetentionRequest {
+    type Output = UpdateDataRetentionResponse;
+    type Error = UpdateDataRetentionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/updateDataRetention";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateDataRetentionOutput, _>()?;
+                        .deserialize::<UpdateDataRetentionResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -1288,25 +1381,31 @@ impl KinesisVideo for KinesisVideoClient {
             }
         })
     }
+}
 
-    /// <p>Updates stream metadata, such as the device name and media type.</p> <p>You must provide the stream name or the Amazon Resource Name (ARN) of the stream.</p> <p>To make sure that you have the latest version of the stream before updating it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p> <code>UpdateStream</code> is an asynchronous operation, and takes time to complete.</p>
-    fn update_stream(
-        &self,
-        input: UpdateStreamInput,
-    ) -> RusotoFuture<UpdateStreamOutput, UpdateStreamError> {
+impl ServiceRequest for UpdateStreamRequest {
+    type Output = UpdateStreamResponse;
+    type Error = UpdateStreamError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/updateStream";
 
-        let mut request = SignedRequest::new("POST", "kinesisvideo", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "kinesisvideo", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateStreamOutput, _>()?;
+                        .deserialize::<UpdateStreamResponse, _>()?;
 
                     Ok(result)
                 }))

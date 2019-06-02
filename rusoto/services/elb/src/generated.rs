@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -161,80 +162,19 @@ impl AccessPointPortDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains the parameters for EnableAvailabilityZonesForLoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddAvailabilityZonesInput {
-    /// <p>The Availability Zones. These must be in the same region as the load balancer.</p>
-    pub availability_zones: Vec<String>,
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-}
-
-/// Serialize `AddAvailabilityZonesInput` contents to a `SignedRequest`.
-struct AddAvailabilityZonesInputSerializer;
-impl AddAvailabilityZonesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddAvailabilityZonesInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        AvailabilityZonesSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "AvailabilityZones"),
-            &obj.availability_zones,
-        );
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-    }
-}
-
-/// <p>Contains the output of EnableAvailabilityZonesForLoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddAvailabilityZonesOutput {
-    /// <p>The updated list of Availability Zones for the load balancer.</p>
-    pub availability_zones: Option<Vec<String>>,
-}
-
-struct AddAvailabilityZonesOutputDeserializer;
-impl AddAvailabilityZonesOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<AddAvailabilityZonesOutput, XmlParseError> {
-        deserialize_elements::<_, AddAvailabilityZonesOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "AvailabilityZones" => {
-                        obj.availability_zones.get_or_insert(vec![]).extend(
-                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Contains the parameters for AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddTagsInput {
+pub struct AddTagsRequest {
     /// <p>The name of the load balancer. You can specify one load balancer only.</p>
     pub load_balancer_names: Vec<String>,
     /// <p>The tags.</p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `AddTagsInput` contents to a `SignedRequest`.
-struct AddTagsInputSerializer;
-impl AddTagsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddTagsInput) {
+/// Serialize `AddTagsRequest` contents to a `SignedRequest`.
+struct AddTagsRequestSerializer;
+impl AddTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AddTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -251,18 +191,18 @@ impl AddTagsInputSerializer {
 
 /// <p>Contains the output of AddTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AddTagsOutput {}
+pub struct AddTagsResponse {}
 
-struct AddTagsOutputDeserializer;
-impl AddTagsOutputDeserializer {
+struct AddTagsResponseDeserializer;
+impl AddTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AddTagsOutput, XmlParseError> {
+    ) -> Result<AddTagsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = AddTagsOutput::default();
+        let obj = AddTagsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -432,17 +372,17 @@ impl AppCookieStickinessPolicyDeserializer {
 }
 /// <p>Contains the parameters for ApplySecurityGroupsToLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplySecurityGroupsToLoadBalancerInput {
+pub struct ApplySecurityGroupsToLoadBalancerRequest {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
     /// <p>The IDs of the security groups to associate with the load balancer. Note that you cannot specify the name of the security group.</p>
     pub security_groups: Vec<String>,
 }
 
-/// Serialize `ApplySecurityGroupsToLoadBalancerInput` contents to a `SignedRequest`.
-struct ApplySecurityGroupsToLoadBalancerInputSerializer;
-impl ApplySecurityGroupsToLoadBalancerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ApplySecurityGroupsToLoadBalancerInput) {
+/// Serialize `ApplySecurityGroupsToLoadBalancerRequest` contents to a `SignedRequest`.
+struct ApplySecurityGroupsToLoadBalancerRequestSerializer;
+impl ApplySecurityGroupsToLoadBalancerRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ApplySecurityGroupsToLoadBalancerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -462,19 +402,19 @@ impl ApplySecurityGroupsToLoadBalancerInputSerializer {
 
 /// <p>Contains the output of ApplySecurityGroupsToLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplySecurityGroupsToLoadBalancerOutput {
+pub struct ApplySecurityGroupsToLoadBalancerResponse {
     /// <p>The IDs of the security groups associated with the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
 }
 
-struct ApplySecurityGroupsToLoadBalancerOutputDeserializer;
-impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
+struct ApplySecurityGroupsToLoadBalancerResponseDeserializer;
+impl ApplySecurityGroupsToLoadBalancerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ApplySecurityGroupsToLoadBalancerOutput, XmlParseError> {
-        deserialize_elements::<_, ApplySecurityGroupsToLoadBalancerOutput, _>(
+    ) -> Result<ApplySecurityGroupsToLoadBalancerResponse, XmlParseError> {
+        deserialize_elements::<_, ApplySecurityGroupsToLoadBalancerResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -493,17 +433,17 @@ impl ApplySecurityGroupsToLoadBalancerOutputDeserializer {
 }
 /// <p>Contains the parameters for AttachLoaBalancerToSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AttachLoadBalancerToSubnetsInput {
+pub struct AttachLoadBalancerToSubnetsRequest {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
     /// <p>The IDs of the subnets to add. You can add only one subnet per Availability Zone.</p>
     pub subnets: Vec<String>,
 }
 
-/// Serialize `AttachLoadBalancerToSubnetsInput` contents to a `SignedRequest`.
-struct AttachLoadBalancerToSubnetsInputSerializer;
-impl AttachLoadBalancerToSubnetsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerToSubnetsInput) {
+/// Serialize `AttachLoadBalancerToSubnetsRequest` contents to a `SignedRequest`.
+struct AttachLoadBalancerToSubnetsRequestSerializer;
+impl AttachLoadBalancerToSubnetsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerToSubnetsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -519,19 +459,19 @@ impl AttachLoadBalancerToSubnetsInputSerializer {
 
 /// <p>Contains the output of AttachLoadBalancerToSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AttachLoadBalancerToSubnetsOutput {
+pub struct AttachLoadBalancerToSubnetsResponse {
     /// <p>The IDs of the subnets attached to the load balancer.</p>
     pub subnets: Option<Vec<String>>,
 }
 
-struct AttachLoadBalancerToSubnetsOutputDeserializer;
-impl AttachLoadBalancerToSubnetsOutputDeserializer {
+struct AttachLoadBalancerToSubnetsResponseDeserializer;
+impl AttachLoadBalancerToSubnetsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AttachLoadBalancerToSubnetsOutput, XmlParseError> {
-        deserialize_elements::<_, AttachLoadBalancerToSubnetsOutput, _>(
+    ) -> Result<AttachLoadBalancerToSubnetsResponse, XmlParseError> {
+        deserialize_elements::<_, AttachLoadBalancerToSubnetsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -692,17 +632,17 @@ impl CardinalityDeserializer {
 }
 /// <p>Contains the parameters for ConfigureHealthCheck.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ConfigureHealthCheckInput {
+pub struct ConfigureHealthCheckRequest {
     /// <p>The configuration information.</p>
     pub health_check: HealthCheck,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
 
-/// Serialize `ConfigureHealthCheckInput` contents to a `SignedRequest`.
-struct ConfigureHealthCheckInputSerializer;
-impl ConfigureHealthCheckInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ConfigureHealthCheckInput) {
+/// Serialize `ConfigureHealthCheckRequest` contents to a `SignedRequest`.
+struct ConfigureHealthCheckRequestSerializer;
+impl ConfigureHealthCheckRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ConfigureHealthCheckRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -722,19 +662,19 @@ impl ConfigureHealthCheckInputSerializer {
 
 /// <p>Contains the output of ConfigureHealthCheck.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ConfigureHealthCheckOutput {
+pub struct ConfigureHealthCheckResponse {
     /// <p>The updated health check.</p>
     pub health_check: Option<HealthCheck>,
 }
 
-struct ConfigureHealthCheckOutputDeserializer;
-impl ConfigureHealthCheckOutputDeserializer {
+struct ConfigureHealthCheckResponseDeserializer;
+impl ConfigureHealthCheckResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ConfigureHealthCheckOutput, XmlParseError> {
-        deserialize_elements::<_, ConfigureHealthCheckOutput, _>(
+    ) -> Result<ConfigureHealthCheckResponse, XmlParseError> {
+        deserialize_elements::<_, ConfigureHealthCheckResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -883,9 +823,223 @@ impl CookieNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>Contains the parameters for CreateAppCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateAppCookieStickinessPolicyRequest {
+    /// <p>The name of the application cookie used for stickiness.</p>
+    pub cookie_name: String,
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+    /// <p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>
+    pub policy_name: String,
+}
+
+/// Serialize `CreateAppCookieStickinessPolicyRequest` contents to a `SignedRequest`.
+struct CreateAppCookieStickinessPolicyRequestSerializer;
+impl CreateAppCookieStickinessPolicyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateAppCookieStickinessPolicyRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "CookieName"), &obj.cookie_name);
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+    }
+}
+
+/// <p>Contains the output for CreateAppCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateAppCookieStickinessPolicyResponse {}
+
+struct CreateAppCookieStickinessPolicyResponseDeserializer;
+impl CreateAppCookieStickinessPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateAppCookieStickinessPolicyResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = CreateAppCookieStickinessPolicyResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Contains the parameters for CreateLBCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateLBCookieStickinessPolicyRequest {
+    /// <p>The time period, in seconds, after which the cookie should be considered stale. If you do not specify this parameter, the default value is 0, which indicates that the sticky session should last for the duration of the browser session.</p>
+    pub cookie_expiration_period: Option<i64>,
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+    /// <p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>
+    pub policy_name: String,
+}
+
+/// Serialize `CreateLBCookieStickinessPolicyRequest` contents to a `SignedRequest`.
+struct CreateLBCookieStickinessPolicyRequestSerializer;
+impl CreateLBCookieStickinessPolicyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateLBCookieStickinessPolicyRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cookie_expiration_period {
+            params.put(
+                &format!("{}{}", prefix, "CookieExpirationPeriod"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+    }
+}
+
+/// <p>Contains the output for CreateLBCookieStickinessPolicy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateLBCookieStickinessPolicyResponse {}
+
+struct CreateLBCookieStickinessPolicyResponseDeserializer;
+impl CreateLBCookieStickinessPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLBCookieStickinessPolicyResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = CreateLBCookieStickinessPolicyResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Contains the parameters for CreateLoadBalancerListeners.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateLoadBalancerListenersRequest {
+    /// <p>The listeners.</p>
+    pub listeners: Vec<Listener>,
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+}
+
+/// Serialize `CreateLoadBalancerListenersRequest` contents to a `SignedRequest`.
+struct CreateLoadBalancerListenersRequestSerializer;
+impl CreateLoadBalancerListenersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerListenersRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        ListenersSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Listeners"),
+            &obj.listeners,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+    }
+}
+
+/// <p>Contains the parameters for CreateLoadBalancerListener.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateLoadBalancerListenersResponse {}
+
+struct CreateLoadBalancerListenersResponseDeserializer;
+impl CreateLoadBalancerListenersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLoadBalancerListenersResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = CreateLoadBalancerListenersResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Contains the parameters for CreateLoadBalancerPolicy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateLoadBalancerPolicyRequest {
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+    /// <p>The policy attributes.</p>
+    pub policy_attributes: Option<Vec<PolicyAttribute>>,
+    /// <p>The name of the load balancer policy to be created. This name must be unique within the set of policies for this load balancer.</p>
+    pub policy_name: String,
+    /// <p>The name of the base policy type. To get the list of policy types, use <a>DescribeLoadBalancerPolicyTypes</a>.</p>
+    pub policy_type_name: String,
+}
+
+/// Serialize `CreateLoadBalancerPolicyRequest` contents to a `SignedRequest`.
+struct CreateLoadBalancerPolicyRequestSerializer;
+impl CreateLoadBalancerPolicyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerPolicyRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+        if let Some(ref field_value) = obj.policy_attributes {
+            PolicyAttributesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PolicyAttributes"),
+                field_value,
+            );
+        }
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(
+            &format!("{}{}", prefix, "PolicyTypeName"),
+            &obj.policy_type_name,
+        );
+    }
+}
+
+/// <p>Contains the output of CreateLoadBalancerPolicy.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateLoadBalancerPolicyResponse {}
+
+struct CreateLoadBalancerPolicyResponseDeserializer;
+impl CreateLoadBalancerPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLoadBalancerPolicyResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = CreateLoadBalancerPolicyResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for CreateLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateAccessPointInput {
+pub struct CreateLoadBalancerRequest {
     /// <p>One or more Availability Zones from the same region as the load balancer.</p> <p>You must specify at least one Availability Zone.</p> <p>You can add more Availability Zones after you create the load balancer using <a>EnableAvailabilityZonesForLoadBalancer</a>.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p>The listeners.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
@@ -902,10 +1056,10 @@ pub struct CreateAccessPointInput {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateAccessPointInput` contents to a `SignedRequest`.
-struct CreateAccessPointInputSerializer;
-impl CreateAccessPointInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateAccessPointInput) {
+/// Serialize `CreateLoadBalancerRequest` contents to a `SignedRequest`.
+struct CreateLoadBalancerRequestSerializer;
+impl CreateLoadBalancerRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -948,19 +1102,19 @@ impl CreateAccessPointInputSerializer {
 
 /// <p>Contains the output for CreateLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateAccessPointOutput {
+pub struct CreateLoadBalancerResponse {
     /// <p>The DNS name of the load balancer.</p>
     pub dns_name: Option<String>,
 }
 
-struct CreateAccessPointOutputDeserializer;
-impl CreateAccessPointOutputDeserializer {
+struct CreateLoadBalancerResponseDeserializer;
+impl CreateLoadBalancerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateAccessPointOutput, XmlParseError> {
-        deserialize_elements::<_, CreateAccessPointOutput, _>(
+    ) -> Result<CreateLoadBalancerResponse, XmlParseError> {
+        deserialize_elements::<_, CreateLoadBalancerResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -973,220 +1127,6 @@ impl CreateAccessPointOutputDeserializer {
                 Ok(())
             },
         )
-    }
-}
-/// <p>Contains the parameters for CreateAppCookieStickinessPolicy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateAppCookieStickinessPolicyInput {
-    /// <p>The name of the application cookie used for stickiness.</p>
-    pub cookie_name: String,
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-    /// <p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>
-    pub policy_name: String,
-}
-
-/// Serialize `CreateAppCookieStickinessPolicyInput` contents to a `SignedRequest`.
-struct CreateAppCookieStickinessPolicyInputSerializer;
-impl CreateAppCookieStickinessPolicyInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateAppCookieStickinessPolicyInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(&format!("{}{}", prefix, "CookieName"), &obj.cookie_name);
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-    }
-}
-
-/// <p>Contains the output for CreateAppCookieStickinessPolicy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateAppCookieStickinessPolicyOutput {}
-
-struct CreateAppCookieStickinessPolicyOutputDeserializer;
-impl CreateAppCookieStickinessPolicyOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateAppCookieStickinessPolicyOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = CreateAppCookieStickinessPolicyOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-/// <p>Contains the parameters for CreateLBCookieStickinessPolicy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLBCookieStickinessPolicyInput {
-    /// <p>The time period, in seconds, after which the cookie should be considered stale. If you do not specify this parameter, the default value is 0, which indicates that the sticky session should last for the duration of the browser session.</p>
-    pub cookie_expiration_period: Option<i64>,
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-    /// <p>The name of the policy being created. Policy names must consist of alphanumeric characters and dashes (-). This name must be unique within the set of policies for this load balancer.</p>
-    pub policy_name: String,
-}
-
-/// Serialize `CreateLBCookieStickinessPolicyInput` contents to a `SignedRequest`.
-struct CreateLBCookieStickinessPolicyInputSerializer;
-impl CreateLBCookieStickinessPolicyInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateLBCookieStickinessPolicyInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.cookie_expiration_period {
-            params.put(
-                &format!("{}{}", prefix, "CookieExpirationPeriod"),
-                &field_value,
-            );
-        }
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-    }
-}
-
-/// <p>Contains the output for CreateLBCookieStickinessPolicy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLBCookieStickinessPolicyOutput {}
-
-struct CreateLBCookieStickinessPolicyOutputDeserializer;
-impl CreateLBCookieStickinessPolicyOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateLBCookieStickinessPolicyOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = CreateLBCookieStickinessPolicyOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-/// <p>Contains the parameters for CreateLoadBalancerListeners.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLoadBalancerListenerInput {
-    /// <p>The listeners.</p>
-    pub listeners: Vec<Listener>,
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-}
-
-/// Serialize `CreateLoadBalancerListenerInput` contents to a `SignedRequest`.
-struct CreateLoadBalancerListenerInputSerializer;
-impl CreateLoadBalancerListenerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerListenerInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        ListenersSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "Listeners"),
-            &obj.listeners,
-        );
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-    }
-}
-
-/// <p>Contains the parameters for CreateLoadBalancerListener.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLoadBalancerListenerOutput {}
-
-struct CreateLoadBalancerListenerOutputDeserializer;
-impl CreateLoadBalancerListenerOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateLoadBalancerListenerOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = CreateLoadBalancerListenerOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-/// <p>Contains the parameters for CreateLoadBalancerPolicy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLoadBalancerPolicyInput {
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-    /// <p>The policy attributes.</p>
-    pub policy_attributes: Option<Vec<PolicyAttribute>>,
-    /// <p>The name of the load balancer policy to be created. This name must be unique within the set of policies for this load balancer.</p>
-    pub policy_name: String,
-    /// <p>The name of the base policy type. To get the list of policy types, use <a>DescribeLoadBalancerPolicyTypes</a>.</p>
-    pub policy_type_name: String,
-}
-
-/// Serialize `CreateLoadBalancerPolicyInput` contents to a `SignedRequest`.
-struct CreateLoadBalancerPolicyInputSerializer;
-impl CreateLoadBalancerPolicyInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateLoadBalancerPolicyInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-        if let Some(ref field_value) = obj.policy_attributes {
-            PolicyAttributesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "PolicyAttributes"),
-                field_value,
-            );
-        }
-        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
-        params.put(
-            &format!("{}{}", prefix, "PolicyTypeName"),
-            &obj.policy_type_name,
-        );
-    }
-}
-
-/// <p>Contains the output of CreateLoadBalancerPolicy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLoadBalancerPolicyOutput {}
-
-struct CreateLoadBalancerPolicyOutputDeserializer;
-impl CreateLoadBalancerPolicyOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CreateLoadBalancerPolicyOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = CreateLoadBalancerPolicyOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
     }
 }
 struct CreatedTimeDeserializer;
@@ -1273,62 +1213,19 @@ impl DefaultValueDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains the parameters for DeleteLoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteAccessPointInput {
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-}
-
-/// Serialize `DeleteAccessPointInput` contents to a `SignedRequest`.
-struct DeleteAccessPointInputSerializer;
-impl DeleteAccessPointInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteAccessPointInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-    }
-}
-
-/// <p>Contains the output of DeleteLoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteAccessPointOutput {}
-
-struct DeleteAccessPointOutputDeserializer;
-impl DeleteAccessPointOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DeleteAccessPointOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = DeleteAccessPointOutput::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
 /// <p>Contains the parameters for DeleteLoadBalancerListeners.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLoadBalancerListenerInput {
+pub struct DeleteLoadBalancerListenersRequest {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
     /// <p>The client port numbers of the listeners.</p>
     pub load_balancer_ports: Vec<i64>,
 }
 
-/// Serialize `DeleteLoadBalancerListenerInput` contents to a `SignedRequest`.
-struct DeleteLoadBalancerListenerInputSerializer;
-impl DeleteLoadBalancerListenerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerListenerInput) {
+/// Serialize `DeleteLoadBalancerListenersRequest` contents to a `SignedRequest`.
+struct DeleteLoadBalancerListenersRequestSerializer;
+impl DeleteLoadBalancerListenersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerListenersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1348,18 +1245,18 @@ impl DeleteLoadBalancerListenerInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancerListeners.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLoadBalancerListenerOutput {}
+pub struct DeleteLoadBalancerListenersResponse {}
 
-struct DeleteLoadBalancerListenerOutputDeserializer;
-impl DeleteLoadBalancerListenerOutputDeserializer {
+struct DeleteLoadBalancerListenersResponseDeserializer;
+impl DeleteLoadBalancerListenersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteLoadBalancerListenerOutput, XmlParseError> {
+    ) -> Result<DeleteLoadBalancerListenersResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteLoadBalancerListenerOutput::default();
+        let obj = DeleteLoadBalancerListenersResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -1368,17 +1265,17 @@ impl DeleteLoadBalancerListenerOutputDeserializer {
 }
 /// <p>Contains the parameters for DeleteLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLoadBalancerPolicyInput {
+pub struct DeleteLoadBalancerPolicyRequest {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
     /// <p>The name of the policy.</p>
     pub policy_name: String,
 }
 
-/// Serialize `DeleteLoadBalancerPolicyInput` contents to a `SignedRequest`.
-struct DeleteLoadBalancerPolicyInputSerializer;
-impl DeleteLoadBalancerPolicyInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerPolicyInput) {
+/// Serialize `DeleteLoadBalancerPolicyRequest` contents to a `SignedRequest`.
+struct DeleteLoadBalancerPolicyRequestSerializer;
+impl DeleteLoadBalancerPolicyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerPolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1394,18 +1291,61 @@ impl DeleteLoadBalancerPolicyInputSerializer {
 
 /// <p>Contains the output of DeleteLoadBalancerPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLoadBalancerPolicyOutput {}
+pub struct DeleteLoadBalancerPolicyResponse {}
 
-struct DeleteLoadBalancerPolicyOutputDeserializer;
-impl DeleteLoadBalancerPolicyOutputDeserializer {
+struct DeleteLoadBalancerPolicyResponseDeserializer;
+impl DeleteLoadBalancerPolicyResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteLoadBalancerPolicyOutput, XmlParseError> {
+    ) -> Result<DeleteLoadBalancerPolicyResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DeleteLoadBalancerPolicyOutput::default();
+        let obj = DeleteLoadBalancerPolicyResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Contains the parameters for DeleteLoadBalancer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteLoadBalancerRequest {
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+}
+
+/// Serialize `DeleteLoadBalancerRequest` contents to a `SignedRequest`.
+struct DeleteLoadBalancerRequestSerializer;
+impl DeleteLoadBalancerRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteLoadBalancerRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+    }
+}
+
+/// <p>Contains the output of DeleteLoadBalancer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteLoadBalancerResponse {}
+
+struct DeleteLoadBalancerResponseDeserializer;
+impl DeleteLoadBalancerResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLoadBalancerResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = DeleteLoadBalancerResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -1414,17 +1354,21 @@ impl DeleteLoadBalancerPolicyOutputDeserializer {
 }
 /// <p>Contains the parameters for DeregisterInstancesFromLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeregisterEndPointsInput {
+pub struct DeregisterInstancesFromLoadBalancerRequest {
     /// <p>The IDs of the instances.</p>
     pub instances: Vec<Instance>,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
 
-/// Serialize `DeregisterEndPointsInput` contents to a `SignedRequest`.
-struct DeregisterEndPointsInputSerializer;
-impl DeregisterEndPointsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeregisterEndPointsInput) {
+/// Serialize `DeregisterInstancesFromLoadBalancerRequest` contents to a `SignedRequest`.
+struct DeregisterInstancesFromLoadBalancerRequestSerializer;
+impl DeregisterInstancesFromLoadBalancerRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DeregisterInstancesFromLoadBalancerRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1444,19 +1388,19 @@ impl DeregisterEndPointsInputSerializer {
 
 /// <p>Contains the output of DeregisterInstancesFromLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeregisterEndPointsOutput {
+pub struct DeregisterInstancesFromLoadBalancerResponse {
     /// <p>The remaining instances registered with the load balancer.</p>
     pub instances: Option<Vec<Instance>>,
 }
 
-struct DeregisterEndPointsOutputDeserializer;
-impl DeregisterEndPointsOutputDeserializer {
+struct DeregisterInstancesFromLoadBalancerResponseDeserializer;
+impl DeregisterInstancesFromLoadBalancerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeregisterEndPointsOutput, XmlParseError> {
-        deserialize_elements::<_, DeregisterEndPointsOutput, _>(
+    ) -> Result<DeregisterInstancesFromLoadBalancerResponse, XmlParseError> {
+        deserialize_elements::<_, DeregisterInstancesFromLoadBalancerResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1473,9 +1417,315 @@ impl DeregisterEndPointsOutputDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountLimitsRequest {
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of results to return with this call.</p>
+    pub page_size: Option<i64>,
+}
+
+/// Serialize `DescribeAccountLimitsRequest` contents to a `SignedRequest`.
+struct DescribeAccountLimitsRequestSerializer;
+impl DescribeAccountLimitsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAccountLimitsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.page_size {
+            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountLimitsResponse {
+    /// <p>Information about the limits.</p>
+    pub limits: Option<Vec<Limit>>,
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    pub next_marker: Option<String>,
+}
+
+struct DescribeAccountLimitsResponseDeserializer;
+impl DescribeAccountLimitsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAccountLimitsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAccountLimitsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Limits" => {
+                        obj.limits
+                            .get_or_insert(vec![])
+                            .extend(LimitsDeserializer::deserialize("Limits", stack)?);
+                    }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(MarkerDeserializer::deserialize("NextMarker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains the parameters for DescribeInstanceHealth.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInstanceHealthRequest {
+    /// <p>The IDs of the instances.</p>
+    pub instances: Option<Vec<Instance>>,
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+}
+
+/// Serialize `DescribeInstanceHealthRequest` contents to a `SignedRequest`.
+struct DescribeInstanceHealthRequestSerializer;
+impl DescribeInstanceHealthRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeInstanceHealthRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.instances {
+            InstancesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Instances"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+    }
+}
+
+/// <p>Contains the output for DescribeInstanceHealth.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeInstanceHealthResponse {
+    /// <p>Information about the health of the instances.</p>
+    pub instance_states: Option<Vec<InstanceState>>,
+}
+
+struct DescribeInstanceHealthResponseDeserializer;
+impl DescribeInstanceHealthResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeInstanceHealthResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeInstanceHealthResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "InstanceStates" => {
+                        obj.instance_states.get_or_insert(vec![]).extend(
+                            InstanceStatesDeserializer::deserialize("InstanceStates", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains the parameters for DescribeLoadBalancerAttributes.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoadBalancerAttributesRequest {
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+}
+
+/// Serialize `DescribeLoadBalancerAttributesRequest` contents to a `SignedRequest`.
+struct DescribeLoadBalancerAttributesRequestSerializer;
+impl DescribeLoadBalancerAttributesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerAttributesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+    }
+}
+
+/// <p>Contains the output of DescribeLoadBalancerAttributes.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoadBalancerAttributesResponse {
+    /// <p>Information about the load balancer attributes.</p>
+    pub load_balancer_attributes: Option<LoadBalancerAttributes>,
+}
+
+struct DescribeLoadBalancerAttributesResponseDeserializer;
+impl DescribeLoadBalancerAttributesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLoadBalancerAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLoadBalancerAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "LoadBalancerAttributes" => {
+                        obj.load_balancer_attributes =
+                            Some(LoadBalancerAttributesDeserializer::deserialize(
+                                "LoadBalancerAttributes",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains the parameters for DescribeLoadBalancerPolicies.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoadBalancerPoliciesRequest {
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: Option<String>,
+    /// <p>The names of the policies.</p>
+    pub policy_names: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeLoadBalancerPoliciesRequest` contents to a `SignedRequest`.
+struct DescribeLoadBalancerPoliciesRequestSerializer;
+impl DescribeLoadBalancerPoliciesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerPoliciesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.load_balancer_name {
+            params.put(&format!("{}{}", prefix, "LoadBalancerName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.policy_names {
+            PolicyNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PolicyNames"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// <p>Contains the output of DescribeLoadBalancerPolicies.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoadBalancerPoliciesResponse {
+    /// <p>Information about the policies.</p>
+    pub policy_descriptions: Option<Vec<PolicyDescription>>,
+}
+
+struct DescribeLoadBalancerPoliciesResponseDeserializer;
+impl DescribeLoadBalancerPoliciesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLoadBalancerPoliciesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLoadBalancerPoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "PolicyDescriptions" => {
+                        obj.policy_descriptions.get_or_insert(vec![]).extend(
+                            PolicyDescriptionsDeserializer::deserialize(
+                                "PolicyDescriptions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains the parameters for DescribeLoadBalancerPolicyTypes.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoadBalancerPolicyTypesRequest {
+    /// <p>The names of the policy types. If no names are specified, describes all policy types defined by Elastic Load Balancing.</p>
+    pub policy_type_names: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeLoadBalancerPolicyTypesRequest` contents to a `SignedRequest`.
+struct DescribeLoadBalancerPolicyTypesRequestSerializer;
+impl DescribeLoadBalancerPolicyTypesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerPolicyTypesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.policy_type_names {
+            PolicyTypeNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PolicyTypeNames"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// <p>Contains the output of DescribeLoadBalancerPolicyTypes.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLoadBalancerPolicyTypesResponse {
+    /// <p>Information about the policy types.</p>
+    pub policy_type_descriptions: Option<Vec<PolicyTypeDescription>>,
+}
+
+struct DescribeLoadBalancerPolicyTypesResponseDeserializer;
+impl DescribeLoadBalancerPolicyTypesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLoadBalancerPolicyTypesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLoadBalancerPolicyTypesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "PolicyTypeDescriptions" => {
+                        obj.policy_type_descriptions.get_or_insert(vec![]).extend(
+                            PolicyTypeDescriptionsDeserializer::deserialize(
+                                "PolicyTypeDescriptions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Contains the parameters for DescribeLoadBalancers.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccessPointsInput {
+pub struct DescribeLoadBalancersRequest {
     /// <p>The names of the load balancers.</p>
     pub load_balancer_names: Option<Vec<String>>,
     /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
@@ -1484,10 +1734,10 @@ pub struct DescribeAccessPointsInput {
     pub page_size: Option<i64>,
 }
 
-/// Serialize `DescribeAccessPointsInput` contents to a `SignedRequest`.
-struct DescribeAccessPointsInputSerializer;
-impl DescribeAccessPointsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAccessPointsInput) {
+/// Serialize `DescribeLoadBalancersRequest` contents to a `SignedRequest`.
+struct DescribeLoadBalancersRequestSerializer;
+impl DescribeLoadBalancersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1511,21 +1761,21 @@ impl DescribeAccessPointsInputSerializer {
 
 /// <p>Contains the parameters for DescribeLoadBalancers.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccessPointsOutput {
+pub struct DescribeLoadBalancersResponse {
     /// <p>Information about the load balancers.</p>
     pub load_balancer_descriptions: Option<Vec<LoadBalancerDescription>>,
     /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
     pub next_marker: Option<String>,
 }
 
-struct DescribeAccessPointsOutputDeserializer;
-impl DescribeAccessPointsOutputDeserializer {
+struct DescribeLoadBalancersResponseDeserializer;
+impl DescribeLoadBalancersResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAccessPointsOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeAccessPointsOutput, _>(
+    ) -> Result<DescribeLoadBalancersResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLoadBalancersResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1549,323 +1799,17 @@ impl DescribeAccessPointsOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountLimitsInput {
-    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
-    pub marker: Option<String>,
-    /// <p>The maximum number of results to return with this call.</p>
-    pub page_size: Option<i64>,
-}
-
-/// Serialize `DescribeAccountLimitsInput` contents to a `SignedRequest`.
-struct DescribeAccountLimitsInputSerializer;
-impl DescribeAccountLimitsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAccountLimitsInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.marker {
-            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
-        }
-        if let Some(ref field_value) = obj.page_size {
-            params.put(&format!("{}{}", prefix, "PageSize"), &field_value);
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountLimitsOutput {
-    /// <p>Information about the limits.</p>
-    pub limits: Option<Vec<Limit>>,
-    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
-    pub next_marker: Option<String>,
-}
-
-struct DescribeAccountLimitsOutputDeserializer;
-impl DescribeAccountLimitsOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DescribeAccountLimitsOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeAccountLimitsOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Limits" => {
-                        obj.limits
-                            .get_or_insert(vec![])
-                            .extend(LimitsDeserializer::deserialize("Limits", stack)?);
-                    }
-                    "NextMarker" => {
-                        obj.next_marker =
-                            Some(MarkerDeserializer::deserialize("NextMarker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Contains the parameters for DescribeInstanceHealth.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEndPointStateInput {
-    /// <p>The IDs of the instances.</p>
-    pub instances: Option<Vec<Instance>>,
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-}
-
-/// Serialize `DescribeEndPointStateInput` contents to a `SignedRequest`.
-struct DescribeEndPointStateInputSerializer;
-impl DescribeEndPointStateInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEndPointStateInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.instances {
-            InstancesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "Instances"),
-                field_value,
-            );
-        }
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-    }
-}
-
-/// <p>Contains the output for DescribeInstanceHealth.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEndPointStateOutput {
-    /// <p>Information about the health of the instances.</p>
-    pub instance_states: Option<Vec<InstanceState>>,
-}
-
-struct DescribeEndPointStateOutputDeserializer;
-impl DescribeEndPointStateOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DescribeEndPointStateOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeEndPointStateOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "InstanceStates" => {
-                        obj.instance_states.get_or_insert(vec![]).extend(
-                            InstanceStatesDeserializer::deserialize("InstanceStates", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Contains the parameters for DescribeLoadBalancerAttributes.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerAttributesInput {
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-}
-
-/// Serialize `DescribeLoadBalancerAttributesInput` contents to a `SignedRequest`.
-struct DescribeLoadBalancerAttributesInputSerializer;
-impl DescribeLoadBalancerAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerAttributesInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-    }
-}
-
-/// <p>Contains the output of DescribeLoadBalancerAttributes.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerAttributesOutput {
-    /// <p>Information about the load balancer attributes.</p>
-    pub load_balancer_attributes: Option<LoadBalancerAttributes>,
-}
-
-struct DescribeLoadBalancerAttributesOutputDeserializer;
-impl DescribeLoadBalancerAttributesOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DescribeLoadBalancerAttributesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeLoadBalancerAttributesOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "LoadBalancerAttributes" => {
-                        obj.load_balancer_attributes =
-                            Some(LoadBalancerAttributesDeserializer::deserialize(
-                                "LoadBalancerAttributes",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Contains the parameters for DescribeLoadBalancerPolicies.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerPoliciesInput {
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: Option<String>,
-    /// <p>The names of the policies.</p>
-    pub policy_names: Option<Vec<String>>,
-}
-
-/// Serialize `DescribeLoadBalancerPoliciesInput` contents to a `SignedRequest`.
-struct DescribeLoadBalancerPoliciesInputSerializer;
-impl DescribeLoadBalancerPoliciesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerPoliciesInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.load_balancer_name {
-            params.put(&format!("{}{}", prefix, "LoadBalancerName"), &field_value);
-        }
-        if let Some(ref field_value) = obj.policy_names {
-            PolicyNamesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "PolicyNames"),
-                field_value,
-            );
-        }
-    }
-}
-
-/// <p>Contains the output of DescribeLoadBalancerPolicies.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerPoliciesOutput {
-    /// <p>Information about the policies.</p>
-    pub policy_descriptions: Option<Vec<PolicyDescription>>,
-}
-
-struct DescribeLoadBalancerPoliciesOutputDeserializer;
-impl DescribeLoadBalancerPoliciesOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DescribeLoadBalancerPoliciesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeLoadBalancerPoliciesOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "PolicyDescriptions" => {
-                        obj.policy_descriptions.get_or_insert(vec![]).extend(
-                            PolicyDescriptionsDeserializer::deserialize(
-                                "PolicyDescriptions",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Contains the parameters for DescribeLoadBalancerPolicyTypes.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerPolicyTypesInput {
-    /// <p>The names of the policy types. If no names are specified, describes all policy types defined by Elastic Load Balancing.</p>
-    pub policy_type_names: Option<Vec<String>>,
-}
-
-/// Serialize `DescribeLoadBalancerPolicyTypesInput` contents to a `SignedRequest`.
-struct DescribeLoadBalancerPolicyTypesInputSerializer;
-impl DescribeLoadBalancerPolicyTypesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerPolicyTypesInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.policy_type_names {
-            PolicyTypeNamesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "PolicyTypeNames"),
-                field_value,
-            );
-        }
-    }
-}
-
-/// <p>Contains the output of DescribeLoadBalancerPolicyTypes.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLoadBalancerPolicyTypesOutput {
-    /// <p>Information about the policy types.</p>
-    pub policy_type_descriptions: Option<Vec<PolicyTypeDescription>>,
-}
-
-struct DescribeLoadBalancerPolicyTypesOutputDeserializer;
-impl DescribeLoadBalancerPolicyTypesOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DescribeLoadBalancerPolicyTypesOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeLoadBalancerPolicyTypesOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "PolicyTypeDescriptions" => {
-                        obj.policy_type_descriptions.get_or_insert(vec![]).extend(
-                            PolicyTypeDescriptionsDeserializer::deserialize(
-                                "PolicyTypeDescriptions",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Contains the parameters for DescribeTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTagsInput {
+pub struct DescribeTagsRequest {
     /// <p>The names of the load balancers.</p>
     pub load_balancer_names: Vec<String>,
 }
 
-/// Serialize `DescribeTagsInput` contents to a `SignedRequest`.
-struct DescribeTagsInputSerializer;
-impl DescribeTagsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsInput) {
+/// Serialize `DescribeTagsRequest` contents to a `SignedRequest`.
+struct DescribeTagsRequestSerializer;
+impl DescribeTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1881,19 +1825,19 @@ impl DescribeTagsInputSerializer {
 
 /// <p>Contains the output for DescribeTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTagsOutput {
+pub struct DescribeTagsResponse {
     /// <p>Information about the tags.</p>
     pub tag_descriptions: Option<Vec<TagDescription>>,
 }
 
-struct DescribeTagsOutputDeserializer;
-impl DescribeTagsOutputDeserializer {
+struct DescribeTagsResponseDeserializer;
+impl DescribeTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeTagsOutput, XmlParseError> {
-        deserialize_elements::<_, DescribeTagsOutput, _>(tag_name, stack, |name, stack, obj| {
+    ) -> Result<DescribeTagsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTagsResponse, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "TagDescriptions" => {
                     obj.tag_descriptions.get_or_insert(vec![]).extend(
@@ -1919,17 +1863,17 @@ impl DescriptionDeserializer {
 }
 /// <p>Contains the parameters for DetachLoadBalancerFromSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachLoadBalancerFromSubnetsInput {
+pub struct DetachLoadBalancerFromSubnetsRequest {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
     /// <p>The IDs of the subnets.</p>
     pub subnets: Vec<String>,
 }
 
-/// Serialize `DetachLoadBalancerFromSubnetsInput` contents to a `SignedRequest`.
-struct DetachLoadBalancerFromSubnetsInputSerializer;
-impl DetachLoadBalancerFromSubnetsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerFromSubnetsInput) {
+/// Serialize `DetachLoadBalancerFromSubnetsRequest` contents to a `SignedRequest`.
+struct DetachLoadBalancerFromSubnetsRequestSerializer;
+impl DetachLoadBalancerFromSubnetsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerFromSubnetsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1945,19 +1889,19 @@ impl DetachLoadBalancerFromSubnetsInputSerializer {
 
 /// <p>Contains the output of DetachLoadBalancerFromSubnets.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachLoadBalancerFromSubnetsOutput {
+pub struct DetachLoadBalancerFromSubnetsResponse {
     /// <p>The IDs of the remaining subnets for the load balancer.</p>
     pub subnets: Option<Vec<String>>,
 }
 
-struct DetachLoadBalancerFromSubnetsOutputDeserializer;
-impl DetachLoadBalancerFromSubnetsOutputDeserializer {
+struct DetachLoadBalancerFromSubnetsResponseDeserializer;
+impl DetachLoadBalancerFromSubnetsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DetachLoadBalancerFromSubnetsOutput, XmlParseError> {
-        deserialize_elements::<_, DetachLoadBalancerFromSubnetsOutput, _>(
+    ) -> Result<DetachLoadBalancerFromSubnetsResponse, XmlParseError> {
+        deserialize_elements::<_, DetachLoadBalancerFromSubnetsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1966,6 +1910,136 @@ impl DetachLoadBalancerFromSubnetsOutputDeserializer {
                         obj.subnets
                             .get_or_insert(vec![])
                             .extend(SubnetsDeserializer::deserialize("Subnets", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains the parameters for DisableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableAvailabilityZonesForLoadBalancerRequest {
+    /// <p>The Availability Zones.</p>
+    pub availability_zones: Vec<String>,
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+}
+
+/// Serialize `DisableAvailabilityZonesForLoadBalancerRequest` contents to a `SignedRequest`.
+struct DisableAvailabilityZonesForLoadBalancerRequestSerializer;
+impl DisableAvailabilityZonesForLoadBalancerRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DisableAvailabilityZonesForLoadBalancerRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        AvailabilityZonesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "AvailabilityZones"),
+            &obj.availability_zones,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+    }
+}
+
+/// <p>Contains the output for DisableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableAvailabilityZonesForLoadBalancerResponse {
+    /// <p>The remaining Availability Zones for the load balancer.</p>
+    pub availability_zones: Option<Vec<String>>,
+}
+
+struct DisableAvailabilityZonesForLoadBalancerResponseDeserializer;
+impl DisableAvailabilityZonesForLoadBalancerResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableAvailabilityZonesForLoadBalancerResponse, XmlParseError> {
+        deserialize_elements::<_, DisableAvailabilityZonesForLoadBalancerResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AvailabilityZones" => {
+                        obj.availability_zones.get_or_insert(vec![]).extend(
+                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Contains the parameters for EnableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableAvailabilityZonesForLoadBalancerRequest {
+    /// <p>The Availability Zones. These must be in the same region as the load balancer.</p>
+    pub availability_zones: Vec<String>,
+    /// <p>The name of the load balancer.</p>
+    pub load_balancer_name: String,
+}
+
+/// Serialize `EnableAvailabilityZonesForLoadBalancerRequest` contents to a `SignedRequest`.
+struct EnableAvailabilityZonesForLoadBalancerRequestSerializer;
+impl EnableAvailabilityZonesForLoadBalancerRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &EnableAvailabilityZonesForLoadBalancerRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        AvailabilityZonesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "AvailabilityZones"),
+            &obj.availability_zones,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LoadBalancerName"),
+            &obj.load_balancer_name,
+        );
+    }
+}
+
+/// <p>Contains the output of EnableAvailabilityZonesForLoadBalancer.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableAvailabilityZonesForLoadBalancerResponse {
+    /// <p>The updated list of Availability Zones for the load balancer.</p>
+    pub availability_zones: Option<Vec<String>>,
+}
+
+struct EnableAvailabilityZonesForLoadBalancerResponseDeserializer;
+impl EnableAvailabilityZonesForLoadBalancerResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableAvailabilityZonesForLoadBalancerResponse, XmlParseError> {
+        deserialize_elements::<_, EnableAvailabilityZonesForLoadBalancerResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AvailabilityZones" => {
+                        obj.availability_zones.get_or_insert(vec![]).extend(
+                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
                 }
@@ -2820,17 +2894,17 @@ impl MaxDeserializer {
 }
 /// <p>Contains the parameters for ModifyLoadBalancerAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyLoadBalancerAttributesInput {
+pub struct ModifyLoadBalancerAttributesRequest {
     /// <p>The attributes for the load balancer.</p>
     pub load_balancer_attributes: LoadBalancerAttributes,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
 
-/// Serialize `ModifyLoadBalancerAttributesInput` contents to a `SignedRequest`.
-struct ModifyLoadBalancerAttributesInputSerializer;
-impl ModifyLoadBalancerAttributesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyLoadBalancerAttributesInput) {
+/// Serialize `ModifyLoadBalancerAttributesRequest` contents to a `SignedRequest`.
+struct ModifyLoadBalancerAttributesRequestSerializer;
+impl ModifyLoadBalancerAttributesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyLoadBalancerAttributesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2850,21 +2924,21 @@ impl ModifyLoadBalancerAttributesInputSerializer {
 
 /// <p>Contains the output of ModifyLoadBalancerAttributes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ModifyLoadBalancerAttributesOutput {
+pub struct ModifyLoadBalancerAttributesResponse {
     /// <p>Information about the load balancer attributes.</p>
     pub load_balancer_attributes: Option<LoadBalancerAttributes>,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
 }
 
-struct ModifyLoadBalancerAttributesOutputDeserializer;
-impl ModifyLoadBalancerAttributesOutputDeserializer {
+struct ModifyLoadBalancerAttributesResponseDeserializer;
+impl ModifyLoadBalancerAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ModifyLoadBalancerAttributesOutput, XmlParseError> {
-        deserialize_elements::<_, ModifyLoadBalancerAttributesOutput, _>(
+    ) -> Result<ModifyLoadBalancerAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, ModifyLoadBalancerAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3346,17 +3420,17 @@ impl ReasonCodeDeserializer {
 }
 /// <p>Contains the parameters for RegisterInstancesWithLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RegisterEndPointsInput {
+pub struct RegisterInstancesWithLoadBalancerRequest {
     /// <p>The IDs of the instances.</p>
     pub instances: Vec<Instance>,
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
 }
 
-/// Serialize `RegisterEndPointsInput` contents to a `SignedRequest`.
-struct RegisterEndPointsInputSerializer;
-impl RegisterEndPointsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RegisterEndPointsInput) {
+/// Serialize `RegisterInstancesWithLoadBalancerRequest` contents to a `SignedRequest`.
+struct RegisterInstancesWithLoadBalancerRequestSerializer;
+impl RegisterInstancesWithLoadBalancerRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RegisterInstancesWithLoadBalancerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3376,19 +3450,19 @@ impl RegisterEndPointsInputSerializer {
 
 /// <p>Contains the output of RegisterInstancesWithLoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RegisterEndPointsOutput {
+pub struct RegisterInstancesWithLoadBalancerResponse {
     /// <p>The updated list of instances for the load balancer.</p>
     pub instances: Option<Vec<Instance>>,
 }
 
-struct RegisterEndPointsOutputDeserializer;
-impl RegisterEndPointsOutputDeserializer {
+struct RegisterInstancesWithLoadBalancerResponseDeserializer;
+impl RegisterInstancesWithLoadBalancerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RegisterEndPointsOutput, XmlParseError> {
-        deserialize_elements::<_, RegisterEndPointsOutput, _>(
+    ) -> Result<RegisterInstancesWithLoadBalancerResponse, XmlParseError> {
+        deserialize_elements::<_, RegisterInstancesWithLoadBalancerResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3405,80 +3479,19 @@ impl RegisterEndPointsOutputDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DisableAvailabilityZonesForLoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveAvailabilityZonesInput {
-    /// <p>The Availability Zones.</p>
-    pub availability_zones: Vec<String>,
-    /// <p>The name of the load balancer.</p>
-    pub load_balancer_name: String,
-}
-
-/// Serialize `RemoveAvailabilityZonesInput` contents to a `SignedRequest`.
-struct RemoveAvailabilityZonesInputSerializer;
-impl RemoveAvailabilityZonesInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveAvailabilityZonesInput) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        AvailabilityZonesSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "AvailabilityZones"),
-            &obj.availability_zones,
-        );
-        params.put(
-            &format!("{}{}", prefix, "LoadBalancerName"),
-            &obj.load_balancer_name,
-        );
-    }
-}
-
-/// <p>Contains the output for DisableAvailabilityZonesForLoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveAvailabilityZonesOutput {
-    /// <p>The remaining Availability Zones for the load balancer.</p>
-    pub availability_zones: Option<Vec<String>>,
-}
-
-struct RemoveAvailabilityZonesOutputDeserializer;
-impl RemoveAvailabilityZonesOutputDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<RemoveAvailabilityZonesOutput, XmlParseError> {
-        deserialize_elements::<_, RemoveAvailabilityZonesOutput, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "AvailabilityZones" => {
-                        obj.availability_zones.get_or_insert(vec![]).extend(
-                            AvailabilityZonesDeserializer::deserialize("AvailabilityZones", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Contains the parameters for RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveTagsInput {
+pub struct RemoveTagsRequest {
     /// <p>The name of the load balancer. You can specify a maximum of one load balancer name.</p>
     pub load_balancer_names: Vec<String>,
     /// <p>The list of tag keys to remove.</p>
     pub tags: Vec<TagKeyOnly>,
 }
 
-/// Serialize `RemoveTagsInput` contents to a `SignedRequest`.
-struct RemoveTagsInputSerializer;
-impl RemoveTagsInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsInput) {
+/// Serialize `RemoveTagsRequest` contents to a `SignedRequest`.
+struct RemoveTagsRequestSerializer;
+impl RemoveTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3495,18 +3508,18 @@ impl RemoveTagsInputSerializer {
 
 /// <p>Contains the output of RemoveTags.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RemoveTagsOutput {}
+pub struct RemoveTagsResponse {}
 
-struct RemoveTagsOutputDeserializer;
-impl RemoveTagsOutputDeserializer {
+struct RemoveTagsResponseDeserializer;
+impl RemoveTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RemoveTagsOutput, XmlParseError> {
+    ) -> Result<RemoveTagsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = RemoveTagsOutput::default();
+        let obj = RemoveTagsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -3599,7 +3612,7 @@ impl SecurityGroupsSerializer {
 
 /// <p>Contains the parameters for SetLoadBalancerListenerSSLCertificate.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetLoadBalancerListenerSSLCertificateInput {
+pub struct SetLoadBalancerListenerSSLCertificateRequest {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
     /// <p>The port that uses the specified SSL certificate.</p>
@@ -3608,13 +3621,13 @@ pub struct SetLoadBalancerListenerSSLCertificateInput {
     pub ssl_certificate_id: String,
 }
 
-/// Serialize `SetLoadBalancerListenerSSLCertificateInput` contents to a `SignedRequest`.
-struct SetLoadBalancerListenerSSLCertificateInputSerializer;
-impl SetLoadBalancerListenerSSLCertificateInputSerializer {
+/// Serialize `SetLoadBalancerListenerSSLCertificateRequest` contents to a `SignedRequest`.
+struct SetLoadBalancerListenerSSLCertificateRequestSerializer;
+impl SetLoadBalancerListenerSSLCertificateRequestSerializer {
     fn serialize(
         params: &mut Params,
         name: &str,
-        obj: &SetLoadBalancerListenerSSLCertificateInput,
+        obj: &SetLoadBalancerListenerSSLCertificateRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -3638,18 +3651,18 @@ impl SetLoadBalancerListenerSSLCertificateInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancerListenerSSLCertificate.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetLoadBalancerListenerSSLCertificateOutput {}
+pub struct SetLoadBalancerListenerSSLCertificateResponse {}
 
-struct SetLoadBalancerListenerSSLCertificateOutputDeserializer;
-impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
+struct SetLoadBalancerListenerSSLCertificateResponseDeserializer;
+impl SetLoadBalancerListenerSSLCertificateResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetLoadBalancerListenerSSLCertificateOutput, XmlParseError> {
+    ) -> Result<SetLoadBalancerListenerSSLCertificateResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = SetLoadBalancerListenerSSLCertificateOutput::default();
+        let obj = SetLoadBalancerListenerSSLCertificateResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -3658,7 +3671,7 @@ impl SetLoadBalancerListenerSSLCertificateOutputDeserializer {
 }
 /// <p>Contains the parameters for SetLoadBalancerPoliciesForBackendServer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetLoadBalancerPoliciesForBackendServerInput {
+pub struct SetLoadBalancerPoliciesForBackendServerRequest {
     /// <p>The port number associated with the EC2 instance.</p>
     pub instance_port: i64,
     /// <p>The name of the load balancer.</p>
@@ -3667,13 +3680,13 @@ pub struct SetLoadBalancerPoliciesForBackendServerInput {
     pub policy_names: Vec<String>,
 }
 
-/// Serialize `SetLoadBalancerPoliciesForBackendServerInput` contents to a `SignedRequest`.
-struct SetLoadBalancerPoliciesForBackendServerInputSerializer;
-impl SetLoadBalancerPoliciesForBackendServerInputSerializer {
+/// Serialize `SetLoadBalancerPoliciesForBackendServerRequest` contents to a `SignedRequest`.
+struct SetLoadBalancerPoliciesForBackendServerRequestSerializer;
+impl SetLoadBalancerPoliciesForBackendServerRequestSerializer {
     fn serialize(
         params: &mut Params,
         name: &str,
-        obj: &SetLoadBalancerPoliciesForBackendServerInput,
+        obj: &SetLoadBalancerPoliciesForBackendServerRequest,
     ) {
         let mut prefix = name.to_string();
         if prefix != "" {
@@ -3695,18 +3708,18 @@ impl SetLoadBalancerPoliciesForBackendServerInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancerPoliciesForBackendServer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetLoadBalancerPoliciesForBackendServerOutput {}
+pub struct SetLoadBalancerPoliciesForBackendServerResponse {}
 
-struct SetLoadBalancerPoliciesForBackendServerOutputDeserializer;
-impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
+struct SetLoadBalancerPoliciesForBackendServerResponseDeserializer;
+impl SetLoadBalancerPoliciesForBackendServerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetLoadBalancerPoliciesForBackendServerOutput, XmlParseError> {
+    ) -> Result<SetLoadBalancerPoliciesForBackendServerResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = SetLoadBalancerPoliciesForBackendServerOutput::default();
+        let obj = SetLoadBalancerPoliciesForBackendServerResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -3715,7 +3728,7 @@ impl SetLoadBalancerPoliciesForBackendServerOutputDeserializer {
 }
 /// <p>Contains the parameters for SetLoadBalancePoliciesOfListener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetLoadBalancerPoliciesOfListenerInput {
+pub struct SetLoadBalancerPoliciesOfListenerRequest {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: String,
     /// <p>The external port of the load balancer.</p>
@@ -3724,10 +3737,10 @@ pub struct SetLoadBalancerPoliciesOfListenerInput {
     pub policy_names: Vec<String>,
 }
 
-/// Serialize `SetLoadBalancerPoliciesOfListenerInput` contents to a `SignedRequest`.
-struct SetLoadBalancerPoliciesOfListenerInputSerializer;
-impl SetLoadBalancerPoliciesOfListenerInputSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetLoadBalancerPoliciesOfListenerInput) {
+/// Serialize `SetLoadBalancerPoliciesOfListenerRequest` contents to a `SignedRequest`.
+struct SetLoadBalancerPoliciesOfListenerRequestSerializer;
+impl SetLoadBalancerPoliciesOfListenerRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetLoadBalancerPoliciesOfListenerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3751,18 +3764,18 @@ impl SetLoadBalancerPoliciesOfListenerInputSerializer {
 
 /// <p>Contains the output of SetLoadBalancePoliciesOfListener.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetLoadBalancerPoliciesOfListenerOutput {}
+pub struct SetLoadBalancerPoliciesOfListenerResponse {}
 
-struct SetLoadBalancerPoliciesOfListenerOutputDeserializer;
-impl SetLoadBalancerPoliciesOfListenerOutputDeserializer {
+struct SetLoadBalancerPoliciesOfListenerResponseDeserializer;
+impl SetLoadBalancerPoliciesOfListenerResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetLoadBalancerPoliciesOfListenerOutput, XmlParseError> {
+    ) -> Result<SetLoadBalancerPoliciesOfListenerResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = SetLoadBalancerPoliciesOfListenerOutput::default();
+        let obj = SetLoadBalancerPoliciesOfListenerResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -5965,181 +5978,169 @@ impl Error for SetLoadBalancerPoliciesOfListenerError {
 /// Trait representing the capabilities of the Elastic Load Balancing API. Elastic Load Balancing clients implement this trait.
 pub trait Elb {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest>;
 
     /// <p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn apply_security_groups_to_load_balancer(
         &self,
-        input: ApplySecurityGroupsToLoadBalancerInput,
-    ) -> RusotoFuture<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>;
+        input: ApplySecurityGroupsToLoadBalancerRequest,
+    ) -> Request<ApplySecurityGroupsToLoadBalancerRequest>;
 
     /// <p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn attach_load_balancer_to_subnets(
         &self,
-        input: AttachLoadBalancerToSubnetsInput,
-    ) -> RusotoFuture<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError>;
+        input: AttachLoadBalancerToSubnetsRequest,
+    ) -> Request<AttachLoadBalancerToSubnetsRequest>;
 
     /// <p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn configure_health_check(
         &self,
-        input: ConfigureHealthCheckInput,
-    ) -> RusotoFuture<ConfigureHealthCheckOutput, ConfigureHealthCheckError>;
+        input: ConfigureHealthCheckRequest,
+    ) -> Request<ConfigureHealthCheckRequest>;
 
     /// <p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn create_app_cookie_stickiness_policy(
         &self,
-        input: CreateAppCookieStickinessPolicyInput,
-    ) -> RusotoFuture<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError>;
+        input: CreateAppCookieStickinessPolicyRequest,
+    ) -> Request<CreateAppCookieStickinessPolicyRequest>;
 
     /// <p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn create_lb_cookie_stickiness_policy(
         &self,
-        input: CreateLBCookieStickinessPolicyInput,
-    ) -> RusotoFuture<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError>;
+        input: CreateLBCookieStickinessPolicyRequest,
+    ) -> Request<CreateLBCookieStickinessPolicyRequest>;
 
     /// <p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
-        input: CreateAccessPointInput,
-    ) -> RusotoFuture<CreateAccessPointOutput, CreateLoadBalancerError>;
+        input: CreateLoadBalancerRequest,
+    ) -> Request<CreateLoadBalancerRequest>;
 
     /// <p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn create_load_balancer_listeners(
         &self,
-        input: CreateLoadBalancerListenerInput,
-    ) -> RusotoFuture<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError>;
+        input: CreateLoadBalancerListenersRequest,
+    ) -> Request<CreateLoadBalancerListenersRequest>;
 
     /// <p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>
     fn create_load_balancer_policy(
         &self,
-        input: CreateLoadBalancerPolicyInput,
-    ) -> RusotoFuture<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError>;
+        input: CreateLoadBalancerPolicyRequest,
+    ) -> Request<CreateLoadBalancerPolicyRequest>;
 
     /// <p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>
     fn delete_load_balancer(
         &self,
-        input: DeleteAccessPointInput,
-    ) -> RusotoFuture<DeleteAccessPointOutput, DeleteLoadBalancerError>;
+        input: DeleteLoadBalancerRequest,
+    ) -> Request<DeleteLoadBalancerRequest>;
 
     /// <p>Deletes the specified listeners from the specified load balancer.</p>
     fn delete_load_balancer_listeners(
         &self,
-        input: DeleteLoadBalancerListenerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError>;
+        input: DeleteLoadBalancerListenersRequest,
+    ) -> Request<DeleteLoadBalancerListenersRequest>;
 
     /// <p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>
     fn delete_load_balancer_policy(
         &self,
-        input: DeleteLoadBalancerPolicyInput,
-    ) -> RusotoFuture<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError>;
+        input: DeleteLoadBalancerPolicyRequest,
+    ) -> Request<DeleteLoadBalancerPolicyRequest>;
 
     /// <p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn deregister_instances_from_load_balancer(
         &self,
-        input: DeregisterEndPointsInput,
-    ) -> RusotoFuture<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError>;
+        input: DeregisterInstancesFromLoadBalancerRequest,
+    ) -> Request<DeregisterInstancesFromLoadBalancerRequest>;
 
     /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
-        input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
+        input: DescribeAccountLimitsRequest,
+    ) -> Request<DescribeAccountLimitsRequest>;
 
     /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
     fn describe_instance_health(
         &self,
-        input: DescribeEndPointStateInput,
-    ) -> RusotoFuture<DescribeEndPointStateOutput, DescribeInstanceHealthError>;
+        input: DescribeInstanceHealthRequest,
+    ) -> Request<DescribeInstanceHealthRequest>;
 
     /// <p>Describes the attributes for the specified load balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
-        input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
+        input: DescribeLoadBalancerAttributesRequest,
+    ) -> Request<DescribeLoadBalancerAttributesRequest>;
 
     /// <p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>
     fn describe_load_balancer_policies(
         &self,
-        input: DescribeLoadBalancerPoliciesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError>;
+        input: DescribeLoadBalancerPoliciesRequest,
+    ) -> Request<DescribeLoadBalancerPoliciesRequest>;
 
     /// <p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>
     fn describe_load_balancer_policy_types(
         &self,
-        input: DescribeLoadBalancerPolicyTypesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError>;
+        input: DescribeLoadBalancerPolicyTypesRequest,
+    ) -> Request<DescribeLoadBalancerPolicyTypesRequest>;
 
     /// <p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>
     fn describe_load_balancers(
         &self,
-        input: DescribeAccessPointsInput,
-    ) -> RusotoFuture<DescribeAccessPointsOutput, DescribeLoadBalancersError>;
+        input: DescribeLoadBalancersRequest,
+    ) -> Request<DescribeLoadBalancersRequest>;
 
     /// <p>Describes the tags associated with the specified load balancers.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest>;
 
     /// <p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>
     fn detach_load_balancer_from_subnets(
         &self,
-        input: DetachLoadBalancerFromSubnetsInput,
-    ) -> RusotoFuture<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError>;
+        input: DetachLoadBalancerFromSubnetsRequest,
+    ) -> Request<DetachLoadBalancerFromSubnetsRequest>;
 
     /// <p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer in EC2-Classic or a default VPC.</p> <p>For load balancers in a non-default VPC, use <a>DetachLoadBalancerFromSubnets</a>.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn disable_availability_zones_for_load_balancer(
         &self,
-        input: RemoveAvailabilityZonesInput,
-    ) -> RusotoFuture<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError>;
+        input: DisableAvailabilityZonesForLoadBalancerRequest,
+    ) -> Request<DisableAvailabilityZonesForLoadBalancerRequest>;
 
     /// <p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer in EC2-Classic or a default VPC.</p> <p>For load balancers in a non-default VPC, use <a>AttachLoadBalancerToSubnets</a>.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn enable_availability_zones_for_load_balancer(
         &self,
-        input: AddAvailabilityZonesInput,
-    ) -> RusotoFuture<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError>;
+        input: EnableAvailabilityZonesForLoadBalancerRequest,
+    ) -> Request<EnableAvailabilityZonesForLoadBalancerRequest>;
 
     /// <p><p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancers Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Connection Draining</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">Access Logs</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Idle Connection Timeout</a> </p> </li> </ul></p>
     fn modify_load_balancer_attributes(
         &self,
-        input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError>;
+        input: ModifyLoadBalancerAttributesRequest,
+    ) -> Request<ModifyLoadBalancerAttributesRequest>;
 
     /// <p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn register_instances_with_load_balancer(
         &self,
-        input: RegisterEndPointsInput,
-    ) -> RusotoFuture<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError>;
+        input: RegisterInstancesWithLoadBalancerRequest,
+    ) -> Request<RegisterInstancesWithLoadBalancerRequest>;
 
     /// <p>Removes one or more tags from the specified load balancer.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError>;
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest>;
 
     /// <p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn set_load_balancer_listener_ssl_certificate(
         &self,
-        input: SetLoadBalancerListenerSSLCertificateInput,
-    ) -> RusotoFuture<
-        SetLoadBalancerListenerSSLCertificateOutput,
-        SetLoadBalancerListenerSSLCertificateError,
-    >;
+        input: SetLoadBalancerListenerSSLCertificateRequest,
+    ) -> Request<SetLoadBalancerListenerSSLCertificateRequest>;
 
     /// <p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancers Guide</i>. For more information about Proxy Protocol, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn set_load_balancer_policies_for_backend_server(
         &self,
-        input: SetLoadBalancerPoliciesForBackendServerInput,
-    ) -> RusotoFuture<
-        SetLoadBalancerPoliciesForBackendServerOutput,
-        SetLoadBalancerPoliciesForBackendServerError,
-    >;
+        input: SetLoadBalancerPoliciesForBackendServerRequest,
+    ) -> Request<SetLoadBalancerPoliciesForBackendServerRequest>;
 
     /// <p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html">Update the SSL Negotiation Configuration</a>, <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a>, and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
     fn set_load_balancer_policies_of_listener(
         &self,
-        input: SetLoadBalancerPoliciesOfListenerInput,
-    ) -> RusotoFuture<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>;
+        input: SetLoadBalancerPoliciesOfListenerRequest,
+    ) -> Request<SetLoadBalancerPoliciesOfListenerRequest>;
 }
 /// A client for the Elastic Load Balancing API.
 #[derive(Clone)]
@@ -6179,17 +6180,248 @@ impl ElbClient {
 
 impl Elb for ElbClient {
     /// <p>Adds the specified tags to the specified load balancer. Each load balancer can have a maximum of 10 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the load balancer, <code>AddTags</code> updates its value.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/add-remove-tags.html">Tag Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn apply_security_groups_to_load_balancer(
+        &self,
+        input: ApplySecurityGroupsToLoadBalancerRequest,
+    ) -> Request<ApplySecurityGroupsToLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn attach_load_balancer_to_subnets(
+        &self,
+        input: AttachLoadBalancerToSubnetsRequest,
+    ) -> Request<AttachLoadBalancerToSubnetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn configure_health_check(
+        &self,
+        input: ConfigureHealthCheckRequest,
+    ) -> Request<ConfigureHealthCheckRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn create_app_cookie_stickiness_policy(
+        &self,
+        input: CreateAppCookieStickinessPolicyRequest,
+    ) -> Request<CreateAppCookieStickinessPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn create_lb_cookie_stickiness_policy(
+        &self,
+        input: CreateLBCookieStickinessPolicyRequest,
+    ) -> Request<CreateLBCookieStickinessPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn create_load_balancer(
+        &self,
+        input: CreateLoadBalancerRequest,
+    ) -> Request<CreateLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn create_load_balancer_listeners(
+        &self,
+        input: CreateLoadBalancerListenersRequest,
+    ) -> Request<CreateLoadBalancerListenersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>
+    fn create_load_balancer_policy(
+        &self,
+        input: CreateLoadBalancerPolicyRequest,
+    ) -> Request<CreateLoadBalancerPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>
+    fn delete_load_balancer(
+        &self,
+        input: DeleteLoadBalancerRequest,
+    ) -> Request<DeleteLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified listeners from the specified load balancer.</p>
+    fn delete_load_balancer_listeners(
+        &self,
+        input: DeleteLoadBalancerListenersRequest,
+    ) -> Request<DeleteLoadBalancerListenersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>
+    fn delete_load_balancer_policy(
+        &self,
+        input: DeleteLoadBalancerPolicyRequest,
+    ) -> Request<DeleteLoadBalancerPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn deregister_instances_from_load_balancer(
+        &self,
+        input: DeregisterInstancesFromLoadBalancerRequest,
+    ) -> Request<DeregisterInstancesFromLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn describe_account_limits(
+        &self,
+        input: DescribeAccountLimitsRequest,
+    ) -> Request<DescribeAccountLimitsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
+    fn describe_instance_health(
+        &self,
+        input: DescribeInstanceHealthRequest,
+    ) -> Request<DescribeInstanceHealthRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the attributes for the specified load balancer.</p>
+    fn describe_load_balancer_attributes(
+        &self,
+        input: DescribeLoadBalancerAttributesRequest,
+    ) -> Request<DescribeLoadBalancerAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>
+    fn describe_load_balancer_policies(
+        &self,
+        input: DescribeLoadBalancerPoliciesRequest,
+    ) -> Request<DescribeLoadBalancerPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>
+    fn describe_load_balancer_policy_types(
+        &self,
+        input: DescribeLoadBalancerPolicyTypesRequest,
+    ) -> Request<DescribeLoadBalancerPolicyTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>
+    fn describe_load_balancers(
+        &self,
+        input: DescribeLoadBalancersRequest,
+    ) -> Request<DescribeLoadBalancersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the tags associated with the specified load balancers.</p>
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>
+    fn detach_load_balancer_from_subnets(
+        &self,
+        input: DetachLoadBalancerFromSubnetsRequest,
+    ) -> Request<DetachLoadBalancerFromSubnetsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer in EC2-Classic or a default VPC.</p> <p>For load balancers in a non-default VPC, use <a>DetachLoadBalancerFromSubnets</a>.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn disable_availability_zones_for_load_balancer(
+        &self,
+        input: DisableAvailabilityZonesForLoadBalancerRequest,
+    ) -> Request<DisableAvailabilityZonesForLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer in EC2-Classic or a default VPC.</p> <p>For load balancers in a non-default VPC, use <a>AttachLoadBalancerToSubnets</a>.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn enable_availability_zones_for_load_balancer(
+        &self,
+        input: EnableAvailabilityZonesForLoadBalancerRequest,
+    ) -> Request<EnableAvailabilityZonesForLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancers Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Connection Draining</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">Access Logs</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Idle Connection Timeout</a> </p> </li> </ul></p>
+    fn modify_load_balancer_attributes(
+        &self,
+        input: ModifyLoadBalancerAttributesRequest,
+    ) -> Request<ModifyLoadBalancerAttributesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn register_instances_with_load_balancer(
+        &self,
+        input: RegisterInstancesWithLoadBalancerRequest,
+    ) -> Request<RegisterInstancesWithLoadBalancerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes one or more tags from the specified load balancer.</p>
+    fn remove_tags(&self, input: RemoveTagsRequest) -> Request<RemoveTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn set_load_balancer_listener_ssl_certificate(
+        &self,
+        input: SetLoadBalancerListenerSSLCertificateRequest,
+    ) -> Request<SetLoadBalancerListenerSSLCertificateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancers Guide</i>. For more information about Proxy Protocol, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn set_load_balancer_policies_for_backend_server(
+        &self,
+        input: SetLoadBalancerPoliciesForBackendServerRequest,
+    ) -> Request<SetLoadBalancerPoliciesForBackendServerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html">Update the SSL Negotiation Configuration</a>, <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a>, and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
+    fn set_load_balancer_policies_of_listener(
+        &self,
+        input: SetLoadBalancerPoliciesOfListenerRequest,
+    ) -> Request<SetLoadBalancerPoliciesOfListenerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsRequest {
+    type Output = AddTagsResponse;
+    type Error = AddTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AddTags");
         params.put("Version", "2012-06-01");
-        AddTagsInputSerializer::serialize(&mut params, "", &input);
+        AddTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6203,7 +6435,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AddTagsOutput::default();
+                    result = AddTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6213,7 +6445,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AddTagsOutputDeserializer::deserialize("AddTagsResult", &mut stack)?;
+                    result = AddTagsResponseDeserializer::deserialize("AddTagsResult", &mut stack)?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -6222,23 +6454,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Associates one or more security groups with your load balancer in a virtual private cloud (VPC). The specified security groups override the previously associated security groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-vpc-security-groups">Security Groups for Load Balancers in a VPC</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn apply_security_groups_to_load_balancer(
-        &self,
-        input: ApplySecurityGroupsToLoadBalancerInput,
-    ) -> RusotoFuture<ApplySecurityGroupsToLoadBalancerOutput, ApplySecurityGroupsToLoadBalancerError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ApplySecurityGroupsToLoadBalancerRequest {
+    type Output = ApplySecurityGroupsToLoadBalancerResponse;
+    type Error = ApplySecurityGroupsToLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ApplySecurityGroupsToLoadBalancer");
         params.put("Version", "2012-06-01");
-        ApplySecurityGroupsToLoadBalancerInputSerializer::serialize(&mut params, "", &input);
+        ApplySecurityGroupsToLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ApplySecurityGroupsToLoadBalancerError::from_response(
@@ -6251,7 +6487,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplySecurityGroupsToLoadBalancerOutput::default();
+                    result = ApplySecurityGroupsToLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6261,7 +6497,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplySecurityGroupsToLoadBalancerOutputDeserializer::deserialize(
+                    result = ApplySecurityGroupsToLoadBalancerResponseDeserializer::deserialize(
                         "ApplySecurityGroupsToLoadBalancerResult",
                         &mut stack,
                     )?;
@@ -6273,22 +6509,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Adds one or more subnets to the set of configured subnets for the specified load balancer.</p> <p>The load balancer evenly distributes requests across all registered subnets. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-manage-subnets.html">Add or Remove Subnets for Your Load Balancer in a VPC</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn attach_load_balancer_to_subnets(
-        &self,
-        input: AttachLoadBalancerToSubnetsInput,
-    ) -> RusotoFuture<AttachLoadBalancerToSubnetsOutput, AttachLoadBalancerToSubnetsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for AttachLoadBalancerToSubnetsRequest {
+    type Output = AttachLoadBalancerToSubnetsResponse;
+    type Error = AttachLoadBalancerToSubnetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachLoadBalancerToSubnets");
         params.put("Version", "2012-06-01");
-        AttachLoadBalancerToSubnetsInputSerializer::serialize(&mut params, "", &input);
+        AttachLoadBalancerToSubnetsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachLoadBalancerToSubnetsError::from_response(response))
@@ -6299,7 +6540,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AttachLoadBalancerToSubnetsOutput::default();
+                    result = AttachLoadBalancerToSubnetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6309,7 +6550,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AttachLoadBalancerToSubnetsOutputDeserializer::deserialize(
+                    result = AttachLoadBalancerToSubnetsResponseDeserializer::deserialize(
                         "AttachLoadBalancerToSubnetsResult",
                         &mut stack,
                     )?;
@@ -6321,22 +6562,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Specifies the health check settings to use when evaluating the health state of your EC2 instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-healthchecks.html">Configure Health Checks for Your Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn configure_health_check(
-        &self,
-        input: ConfigureHealthCheckInput,
-    ) -> RusotoFuture<ConfigureHealthCheckOutput, ConfigureHealthCheckError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ConfigureHealthCheckRequest {
+    type Output = ConfigureHealthCheckResponse;
+    type Error = ConfigureHealthCheckError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ConfigureHealthCheck");
         params.put("Version", "2012-06-01");
-        ConfigureHealthCheckInputSerializer::serialize(&mut params, "", &input);
+        ConfigureHealthCheckRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -6349,7 +6595,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ConfigureHealthCheckOutput::default();
+                    result = ConfigureHealthCheckResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6359,7 +6605,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigureHealthCheckOutputDeserializer::deserialize(
+                    result = ConfigureHealthCheckResponseDeserializer::deserialize(
                         "ConfigureHealthCheckResult",
                         &mut stack,
                     )?;
@@ -6371,23 +6617,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Generates a stickiness policy with sticky session lifetimes that follow that of an application-generated cookie. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>This policy is similar to the policy created by <a>CreateLBCookieStickinessPolicy</a>, except that the lifetime of the special Elastic Load Balancing cookie, <code>AWSELB</code>, follows the lifetime of the application-generated cookie specified in the policy configuration. The load balancer only inserts a new stickiness cookie when the application response includes a new application cookie.</p> <p>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn create_app_cookie_stickiness_policy(
-        &self,
-        input: CreateAppCookieStickinessPolicyInput,
-    ) -> RusotoFuture<CreateAppCookieStickinessPolicyOutput, CreateAppCookieStickinessPolicyError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateAppCookieStickinessPolicyRequest {
+    type Output = CreateAppCookieStickinessPolicyResponse;
+    type Error = CreateAppCookieStickinessPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateAppCookieStickinessPolicy");
         params.put("Version", "2012-06-01");
-        CreateAppCookieStickinessPolicyInputSerializer::serialize(&mut params, "", &input);
+        CreateAppCookieStickinessPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateAppCookieStickinessPolicyError::from_response(
@@ -6400,7 +6650,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateAppCookieStickinessPolicyOutput::default();
+                    result = CreateAppCookieStickinessPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6410,7 +6660,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateAppCookieStickinessPolicyOutputDeserializer::deserialize(
+                    result = CreateAppCookieStickinessPolicyResponseDeserializer::deserialize(
                         "CreateAppCookieStickinessPolicyResult",
                         &mut stack,
                     )?;
@@ -6422,23 +6672,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Generates a stickiness policy with sticky session lifetimes controlled by the lifetime of the browser (user-agent) or a specified expiration period. This policy can be associated only with HTTP/HTTPS listeners.</p> <p>When a load balancer implements this policy, the load balancer uses a special cookie to track the instance for each request. When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the load balancer sends the request to the application server specified in the cookie. If not, the load balancer sends the request to a server that is chosen based on the existing load-balancing algorithm.</p> <p>A cookie is inserted into the response for binding subsequent requests from the same user to that server. The validity of the cookie is based on the cookie expiration time, which is specified in the policy configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn create_lb_cookie_stickiness_policy(
-        &self,
-        input: CreateLBCookieStickinessPolicyInput,
-    ) -> RusotoFuture<CreateLBCookieStickinessPolicyOutput, CreateLBCookieStickinessPolicyError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateLBCookieStickinessPolicyRequest {
+    type Output = CreateLBCookieStickinessPolicyResponse;
+    type Error = CreateLBCookieStickinessPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLBCookieStickinessPolicy");
         params.put("Version", "2012-06-01");
-        CreateLBCookieStickinessPolicyInputSerializer::serialize(&mut params, "", &input);
+        CreateLBCookieStickinessPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLBCookieStickinessPolicyError::from_response(response))
@@ -6449,7 +6703,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateLBCookieStickinessPolicyOutput::default();
+                    result = CreateLBCookieStickinessPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6459,7 +6713,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateLBCookieStickinessPolicyOutputDeserializer::deserialize(
+                    result = CreateLBCookieStickinessPolicyResponseDeserializer::deserialize(
                         "CreateLBCookieStickinessPolicyResult",
                         &mut stack,
                     )?;
@@ -6471,22 +6725,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a Classic Load Balancer.</p> <p>You can add listeners, security groups, subnets, and tags when you create your load balancer, or you can add them later using <a>CreateLoadBalancerListeners</a>, <a>ApplySecurityGroupsToLoadBalancer</a>, <a>AttachLoadBalancerToSubnets</a>, and <a>AddTags</a>.</p> <p>To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn create_load_balancer(
-        &self,
-        input: CreateAccessPointInput,
-    ) -> RusotoFuture<CreateAccessPointOutput, CreateLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateLoadBalancerRequest {
+    type Output = CreateLoadBalancerResponse;
+    type Error = CreateLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoadBalancer");
         params.put("Version", "2012-06-01");
-        CreateAccessPointInputSerializer::serialize(&mut params, "", &input);
+        CreateLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6500,7 +6759,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateAccessPointOutput::default();
+                    result = CreateLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6510,7 +6769,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateAccessPointOutputDeserializer::deserialize(
+                    result = CreateLoadBalancerResponseDeserializer::deserialize(
                         "CreateLoadBalancerResult",
                         &mut stack,
                     )?;
@@ -6522,22 +6781,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates one or more listeners for the specified load balancer. If a listener with the specified port does not already exist, it is created; otherwise, the properties of the new listener must match the properties of the existing listener.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-listener-config.html">Listeners for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn create_load_balancer_listeners(
-        &self,
-        input: CreateLoadBalancerListenerInput,
-    ) -> RusotoFuture<CreateLoadBalancerListenerOutput, CreateLoadBalancerListenersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateLoadBalancerListenersRequest {
+    type Output = CreateLoadBalancerListenersResponse;
+    type Error = CreateLoadBalancerListenersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoadBalancerListeners");
         params.put("Version", "2012-06-01");
-        CreateLoadBalancerListenerInputSerializer::serialize(&mut params, "", &input);
+        CreateLoadBalancerListenersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoadBalancerListenersError::from_response(response))
@@ -6548,7 +6812,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateLoadBalancerListenerOutput::default();
+                    result = CreateLoadBalancerListenersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6558,7 +6822,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateLoadBalancerListenerOutputDeserializer::deserialize(
+                    result = CreateLoadBalancerListenersResponseDeserializer::deserialize(
                         "CreateLoadBalancerListenersResult",
                         &mut stack,
                     )?;
@@ -6570,22 +6834,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a policy with the specified attributes for the specified load balancer.</p> <p>Policies are settings that are saved for your load balancer and that can be applied to the listener or the application server, depending on the policy type.</p>
-    fn create_load_balancer_policy(
-        &self,
-        input: CreateLoadBalancerPolicyInput,
-    ) -> RusotoFuture<CreateLoadBalancerPolicyOutput, CreateLoadBalancerPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for CreateLoadBalancerPolicyRequest {
+    type Output = CreateLoadBalancerPolicyResponse;
+    type Error = CreateLoadBalancerPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLoadBalancerPolicy");
         params.put("Version", "2012-06-01");
-        CreateLoadBalancerPolicyInputSerializer::serialize(&mut params, "", &input);
+        CreateLoadBalancerPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLoadBalancerPolicyError::from_response(response))
@@ -6596,7 +6865,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateLoadBalancerPolicyOutput::default();
+                    result = CreateLoadBalancerPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6606,7 +6875,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateLoadBalancerPolicyOutputDeserializer::deserialize(
+                    result = CreateLoadBalancerPolicyResponseDeserializer::deserialize(
                         "CreateLoadBalancerPolicyResult",
                         &mut stack,
                     )?;
@@ -6618,22 +6887,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified load balancer.</p> <p>If you are attempting to recreate a load balancer, you must reconfigure all settings. The DNS name associated with a deleted load balancer are no longer usable. The name and associated DNS record of the deleted load balancer no longer exist and traffic sent to any of its IP addresses is no longer delivered to your instances.</p> <p>If the load balancer does not exist or has already been deleted, the call to <code>DeleteLoadBalancer</code> still succeeds.</p>
-    fn delete_load_balancer(
-        &self,
-        input: DeleteAccessPointInput,
-    ) -> RusotoFuture<DeleteAccessPointOutput, DeleteLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeleteLoadBalancerRequest {
+    type Output = DeleteLoadBalancerResponse;
+    type Error = DeleteLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoadBalancer");
         params.put("Version", "2012-06-01");
-        DeleteAccessPointInputSerializer::serialize(&mut params, "", &input);
+        DeleteLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6647,7 +6921,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteAccessPointOutput::default();
+                    result = DeleteLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6657,7 +6931,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteAccessPointOutputDeserializer::deserialize(
+                    result = DeleteLoadBalancerResponseDeserializer::deserialize(
                         "DeleteLoadBalancerResult",
                         &mut stack,
                     )?;
@@ -6669,22 +6943,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified listeners from the specified load balancer.</p>
-    fn delete_load_balancer_listeners(
-        &self,
-        input: DeleteLoadBalancerListenerInput,
-    ) -> RusotoFuture<DeleteLoadBalancerListenerOutput, DeleteLoadBalancerListenersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeleteLoadBalancerListenersRequest {
+    type Output = DeleteLoadBalancerListenersResponse;
+    type Error = DeleteLoadBalancerListenersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoadBalancerListeners");
         params.put("Version", "2012-06-01");
-        DeleteLoadBalancerListenerInputSerializer::serialize(&mut params, "", &input);
+        DeleteLoadBalancerListenersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoadBalancerListenersError::from_response(response))
@@ -6695,7 +6974,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteLoadBalancerListenerOutput::default();
+                    result = DeleteLoadBalancerListenersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6705,7 +6984,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteLoadBalancerListenerOutputDeserializer::deserialize(
+                    result = DeleteLoadBalancerListenersResponseDeserializer::deserialize(
                         "DeleteLoadBalancerListenersResult",
                         &mut stack,
                     )?;
@@ -6717,22 +6996,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified policy from the specified load balancer. This policy must not be enabled for any listeners.</p>
-    fn delete_load_balancer_policy(
-        &self,
-        input: DeleteLoadBalancerPolicyInput,
-    ) -> RusotoFuture<DeleteLoadBalancerPolicyOutput, DeleteLoadBalancerPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeleteLoadBalancerPolicyRequest {
+    type Output = DeleteLoadBalancerPolicyResponse;
+    type Error = DeleteLoadBalancerPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLoadBalancerPolicy");
         params.put("Version", "2012-06-01");
-        DeleteLoadBalancerPolicyInputSerializer::serialize(&mut params, "", &input);
+        DeleteLoadBalancerPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLoadBalancerPolicyError::from_response(response))
@@ -6743,7 +7027,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteLoadBalancerPolicyOutput::default();
+                    result = DeleteLoadBalancerPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6753,7 +7037,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteLoadBalancerPolicyOutputDeserializer::deserialize(
+                    result = DeleteLoadBalancerPolicyResponseDeserializer::deserialize(
                         "DeleteLoadBalancerPolicyResult",
                         &mut stack,
                     )?;
@@ -6765,22 +7049,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Deregisters the specified instances from the specified load balancer. After the instance is deregistered, it no longer receives traffic from the load balancer.</p> <p>You can use <a>DescribeLoadBalancers</a> to verify that the instance is deregistered from the load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn deregister_instances_from_load_balancer(
-        &self,
-        input: DeregisterEndPointsInput,
-    ) -> RusotoFuture<DeregisterEndPointsOutput, DeregisterInstancesFromLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DeregisterInstancesFromLoadBalancerRequest {
+    type Output = DeregisterInstancesFromLoadBalancerResponse;
+    type Error = DeregisterInstancesFromLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeregisterInstancesFromLoadBalancer");
         params.put("Version", "2012-06-01");
-        DeregisterEndPointsInputSerializer::serialize(&mut params, "", &input);
+        DeregisterInstancesFromLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeregisterInstancesFromLoadBalancerError::from_response(
@@ -6793,7 +7082,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeregisterEndPointsOutput::default();
+                    result = DeregisterInstancesFromLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6803,7 +7092,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeregisterEndPointsOutputDeserializer::deserialize(
+                    result = DeregisterInstancesFromLoadBalancerResponseDeserializer::deserialize(
                         "DeregisterInstancesFromLoadBalancerResult",
                         &mut stack,
                     )?;
@@ -6815,22 +7104,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-limits.html">Limits for Your Classic Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn describe_account_limits(
-        &self,
-        input: DescribeAccountLimitsInput,
-    ) -> RusotoFuture<DescribeAccountLimitsOutput, DescribeAccountLimitsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeAccountLimitsRequest {
+    type Output = DescribeAccountLimitsResponse;
+    type Error = DescribeAccountLimitsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2012-06-01");
-        DescribeAccountLimitsInputSerializer::serialize(&mut params, "", &input);
+        DescribeAccountLimitsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountLimitsError::from_response(response))
@@ -6841,7 +7135,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAccountLimitsOutput::default();
+                    result = DescribeAccountLimitsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6851,7 +7145,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccountLimitsOutputDeserializer::deserialize(
+                    result = DescribeAccountLimitsResponseDeserializer::deserialize(
                         "DescribeAccountLimitsResult",
                         &mut stack,
                     )?;
@@ -6863,22 +7157,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the state of the specified instances with respect to the specified load balancer. If no instances are specified, the call describes the state of all instances that are currently registered with the load balancer. If instances are specified, their state is returned even if they are no longer registered with the load balancer. The state of terminated instances is not returned.</p>
-    fn describe_instance_health(
-        &self,
-        input: DescribeEndPointStateInput,
-    ) -> RusotoFuture<DescribeEndPointStateOutput, DescribeInstanceHealthError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeInstanceHealthRequest {
+    type Output = DescribeInstanceHealthResponse;
+    type Error = DescribeInstanceHealthError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeInstanceHealth");
         params.put("Version", "2012-06-01");
-        DescribeEndPointStateInputSerializer::serialize(&mut params, "", &input);
+        DescribeInstanceHealthRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstanceHealthError::from_response(response))
@@ -6889,7 +7188,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEndPointStateOutput::default();
+                    result = DescribeInstanceHealthResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6899,7 +7198,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEndPointStateOutputDeserializer::deserialize(
+                    result = DescribeInstanceHealthResponseDeserializer::deserialize(
                         "DescribeInstanceHealthResult",
                         &mut stack,
                     )?;
@@ -6911,23 +7210,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the attributes for the specified load balancer.</p>
-    fn describe_load_balancer_attributes(
-        &self,
-        input: DescribeLoadBalancerAttributesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancerAttributesRequest {
+    type Output = DescribeLoadBalancerAttributesResponse;
+    type Error = DescribeLoadBalancerAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerAttributes");
         params.put("Version", "2012-06-01");
-        DescribeLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancerAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerAttributesError::from_response(response))
@@ -6938,7 +7241,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeLoadBalancerAttributesOutput::default();
+                    result = DescribeLoadBalancerAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6948,7 +7251,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancerAttributesOutputDeserializer::deserialize(
+                    result = DescribeLoadBalancerAttributesResponseDeserializer::deserialize(
                         "DescribeLoadBalancerAttributesResult",
                         &mut stack,
                     )?;
@@ -6960,22 +7263,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified policies.</p> <p>If you specify a load balancer name, the action returns the descriptions of all policies created for the load balancer. If you specify a policy name associated with your load balancer, the action returns the description of that policy. If you don't specify a load balancer name, the action returns descriptions of the specified sample policies, or descriptions of all sample policies. The names of the sample policies have the <code>ELBSample-</code> prefix.</p>
-    fn describe_load_balancer_policies(
-        &self,
-        input: DescribeLoadBalancerPoliciesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerPoliciesOutput, DescribeLoadBalancerPoliciesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancerPoliciesRequest {
+    type Output = DescribeLoadBalancerPoliciesResponse;
+    type Error = DescribeLoadBalancerPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerPolicies");
         params.put("Version", "2012-06-01");
-        DescribeLoadBalancerPoliciesInputSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancerPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerPoliciesError::from_response(response))
@@ -6986,7 +7294,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeLoadBalancerPoliciesOutput::default();
+                    result = DescribeLoadBalancerPoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -6996,7 +7304,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancerPoliciesOutputDeserializer::deserialize(
+                    result = DescribeLoadBalancerPoliciesResponseDeserializer::deserialize(
                         "DescribeLoadBalancerPoliciesResult",
                         &mut stack,
                     )?;
@@ -7008,23 +7316,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified load balancer policy types or all load balancer policy types.</p> <p>The description of each type indicates how it can be used. For example, some policies can be used only with layer 7 listeners, some policies can be used only with layer 4 listeners, and some policies can be used only with your EC2 instances.</p> <p>You can use <a>CreateLoadBalancerPolicy</a> to create a policy configuration for any of these policy types. Then, depending on the policy type, use either <a>SetLoadBalancerPoliciesOfListener</a> or <a>SetLoadBalancerPoliciesForBackendServer</a> to set the policy.</p>
-    fn describe_load_balancer_policy_types(
-        &self,
-        input: DescribeLoadBalancerPolicyTypesInput,
-    ) -> RusotoFuture<DescribeLoadBalancerPolicyTypesOutput, DescribeLoadBalancerPolicyTypesError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancerPolicyTypesRequest {
+    type Output = DescribeLoadBalancerPolicyTypesResponse;
+    type Error = DescribeLoadBalancerPolicyTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerPolicyTypes");
         params.put("Version", "2012-06-01");
-        DescribeLoadBalancerPolicyTypesInputSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancerPolicyTypesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerPolicyTypesError::from_response(
@@ -7037,7 +7349,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeLoadBalancerPolicyTypesOutput::default();
+                    result = DescribeLoadBalancerPolicyTypesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7047,7 +7359,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLoadBalancerPolicyTypesOutputDeserializer::deserialize(
+                    result = DescribeLoadBalancerPolicyTypesResponseDeserializer::deserialize(
                         "DescribeLoadBalancerPolicyTypesResult",
                         &mut stack,
                     )?;
@@ -7059,22 +7371,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified the load balancers. If no load balancers are specified, the call describes all of your load balancers.</p>
-    fn describe_load_balancers(
-        &self,
-        input: DescribeAccessPointsInput,
-    ) -> RusotoFuture<DescribeAccessPointsOutput, DescribeLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancersRequest {
+    type Output = DescribeLoadBalancersResponse;
+    type Error = DescribeLoadBalancersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancers");
         params.put("Version", "2012-06-01");
-        DescribeAccessPointsInputSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancersError::from_response(response))
@@ -7085,7 +7402,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAccessPointsOutput::default();
+                    result = DescribeLoadBalancersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7095,7 +7412,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccessPointsOutputDeserializer::deserialize(
+                    result = DescribeLoadBalancersResponseDeserializer::deserialize(
                         "DescribeLoadBalancersResult",
                         &mut stack,
                     )?;
@@ -7107,22 +7424,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the tags associated with the specified load balancers.</p>
-    fn describe_tags(
-        &self,
-        input: DescribeTagsInput,
-    ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DescribeTagsRequest {
+    type Output = DescribeTagsResponse;
+    type Error = DescribeTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTags");
         params.put("Version", "2012-06-01");
-        DescribeTagsInputSerializer::serialize(&mut params, "", &input);
+        DescribeTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -7136,7 +7458,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeTagsOutput::default();
+                    result = DescribeTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7146,7 +7468,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTagsOutputDeserializer::deserialize(
+                    result = DescribeTagsResponseDeserializer::deserialize(
                         "DescribeTagsResult",
                         &mut stack,
                     )?;
@@ -7158,22 +7480,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Removes the specified subnets from the set of configured subnets for the load balancer.</p> <p>After a subnet is removed, all EC2 instances registered with the load balancer in the removed subnet go into the <code>OutOfService</code> state. Then, the load balancer balances the traffic among the remaining routable subnets.</p>
-    fn detach_load_balancer_from_subnets(
-        &self,
-        input: DetachLoadBalancerFromSubnetsInput,
-    ) -> RusotoFuture<DetachLoadBalancerFromSubnetsOutput, DetachLoadBalancerFromSubnetsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DetachLoadBalancerFromSubnetsRequest {
+    type Output = DetachLoadBalancerFromSubnetsResponse;
+    type Error = DetachLoadBalancerFromSubnetsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachLoadBalancerFromSubnets");
         params.put("Version", "2012-06-01");
-        DetachLoadBalancerFromSubnetsInputSerializer::serialize(&mut params, "", &input);
+        DetachLoadBalancerFromSubnetsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DetachLoadBalancerFromSubnetsError::from_response(response))
@@ -7184,7 +7511,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DetachLoadBalancerFromSubnetsOutput::default();
+                    result = DetachLoadBalancerFromSubnetsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7194,7 +7521,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DetachLoadBalancerFromSubnetsOutputDeserializer::deserialize(
+                    result = DetachLoadBalancerFromSubnetsResponseDeserializer::deserialize(
                         "DetachLoadBalancerFromSubnetsResult",
                         &mut stack,
                     )?;
@@ -7206,23 +7533,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Removes the specified Availability Zones from the set of Availability Zones for the specified load balancer in EC2-Classic or a default VPC.</p> <p>For load balancers in a non-default VPC, use <a>DetachLoadBalancerFromSubnets</a>.</p> <p>There must be at least one Availability Zone registered with a load balancer at all times. After an Availability Zone is removed, all instances registered with the load balancer that are in the removed Availability Zone go into the <code>OutOfService</code> state. Then, the load balancer attempts to equally balance the traffic among its remaining Availability Zones.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn disable_availability_zones_for_load_balancer(
-        &self,
-        input: RemoveAvailabilityZonesInput,
-    ) -> RusotoFuture<RemoveAvailabilityZonesOutput, DisableAvailabilityZonesForLoadBalancerError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for DisableAvailabilityZonesForLoadBalancerRequest {
+    type Output = DisableAvailabilityZonesForLoadBalancerResponse;
+    type Error = DisableAvailabilityZonesForLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableAvailabilityZonesForLoadBalancer");
         params.put("Version", "2012-06-01");
-        RemoveAvailabilityZonesInputSerializer::serialize(&mut params, "", &input);
+        DisableAvailabilityZonesForLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisableAvailabilityZonesForLoadBalancerError::from_response(
@@ -7235,7 +7566,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RemoveAvailabilityZonesOutput::default();
+                    result = DisableAvailabilityZonesForLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7245,10 +7576,11 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RemoveAvailabilityZonesOutputDeserializer::deserialize(
-                        "DisableAvailabilityZonesForLoadBalancerResult",
-                        &mut stack,
-                    )?;
+                    result =
+                        DisableAvailabilityZonesForLoadBalancerResponseDeserializer::deserialize(
+                            "DisableAvailabilityZonesForLoadBalancerResult",
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -7257,22 +7589,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Adds the specified Availability Zones to the set of Availability Zones for the specified load balancer in EC2-Classic or a default VPC.</p> <p>For load balancers in a non-default VPC, use <a>AttachLoadBalancerToSubnets</a>.</p> <p>The load balancer evenly distributes requests across all its registered Availability Zones that contain instances. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-az.html">Add or Remove Availability Zones</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn enable_availability_zones_for_load_balancer(
-        &self,
-        input: AddAvailabilityZonesInput,
-    ) -> RusotoFuture<AddAvailabilityZonesOutput, EnableAvailabilityZonesForLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for EnableAvailabilityZonesForLoadBalancerRequest {
+    type Output = EnableAvailabilityZonesForLoadBalancerResponse;
+    type Error = EnableAvailabilityZonesForLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableAvailabilityZonesForLoadBalancer");
         params.put("Version", "2012-06-01");
-        AddAvailabilityZonesInputSerializer::serialize(&mut params, "", &input);
+        EnableAvailabilityZonesForLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(EnableAvailabilityZonesForLoadBalancerError::from_response(
@@ -7285,7 +7622,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AddAvailabilityZonesOutput::default();
+                    result = EnableAvailabilityZonesForLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7295,10 +7632,11 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AddAvailabilityZonesOutputDeserializer::deserialize(
-                        "EnableAvailabilityZonesForLoadBalancerResult",
-                        &mut stack,
-                    )?;
+                    result =
+                        EnableAvailabilityZonesForLoadBalancerResponseDeserializer::deserialize(
+                            "EnableAvailabilityZonesForLoadBalancerResult",
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -7307,22 +7645,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p><p>Modifies the attributes of the specified load balancer.</p> <p>You can modify the load balancer attributes, such as <code>AccessLogs</code>, <code>ConnectionDraining</code>, and <code>CrossZoneLoadBalancing</code> by either enabling or disabling them. Or, you can modify the load balancer attribute <code>ConnectionSettings</code> by specifying an idle connection timeout value for your load balancer.</p> <p>For more information, see the following in the <i>Classic Load Balancers Guide</i>:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-disable-crosszone-lb.html">Cross-Zone Load Balancing</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-conn-drain.html">Connection Draining</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">Access Logs</a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/config-idle-timeout.html">Idle Connection Timeout</a> </p> </li> </ul></p>
-    fn modify_load_balancer_attributes(
-        &self,
-        input: ModifyLoadBalancerAttributesInput,
-    ) -> RusotoFuture<ModifyLoadBalancerAttributesOutput, ModifyLoadBalancerAttributesError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for ModifyLoadBalancerAttributesRequest {
+    type Output = ModifyLoadBalancerAttributesResponse;
+    type Error = ModifyLoadBalancerAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ModifyLoadBalancerAttributes");
         params.put("Version", "2012-06-01");
-        ModifyLoadBalancerAttributesInputSerializer::serialize(&mut params, "", &input);
+        ModifyLoadBalancerAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ModifyLoadBalancerAttributesError::from_response(response))
@@ -7333,7 +7676,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ModifyLoadBalancerAttributesOutput::default();
+                    result = ModifyLoadBalancerAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7343,7 +7686,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyLoadBalancerAttributesOutputDeserializer::deserialize(
+                    result = ModifyLoadBalancerAttributesResponseDeserializer::deserialize(
                         "ModifyLoadBalancerAttributesResult",
                         &mut stack,
                     )?;
@@ -7355,22 +7698,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Adds the specified instances to the specified load balancer.</p> <p>The instance must be a running instance in the same network as the load balancer (EC2-Classic or the same VPC). If you have EC2-Classic instances and a load balancer in a VPC with ClassicLink enabled, you can link the EC2-Classic instances to that VPC and then register the linked EC2-Classic instances with the load balancer in the VPC.</p> <p>Note that <code>RegisterInstanceWithLoadBalancer</code> completes when the request has been registered. Instance registration takes a little time to complete. To check the state of the registered instances, use <a>DescribeLoadBalancers</a> or <a>DescribeInstanceHealth</a>.</p> <p>After the instance is registered, it starts receiving traffic and requests from the load balancer. Any instance that is not in one of the Availability Zones registered for the load balancer is moved to the <code>OutOfService</code> state. If an Availability Zone is added to the load balancer later, any instances registered with the load balancer move to the <code>InService</code> state.</p> <p>To deregister instances from a load balancer, use <a>DeregisterInstancesFromLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-deregister-register-instances.html">Register or De-Register EC2 Instances</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn register_instances_with_load_balancer(
-        &self,
-        input: RegisterEndPointsInput,
-    ) -> RusotoFuture<RegisterEndPointsOutput, RegisterInstancesWithLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for RegisterInstancesWithLoadBalancerRequest {
+    type Output = RegisterInstancesWithLoadBalancerResponse;
+    type Error = RegisterInstancesWithLoadBalancerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RegisterInstancesWithLoadBalancer");
         params.put("Version", "2012-06-01");
-        RegisterEndPointsInputSerializer::serialize(&mut params, "", &input);
+        RegisterInstancesWithLoadBalancerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RegisterInstancesWithLoadBalancerError::from_response(
@@ -7383,7 +7731,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RegisterEndPointsOutput::default();
+                    result = RegisterInstancesWithLoadBalancerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7393,7 +7741,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RegisterEndPointsOutputDeserializer::deserialize(
+                    result = RegisterInstancesWithLoadBalancerResponseDeserializer::deserialize(
                         "RegisterInstancesWithLoadBalancerResult",
                         &mut stack,
                     )?;
@@ -7405,22 +7753,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Removes one or more tags from the specified load balancer.</p>
-    fn remove_tags(
-        &self,
-        input: RemoveTagsInput,
-    ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for RemoveTagsRequest {
+    type Output = RemoveTagsResponse;
+    type Error = RemoveTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RemoveTags");
         params.put("Version", "2012-06-01");
-        RemoveTagsInputSerializer::serialize(&mut params, "", &input);
+        RemoveTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -7434,7 +7787,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RemoveTagsOutput::default();
+                    result = RemoveTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7444,8 +7797,10 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        RemoveTagsOutputDeserializer::deserialize("RemoveTagsResult", &mut stack)?;
+                    result = RemoveTagsResponseDeserializer::deserialize(
+                        "RemoveTagsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -7454,25 +7809,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Sets the certificate that terminates the specified listener's SSL connections. The specified certificate replaces any prior certificate that was used on the same load balancer and port.</p> <p>For more information about updating your SSL certificate, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-update-ssl-cert.html">Replace the SSL Certificate for Your Load Balancer</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn set_load_balancer_listener_ssl_certificate(
-        &self,
-        input: SetLoadBalancerListenerSSLCertificateInput,
-    ) -> RusotoFuture<
-        SetLoadBalancerListenerSSLCertificateOutput,
-        SetLoadBalancerListenerSSLCertificateError,
-    > {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for SetLoadBalancerListenerSSLCertificateRequest {
+    type Output = SetLoadBalancerListenerSSLCertificateResponse;
+    type Error = SetLoadBalancerListenerSSLCertificateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetLoadBalancerListenerSSLCertificate");
         params.put("Version", "2012-06-01");
-        SetLoadBalancerListenerSSLCertificateInputSerializer::serialize(&mut params, "", &input);
+        SetLoadBalancerListenerSSLCertificateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetLoadBalancerListenerSSLCertificateError::from_response(
@@ -7485,7 +7842,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetLoadBalancerListenerSSLCertificateOutput::default();
+                    result = SetLoadBalancerListenerSSLCertificateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7495,10 +7852,11 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SetLoadBalancerListenerSSLCertificateOutputDeserializer::deserialize(
-                        "SetLoadBalancerListenerSSLCertificateResult",
-                        &mut stack,
-                    )?;
+                    result =
+                        SetLoadBalancerListenerSSLCertificateResponseDeserializer::deserialize(
+                            "SetLoadBalancerListenerSSLCertificateResult",
+                            &mut stack,
+                        )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -7507,25 +7865,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Replaces the set of policies associated with the specified port on which the EC2 instance is listening with a new set of policies. At this time, only the back-end server authentication policy type can be applied to the instance ports; this policy type is composed of multiple public key policies.</p> <p>Each time you use <code>SetLoadBalancerPoliciesForBackendServer</code> to enable the policies, use the <code>PolicyNames</code> parameter to list the policies that you want to enable.</p> <p>You can use <a>DescribeLoadBalancers</a> or <a>DescribeLoadBalancerPolicies</a> to verify that the policy is associated with the EC2 instance.</p> <p>For more information about enabling back-end instance authentication, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html#configure_backendauth_clt">Configure Back-end Instance Authentication</a> in the <i>Classic Load Balancers Guide</i>. For more information about Proxy Protocol, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-proxy-protocol.html">Configure Proxy Protocol Support</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn set_load_balancer_policies_for_backend_server(
-        &self,
-        input: SetLoadBalancerPoliciesForBackendServerInput,
-    ) -> RusotoFuture<
-        SetLoadBalancerPoliciesForBackendServerOutput,
-        SetLoadBalancerPoliciesForBackendServerError,
-    > {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for SetLoadBalancerPoliciesForBackendServerRequest {
+    type Output = SetLoadBalancerPoliciesForBackendServerResponse;
+    type Error = SetLoadBalancerPoliciesForBackendServerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetLoadBalancerPoliciesForBackendServer");
         params.put("Version", "2012-06-01");
-        SetLoadBalancerPoliciesForBackendServerInputSerializer::serialize(&mut params, "", &input);
+        SetLoadBalancerPoliciesForBackendServerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetLoadBalancerPoliciesForBackendServerError::from_response(
@@ -7538,7 +7898,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetLoadBalancerPoliciesForBackendServerOutput::default();
+                    result = SetLoadBalancerPoliciesForBackendServerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7549,7 +7909,7 @@ impl Elb for ElbClient {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
                     result =
-                        SetLoadBalancerPoliciesForBackendServerOutputDeserializer::deserialize(
+                        SetLoadBalancerPoliciesForBackendServerResponseDeserializer::deserialize(
                             "SetLoadBalancerPoliciesForBackendServerResult",
                             &mut stack,
                         )?;
@@ -7561,23 +7921,27 @@ impl Elb for ElbClient {
             }))
         })
     }
+}
 
-    /// <p>Replaces the current set of policies for the specified load balancer port with the specified set of policies.</p> <p>To enable back-end server authentication, use <a>SetLoadBalancerPoliciesForBackendServer</a>.</p> <p>For more information about setting policies, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/ssl-config-update.html">Update the SSL Negotiation Configuration</a>, <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-duration">Duration-Based Session Stickiness</a>, and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-sticky-sessions.html#enable-sticky-sessions-application">Application-Controlled Session Stickiness</a> in the <i>Classic Load Balancers Guide</i>.</p>
-    fn set_load_balancer_policies_of_listener(
-        &self,
-        input: SetLoadBalancerPoliciesOfListenerInput,
-    ) -> RusotoFuture<SetLoadBalancerPoliciesOfListenerOutput, SetLoadBalancerPoliciesOfListenerError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+impl ServiceRequest for SetLoadBalancerPoliciesOfListenerRequest {
+    type Output = SetLoadBalancerPoliciesOfListenerResponse;
+    type Error = SetLoadBalancerPoliciesOfListenerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetLoadBalancerPoliciesOfListener");
         params.put("Version", "2012-06-01");
-        SetLoadBalancerPoliciesOfListenerInputSerializer::serialize(&mut params, "", &input);
+        SetLoadBalancerPoliciesOfListenerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetLoadBalancerPoliciesOfListenerError::from_response(
@@ -7590,7 +7954,7 @@ impl Elb for ElbClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetLoadBalancerPoliciesOfListenerOutput::default();
+                    result = SetLoadBalancerPoliciesOfListenerResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -7600,7 +7964,7 @@ impl Elb for ElbClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SetLoadBalancerPoliciesOfListenerOutputDeserializer::deserialize(
+                    result = SetLoadBalancerPoliciesOfListenerResponseDeserializer::deserialize(
                         "SetLoadBalancerPoliciesOfListenerResult",
                         &mut stack,
                     )?;
@@ -7631,7 +7995,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAccessPointsInput::default();
+        let request = DescribeLoadBalancersRequest::default();
         let result = client.describe_load_balancers(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
@@ -7644,7 +8008,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeLoadBalancerPoliciesInput::default();
+        let request = DescribeLoadBalancerPoliciesRequest::default();
         let result = client.describe_load_balancer_policies(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -7657,7 +8021,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeLoadBalancerPolicyTypesInput::default();
+        let request = DescribeLoadBalancerPolicyTypesRequest::default();
         let result = client.describe_load_balancer_policy_types(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -7670,7 +8034,7 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = ElbClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAccessPointsInput::default();
+        let request = DescribeLoadBalancersRequest::default();
         let result = client.describe_load_balancers(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }

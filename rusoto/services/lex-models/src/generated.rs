@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -390,6 +391,10 @@ pub struct DeleteBotAliasRequest {
     pub name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteBotAliasResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBotChannelAssociationRequest {
     /// <p>An alias that points to the specific version of the Amazon Lex bot to which this association is being made.</p>
@@ -403,12 +408,20 @@ pub struct DeleteBotChannelAssociationRequest {
     pub name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteBotChannelAssociationResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBotRequest {
     /// <p>The name of the bot. The name is case sensitive. </p>
     #[serde(rename = "name")]
     pub name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteBotResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBotVersionRequest {
@@ -420,12 +433,20 @@ pub struct DeleteBotVersionRequest {
     pub version: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteBotVersionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIntentRequest {
     /// <p>The name of the intent. The name is case sensitive. </p>
     #[serde(rename = "name")]
     pub name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIntentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIntentVersionRequest {
@@ -437,12 +458,20 @@ pub struct DeleteIntentVersionRequest {
     pub version: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteIntentVersionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSlotTypeRequest {
     /// <p>The name of the slot type. The name is case sensitive. </p>
     #[serde(rename = "name")]
     pub name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteSlotTypeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSlotTypeVersionRequest {
@@ -454,6 +483,10 @@ pub struct DeleteSlotTypeVersionRequest {
     pub version: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteSlotTypeVersionResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUtterancesRequest {
     /// <p>The name of the bot that stored the utterances.</p>
@@ -463,6 +496,10 @@ pub struct DeleteUtterancesRequest {
     #[serde(rename = "userId")]
     pub user_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUtterancesResponse {}
 
 /// <p><p>Each slot type can have a set of values. Each enumeration value represents a value the slot type can take. </p> <p>For example, a pizza ordering bot could have a slot type that specifies the type of crust that the pizza should have. The slot type could include the values </p> <ul> <li> <p>thick</p> </li> <li> <p>thin</p> </li> <li> <p>stuffed</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -3816,202 +3853,155 @@ pub trait LexModels {
     fn create_bot_version(
         &self,
         input: CreateBotVersionRequest,
-    ) -> RusotoFuture<CreateBotVersionResponse, CreateBotVersionError>;
+    ) -> Request<CreateBotVersionRequest>;
 
     /// <p>Creates a new version of an intent based on the <code>$LATEST</code> version of the intent. If the <code>$LATEST</code> version of this intent hasn't changed since you last updated it, Amazon Lex doesn't create a new version. It returns the last version you created.</p> <note> <p>You can update only the <code>$LATEST</code> version of the intent. You can't update the numbered versions that you create with the <code>CreateIntentVersion</code> operation.</p> </note> <p> When you create a version of an intent, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions to perform the <code>lex:CreateIntentVersion</code> action. </p>
     fn create_intent_version(
         &self,
         input: CreateIntentVersionRequest,
-    ) -> RusotoFuture<CreateIntentVersionResponse, CreateIntentVersionError>;
+    ) -> Request<CreateIntentVersionRequest>;
 
     /// <p>Creates a new version of a slot type based on the <code>$LATEST</code> version of the specified slot type. If the <code>$LATEST</code> version of this resource has not changed since the last version that you created, Amazon Lex doesn't create a new version. It returns the last version that you created. </p> <note> <p>You can update only the <code>$LATEST</code> version of a slot type. You can't update the numbered versions that you create with the <code>CreateSlotTypeVersion</code> operation.</p> </note> <p>When you create a version of a slot type, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions for the <code>lex:CreateSlotTypeVersion</code> action.</p>
     fn create_slot_type_version(
         &self,
         input: CreateSlotTypeVersionRequest,
-    ) -> RusotoFuture<CreateSlotTypeVersionResponse, CreateSlotTypeVersionError>;
+    ) -> Request<CreateSlotTypeVersionRequest>;
 
     /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
-    fn delete_bot(&self, input: DeleteBotRequest) -> RusotoFuture<(), DeleteBotError>;
+    fn delete_bot(&self, input: DeleteBotRequest) -> Request<DeleteBotRequest>;
 
     /// <p>Deletes an alias for the specified bot. </p> <p>You can't delete an alias that is used in the association between a bot and a messaging channel. If an alias is used in a channel association, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the channel association that refers to the bot. You can remove the reference to the alias by deleting the channel association. If you get the same exception again, delete the referring association until the <code>DeleteBotAlias</code> operation is successful.</p>
-    fn delete_bot_alias(
-        &self,
-        input: DeleteBotAliasRequest,
-    ) -> RusotoFuture<(), DeleteBotAliasError>;
+    fn delete_bot_alias(&self, input: DeleteBotAliasRequest) -> Request<DeleteBotAliasRequest>;
 
     /// <p>Deletes the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permission for the <code>lex:DeleteBotChannelAssociation</code> action.</p>
     fn delete_bot_channel_association(
         &self,
         input: DeleteBotChannelAssociationRequest,
-    ) -> RusotoFuture<(), DeleteBotChannelAssociationError>;
+    ) -> Request<DeleteBotChannelAssociationRequest>;
 
     /// <p>Deletes a specific version of a bot. To delete all versions of a bot, use the <a>DeleteBot</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteBotVersion</code> action.</p>
     fn delete_bot_version(
         &self,
         input: DeleteBotVersionRequest,
-    ) -> RusotoFuture<(), DeleteBotVersionError>;
+    ) -> Request<DeleteBotVersionRequest>;
 
     /// <p>Deletes all versions of the intent, including the <code>$LATEST</code> version. To delete a specific version of the intent, use the <a>DeleteIntentVersion</a> operation.</p> <p> You can delete a version of an intent only if it is not referenced. To delete an intent that is referred to in one or more bots (see <a>how-it-works</a>), you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, it provides an example reference that shows where the intent is referenced. To remove the reference to the intent, either update the bot or delete it. If you get the same exception when you attempt to delete the intent again, repeat until the intent has no references and the call to <code>DeleteIntent</code> is successful. </p> </note> <p> This operation requires permission for the <code>lex:DeleteIntent</code> action. </p>
-    fn delete_intent(&self, input: DeleteIntentRequest) -> RusotoFuture<(), DeleteIntentError>;
+    fn delete_intent(&self, input: DeleteIntentRequest) -> Request<DeleteIntentRequest>;
 
     /// <p>Deletes a specific version of an intent. To delete all versions of a intent, use the <a>DeleteIntent</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteIntentVersion</code> action.</p>
     fn delete_intent_version(
         &self,
         input: DeleteIntentVersionRequest,
-    ) -> RusotoFuture<(), DeleteIntentVersionError>;
+    ) -> Request<DeleteIntentVersionRequest>;
 
     /// <p>Deletes all versions of the slot type, including the <code>$LATEST</code> version. To delete a specific version of the slot type, use the <a>DeleteSlotTypeVersion</a> operation.</p> <p> You can delete a version of a slot type only if it is not referenced. To delete a slot type that is referred to in one or more intents, you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, the exception provides an example reference that shows the intent where the slot type is referenced. To remove the reference to the slot type, either update the intent or delete it. If you get the same exception when you attempt to delete the slot type again, repeat until the slot type has no references and the <code>DeleteSlotType</code> call is successful. </p> </note> <p>This operation requires permission for the <code>lex:DeleteSlotType</code> action.</p>
-    fn delete_slot_type(
-        &self,
-        input: DeleteSlotTypeRequest,
-    ) -> RusotoFuture<(), DeleteSlotTypeError>;
+    fn delete_slot_type(&self, input: DeleteSlotTypeRequest) -> Request<DeleteSlotTypeRequest>;
 
     /// <p>Deletes a specific version of a slot type. To delete all versions of a slot type, use the <a>DeleteSlotType</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteSlotTypeVersion</code> action.</p>
     fn delete_slot_type_version(
         &self,
         input: DeleteSlotTypeVersionRequest,
-    ) -> RusotoFuture<(), DeleteSlotTypeVersionError>;
+    ) -> Request<DeleteSlotTypeVersionRequest>;
 
     /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
-    fn delete_utterances(
-        &self,
-        input: DeleteUtterancesRequest,
-    ) -> RusotoFuture<(), DeleteUtterancesError>;
+    fn delete_utterances(&self, input: DeleteUtterancesRequest)
+        -> Request<DeleteUtterancesRequest>;
 
     /// <p>Returns metadata information for a specific bot. You must provide the bot name and the bot version or alias. </p> <p> This operation requires permissions for the <code>lex:GetBot</code> action. </p>
-    fn get_bot(&self, input: GetBotRequest) -> RusotoFuture<GetBotResponse, GetBotError>;
+    fn get_bot(&self, input: GetBotRequest) -> Request<GetBotRequest>;
 
     /// <p>Returns information about an Amazon Lex bot alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:GetBotAlias</code> action.</p>
-    fn get_bot_alias(
-        &self,
-        input: GetBotAliasRequest,
-    ) -> RusotoFuture<GetBotAliasResponse, GetBotAliasError>;
+    fn get_bot_alias(&self, input: GetBotAliasRequest) -> Request<GetBotAliasRequest>;
 
     /// <p>Returns a list of aliases for a specified Amazon Lex bot.</p> <p>This operation requires permissions for the <code>lex:GetBotAliases</code> action.</p>
-    fn get_bot_aliases(
-        &self,
-        input: GetBotAliasesRequest,
-    ) -> RusotoFuture<GetBotAliasesResponse, GetBotAliasesError>;
+    fn get_bot_aliases(&self, input: GetBotAliasesRequest) -> Request<GetBotAliasesRequest>;
 
     /// <p>Returns information about the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permissions for the <code>lex:GetBotChannelAssociation</code> action.</p>
     fn get_bot_channel_association(
         &self,
         input: GetBotChannelAssociationRequest,
-    ) -> RusotoFuture<GetBotChannelAssociationResponse, GetBotChannelAssociationError>;
+    ) -> Request<GetBotChannelAssociationRequest>;
 
     /// <p> Returns a list of all of the channels associated with the specified bot. </p> <p>The <code>GetBotChannelAssociations</code> operation requires permissions for the <code>lex:GetBotChannelAssociations</code> action.</p>
     fn get_bot_channel_associations(
         &self,
         input: GetBotChannelAssociationsRequest,
-    ) -> RusotoFuture<GetBotChannelAssociationsResponse, GetBotChannelAssociationsError>;
+    ) -> Request<GetBotChannelAssociationsRequest>;
 
     /// <p>Gets information about all of the versions of a bot.</p> <p>The <code>GetBotVersions</code> operation returns a <code>BotMetadata</code> object for each version of a bot. For example, if a bot has three numbered versions, the <code>GetBotVersions</code> operation returns four <code>BotMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetBotVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetBotVersions</code> action.</p>
-    fn get_bot_versions(
-        &self,
-        input: GetBotVersionsRequest,
-    ) -> RusotoFuture<GetBotVersionsResponse, GetBotVersionsError>;
+    fn get_bot_versions(&self, input: GetBotVersionsRequest) -> Request<GetBotVersionsRequest>;
 
     /// <p>Returns bot information as follows: </p> <ul> <li> <p>If you provide the <code>nameContains</code> field, the response includes information for the <code>$LATEST</code> version of all bots whose name contains the specified string.</p> </li> <li> <p>If you don't specify the <code>nameContains</code> field, the operation returns information about the <code>$LATEST</code> version of all of your bots.</p> </li> </ul> <p>This operation requires permission for the <code>lex:GetBots</code> action.</p>
-    fn get_bots(&self, input: GetBotsRequest) -> RusotoFuture<GetBotsResponse, GetBotsError>;
+    fn get_bots(&self, input: GetBotsRequest) -> Request<GetBotsRequest>;
 
     /// <p>Returns information about a built-in intent.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntent</code> action.</p>
     fn get_builtin_intent(
         &self,
         input: GetBuiltinIntentRequest,
-    ) -> RusotoFuture<GetBuiltinIntentResponse, GetBuiltinIntentError>;
+    ) -> Request<GetBuiltinIntentRequest>;
 
     /// <p>Gets a list of built-in intents that meet the specified criteria.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntents</code> action.</p>
     fn get_builtin_intents(
         &self,
         input: GetBuiltinIntentsRequest,
-    ) -> RusotoFuture<GetBuiltinIntentsResponse, GetBuiltinIntentsError>;
+    ) -> Request<GetBuiltinIntentsRequest>;
 
     /// <p>Gets a list of built-in slot types that meet the specified criteria.</p> <p>For a list of built-in slot types, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p> <p>This operation requires permission for the <code>lex:GetBuiltInSlotTypes</code> action.</p>
     fn get_builtin_slot_types(
         &self,
         input: GetBuiltinSlotTypesRequest,
-    ) -> RusotoFuture<GetBuiltinSlotTypesResponse, GetBuiltinSlotTypesError>;
+    ) -> Request<GetBuiltinSlotTypesRequest>;
 
     /// <p>Exports the contents of a Amazon Lex resource in a specified format. </p>
-    fn get_export(
-        &self,
-        input: GetExportRequest,
-    ) -> RusotoFuture<GetExportResponse, GetExportError>;
+    fn get_export(&self, input: GetExportRequest) -> Request<GetExportRequest>;
 
     /// <p>Gets information about an import job started with the <code>StartImport</code> operation.</p>
-    fn get_import(
-        &self,
-        input: GetImportRequest,
-    ) -> RusotoFuture<GetImportResponse, GetImportError>;
+    fn get_import(&self, input: GetImportRequest) -> Request<GetImportRequest>;
 
     /// <p> Returns information about an intent. In addition to the intent name, you must specify the intent version. </p> <p> This operation requires permissions to perform the <code>lex:GetIntent</code> action. </p>
-    fn get_intent(
-        &self,
-        input: GetIntentRequest,
-    ) -> RusotoFuture<GetIntentResponse, GetIntentError>;
+    fn get_intent(&self, input: GetIntentRequest) -> Request<GetIntentRequest>;
 
     /// <p>Gets information about all of the versions of an intent.</p> <p>The <code>GetIntentVersions</code> operation returns an <code>IntentMetadata</code> object for each version of an intent. For example, if an intent has three numbered versions, the <code>GetIntentVersions</code> operation returns four <code>IntentMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetIntentVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetIntentVersions</code> action.</p>
     fn get_intent_versions(
         &self,
         input: GetIntentVersionsRequest,
-    ) -> RusotoFuture<GetIntentVersionsResponse, GetIntentVersionsError>;
+    ) -> Request<GetIntentVersionsRequest>;
 
     /// <p>Returns intent information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all intents that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all intents. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetIntents</code> action. </p>
-    fn get_intents(
-        &self,
-        input: GetIntentsRequest,
-    ) -> RusotoFuture<GetIntentsResponse, GetIntentsError>;
+    fn get_intents(&self, input: GetIntentsRequest) -> Request<GetIntentsRequest>;
 
     /// <p>Returns information about a specific version of a slot type. In addition to specifying the slot type name, you must specify the slot type version.</p> <p>This operation requires permissions for the <code>lex:GetSlotType</code> action.</p>
-    fn get_slot_type(
-        &self,
-        input: GetSlotTypeRequest,
-    ) -> RusotoFuture<GetSlotTypeResponse, GetSlotTypeError>;
+    fn get_slot_type(&self, input: GetSlotTypeRequest) -> Request<GetSlotTypeRequest>;
 
     /// <p>Gets information about all versions of a slot type.</p> <p>The <code>GetSlotTypeVersions</code> operation returns a <code>SlotTypeMetadata</code> object for each version of a slot type. For example, if a slot type has three numbered versions, the <code>GetSlotTypeVersions</code> operation returns four <code>SlotTypeMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetSlotTypeVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetSlotTypeVersions</code> action.</p>
     fn get_slot_type_versions(
         &self,
         input: GetSlotTypeVersionsRequest,
-    ) -> RusotoFuture<GetSlotTypeVersionsResponse, GetSlotTypeVersionsError>;
+    ) -> Request<GetSlotTypeVersionsRequest>;
 
     /// <p>Returns slot type information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all slot types that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all slot types. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetSlotTypes</code> action. </p>
-    fn get_slot_types(
-        &self,
-        input: GetSlotTypesRequest,
-    ) -> RusotoFuture<GetSlotTypesResponse, GetSlotTypesError>;
+    fn get_slot_types(&self, input: GetSlotTypesRequest) -> Request<GetSlotTypesRequest>;
 
     /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <note> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> </note> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
     fn get_utterances_view(
         &self,
         input: GetUtterancesViewRequest,
-    ) -> RusotoFuture<GetUtterancesViewResponse, GetUtterancesViewError>;
+    ) -> Request<GetUtterancesViewRequest>;
 
     /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
-    fn put_bot(&self, input: PutBotRequest) -> RusotoFuture<PutBotResponse, PutBotError>;
+    fn put_bot(&self, input: PutBotRequest) -> Request<PutBotRequest>;
 
     /// <p>Creates an alias for the specified version of the bot or replaces an alias for the specified bot. To change the version of the bot that the alias points to, replace the alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:PutBotAlias</code> action. </p>
-    fn put_bot_alias(
-        &self,
-        input: PutBotAliasRequest,
-    ) -> RusotoFuture<PutBotAliasResponse, PutBotAliasError>;
+    fn put_bot_alias(&self, input: PutBotAliasRequest) -> Request<PutBotAliasRequest>;
 
     /// <p>Creates an intent or replaces an existing intent.</p> <p>To define the interaction between the user and your bot, you use one or more intents. For a pizza ordering bot, for example, you would create an <code>OrderPizza</code> intent. </p> <p>To create an intent or replace an existing intent, you must provide the following:</p> <ul> <li> <p>Intent name. For example, <code>OrderPizza</code>.</p> </li> <li> <p>Sample utterances. For example, "Can I order a pizza, please." and "I want to order a pizza."</p> </li> <li> <p>Information to be gathered. You specify slot types for the information that your bot will request from the user. You can specify standard slot types, such as a date or a time, or custom slot types such as the size and crust of a pizza.</p> </li> <li> <p>How the intent will be fulfilled. You can provide a Lambda function or configure the intent to return the intent information to the client application. If you use a Lambda function, when all of the intent information is available, Amazon Lex invokes your Lambda function. If you configure your intent to return the intent information to the client application. </p> </li> </ul> <p>You can specify other optional information in the request, such as:</p> <ul> <li> <p>A confirmation prompt to ask the user to confirm an intent. For example, "Shall I order your pizza?"</p> </li> <li> <p>A conclusion statement to send to the user after the intent has been fulfilled. For example, "I placed your pizza order."</p> </li> <li> <p>A follow-up prompt that asks the user for additional activity. For example, asking "Do you want to order a drink with your pizza?"</p> </li> </ul> <p>If you specify an existing intent name to update the intent, Amazon Lex replaces the values in the <code>$LATEST</code> version of the intent with the values in the request. Amazon Lex removes fields that you don't provide in the request. If you don't specify the required fields, Amazon Lex throws an exception. When you update the <code>$LATEST</code> version of an intent, the <code>status</code> field of any bot that uses the <code>$LATEST</code> version of the intent is set to <code>NOT_BUILT</code>.</p> <p>For more information, see <a>how-it-works</a>.</p> <p>This operation requires permissions for the <code>lex:PutIntent</code> action.</p>
-    fn put_intent(
-        &self,
-        input: PutIntentRequest,
-    ) -> RusotoFuture<PutIntentResponse, PutIntentError>;
+    fn put_intent(&self, input: PutIntentRequest) -> Request<PutIntentRequest>;
 
     /// <p>Creates a custom slot type or replaces an existing custom slot type.</p> <p>To create a custom slot type, specify a name for the slot type and a set of enumeration values, which are the values that a slot of this type can assume. For more information, see <a>how-it-works</a>.</p> <p>If you specify the name of an existing slot type, the fields in the request replace the existing values in the <code>$LATEST</code> version of the slot type. Amazon Lex removes the fields that you don't provide in the request. If you don't specify required fields, Amazon Lex throws an exception. When you update the <code>$LATEST</code> version of a slot type, if a bot uses the <code>$LATEST</code> version of an intent that contains the slot type, the bot's <code>status</code> field is set to <code>NOT_BUILT</code>.</p> <p>This operation requires permissions for the <code>lex:PutSlotType</code> action.</p>
-    fn put_slot_type(
-        &self,
-        input: PutSlotTypeRequest,
-    ) -> RusotoFuture<PutSlotTypeResponse, PutSlotTypeError>;
+    fn put_slot_type(&self, input: PutSlotTypeRequest) -> Request<PutSlotTypeRequest>;
 
     /// <p>Starts a job to import a resource to Amazon Lex.</p>
-    fn start_import(
-        &self,
-        input: StartImportRequest,
-    ) -> RusotoFuture<StartImportResponse, StartImportError>;
+    fn start_import(&self, input: StartImportRequest) -> Request<StartImportRequest>;
 }
 /// A client for the Amazon Lex Model Building Service API.
 #[derive(Clone)]
@@ -4054,17 +4044,251 @@ impl LexModels for LexModelsClient {
     fn create_bot_version(
         &self,
         input: CreateBotVersionRequest,
-    ) -> RusotoFuture<CreateBotVersionResponse, CreateBotVersionError> {
-        let request_uri = format!("/bots/{name}/versions", name = input.name);
+    ) -> Request<CreateBotVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
+    /// <p>Creates a new version of an intent based on the <code>$LATEST</code> version of the intent. If the <code>$LATEST</code> version of this intent hasn't changed since you last updated it, Amazon Lex doesn't create a new version. It returns the last version you created.</p> <note> <p>You can update only the <code>$LATEST</code> version of the intent. You can't update the numbered versions that you create with the <code>CreateIntentVersion</code> operation.</p> </note> <p> When you create a version of an intent, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions to perform the <code>lex:CreateIntentVersion</code> action. </p>
+    fn create_intent_version(
+        &self,
+        input: CreateIntentVersionRequest,
+    ) -> Request<CreateIntentVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new version of a slot type based on the <code>$LATEST</code> version of the specified slot type. If the <code>$LATEST</code> version of this resource has not changed since the last version that you created, Amazon Lex doesn't create a new version. It returns the last version that you created. </p> <note> <p>You can update only the <code>$LATEST</code> version of a slot type. You can't update the numbered versions that you create with the <code>CreateSlotTypeVersion</code> operation.</p> </note> <p>When you create a version of a slot type, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions for the <code>lex:CreateSlotTypeVersion</code> action.</p>
+    fn create_slot_type_version(
+        &self,
+        input: CreateSlotTypeVersionRequest,
+    ) -> Request<CreateSlotTypeVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
+    fn delete_bot(&self, input: DeleteBotRequest) -> Request<DeleteBotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an alias for the specified bot. </p> <p>You can't delete an alias that is used in the association between a bot and a messaging channel. If an alias is used in a channel association, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the channel association that refers to the bot. You can remove the reference to the alias by deleting the channel association. If you get the same exception again, delete the referring association until the <code>DeleteBotAlias</code> operation is successful.</p>
+    fn delete_bot_alias(&self, input: DeleteBotAliasRequest) -> Request<DeleteBotAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permission for the <code>lex:DeleteBotChannelAssociation</code> action.</p>
+    fn delete_bot_channel_association(
+        &self,
+        input: DeleteBotChannelAssociationRequest,
+    ) -> Request<DeleteBotChannelAssociationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific version of a bot. To delete all versions of a bot, use the <a>DeleteBot</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteBotVersion</code> action.</p>
+    fn delete_bot_version(
+        &self,
+        input: DeleteBotVersionRequest,
+    ) -> Request<DeleteBotVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes all versions of the intent, including the <code>$LATEST</code> version. To delete a specific version of the intent, use the <a>DeleteIntentVersion</a> operation.</p> <p> You can delete a version of an intent only if it is not referenced. To delete an intent that is referred to in one or more bots (see <a>how-it-works</a>), you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, it provides an example reference that shows where the intent is referenced. To remove the reference to the intent, either update the bot or delete it. If you get the same exception when you attempt to delete the intent again, repeat until the intent has no references and the call to <code>DeleteIntent</code> is successful. </p> </note> <p> This operation requires permission for the <code>lex:DeleteIntent</code> action. </p>
+    fn delete_intent(&self, input: DeleteIntentRequest) -> Request<DeleteIntentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific version of an intent. To delete all versions of a intent, use the <a>DeleteIntent</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteIntentVersion</code> action.</p>
+    fn delete_intent_version(
+        &self,
+        input: DeleteIntentVersionRequest,
+    ) -> Request<DeleteIntentVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes all versions of the slot type, including the <code>$LATEST</code> version. To delete a specific version of the slot type, use the <a>DeleteSlotTypeVersion</a> operation.</p> <p> You can delete a version of a slot type only if it is not referenced. To delete a slot type that is referred to in one or more intents, you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, the exception provides an example reference that shows the intent where the slot type is referenced. To remove the reference to the slot type, either update the intent or delete it. If you get the same exception when you attempt to delete the slot type again, repeat until the slot type has no references and the <code>DeleteSlotType</code> call is successful. </p> </note> <p>This operation requires permission for the <code>lex:DeleteSlotType</code> action.</p>
+    fn delete_slot_type(&self, input: DeleteSlotTypeRequest) -> Request<DeleteSlotTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specific version of a slot type. To delete all versions of a slot type, use the <a>DeleteSlotType</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteSlotTypeVersion</code> action.</p>
+    fn delete_slot_type_version(
+        &self,
+        input: DeleteSlotTypeVersionRequest,
+    ) -> Request<DeleteSlotTypeVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
+    fn delete_utterances(
+        &self,
+        input: DeleteUtterancesRequest,
+    ) -> Request<DeleteUtterancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns metadata information for a specific bot. You must provide the bot name and the bot version or alias. </p> <p> This operation requires permissions for the <code>lex:GetBot</code> action. </p>
+    fn get_bot(&self, input: GetBotRequest) -> Request<GetBotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about an Amazon Lex bot alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:GetBotAlias</code> action.</p>
+    fn get_bot_alias(&self, input: GetBotAliasRequest) -> Request<GetBotAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of aliases for a specified Amazon Lex bot.</p> <p>This operation requires permissions for the <code>lex:GetBotAliases</code> action.</p>
+    fn get_bot_aliases(&self, input: GetBotAliasesRequest) -> Request<GetBotAliasesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permissions for the <code>lex:GetBotChannelAssociation</code> action.</p>
+    fn get_bot_channel_association(
+        &self,
+        input: GetBotChannelAssociationRequest,
+    ) -> Request<GetBotChannelAssociationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns a list of all of the channels associated with the specified bot. </p> <p>The <code>GetBotChannelAssociations</code> operation requires permissions for the <code>lex:GetBotChannelAssociations</code> action.</p>
+    fn get_bot_channel_associations(
+        &self,
+        input: GetBotChannelAssociationsRequest,
+    ) -> Request<GetBotChannelAssociationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about all of the versions of a bot.</p> <p>The <code>GetBotVersions</code> operation returns a <code>BotMetadata</code> object for each version of a bot. For example, if a bot has three numbered versions, the <code>GetBotVersions</code> operation returns four <code>BotMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetBotVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetBotVersions</code> action.</p>
+    fn get_bot_versions(&self, input: GetBotVersionsRequest) -> Request<GetBotVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns bot information as follows: </p> <ul> <li> <p>If you provide the <code>nameContains</code> field, the response includes information for the <code>$LATEST</code> version of all bots whose name contains the specified string.</p> </li> <li> <p>If you don't specify the <code>nameContains</code> field, the operation returns information about the <code>$LATEST</code> version of all of your bots.</p> </li> </ul> <p>This operation requires permission for the <code>lex:GetBots</code> action.</p>
+    fn get_bots(&self, input: GetBotsRequest) -> Request<GetBotsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a built-in intent.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntent</code> action.</p>
+    fn get_builtin_intent(
+        &self,
+        input: GetBuiltinIntentRequest,
+    ) -> Request<GetBuiltinIntentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of built-in intents that meet the specified criteria.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntents</code> action.</p>
+    fn get_builtin_intents(
+        &self,
+        input: GetBuiltinIntentsRequest,
+    ) -> Request<GetBuiltinIntentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of built-in slot types that meet the specified criteria.</p> <p>For a list of built-in slot types, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p> <p>This operation requires permission for the <code>lex:GetBuiltInSlotTypes</code> action.</p>
+    fn get_builtin_slot_types(
+        &self,
+        input: GetBuiltinSlotTypesRequest,
+    ) -> Request<GetBuiltinSlotTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Exports the contents of a Amazon Lex resource in a specified format. </p>
+    fn get_export(&self, input: GetExportRequest) -> Request<GetExportRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about an import job started with the <code>StartImport</code> operation.</p>
+    fn get_import(&self, input: GetImportRequest) -> Request<GetImportRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Returns information about an intent. In addition to the intent name, you must specify the intent version. </p> <p> This operation requires permissions to perform the <code>lex:GetIntent</code> action. </p>
+    fn get_intent(&self, input: GetIntentRequest) -> Request<GetIntentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about all of the versions of an intent.</p> <p>The <code>GetIntentVersions</code> operation returns an <code>IntentMetadata</code> object for each version of an intent. For example, if an intent has three numbered versions, the <code>GetIntentVersions</code> operation returns four <code>IntentMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetIntentVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetIntentVersions</code> action.</p>
+    fn get_intent_versions(
+        &self,
+        input: GetIntentVersionsRequest,
+    ) -> Request<GetIntentVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns intent information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all intents that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all intents. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetIntents</code> action. </p>
+    fn get_intents(&self, input: GetIntentsRequest) -> Request<GetIntentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific version of a slot type. In addition to specifying the slot type name, you must specify the slot type version.</p> <p>This operation requires permissions for the <code>lex:GetSlotType</code> action.</p>
+    fn get_slot_type(&self, input: GetSlotTypeRequest) -> Request<GetSlotTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about all versions of a slot type.</p> <p>The <code>GetSlotTypeVersions</code> operation returns a <code>SlotTypeMetadata</code> object for each version of a slot type. For example, if a slot type has three numbered versions, the <code>GetSlotTypeVersions</code> operation returns four <code>SlotTypeMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetSlotTypeVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetSlotTypeVersions</code> action.</p>
+    fn get_slot_type_versions(
+        &self,
+        input: GetSlotTypeVersionsRequest,
+    ) -> Request<GetSlotTypeVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns slot type information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all slot types that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all slot types. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetSlotTypes</code> action. </p>
+    fn get_slot_types(&self, input: GetSlotTypesRequest) -> Request<GetSlotTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <note> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> </note> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
+    fn get_utterances_view(
+        &self,
+        input: GetUtterancesViewRequest,
+    ) -> Request<GetUtterancesViewRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
+    fn put_bot(&self, input: PutBotRequest) -> Request<PutBotRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an alias for the specified version of the bot or replaces an alias for the specified bot. To change the version of the bot that the alias points to, replace the alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:PutBotAlias</code> action. </p>
+    fn put_bot_alias(&self, input: PutBotAliasRequest) -> Request<PutBotAliasRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an intent or replaces an existing intent.</p> <p>To define the interaction between the user and your bot, you use one or more intents. For a pizza ordering bot, for example, you would create an <code>OrderPizza</code> intent. </p> <p>To create an intent or replace an existing intent, you must provide the following:</p> <ul> <li> <p>Intent name. For example, <code>OrderPizza</code>.</p> </li> <li> <p>Sample utterances. For example, "Can I order a pizza, please." and "I want to order a pizza."</p> </li> <li> <p>Information to be gathered. You specify slot types for the information that your bot will request from the user. You can specify standard slot types, such as a date or a time, or custom slot types such as the size and crust of a pizza.</p> </li> <li> <p>How the intent will be fulfilled. You can provide a Lambda function or configure the intent to return the intent information to the client application. If you use a Lambda function, when all of the intent information is available, Amazon Lex invokes your Lambda function. If you configure your intent to return the intent information to the client application. </p> </li> </ul> <p>You can specify other optional information in the request, such as:</p> <ul> <li> <p>A confirmation prompt to ask the user to confirm an intent. For example, "Shall I order your pizza?"</p> </li> <li> <p>A conclusion statement to send to the user after the intent has been fulfilled. For example, "I placed your pizza order."</p> </li> <li> <p>A follow-up prompt that asks the user for additional activity. For example, asking "Do you want to order a drink with your pizza?"</p> </li> </ul> <p>If you specify an existing intent name to update the intent, Amazon Lex replaces the values in the <code>$LATEST</code> version of the intent with the values in the request. Amazon Lex removes fields that you don't provide in the request. If you don't specify the required fields, Amazon Lex throws an exception. When you update the <code>$LATEST</code> version of an intent, the <code>status</code> field of any bot that uses the <code>$LATEST</code> version of the intent is set to <code>NOT_BUILT</code>.</p> <p>For more information, see <a>how-it-works</a>.</p> <p>This operation requires permissions for the <code>lex:PutIntent</code> action.</p>
+    fn put_intent(&self, input: PutIntentRequest) -> Request<PutIntentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a custom slot type or replaces an existing custom slot type.</p> <p>To create a custom slot type, specify a name for the slot type and a set of enumeration values, which are the values that a slot of this type can assume. For more information, see <a>how-it-works</a>.</p> <p>If you specify the name of an existing slot type, the fields in the request replace the existing values in the <code>$LATEST</code> version of the slot type. Amazon Lex removes the fields that you don't provide in the request. If you don't specify required fields, Amazon Lex throws an exception. When you update the <code>$LATEST</code> version of a slot type, if a bot uses the <code>$LATEST</code> version of an intent that contains the slot type, the bot's <code>status</code> field is set to <code>NOT_BUILT</code>.</p> <p>This operation requires permissions for the <code>lex:PutSlotType</code> action.</p>
+    fn put_slot_type(&self, input: PutSlotTypeRequest) -> Request<PutSlotTypeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a job to import a resource to Amazon Lex.</p>
+    fn start_import(&self, input: StartImportRequest) -> Request<StartImportRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateBotVersionRequest {
+    type Output = CreateBotVersionResponse;
+    type Error = CreateBotVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bots/{name}/versions", name = self.name);
+
+        let mut request = SignedRequest::new("POST", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4082,22 +4306,28 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new version of an intent based on the <code>$LATEST</code> version of the intent. If the <code>$LATEST</code> version of this intent hasn't changed since you last updated it, Amazon Lex doesn't create a new version. It returns the last version you created.</p> <note> <p>You can update only the <code>$LATEST</code> version of the intent. You can't update the numbered versions that you create with the <code>CreateIntentVersion</code> operation.</p> </note> <p> When you create a version of an intent, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions to perform the <code>lex:CreateIntentVersion</code> action. </p>
-    fn create_intent_version(
-        &self,
-        input: CreateIntentVersionRequest,
-    ) -> RusotoFuture<CreateIntentVersionResponse, CreateIntentVersionError> {
-        let request_uri = format!("/intents/{name}/versions", name = input.name);
+impl ServiceRequest for CreateIntentVersionRequest {
+    type Output = CreateIntentVersionResponse;
+    type Error = CreateIntentVersionError;
 
-        let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/intents/{name}/versions", name = self.name);
+
+        let mut request = SignedRequest::new("POST", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4114,22 +4344,28 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new version of a slot type based on the <code>$LATEST</code> version of the specified slot type. If the <code>$LATEST</code> version of this resource has not changed since the last version that you created, Amazon Lex doesn't create a new version. It returns the last version that you created. </p> <note> <p>You can update only the <code>$LATEST</code> version of a slot type. You can't update the numbered versions that you create with the <code>CreateSlotTypeVersion</code> operation.</p> </note> <p>When you create a version of a slot type, Amazon Lex sets the version to 1. Subsequent versions increment by 1. For more information, see <a>versioning-intro</a>. </p> <p>This operation requires permissions for the <code>lex:CreateSlotTypeVersion</code> action.</p>
-    fn create_slot_type_version(
-        &self,
-        input: CreateSlotTypeVersionRequest,
-    ) -> RusotoFuture<CreateSlotTypeVersionResponse, CreateSlotTypeVersionError> {
-        let request_uri = format!("/slottypes/{name}/versions", name = input.name);
+impl ServiceRequest for CreateSlotTypeVersionRequest {
+    type Output = CreateSlotTypeVersionResponse;
+    type Error = CreateSlotTypeVersionError;
 
-        let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/slottypes/{name}/versions", name = self.name);
+
+        let mut request = SignedRequest::new("POST", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4146,20 +4382,29 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes all versions of the bot, including the <code>$LATEST</code> version. To delete a specific version of the bot, use the <a>DeleteBotVersion</a> operation.</p> <p>If a bot has an alias, you can't delete it. Instead, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the alias that refers to the bot. To remove the reference to the bot, delete the alias. If you get the same exception again, delete the referring alias until the <code>DeleteBot</code> operation is successful.</p> <p>This operation requires permissions for the <code>lex:DeleteBot</code> action.</p>
-    fn delete_bot(&self, input: DeleteBotRequest) -> RusotoFuture<(), DeleteBotError> {
-        let request_uri = format!("/bots/{name}", name = input.name);
+impl ServiceRequest for DeleteBotRequest {
+    type Output = DeleteBotResponse;
+    type Error = DeleteBotError;
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bots/{name}", name = self.name);
+
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteBotResponse {};
 
                     Ok(result)
                 }))
@@ -4173,27 +4418,33 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an alias for the specified bot. </p> <p>You can't delete an alias that is used in the association between a bot and a messaging channel. If an alias is used in a channel association, the <code>DeleteBot</code> operation returns a <code>ResourceInUseException</code> exception that includes a reference to the channel association that refers to the bot. You can remove the reference to the alias by deleting the channel association. If you get the same exception again, delete the referring association until the <code>DeleteBotAlias</code> operation is successful.</p>
-    fn delete_bot_alias(
-        &self,
-        input: DeleteBotAliasRequest,
-    ) -> RusotoFuture<(), DeleteBotAliasError> {
+impl ServiceRequest for DeleteBotAliasRequest {
+    type Output = DeleteBotAliasResponse;
+    type Error = DeleteBotAliasError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{name}",
-            bot_name = input.bot_name,
-            name = input.name
+            bot_name = self.bot_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteBotAliasResponse {};
 
                     Ok(result)
                 }))
@@ -4207,28 +4458,34 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permission for the <code>lex:DeleteBotChannelAssociation</code> action.</p>
-    fn delete_bot_channel_association(
-        &self,
-        input: DeleteBotChannelAssociationRequest,
-    ) -> RusotoFuture<(), DeleteBotChannelAssociationError> {
+impl ServiceRequest for DeleteBotChannelAssociationRequest {
+    type Output = DeleteBotChannelAssociationResponse;
+    type Error = DeleteBotChannelAssociationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
-            alias_name = input.bot_alias,
-            bot_name = input.bot_name,
-            name = input.name
+            alias_name = self.bot_alias,
+            bot_name = self.bot_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteBotChannelAssociationResponse {};
 
                     Ok(result)
                 }))
@@ -4239,27 +4496,33 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific version of a bot. To delete all versions of a bot, use the <a>DeleteBot</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteBotVersion</code> action.</p>
-    fn delete_bot_version(
-        &self,
-        input: DeleteBotVersionRequest,
-    ) -> RusotoFuture<(), DeleteBotVersionError> {
+impl ServiceRequest for DeleteBotVersionRequest {
+    type Output = DeleteBotVersionResponse;
+    type Error = DeleteBotVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{name}/versions/{version}",
-            name = input.name,
-            version = input.version
+            name = self.name,
+            version = self.version
         );
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteBotVersionResponse {};
 
                     Ok(result)
                 }))
@@ -4273,20 +4536,29 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes all versions of the intent, including the <code>$LATEST</code> version. To delete a specific version of the intent, use the <a>DeleteIntentVersion</a> operation.</p> <p> You can delete a version of an intent only if it is not referenced. To delete an intent that is referred to in one or more bots (see <a>how-it-works</a>), you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, it provides an example reference that shows where the intent is referenced. To remove the reference to the intent, either update the bot or delete it. If you get the same exception when you attempt to delete the intent again, repeat until the intent has no references and the call to <code>DeleteIntent</code> is successful. </p> </note> <p> This operation requires permission for the <code>lex:DeleteIntent</code> action. </p>
-    fn delete_intent(&self, input: DeleteIntentRequest) -> RusotoFuture<(), DeleteIntentError> {
-        let request_uri = format!("/intents/{name}", name = input.name);
+impl ServiceRequest for DeleteIntentRequest {
+    type Output = DeleteIntentResponse;
+    type Error = DeleteIntentError;
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/intents/{name}", name = self.name);
+
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteIntentResponse {};
 
                     Ok(result)
                 }))
@@ -4300,27 +4572,33 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific version of an intent. To delete all versions of a intent, use the <a>DeleteIntent</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteIntentVersion</code> action.</p>
-    fn delete_intent_version(
-        &self,
-        input: DeleteIntentVersionRequest,
-    ) -> RusotoFuture<(), DeleteIntentVersionError> {
+impl ServiceRequest for DeleteIntentVersionRequest {
+    type Output = DeleteIntentVersionResponse;
+    type Error = DeleteIntentVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/intents/{name}/versions/{version}",
-            name = input.name,
-            version = input.version
+            name = self.name,
+            version = self.version
         );
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteIntentVersionResponse {};
 
                     Ok(result)
                 }))
@@ -4333,23 +4611,29 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes all versions of the slot type, including the <code>$LATEST</code> version. To delete a specific version of the slot type, use the <a>DeleteSlotTypeVersion</a> operation.</p> <p> You can delete a version of a slot type only if it is not referenced. To delete a slot type that is referred to in one or more intents, you must remove those references first. </p> <note> <p> If you get the <code>ResourceInUseException</code> exception, the exception provides an example reference that shows the intent where the slot type is referenced. To remove the reference to the slot type, either update the intent or delete it. If you get the same exception when you attempt to delete the slot type again, repeat until the slot type has no references and the <code>DeleteSlotType</code> call is successful. </p> </note> <p>This operation requires permission for the <code>lex:DeleteSlotType</code> action.</p>
-    fn delete_slot_type(
-        &self,
-        input: DeleteSlotTypeRequest,
-    ) -> RusotoFuture<(), DeleteSlotTypeError> {
-        let request_uri = format!("/slottypes/{name}", name = input.name);
+impl ServiceRequest for DeleteSlotTypeRequest {
+    type Output = DeleteSlotTypeResponse;
+    type Error = DeleteSlotTypeError;
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/slottypes/{name}", name = self.name);
+
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteSlotTypeResponse {};
 
                     Ok(result)
                 }))
@@ -4363,27 +4647,33 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specific version of a slot type. To delete all versions of a slot type, use the <a>DeleteSlotType</a> operation. </p> <p>This operation requires permissions for the <code>lex:DeleteSlotTypeVersion</code> action.</p>
-    fn delete_slot_type_version(
-        &self,
-        input: DeleteSlotTypeVersionRequest,
-    ) -> RusotoFuture<(), DeleteSlotTypeVersionError> {
+impl ServiceRequest for DeleteSlotTypeVersionRequest {
+    type Output = DeleteSlotTypeVersionResponse;
+    type Error = DeleteSlotTypeVersionError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/slottypes/{name}/version/{version}",
-            name = input.name,
-            version = input.version
+            name = self.name,
+            version = self.version
         );
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteSlotTypeVersionResponse {};
 
                     Ok(result)
                 }))
@@ -4396,27 +4686,33 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Deletes stored utterances.</p> <p>Amazon Lex stores the utterances that users send to your bot. Utterances are stored for 15 days for use with the <a>GetUtterancesView</a> operation, and then stored indefinitely for use in improving the ability of your bot to respond to user input.</p> <p>Use the <code>DeleteStoredUtterances</code> operation to manually delete stored utterances for a specific user.</p> <p>This operation requires permissions for the <code>lex:DeleteUtterances</code> action.</p>
-    fn delete_utterances(
-        &self,
-        input: DeleteUtterancesRequest,
-    ) -> RusotoFuture<(), DeleteUtterancesError> {
+impl ServiceRequest for DeleteUtterancesRequest {
+    type Output = DeleteUtterancesResponse;
+    type Error = DeleteUtterancesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{bot_name}/utterances/{user_id}",
-            bot_name = input.bot_name,
-            user_id = input.user_id
+            bot_name = self.bot_name,
+            user_id = self.user_id
         );
 
-        let mut request = SignedRequest::new("DELETE", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = DeleteUtterancesResponse {};
 
                     Ok(result)
                 }))
@@ -4430,21 +4726,30 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns metadata information for a specific bot. You must provide the bot name and the bot version or alias. </p> <p> This operation requires permissions for the <code>lex:GetBot</code> action. </p>
-    fn get_bot(&self, input: GetBotRequest) -> RusotoFuture<GetBotResponse, GetBotError> {
+impl ServiceRequest for GetBotRequest {
+    type Output = GetBotResponse;
+    type Error = GetBotError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{name}/versions/{versionoralias}",
-            name = input.name,
-            versionoralias = input.version_or_alias
+            name = self.name,
+            versionoralias = self.version_or_alias
         );
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4462,24 +4767,30 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about an Amazon Lex bot alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:GetBotAlias</code> action.</p>
-    fn get_bot_alias(
-        &self,
-        input: GetBotAliasRequest,
-    ) -> RusotoFuture<GetBotAliasResponse, GetBotAliasError> {
+impl ServiceRequest for GetBotAliasRequest {
+    type Output = GetBotAliasResponse;
+    type Error = GetBotAliasError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{name}",
-            bot_name = input.bot_name,
-            name = input.name
+            bot_name = self.bot_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4497,32 +4808,38 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of aliases for a specified Amazon Lex bot.</p> <p>This operation requires permissions for the <code>lex:GetBotAliases</code> action.</p>
-    fn get_bot_aliases(
-        &self,
-        input: GetBotAliasesRequest,
-    ) -> RusotoFuture<GetBotAliasesResponse, GetBotAliasesError> {
-        let request_uri = format!("/bots/{bot_name}/aliases/", bot_name = input.bot_name);
+impl ServiceRequest for GetBotAliasesRequest {
+    type Output = GetBotAliasesResponse;
+    type Error = GetBotAliasesError;
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bots/{bot_name}/aliases/", bot_name = self.bot_name);
+
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.name_contains {
+        if let Some(ref x) = self.name_contains {
             params.put("nameContains", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4540,25 +4857,31 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the association between an Amazon Lex bot and a messaging platform.</p> <p>This operation requires permissions for the <code>lex:GetBotChannelAssociation</code> action.</p>
-    fn get_bot_channel_association(
-        &self,
-        input: GetBotChannelAssociationRequest,
-    ) -> RusotoFuture<GetBotChannelAssociationResponse, GetBotChannelAssociationError> {
+impl ServiceRequest for GetBotChannelAssociationRequest {
+    type Output = GetBotChannelAssociationResponse;
+    type Error = GetBotChannelAssociationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{alias_name}/channels/{name}",
-            alias_name = input.bot_alias,
-            bot_name = input.bot_name,
-            name = input.name
+            alias_name = self.bot_alias,
+            bot_name = self.bot_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4573,36 +4896,42 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p> Returns a list of all of the channels associated with the specified bot. </p> <p>The <code>GetBotChannelAssociations</code> operation requires permissions for the <code>lex:GetBotChannelAssociations</code> action.</p>
-    fn get_bot_channel_associations(
-        &self,
-        input: GetBotChannelAssociationsRequest,
-    ) -> RusotoFuture<GetBotChannelAssociationsResponse, GetBotChannelAssociationsError> {
+impl ServiceRequest for GetBotChannelAssociationsRequest {
+    type Output = GetBotChannelAssociationsResponse;
+    type Error = GetBotChannelAssociationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{alias_name}/channels/",
-            alias_name = input.bot_alias,
-            bot_name = input.bot_name
+            alias_name = self.bot_alias,
+            bot_name = self.bot_name
         );
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.name_contains {
+        if let Some(ref x) = self.name_contains {
             params.put("nameContains", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4617,29 +4946,35 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about all of the versions of a bot.</p> <p>The <code>GetBotVersions</code> operation returns a <code>BotMetadata</code> object for each version of a bot. For example, if a bot has three numbered versions, the <code>GetBotVersions</code> operation returns four <code>BotMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetBotVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetBotVersions</code> action.</p>
-    fn get_bot_versions(
-        &self,
-        input: GetBotVersionsRequest,
-    ) -> RusotoFuture<GetBotVersionsResponse, GetBotVersionsError> {
-        let request_uri = format!("/bots/{name}/versions/", name = input.name);
+impl ServiceRequest for GetBotVersionsRequest {
+    type Output = GetBotVersionsResponse;
+    type Error = GetBotVersionsError;
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bots/{name}/versions/", name = self.name);
+
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4657,29 +4992,38 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns bot information as follows: </p> <ul> <li> <p>If you provide the <code>nameContains</code> field, the response includes information for the <code>$LATEST</code> version of all bots whose name contains the specified string.</p> </li> <li> <p>If you don't specify the <code>nameContains</code> field, the operation returns information about the <code>$LATEST</code> version of all of your bots.</p> </li> </ul> <p>This operation requires permission for the <code>lex:GetBots</code> action.</p>
-    fn get_bots(&self, input: GetBotsRequest) -> RusotoFuture<GetBotsResponse, GetBotsError> {
+impl ServiceRequest for GetBotsRequest {
+    type Output = GetBotsResponse;
+    type Error = GetBotsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/bots/";
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.name_contains {
+        if let Some(ref x) = self.name_contains {
             params.put("nameContains", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4697,20 +5041,26 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a built-in intent.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntent</code> action.</p>
-    fn get_builtin_intent(
-        &self,
-        input: GetBuiltinIntentRequest,
-    ) -> RusotoFuture<GetBuiltinIntentResponse, GetBuiltinIntentError> {
-        let request_uri = format!("/builtins/intents/{signature}", signature = input.signature);
+impl ServiceRequest for GetBuiltinIntentRequest {
+    type Output = GetBuiltinIntentResponse;
+    type Error = GetBuiltinIntentError;
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/builtins/intents/{signature}", signature = self.signature);
+
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4728,35 +5078,41 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of built-in intents that meet the specified criteria.</p> <p>This operation requires permission for the <code>lex:GetBuiltinIntents</code> action.</p>
-    fn get_builtin_intents(
-        &self,
-        input: GetBuiltinIntentsRequest,
-    ) -> RusotoFuture<GetBuiltinIntentsResponse, GetBuiltinIntentsError> {
+impl ServiceRequest for GetBuiltinIntentsRequest {
+    type Output = GetBuiltinIntentsResponse;
+    type Error = GetBuiltinIntentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/builtins/intents/";
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.locale {
+        if let Some(ref x) = self.locale {
             params.put("locale", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.signature_contains {
+        if let Some(ref x) = self.signature_contains {
             params.put("signatureContains", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4774,35 +5130,41 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of built-in slot types that meet the specified criteria.</p> <p>For a list of built-in slot types, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p> <p>This operation requires permission for the <code>lex:GetBuiltInSlotTypes</code> action.</p>
-    fn get_builtin_slot_types(
-        &self,
-        input: GetBuiltinSlotTypesRequest,
-    ) -> RusotoFuture<GetBuiltinSlotTypesResponse, GetBuiltinSlotTypesError> {
+impl ServiceRequest for GetBuiltinSlotTypesRequest {
+    type Output = GetBuiltinSlotTypesResponse;
+    type Error = GetBuiltinSlotTypesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/builtins/slottypes/";
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.locale {
+        if let Some(ref x) = self.locale {
             params.put("locale", x);
         }
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
-        if let Some(ref x) = input.signature_contains {
+        if let Some(ref x) = self.signature_contains {
             params.put("signatureContains", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4819,27 +5181,33 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Exports the contents of a Amazon Lex resource in a specified format. </p>
-    fn get_export(
-        &self,
-        input: GetExportRequest,
-    ) -> RusotoFuture<GetExportResponse, GetExportError> {
+impl ServiceRequest for GetExportRequest {
+    type Output = GetExportResponse;
+    type Error = GetExportError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/exports/";
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        params.put("exportType", &input.export_type);
-        params.put("name", &input.name);
-        params.put("resourceType", &input.resource_type);
-        params.put("version", &input.version);
+        params.put("exportType", &self.export_type);
+        params.put("name", &self.name);
+        params.put("resourceType", &self.resource_type);
+        params.put("version", &self.version);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4857,20 +5225,26 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about an import job started with the <code>StartImport</code> operation.</p>
-    fn get_import(
-        &self,
-        input: GetImportRequest,
-    ) -> RusotoFuture<GetImportResponse, GetImportError> {
-        let request_uri = format!("/imports/{import_id}", import_id = input.import_id);
+impl ServiceRequest for GetImportRequest {
+    type Output = GetImportResponse;
+    type Error = GetImportError;
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/imports/{import_id}", import_id = self.import_id);
+
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4888,24 +5262,30 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p> Returns information about an intent. In addition to the intent name, you must specify the intent version. </p> <p> This operation requires permissions to perform the <code>lex:GetIntent</code> action. </p>
-    fn get_intent(
-        &self,
-        input: GetIntentRequest,
-    ) -> RusotoFuture<GetIntentResponse, GetIntentError> {
+impl ServiceRequest for GetIntentRequest {
+    type Output = GetIntentResponse;
+    type Error = GetIntentError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/intents/{name}/versions/{version}",
-            name = input.name,
-            version = input.version
+            name = self.name,
+            version = self.version
         );
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4923,29 +5303,35 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about all of the versions of an intent.</p> <p>The <code>GetIntentVersions</code> operation returns an <code>IntentMetadata</code> object for each version of an intent. For example, if an intent has three numbered versions, the <code>GetIntentVersions</code> operation returns four <code>IntentMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetIntentVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetIntentVersions</code> action.</p>
-    fn get_intent_versions(
-        &self,
-        input: GetIntentVersionsRequest,
-    ) -> RusotoFuture<GetIntentVersionsResponse, GetIntentVersionsError> {
-        let request_uri = format!("/intents/{name}/versions/", name = input.name);
+impl ServiceRequest for GetIntentVersionsRequest {
+    type Output = GetIntentVersionsResponse;
+    type Error = GetIntentVersionsError;
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/intents/{name}/versions/", name = self.name);
+
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -4963,32 +5349,38 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns intent information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all intents that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all intents. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetIntents</code> action. </p>
-    fn get_intents(
-        &self,
-        input: GetIntentsRequest,
-    ) -> RusotoFuture<GetIntentsResponse, GetIntentsError> {
+impl ServiceRequest for GetIntentsRequest {
+    type Output = GetIntentsResponse;
+    type Error = GetIntentsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/intents/";
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.name_contains {
+        if let Some(ref x) = self.name_contains {
             params.put("nameContains", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5006,24 +5398,30 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific version of a slot type. In addition to specifying the slot type name, you must specify the slot type version.</p> <p>This operation requires permissions for the <code>lex:GetSlotType</code> action.</p>
-    fn get_slot_type(
-        &self,
-        input: GetSlotTypeRequest,
-    ) -> RusotoFuture<GetSlotTypeResponse, GetSlotTypeError> {
+impl ServiceRequest for GetSlotTypeRequest {
+    type Output = GetSlotTypeResponse;
+    type Error = GetSlotTypeError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/slottypes/{name}/versions/{version}",
-            name = input.name,
-            version = input.version
+            name = self.name,
+            version = self.version
         );
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5041,29 +5439,35 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about all versions of a slot type.</p> <p>The <code>GetSlotTypeVersions</code> operation returns a <code>SlotTypeMetadata</code> object for each version of a slot type. For example, if a slot type has three numbered versions, the <code>GetSlotTypeVersions</code> operation returns four <code>SlotTypeMetadata</code> objects in the response, one for each numbered version and one for the <code>$LATEST</code> version. </p> <p>The <code>GetSlotTypeVersions</code> operation always returns at least one version, the <code>$LATEST</code> version.</p> <p>This operation requires permissions for the <code>lex:GetSlotTypeVersions</code> action.</p>
-    fn get_slot_type_versions(
-        &self,
-        input: GetSlotTypeVersionsRequest,
-    ) -> RusotoFuture<GetSlotTypeVersionsResponse, GetSlotTypeVersionsError> {
-        let request_uri = format!("/slottypes/{name}/versions/", name = input.name);
+impl ServiceRequest for GetSlotTypeVersionsRequest {
+    type Output = GetSlotTypeVersionsResponse;
+    type Error = GetSlotTypeVersionsError;
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/slottypes/{name}/versions/", name = self.name);
+
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5080,32 +5484,38 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Returns slot type information as follows: </p> <ul> <li> <p>If you specify the <code>nameContains</code> field, returns the <code>$LATEST</code> version of all slot types that contain the specified string.</p> </li> <li> <p> If you don't specify the <code>nameContains</code> field, returns information about the <code>$LATEST</code> version of all slot types. </p> </li> </ul> <p> The operation requires permission for the <code>lex:GetSlotTypes</code> action. </p>
-    fn get_slot_types(
-        &self,
-        input: GetSlotTypesRequest,
-    ) -> RusotoFuture<GetSlotTypesResponse, GetSlotTypesError> {
+impl ServiceRequest for GetSlotTypesRequest {
+    type Output = GetSlotTypesResponse;
+    type Error = GetSlotTypesError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/slottypes/";
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("maxResults", x);
         }
-        if let Some(ref x) = input.name_contains {
+        if let Some(ref x) = self.name_contains {
             params.put("nameContains", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("nextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5123,28 +5533,34 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Use the <code>GetUtterancesView</code> operation to get information about the utterances that your users have made to your bot. You can use this list to tune the utterances that your bot responds to.</p> <p>For example, say that you have created a bot to order flowers. After your users have used your bot for a while, use the <code>GetUtterancesView</code> operation to see the requests that they have made and whether they have been successful. You might find that the utterance "I want flowers" is not being recognized. You could add this utterance to the <code>OrderFlowers</code> intent so that your bot recognizes that utterance.</p> <p>After you publish a new version of a bot, you can get information about the old version and the new so that you can compare the performance across the two versions. </p> <note> <p>Utterance statistics are generated once a day. Data is available for the last 15 days. You can request information for up to 5 versions in each request. The response contains information about a maximum of 100 utterances for each version.</p> </note> <p>This operation requires permissions for the <code>lex:GetUtterancesView</code> action.</p>
-    fn get_utterances_view(
-        &self,
-        input: GetUtterancesViewRequest,
-    ) -> RusotoFuture<GetUtterancesViewResponse, GetUtterancesViewError> {
-        let request_uri = format!("/bots/{botname}/utterances", botname = input.bot_name);
+impl ServiceRequest for GetUtterancesViewRequest {
+    type Output = GetUtterancesViewResponse;
+    type Error = GetUtterancesViewError;
 
-        let mut request = SignedRequest::new("GET", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bots/{botname}/utterances", botname = self.bot_name);
+
+        let mut request = SignedRequest::new("GET", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
 
         let mut params = Params::new();
-        for item in input.bot_versions.iter() {
+        for item in self.bot_versions.iter() {
             params.put("bot_versions", item);
         }
-        params.put("status_type", &input.status_type);
+        params.put("status_type", &self.status_type);
         params.put("view", "aggregation");
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5162,19 +5578,28 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Creates an Amazon Lex conversational bot or replaces an existing bot. When you create or update a bot you are only required to specify a name, a locale, and whether the bot is directed toward children under age 13. You can use this to add intents later, or to remove intents from an existing bot. When you create a bot with the minimum information, the bot is created or updated but Amazon Lex returns the <code/> response <code>FAILED</code>. You can build the bot after you add one or more intents. For more information about Amazon Lex bots, see <a>how-it-works</a>. </p> <p>If you specify the name of an existing bot, the fields in the request replace the existing values in the <code>$LATEST</code> version of the bot. Amazon Lex removes any fields that you don't provide values for in the request, except for the <code>idleTTLInSeconds</code> and <code>privacySettings</code> fields, which are set to their default values. If you don't specify values for required fields, Amazon Lex throws an exception.</p> <p>This operation requires permissions for the <code>lex:PutBot</code> action. For more information, see <a>auth-and-access-control</a>.</p>
-    fn put_bot(&self, input: PutBotRequest) -> RusotoFuture<PutBotResponse, PutBotError> {
-        let request_uri = format!("/bots/{name}/versions/$LATEST", name = input.name);
+impl ServiceRequest for PutBotRequest {
+    type Output = PutBotResponse;
+    type Error = PutBotError;
 
-        let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/bots/{name}/versions/$LATEST", name = self.name);
+
+        let mut request = SignedRequest::new("PUT", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5192,26 +5617,32 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Creates an alias for the specified version of the bot or replaces an alias for the specified bot. To change the version of the bot that the alias points to, replace the alias. For more information about aliases, see <a>versioning-aliases</a>.</p> <p>This operation requires permissions for the <code>lex:PutBotAlias</code> action. </p>
-    fn put_bot_alias(
-        &self,
-        input: PutBotAliasRequest,
-    ) -> RusotoFuture<PutBotAliasResponse, PutBotAliasError> {
+impl ServiceRequest for PutBotAliasRequest {
+    type Output = PutBotAliasResponse;
+    type Error = PutBotAliasError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/bots/{bot_name}/aliases/{name}",
-            bot_name = input.bot_name,
-            name = input.name
+            bot_name = self.bot_name,
+            name = self.name
         );
 
-        let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5229,22 +5660,28 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Creates an intent or replaces an existing intent.</p> <p>To define the interaction between the user and your bot, you use one or more intents. For a pizza ordering bot, for example, you would create an <code>OrderPizza</code> intent. </p> <p>To create an intent or replace an existing intent, you must provide the following:</p> <ul> <li> <p>Intent name. For example, <code>OrderPizza</code>.</p> </li> <li> <p>Sample utterances. For example, "Can I order a pizza, please." and "I want to order a pizza."</p> </li> <li> <p>Information to be gathered. You specify slot types for the information that your bot will request from the user. You can specify standard slot types, such as a date or a time, or custom slot types such as the size and crust of a pizza.</p> </li> <li> <p>How the intent will be fulfilled. You can provide a Lambda function or configure the intent to return the intent information to the client application. If you use a Lambda function, when all of the intent information is available, Amazon Lex invokes your Lambda function. If you configure your intent to return the intent information to the client application. </p> </li> </ul> <p>You can specify other optional information in the request, such as:</p> <ul> <li> <p>A confirmation prompt to ask the user to confirm an intent. For example, "Shall I order your pizza?"</p> </li> <li> <p>A conclusion statement to send to the user after the intent has been fulfilled. For example, "I placed your pizza order."</p> </li> <li> <p>A follow-up prompt that asks the user for additional activity. For example, asking "Do you want to order a drink with your pizza?"</p> </li> </ul> <p>If you specify an existing intent name to update the intent, Amazon Lex replaces the values in the <code>$LATEST</code> version of the intent with the values in the request. Amazon Lex removes fields that you don't provide in the request. If you don't specify the required fields, Amazon Lex throws an exception. When you update the <code>$LATEST</code> version of an intent, the <code>status</code> field of any bot that uses the <code>$LATEST</code> version of the intent is set to <code>NOT_BUILT</code>.</p> <p>For more information, see <a>how-it-works</a>.</p> <p>This operation requires permissions for the <code>lex:PutIntent</code> action.</p>
-    fn put_intent(
-        &self,
-        input: PutIntentRequest,
-    ) -> RusotoFuture<PutIntentResponse, PutIntentError> {
-        let request_uri = format!("/intents/{name}/versions/$LATEST", name = input.name);
+impl ServiceRequest for PutIntentRequest {
+    type Output = PutIntentResponse;
+    type Error = PutIntentError;
 
-        let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/intents/{name}/versions/$LATEST", name = self.name);
+
+        let mut request = SignedRequest::new("PUT", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5262,22 +5699,28 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Creates a custom slot type or replaces an existing custom slot type.</p> <p>To create a custom slot type, specify a name for the slot type and a set of enumeration values, which are the values that a slot of this type can assume. For more information, see <a>how-it-works</a>.</p> <p>If you specify the name of an existing slot type, the fields in the request replace the existing values in the <code>$LATEST</code> version of the slot type. Amazon Lex removes the fields that you don't provide in the request. If you don't specify required fields, Amazon Lex throws an exception. When you update the <code>$LATEST</code> version of a slot type, if a bot uses the <code>$LATEST</code> version of an intent that contains the slot type, the bot's <code>status</code> field is set to <code>NOT_BUILT</code>.</p> <p>This operation requires permissions for the <code>lex:PutSlotType</code> action.</p>
-    fn put_slot_type(
-        &self,
-        input: PutSlotTypeRequest,
-    ) -> RusotoFuture<PutSlotTypeResponse, PutSlotTypeError> {
-        let request_uri = format!("/slottypes/{name}/versions/$LATEST", name = input.name);
+impl ServiceRequest for PutSlotTypeRequest {
+    type Output = PutSlotTypeResponse;
+    type Error = PutSlotTypeError;
 
-        let mut request = SignedRequest::new("PUT", "lex", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/slottypes/{name}/versions/$LATEST", name = self.name);
+
+        let mut request = SignedRequest::new("PUT", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -5295,22 +5738,28 @@ impl LexModels for LexModelsClient {
             }
         })
     }
+}
 
-    /// <p>Starts a job to import a resource to Amazon Lex.</p>
-    fn start_import(
-        &self,
-        input: StartImportRequest,
-    ) -> RusotoFuture<StartImportResponse, StartImportError> {
+impl ServiceRequest for StartImportRequest {
+    type Output = StartImportResponse;
+    type Error = StartImportError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/imports/";
 
-        let mut request = SignedRequest::new("POST", "lex", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "lex", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("models.lex".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)

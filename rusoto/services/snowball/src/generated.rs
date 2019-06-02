@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -94,7 +95,7 @@ pub struct CancelClusterRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CancelClusterResult {}
+pub struct CancelClusterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CancelJobRequest {
@@ -105,7 +106,7 @@ pub struct CancelJobRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CancelJobResult {}
+pub struct CancelJobResponse {}
 
 /// <p>Contains a cluster's state, a cluster's ID, and other important information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -210,7 +211,7 @@ pub struct CreateAddressRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateAddressResult {
+pub struct CreateAddressResponse {
     /// <p>The automatically generated ID for a specific address. You'll use this ID when you create a job to specify which address you want the Snowball for that job shipped to.</p>
     #[serde(rename = "AddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -258,7 +259,7 @@ pub struct CreateClusterRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateClusterResult {
+pub struct CreateClusterResponse {
     /// <p>The automatically generated ID for a cluster.</p>
     #[serde(rename = "ClusterId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -319,7 +320,7 @@ pub struct CreateJobRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateJobResult {
+pub struct CreateJobResponse {
     /// <p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -357,7 +358,7 @@ pub struct DescribeAddressRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeAddressResult {
+pub struct DescribeAddressResponse {
     /// <p>The address that you want the Snowball or Snowballs associated with a specific job to be shipped to.</p>
     #[serde(rename = "Address")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -378,7 +379,7 @@ pub struct DescribeAddressesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeAddressesResult {
+pub struct DescribeAddressesResponse {
     /// <p>The Snowball shipping addresses that were created for this account.</p>
     #[serde(rename = "Addresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -398,7 +399,7 @@ pub struct DescribeClusterRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeClusterResult {
+pub struct DescribeClusterResponse {
     /// <p>Information about a specific cluster, including shipping information, cluster status, and other important metadata.</p>
     #[serde(rename = "ClusterMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -414,7 +415,7 @@ pub struct DescribeJobRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeJobResult {
+pub struct DescribeJobResponse {
     /// <p>Information about a specific job, including shipping information, job status, and other important metadata.</p>
     #[serde(rename = "JobMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -455,7 +456,7 @@ pub struct GetJobManifestRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetJobManifestResult {
+pub struct GetJobManifestResponse {
     /// <p>The Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value.</p>
     #[serde(rename = "ManifestURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -471,7 +472,7 @@ pub struct GetJobUnlockCodeRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetJobUnlockCodeResult {
+pub struct GetJobUnlockCodeResponse {
     /// <p>The <code>UnlockCode</code> value for the specified job. The <code>UnlockCode</code> value can be accessed for up to 90 days after the job has been created.</p>
     #[serde(rename = "UnlockCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -483,7 +484,7 @@ pub struct GetSnowballUsageRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetSnowballUsageResult {
+pub struct GetSnowballUsageResponse {
     /// <p>The service limit for number of Snowballs this account can have at once. The default service limit is 1 (one).</p>
     #[serde(rename = "SnowballLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -680,7 +681,7 @@ pub struct ListClusterJobsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListClusterJobsResult {
+pub struct ListClusterJobsResponse {
     /// <p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. </p>
     #[serde(rename = "JobListEntries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -705,7 +706,7 @@ pub struct ListClustersRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListClustersResult {
+pub struct ListClustersResponse {
     /// <p>Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
     #[serde(rename = "ClusterListEntries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -730,7 +731,7 @@ pub struct ListCompatibleImagesRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListCompatibleImagesResult {
+pub struct ListCompatibleImagesResponse {
     /// <p>A JSON-formatted object that describes a compatible AMI.</p>
     #[serde(rename = "CompatibleImages")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -755,7 +756,7 @@ pub struct ListJobsRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListJobsResult {
+pub struct ListJobsResponse {
     /// <p>Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. </p>
     #[serde(rename = "JobListEntries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -865,7 +866,7 @@ pub struct UpdateClusterRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateClusterResult {}
+pub struct UpdateClusterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateJobRequest {
@@ -908,7 +909,7 @@ pub struct UpdateJobRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateJobResult {}
+pub struct UpdateJobResponse {}
 
 /// Errors returned by CancelCluster
 #[derive(Debug, PartialEq)]
@@ -1663,97 +1664,67 @@ impl Error for UpdateJobError {
 /// Trait representing the capabilities of the Amazon Snowball API. Amazon Snowball clients implement this trait.
 pub trait Snowball {
     /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>
-    fn cancel_cluster(
-        &self,
-        input: CancelClusterRequest,
-    ) -> RusotoFuture<CancelClusterResult, CancelClusterError>;
+    fn cancel_cluster(&self, input: CancelClusterRequest) -> Request<CancelClusterRequest>;
 
     /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action returns a job's <code>JobState</code> as part of the response element data returned.</p>
-    fn cancel_job(&self, input: CancelJobRequest) -> RusotoFuture<CancelJobResult, CancelJobError>;
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest>;
 
     /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
-    fn create_address(
-        &self,
-        input: CreateAddressRequest,
-    ) -> RusotoFuture<CreateAddressResult, CreateAddressError>;
+    fn create_address(&self, input: CreateAddressRequest) -> Request<CreateAddressRequest>;
 
     /// <p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>
-    fn create_cluster(
-        &self,
-        input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResult, CreateClusterError>;
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest>;
 
     /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
-    fn create_job(&self, input: CreateJobRequest) -> RusotoFuture<CreateJobResult, CreateJobError>;
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest>;
 
     /// <p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>
-    fn describe_address(
-        &self,
-        input: DescribeAddressRequest,
-    ) -> RusotoFuture<DescribeAddressResult, DescribeAddressError>;
+    fn describe_address(&self, input: DescribeAddressRequest) -> Request<DescribeAddressRequest>;
 
     /// <p>Returns a specified number of <code>ADDRESS</code> objects. Calling this API in one of the US regions will return addresses from the list of all addresses associated with this account in all US regions.</p>
     fn describe_addresses(
         &self,
         input: DescribeAddressesRequest,
-    ) -> RusotoFuture<DescribeAddressesResult, DescribeAddressesError>;
+    ) -> Request<DescribeAddressesRequest>;
 
     /// <p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>
-    fn describe_cluster(
-        &self,
-        input: DescribeClusterRequest,
-    ) -> RusotoFuture<DescribeClusterResult, DescribeClusterError>;
+    fn describe_cluster(&self, input: DescribeClusterRequest) -> Request<DescribeClusterRequest>;
 
     /// <p>Returns information about a specific job including shipping information, job status, and other important metadata. </p>
-    fn describe_job(
-        &self,
-        input: DescribeJobRequest,
-    ) -> RusotoFuture<DescribeJobResult, DescribeJobError>;
+    fn describe_job(&self, input: DescribeJobRequest) -> Request<DescribeJobRequest>;
 
     /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
-    fn get_job_manifest(
-        &self,
-        input: GetJobManifestRequest,
-    ) -> RusotoFuture<GetJobManifestResult, GetJobManifestError>;
+    fn get_job_manifest(&self, input: GetJobManifestRequest) -> Request<GetJobManifestRequest>;
 
     /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>
     fn get_job_unlock_code(
         &self,
         input: GetJobUnlockCodeRequest,
-    ) -> RusotoFuture<GetJobUnlockCodeResult, GetJobUnlockCodeError>;
+    ) -> Request<GetJobUnlockCodeRequest>;
 
     /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
-    fn get_snowball_usage(&self) -> RusotoFuture<GetSnowballUsageResult, GetSnowballUsageError>;
+    fn get_snowball_usage(&self) -> Request<GetSnowballUsageRequest>;
 
     /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>
-    fn list_cluster_jobs(
-        &self,
-        input: ListClusterJobsRequest,
-    ) -> RusotoFuture<ListClusterJobsResult, ListClusterJobsError>;
+    fn list_cluster_jobs(&self, input: ListClusterJobsRequest) -> Request<ListClusterJobsRequest>;
 
     /// <p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
-    fn list_clusters(
-        &self,
-        input: ListClustersRequest,
-    ) -> RusotoFuture<ListClustersResult, ListClustersError>;
+    fn list_clusters(&self, input: ListClustersRequest) -> Request<ListClustersRequest>;
 
     /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on <code>EDGE</code>, <code>EDGE_C</code>, and <code>EDGE_CG</code> devices. For more information on compatible AMIs, see <a href="http://docs.aws.amazon.com/snowball/latest/developer-guide/using-ec2.html">Using Amazon EC2 Compute Instances</a> in the <i>AWS Snowball Developer Guide</i>.</p>
     fn list_compatible_images(
         &self,
         input: ListCompatibleImagesRequest,
-    ) -> RusotoFuture<ListCompatibleImagesResult, ListCompatibleImagesError>;
+    ) -> Request<ListCompatibleImagesRequest>;
 
     /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError>;
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest>;
 
     /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
-    fn update_cluster(
-        &self,
-        input: UpdateClusterRequest,
-    ) -> RusotoFuture<UpdateClusterResult, UpdateClusterError>;
+    fn update_cluster(&self, input: UpdateClusterRequest) -> Request<UpdateClusterRequest>;
 
     /// <p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>
-    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<UpdateJobResult, UpdateJobError>;
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest>;
 }
 /// A client for the Amazon Snowball API.
 #[derive(Clone)]
@@ -1793,25 +1764,133 @@ impl SnowballClient {
 
 impl Snowball for SnowballClient {
     /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>
-    fn cancel_cluster(
+    fn cancel_cluster(&self, input: CancelClusterRequest) -> Request<CancelClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action returns a job's <code>JobState</code> as part of the response element data returned.</p>
+    fn cancel_job(&self, input: CancelJobRequest) -> Request<CancelJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
+    fn create_address(&self, input: CreateAddressRequest) -> Request<CreateAddressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>
+    fn create_cluster(&self, input: CreateClusterRequest) -> Request<CreateClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
+    fn create_job(&self, input: CreateJobRequest) -> Request<CreateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>
+    fn describe_address(&self, input: DescribeAddressRequest) -> Request<DescribeAddressRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a specified number of <code>ADDRESS</code> objects. Calling this API in one of the US regions will return addresses from the list of all addresses associated with this account in all US regions.</p>
+    fn describe_addresses(
         &self,
-        input: CancelClusterRequest,
-    ) -> RusotoFuture<CancelClusterResult, CancelClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        input: DescribeAddressesRequest,
+    ) -> Request<DescribeAddressesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>
+    fn describe_cluster(&self, input: DescribeClusterRequest) -> Request<DescribeClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a specific job including shipping information, job status, and other important metadata. </p>
+    fn describe_job(&self, input: DescribeJobRequest) -> Request<DescribeJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
+    fn get_job_manifest(&self, input: GetJobManifestRequest) -> Request<GetJobManifestRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>
+    fn get_job_unlock_code(
+        &self,
+        input: GetJobUnlockCodeRequest,
+    ) -> Request<GetJobUnlockCodeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
+    fn get_snowball_usage(&self) -> Request<GetSnowballUsageRequest> {
+        Request::new(
+            GetSnowballUsageRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>
+    fn list_cluster_jobs(&self, input: ListClusterJobsRequest) -> Request<ListClusterJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
+    fn list_clusters(&self, input: ListClustersRequest) -> Request<ListClustersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on <code>EDGE</code>, <code>EDGE_C</code>, and <code>EDGE_CG</code> devices. For more information on compatible AMIs, see <a href="http://docs.aws.amazon.com/snowball/latest/developer-guide/using-ec2.html">Using Amazon EC2 Compute Instances</a> in the <i>AWS Snowball Developer Guide</i>.</p>
+    fn list_compatible_images(
+        &self,
+        input: ListCompatibleImagesRequest,
+    ) -> Request<ListCompatibleImagesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> Request<ListJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
+    fn update_cluster(&self, input: UpdateClusterRequest) -> Request<UpdateClusterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>
+    fn update_job(&self, input: UpdateJobRequest) -> Request<UpdateJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CancelClusterRequest {
+    type Output = CancelClusterResponse;
+    type Error = CancelClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CancelCluster",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CancelClusterResult, _>()
+                        .deserialize::<CancelClusterResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1823,23 +1902,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action returns a job's <code>JobState</code> as part of the response element data returned.</p>
-    fn cancel_job(&self, input: CancelJobRequest) -> RusotoFuture<CancelJobResult, CancelJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for CancelJobRequest {
+    type Output = CancelJobResponse;
+    type Error = CancelJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CancelJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<CancelJobResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CancelJobResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1851,27 +1939,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
-    fn create_address(
-        &self,
-        input: CreateAddressRequest,
-    ) -> RusotoFuture<CreateAddressResult, CreateAddressError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for CreateAddressRequest {
+    type Output = CreateAddressResponse;
+    type Error = CreateAddressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CreateAddress",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAddressResult, _>()
+                        .deserialize::<CreateAddressResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1883,27 +1976,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Creates an empty cluster. Each cluster supports five nodes. You use the <a>CreateJob</a> action separately to create the jobs for each of these nodes. The cluster does not ship until these five node jobs have been created.</p>
-    fn create_cluster(
-        &self,
-        input: CreateClusterRequest,
-    ) -> RusotoFuture<CreateClusterResult, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for CreateClusterRequest {
+    type Output = CreateClusterResponse;
+    type Error = CreateClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CreateCluster",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateClusterResult, _>()
+                        .deserialize::<CreateClusterResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1915,23 +2013,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
-    fn create_job(&self, input: CreateJobRequest) -> RusotoFuture<CreateJobResult, CreateJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for CreateJobRequest {
+    type Output = CreateJobResponse;
+    type Error = CreateJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CreateJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateJobResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1943,27 +2050,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>
-    fn describe_address(
-        &self,
-        input: DescribeAddressRequest,
-    ) -> RusotoFuture<DescribeAddressResult, DescribeAddressError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for DescribeAddressRequest {
+    type Output = DescribeAddressResponse;
+    type Error = DescribeAddressError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeAddress",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAddressResult, _>()
+                        .deserialize::<DescribeAddressResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -1975,27 +2087,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns a specified number of <code>ADDRESS</code> objects. Calling this API in one of the US regions will return addresses from the list of all addresses associated with this account in all US regions.</p>
-    fn describe_addresses(
-        &self,
-        input: DescribeAddressesRequest,
-    ) -> RusotoFuture<DescribeAddressesResult, DescribeAddressesError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for DescribeAddressesRequest {
+    type Output = DescribeAddressesResponse;
+    type Error = DescribeAddressesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeAddresses",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAddressesResult, _>()
+                        .deserialize::<DescribeAddressesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2007,27 +2124,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific cluster including shipping information, cluster status, and other important metadata.</p>
-    fn describe_cluster(
-        &self,
-        input: DescribeClusterRequest,
-    ) -> RusotoFuture<DescribeClusterResult, DescribeClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for DescribeClusterRequest {
+    type Output = DescribeClusterResponse;
+    type Error = DescribeClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeCluster",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeClusterResult, _>()
+                        .deserialize::<DescribeClusterResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2039,27 +2161,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a specific job including shipping information, job status, and other important metadata. </p>
-    fn describe_job(
-        &self,
-        input: DescribeJobRequest,
-    ) -> RusotoFuture<DescribeJobResult, DescribeJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for DescribeJobRequest {
+    type Output = DescribeJobResponse;
+    type Error = DescribeJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeJobResult, _>()
+                        .deserialize::<DescribeJobResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2071,27 +2198,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
-    fn get_job_manifest(
-        &self,
-        input: GetJobManifestRequest,
-    ) -> RusotoFuture<GetJobManifestResult, GetJobManifestError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for GetJobManifestRequest {
+    type Output = GetJobManifestResponse;
+    type Error = GetJobManifestError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.GetJobManifest",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetJobManifestResult, _>()
+                        .deserialize::<GetJobManifestResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2103,27 +2235,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>
-    fn get_job_unlock_code(
-        &self,
-        input: GetJobUnlockCodeRequest,
-    ) -> RusotoFuture<GetJobUnlockCodeResult, GetJobUnlockCodeError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for GetJobUnlockCodeRequest {
+    type Output = GetJobUnlockCodeResponse;
+    type Error = GetJobUnlockCodeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.GetJobUnlockCode",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetJobUnlockCodeResult, _>()
+                        .deserialize::<GetJobUnlockCodeResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2135,10 +2272,18 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
-    fn get_snowball_usage(&self) -> RusotoFuture<GetSnowballUsageResult, GetSnowballUsageError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for GetSnowballUsageRequest {
+    type Output = GetSnowballUsageResponse;
+    type Error = GetSnowballUsageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
@@ -2147,11 +2292,11 @@ impl Snowball for SnowballClient {
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetSnowballUsageResult, _>()
+                        .deserialize::<GetSnowballUsageResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2163,27 +2308,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object is for a job in the specified cluster and contains a job's state, a job's ID, and other information.</p>
-    fn list_cluster_jobs(
-        &self,
-        input: ListClusterJobsRequest,
-    ) -> RusotoFuture<ListClusterJobsResult, ListClusterJobsError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for ListClusterJobsRequest {
+    type Output = ListClusterJobsResponse;
+    type Error = ListClusterJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.ListClusterJobs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListClusterJobsResult, _>()
+                        .deserialize::<ListClusterJobsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2195,27 +2345,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of <code>ClusterListEntry</code> objects of the specified length. Each <code>ClusterListEntry</code> object contains a cluster's state, a cluster's ID, and other important status information.</p>
-    fn list_clusters(
-        &self,
-        input: ListClustersRequest,
-    ) -> RusotoFuture<ListClustersResult, ListClustersError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for ListClustersRequest {
+    type Output = ListClustersResponse;
+    type Error = ListClustersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.ListClusters",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListClustersResult, _>()
+                        .deserialize::<ListClustersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2227,27 +2382,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on <code>EDGE</code>, <code>EDGE_C</code>, and <code>EDGE_CG</code> devices. For more information on compatible AMIs, see <a href="http://docs.aws.amazon.com/snowball/latest/developer-guide/using-ec2.html">Using Amazon EC2 Compute Instances</a> in the <i>AWS Snowball Developer Guide</i>.</p>
-    fn list_compatible_images(
-        &self,
-        input: ListCompatibleImagesRequest,
-    ) -> RusotoFuture<ListCompatibleImagesResult, ListCompatibleImagesError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for ListCompatibleImagesRequest {
+    type Output = ListCompatibleImagesResponse;
+    type Error = ListCompatibleImagesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.ListCompatibleImages",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCompatibleImagesResult, _>()
+                        .deserialize::<ListCompatibleImagesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2258,20 +2418,29 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
-    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for ListJobsRequest {
+    type Output = ListJobsResponse;
+    type Error = ListJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSIESnowballJobManagementService.ListJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListJobsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2283,27 +2452,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
-    fn update_cluster(
-        &self,
-        input: UpdateClusterRequest,
-    ) -> RusotoFuture<UpdateClusterResult, UpdateClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for UpdateClusterRequest {
+    type Output = UpdateClusterResponse;
+    type Error = UpdateClusterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.UpdateCluster",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateClusterResult, _>()
+                        .deserialize::<UpdateClusterResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -2315,23 +2489,32 @@ impl Snowball for SnowballClient {
             }
         })
     }
+}
 
-    /// <p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>
-    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<UpdateJobResult, UpdateJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+impl ServiceRequest for UpdateJobRequest {
+    type Output = UpdateJobResponse;
+    type Error = UpdateJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "snowball", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.UpdateJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<UpdateJobResult, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateJobResponse, _>()
                 }))
             } else {
                 Box::new(

@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -354,6 +355,10 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the playback configuration. You can get this from the response to any playback configuration request. </p>
@@ -363,6 +368,10 @@ pub struct UntagResourceRequest {
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 /// Errors returned by DeletePlaybackConfiguration
 #[derive(Debug, PartialEq)]
@@ -573,37 +582,37 @@ pub trait MediaTailor {
     fn delete_playback_configuration(
         &self,
         input: DeletePlaybackConfigurationRequest,
-    ) -> RusotoFuture<DeletePlaybackConfigurationResponse, DeletePlaybackConfigurationError>;
+    ) -> Request<DeletePlaybackConfigurationRequest>;
 
     /// <p>Returns the playback configuration for the specified name. </p>
     fn get_playback_configuration(
         &self,
         input: GetPlaybackConfigurationRequest,
-    ) -> RusotoFuture<GetPlaybackConfigurationResponse, GetPlaybackConfigurationError>;
+    ) -> Request<GetPlaybackConfigurationRequest>;
 
     /// <p>Returns a list of the playback configurations defined in AWS Elemental MediaTailor. You can specify a maximum number of configurations to return at a time. The default maximum is 50. Results are returned in pagefuls. If MediaTailor has more configurations than the specified maximum, it provides parameters in the response that you can use to retrieve the next pageful. </p>
     fn list_playback_configurations(
         &self,
         input: ListPlaybackConfigurationsRequest,
-    ) -> RusotoFuture<ListPlaybackConfigurationsResponse, ListPlaybackConfigurationsError>;
+    ) -> Request<ListPlaybackConfigurationsRequest>;
 
     /// <p>Returns a list of the tags assigned to the specified playback configuration resource. </p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Adds a new playback configuration to AWS Elemental MediaTailor. </p>
     fn put_playback_configuration(
         &self,
         input: PutPlaybackConfigurationRequest,
-    ) -> RusotoFuture<PutPlaybackConfigurationResponse, PutPlaybackConfigurationError>;
+    ) -> Request<PutPlaybackConfigurationRequest>;
 
     /// <p>Adds tags to the specified playback configuration resource. You can specify one or more tags to add. </p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Removes tags from the specified playback configuration resource. You can specify one or more tags to remove. </p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 }
 /// A client for the MediaTailor API.
 #[derive(Clone)]
@@ -646,15 +655,71 @@ impl MediaTailor for MediaTailorClient {
     fn delete_playback_configuration(
         &self,
         input: DeletePlaybackConfigurationRequest,
-    ) -> RusotoFuture<DeletePlaybackConfigurationResponse, DeletePlaybackConfigurationError> {
-        let request_uri = format!("/playbackConfiguration/{name}", name = input.name);
+    ) -> Request<DeletePlaybackConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
 
-        let mut request = SignedRequest::new("DELETE", "mediatailor", &self.region, &request_uri);
+    /// <p>Returns the playback configuration for the specified name. </p>
+    fn get_playback_configuration(
+        &self,
+        input: GetPlaybackConfigurationRequest,
+    ) -> Request<GetPlaybackConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the playback configurations defined in AWS Elemental MediaTailor. You can specify a maximum number of configurations to return at a time. The default maximum is 50. Results are returned in pagefuls. If MediaTailor has more configurations than the specified maximum, it provides parameters in the response that you can use to retrieve the next pageful. </p>
+    fn list_playback_configurations(
+        &self,
+        input: ListPlaybackConfigurationsRequest,
+    ) -> Request<ListPlaybackConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the tags assigned to the specified playback configuration resource. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds a new playback configuration to AWS Elemental MediaTailor. </p>
+    fn put_playback_configuration(
+        &self,
+        input: PutPlaybackConfigurationRequest,
+    ) -> Request<PutPlaybackConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds tags to the specified playback configuration resource. You can specify one or more tags to add. </p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes tags from the specified playback configuration resource. You can specify one or more tags to remove. </p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DeletePlaybackConfigurationRequest {
+    type Output = DeletePlaybackConfigurationResponse;
+    type Error = DeletePlaybackConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/playbackConfiguration/{name}", name = self.name);
+
+        let mut request = SignedRequest::new("DELETE", "mediatailor", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -669,20 +734,26 @@ impl MediaTailor for MediaTailorClient {
             }
         })
     }
+}
 
-    /// <p>Returns the playback configuration for the specified name. </p>
-    fn get_playback_configuration(
-        &self,
-        input: GetPlaybackConfigurationRequest,
-    ) -> RusotoFuture<GetPlaybackConfigurationResponse, GetPlaybackConfigurationError> {
-        let request_uri = format!("/playbackConfiguration/{name}", name = input.name);
+impl ServiceRequest for GetPlaybackConfigurationRequest {
+    type Output = GetPlaybackConfigurationResponse;
+    type Error = GetPlaybackConfigurationError;
 
-        let mut request = SignedRequest::new("GET", "mediatailor", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/playbackConfiguration/{name}", name = self.name);
+
+        let mut request = SignedRequest::new("GET", "mediatailor", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -697,29 +768,35 @@ impl MediaTailor for MediaTailorClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of the playback configurations defined in AWS Elemental MediaTailor. You can specify a maximum number of configurations to return at a time. The default maximum is 50. Results are returned in pagefuls. If MediaTailor has more configurations than the specified maximum, it provides parameters in the response that you can use to retrieve the next pageful. </p>
-    fn list_playback_configurations(
-        &self,
-        input: ListPlaybackConfigurationsRequest,
-    ) -> RusotoFuture<ListPlaybackConfigurationsResponse, ListPlaybackConfigurationsError> {
+impl ServiceRequest for ListPlaybackConfigurationsRequest {
+    type Output = ListPlaybackConfigurationsResponse;
+    type Error = ListPlaybackConfigurationsError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/playbackConfigurations";
 
-        let mut request = SignedRequest::new("GET", "mediatailor", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "mediatailor", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
         let mut params = Params::new();
-        if let Some(ref x) = input.max_results {
+        if let Some(ref x) = self.max_results {
             params.put("MaxResults", x);
         }
-        if let Some(ref x) = input.next_token {
+        if let Some(ref x) = self.next_token {
             params.put("NextToken", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -734,20 +811,26 @@ impl MediaTailor for MediaTailorClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of the tags assigned to the specified playback configuration resource. </p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
 
-        let mut request = SignedRequest::new("GET", "mediatailor", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "mediatailor", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -764,22 +847,28 @@ impl MediaTailor for MediaTailorClient {
             }
         })
     }
+}
 
-    /// <p>Adds a new playback configuration to AWS Elemental MediaTailor. </p>
-    fn put_playback_configuration(
-        &self,
-        input: PutPlaybackConfigurationRequest,
-    ) -> RusotoFuture<PutPlaybackConfigurationResponse, PutPlaybackConfigurationError> {
+impl ServiceRequest for PutPlaybackConfigurationRequest {
+    type Output = PutPlaybackConfigurationResponse;
+    type Error = PutPlaybackConfigurationError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/playbackConfiguration";
 
-        let mut request = SignedRequest::new("PUT", "mediatailor", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "mediatailor", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
@@ -794,22 +883,31 @@ impl MediaTailor for MediaTailorClient {
             }
         })
     }
+}
 
-    /// <p>Adds tags to the specified playback configuration resource. You can specify one or more tags to add. </p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
 
-        let mut request = SignedRequest::new("POST", "mediatailor", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "mediatailor", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        let encoded = Some(serde_json::to_vec(&self).unwrap());
         request.set_payload(encoded);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = TagResourceResponse {};
 
                     Ok(result)
                 }))
@@ -823,26 +921,35 @@ impl MediaTailor for MediaTailorClient {
             }
         })
     }
+}
 
-    /// <p>Removes tags from the specified playback configuration resource. You can specify one or more tags to remove. </p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
 
-        let mut request = SignedRequest::new("DELETE", "mediatailor", &self.region, &request_uri);
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = self.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "mediatailor", region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.mediatailor".to_string());
 
         let mut params = Params::new();
-        for item in input.tag_keys.iter() {
+        for item in self.tag_keys.iter() {
             params.put("tagKeys", item);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.as_u16() == 204 {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    let result = ::std::mem::drop(response);
+                    let result = UntagResourceResponse {};
 
                     Ok(result)
                 }))

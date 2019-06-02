@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -2777,6 +2778,20 @@ impl LimitsDeserializer {
         })
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListDomainNamesRequest {}
+
+/// Serialize `ListDomainNamesRequest` contents to a `SignedRequest`.
+struct ListDomainNamesRequestSerializer;
+impl ListDomainNamesRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &ListDomainNamesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>The result of a <code>ListDomainNames</code> request. Contains a list of the domains owned by an account.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListDomainNamesResponse {
@@ -5445,145 +5460,120 @@ impl Error for UpdateServiceAccessPoliciesError {
 /// Trait representing the capabilities of the Amazon CloudSearch API. Amazon CloudSearch clients implement this trait.
 pub trait CloudSearch {
     /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn build_suggesters(
-        &self,
-        input: BuildSuggestersRequest,
-    ) -> RusotoFuture<BuildSuggestersResponse, BuildSuggestersError>;
+    fn build_suggesters(&self, input: BuildSuggestersRequest) -> Request<BuildSuggestersRequest>;
 
     /// <p>Creates a new search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html" target="_blank">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn create_domain(
-        &self,
-        input: CreateDomainRequest,
-    ) -> RusotoFuture<CreateDomainResponse, CreateDomainError>;
+    fn create_domain(&self, input: CreateDomainRequest) -> Request<CreateDomainRequest>;
 
     /// <p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn define_analysis_scheme(
         &self,
         input: DefineAnalysisSchemeRequest,
-    ) -> RusotoFuture<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError>;
+    ) -> Request<DefineAnalysisSchemeRequest>;
 
     /// <p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn define_expression(
-        &self,
-        input: DefineExpressionRequest,
-    ) -> RusotoFuture<DefineExpressionResponse, DefineExpressionError>;
+    fn define_expression(&self, input: DefineExpressionRequest)
+        -> Request<DefineExpressionRequest>;
 
     /// <p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn define_index_field(
         &self,
         input: DefineIndexFieldRequest,
-    ) -> RusotoFuture<DefineIndexFieldResponse, DefineIndexFieldError>;
+    ) -> Request<DefineIndexFieldRequest>;
 
     /// <p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn define_suggester(
-        &self,
-        input: DefineSuggesterRequest,
-    ) -> RusotoFuture<DefineSuggesterResponse, DefineSuggesterError>;
+    fn define_suggester(&self, input: DefineSuggesterRequest) -> Request<DefineSuggesterRequest>;
 
     /// <p>Deletes an analysis scheme. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn delete_analysis_scheme(
         &self,
         input: DeleteAnalysisSchemeRequest,
-    ) -> RusotoFuture<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError>;
+    ) -> Request<DeleteAnalysisSchemeRequest>;
 
     /// <p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html" target="_blank">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn delete_domain(
-        &self,
-        input: DeleteDomainRequest,
-    ) -> RusotoFuture<DeleteDomainResponse, DeleteDomainError>;
+    fn delete_domain(&self, input: DeleteDomainRequest) -> Request<DeleteDomainRequest>;
 
     /// <p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn delete_expression(
-        &self,
-        input: DeleteExpressionRequest,
-    ) -> RusotoFuture<DeleteExpressionResponse, DeleteExpressionError>;
+    fn delete_expression(&self, input: DeleteExpressionRequest)
+        -> Request<DeleteExpressionRequest>;
 
     /// <p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn delete_index_field(
         &self,
         input: DeleteIndexFieldRequest,
-    ) -> RusotoFuture<DeleteIndexFieldResponse, DeleteIndexFieldError>;
+    ) -> Request<DeleteIndexFieldRequest>;
 
     /// <p>Deletes a suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn delete_suggester(
-        &self,
-        input: DeleteSuggesterRequest,
-    ) -> RusotoFuture<DeleteSuggesterResponse, DeleteSuggesterError>;
+    fn delete_suggester(&self, input: DeleteSuggesterRequest) -> Request<DeleteSuggesterRequest>;
 
     /// <p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_analysis_schemes(
         &self,
         input: DescribeAnalysisSchemesRequest,
-    ) -> RusotoFuture<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError>;
+    ) -> Request<DescribeAnalysisSchemesRequest>;
 
     /// <p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_availability_options(
         &self,
         input: DescribeAvailabilityOptionsRequest,
-    ) -> RusotoFuture<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError>;
+    ) -> Request<DescribeAvailabilityOptionsRequest>;
 
     /// <p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_domains(
-        &self,
-        input: DescribeDomainsRequest,
-    ) -> RusotoFuture<DescribeDomainsResponse, DescribeDomainsError>;
+    fn describe_domains(&self, input: DescribeDomainsRequest) -> Request<DescribeDomainsRequest>;
 
     /// <p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_expressions(
         &self,
         input: DescribeExpressionsRequest,
-    ) -> RusotoFuture<DescribeExpressionsResponse, DescribeExpressionsError>;
+    ) -> Request<DescribeExpressionsRequest>;
 
     /// <p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_index_fields(
         &self,
         input: DescribeIndexFieldsRequest,
-    ) -> RusotoFuture<DescribeIndexFieldsResponse, DescribeIndexFieldsError>;
+    ) -> Request<DescribeIndexFieldsRequest>;
 
     /// <p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_scaling_parameters(
         &self,
         input: DescribeScalingParametersRequest,
-    ) -> RusotoFuture<DescribeScalingParametersResponse, DescribeScalingParametersError>;
+    ) -> Request<DescribeScalingParametersRequest>;
 
     /// <p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_service_access_policies(
         &self,
         input: DescribeServiceAccessPoliciesRequest,
-    ) -> RusotoFuture<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>;
+    ) -> Request<DescribeServiceAccessPoliciesRequest>;
 
     /// <p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn describe_suggesters(
         &self,
         input: DescribeSuggestersRequest,
-    ) -> RusotoFuture<DescribeSuggestersResponse, DescribeSuggestersError>;
+    ) -> Request<DescribeSuggestersRequest>;
 
     /// <p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>
-    fn index_documents(
-        &self,
-        input: IndexDocumentsRequest,
-    ) -> RusotoFuture<IndexDocumentsResponse, IndexDocumentsError>;
+    fn index_documents(&self, input: IndexDocumentsRequest) -> Request<IndexDocumentsRequest>;
 
     /// <p>Lists all search domains owned by an account.</p>
-    fn list_domain_names(&self) -> RusotoFuture<ListDomainNamesResponse, ListDomainNamesError>;
+    fn list_domain_names(&self) -> Request<ListDomainNamesRequest>;
 
     /// <p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
     fn update_availability_options(
         &self,
         input: UpdateAvailabilityOptionsRequest,
-    ) -> RusotoFuture<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError>;
+    ) -> Request<UpdateAvailabilityOptionsRequest>;
 
     /// <p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
     fn update_scaling_parameters(
         &self,
         input: UpdateScalingParametersRequest,
-    ) -> RusotoFuture<UpdateScalingParametersResponse, UpdateScalingParametersError>;
+    ) -> Request<UpdateScalingParametersRequest>;
 
     /// <p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>
     fn update_service_access_policies(
         &self,
         input: UpdateServiceAccessPoliciesRequest,
-    ) -> RusotoFuture<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError>;
+    ) -> Request<UpdateServiceAccessPoliciesRequest>;
 }
 /// A client for the Amazon CloudSearch API.
 #[derive(Clone)]
@@ -5623,20 +5613,197 @@ impl CloudSearchClient {
 
 impl CloudSearch for CloudSearchClient {
     /// <p>Indexes the search suggestions. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html#configuring-suggesters">Configuring Suggesters</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn build_suggesters(
+    fn build_suggesters(&self, input: BuildSuggestersRequest) -> Request<BuildSuggestersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html" target="_blank">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn create_domain(&self, input: CreateDomainRequest) -> Request<CreateDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn define_analysis_scheme(
         &self,
-        input: BuildSuggestersRequest,
-    ) -> RusotoFuture<BuildSuggestersResponse, BuildSuggestersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+        input: DefineAnalysisSchemeRequest,
+    ) -> Request<DefineAnalysisSchemeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn define_expression(
+        &self,
+        input: DefineExpressionRequest,
+    ) -> Request<DefineExpressionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
+    fn define_index_field(
+        &self,
+        input: DefineIndexFieldRequest,
+    ) -> Request<DefineIndexFieldRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn define_suggester(&self, input: DefineSuggesterRequest) -> Request<DefineSuggesterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an analysis scheme. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
+    fn delete_analysis_scheme(
+        &self,
+        input: DeleteAnalysisSchemeRequest,
+    ) -> Request<DeleteAnalysisSchemeRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html" target="_blank">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
+    fn delete_domain(&self, input: DeleteDomainRequest) -> Request<DeleteDomainRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn delete_expression(
+        &self,
+        input: DeleteExpressionRequest,
+    ) -> Request<DeleteExpressionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn delete_index_field(
+        &self,
+        input: DeleteIndexFieldRequest,
+    ) -> Request<DeleteIndexFieldRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn delete_suggester(&self, input: DeleteSuggesterRequest) -> Request<DeleteSuggesterRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_analysis_schemes(
+        &self,
+        input: DescribeAnalysisSchemesRequest,
+    ) -> Request<DescribeAnalysisSchemesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_availability_options(
+        &self,
+        input: DescribeAvailabilityOptionsRequest,
+    ) -> Request<DescribeAvailabilityOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_domains(&self, input: DescribeDomainsRequest) -> Request<DescribeDomainsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_expressions(
+        &self,
+        input: DescribeExpressionsRequest,
+    ) -> Request<DescribeExpressionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_index_fields(
+        &self,
+        input: DescribeIndexFieldsRequest,
+    ) -> Request<DescribeIndexFieldsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_scaling_parameters(
+        &self,
+        input: DescribeScalingParametersRequest,
+    ) -> Request<DescribeScalingParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_service_access_policies(
+        &self,
+        input: DescribeServiceAccessPoliciesRequest,
+    ) -> Request<DescribeServiceAccessPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn describe_suggesters(
+        &self,
+        input: DescribeSuggestersRequest,
+    ) -> Request<DescribeSuggestersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>
+    fn index_documents(&self, input: IndexDocumentsRequest) -> Request<IndexDocumentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all search domains owned by an account.</p>
+    fn list_domain_names(&self) -> Request<ListDomainNamesRequest> {
+        Request::new(
+            ListDomainNamesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
+    fn update_availability_options(
+        &self,
+        input: UpdateAvailabilityOptionsRequest,
+    ) -> Request<UpdateAvailabilityOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
+    fn update_scaling_parameters(
+        &self,
+        input: UpdateScalingParametersRequest,
+    ) -> Request<UpdateScalingParametersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>
+    fn update_service_access_policies(
+        &self,
+        input: UpdateServiceAccessPoliciesRequest,
+    ) -> Request<UpdateServiceAccessPoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BuildSuggestersRequest {
+    type Output = BuildSuggestersResponse;
+    type Error = BuildSuggestersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BuildSuggesters");
         params.put("Version", "2013-01-01");
-        BuildSuggestersRequestSerializer::serialize(&mut params, "", &input);
+        BuildSuggestersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5672,22 +5839,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/creating-domains.html" target="_blank">Creating a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn create_domain(
-        &self,
-        input: CreateDomainRequest,
-    ) -> RusotoFuture<CreateDomainResponse, CreateDomainError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for CreateDomainRequest {
+    type Output = CreateDomainResponse;
+    type Error = CreateDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateDomain");
         params.put("Version", "2013-01-01");
-        CreateDomainRequestSerializer::serialize(&mut params, "", &input);
+        CreateDomainRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5723,22 +5895,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Configures an analysis scheme that can be applied to a <code>text</code> or <code>text-array</code> field to define language-specific text processing options. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn define_analysis_scheme(
-        &self,
-        input: DefineAnalysisSchemeRequest,
-    ) -> RusotoFuture<DefineAnalysisSchemeResponse, DefineAnalysisSchemeError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DefineAnalysisSchemeRequest {
+    type Output = DefineAnalysisSchemeResponse;
+    type Error = DefineAnalysisSchemeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineAnalysisScheme");
         params.put("Version", "2013-01-01");
-        DefineAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
+        DefineAnalysisSchemeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -5773,22 +5950,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Configures an <code><a>Expression</a></code> for the search domain. Used to create new expressions and modify existing ones. If the expression exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn define_expression(
-        &self,
-        input: DefineExpressionRequest,
-    ) -> RusotoFuture<DefineExpressionResponse, DefineExpressionError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DefineExpressionRequest {
+    type Output = DefineExpressionResponse;
+    type Error = DefineExpressionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineExpression");
         params.put("Version", "2013-01-01");
-        DefineExpressionRequestSerializer::serialize(&mut params, "", &input);
+        DefineExpressionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5824,22 +6006,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Configures an <code><a>IndexField</a></code> for the search domain. Used to create new fields and modify existing ones. You must specify the name of the domain you are configuring and an index field configuration. The index field configuration specifies a unique name, the index field type, and the options you want to configure for the field. The options you can specify depend on the <code><a>IndexFieldType</a></code>. If the field exists, the new configuration replaces the old one. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn define_index_field(
-        &self,
-        input: DefineIndexFieldRequest,
-    ) -> RusotoFuture<DefineIndexFieldResponse, DefineIndexFieldError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DefineIndexFieldRequest {
+    type Output = DefineIndexFieldResponse;
+    type Error = DefineIndexFieldError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineIndexField");
         params.put("Version", "2013-01-01");
-        DefineIndexFieldRequestSerializer::serialize(&mut params, "", &input);
+        DefineIndexFieldRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5875,22 +6062,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Configures a suggester for a domain. A suggester enables you to display possible matches before users finish typing their queries. When you configure a suggester, you must specify the name of the text field you want to search for possible matches and a unique name for the suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn define_suggester(
-        &self,
-        input: DefineSuggesterRequest,
-    ) -> RusotoFuture<DefineSuggesterResponse, DefineSuggesterError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DefineSuggesterRequest {
+    type Output = DefineSuggesterResponse;
+    type Error = DefineSuggesterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DefineSuggester");
         params.put("Version", "2013-01-01");
-        DefineSuggesterRequestSerializer::serialize(&mut params, "", &input);
+        DefineSuggesterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -5926,22 +6118,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes an analysis scheme. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn delete_analysis_scheme(
-        &self,
-        input: DeleteAnalysisSchemeRequest,
-    ) -> RusotoFuture<DeleteAnalysisSchemeResponse, DeleteAnalysisSchemeError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DeleteAnalysisSchemeRequest {
+    type Output = DeleteAnalysisSchemeResponse;
+    type Error = DeleteAnalysisSchemeError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAnalysisScheme");
         params.put("Version", "2013-01-01");
-        DeleteAnalysisSchemeRequestSerializer::serialize(&mut params, "", &input);
+        DeleteAnalysisSchemeRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -5976,22 +6173,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Permanently deletes a search domain and all of its data. Once a domain has been deleted, it cannot be recovered. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/deleting-domains.html" target="_blank">Deleting a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn delete_domain(
-        &self,
-        input: DeleteDomainRequest,
-    ) -> RusotoFuture<DeleteDomainResponse, DeleteDomainError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DeleteDomainRequest {
+    type Output = DeleteDomainResponse;
+    type Error = DeleteDomainError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteDomain");
         params.put("Version", "2013-01-01");
-        DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
+        DeleteDomainRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6027,22 +6229,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Removes an <code><a>Expression</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn delete_expression(
-        &self,
-        input: DeleteExpressionRequest,
-    ) -> RusotoFuture<DeleteExpressionResponse, DeleteExpressionError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DeleteExpressionRequest {
+    type Output = DeleteExpressionResponse;
+    type Error = DeleteExpressionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteExpression");
         params.put("Version", "2013-01-01");
-        DeleteExpressionRequestSerializer::serialize(&mut params, "", &input);
+        DeleteExpressionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6078,22 +6285,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Removes an <code><a>IndexField</a></code> from the search domain. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-index-fields.html" target="_blank">Configuring Index Fields</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn delete_index_field(
-        &self,
-        input: DeleteIndexFieldRequest,
-    ) -> RusotoFuture<DeleteIndexFieldResponse, DeleteIndexFieldError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DeleteIndexFieldRequest {
+    type Output = DeleteIndexFieldResponse;
+    type Error = DeleteIndexFieldError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteIndexField");
         params.put("Version", "2013-01-01");
-        DeleteIndexFieldRequestSerializer::serialize(&mut params, "", &input);
+        DeleteIndexFieldRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6129,22 +6341,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes a suggester. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn delete_suggester(
-        &self,
-        input: DeleteSuggesterRequest,
-    ) -> RusotoFuture<DeleteSuggesterResponse, DeleteSuggesterError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DeleteSuggesterRequest {
+    type Output = DeleteSuggesterResponse;
+    type Error = DeleteSuggesterError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteSuggester");
         params.put("Version", "2013-01-01");
-        DeleteSuggesterRequestSerializer::serialize(&mut params, "", &input);
+        DeleteSuggesterRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6180,22 +6397,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets the analysis schemes configured for a domain. An analysis scheme defines language-specific text processing options for a <code>text</code> field. Can be limited to specific analysis schemes by name. By default, shows all analysis schemes and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-analysis-schemes.html" target="_blank">Configuring Analysis Schemes</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_analysis_schemes(
-        &self,
-        input: DescribeAnalysisSchemesRequest,
-    ) -> RusotoFuture<DescribeAnalysisSchemesResponse, DescribeAnalysisSchemesError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeAnalysisSchemesRequest {
+    type Output = DescribeAnalysisSchemesResponse;
+    type Error = DescribeAnalysisSchemesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAnalysisSchemes");
         params.put("Version", "2013-01-01");
-        DescribeAnalysisSchemesRequestSerializer::serialize(&mut params, "", &input);
+        DescribeAnalysisSchemesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAnalysisSchemesError::from_response(response))
@@ -6228,22 +6450,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets the availability options configured for a domain. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_availability_options(
-        &self,
-        input: DescribeAvailabilityOptionsRequest,
-    ) -> RusotoFuture<DescribeAvailabilityOptionsResponse, DescribeAvailabilityOptionsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeAvailabilityOptionsRequest {
+    type Output = DescribeAvailabilityOptionsResponse;
+    type Error = DescribeAvailabilityOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAvailabilityOptions");
         params.put("Version", "2013-01-01");
-        DescribeAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
+        DescribeAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAvailabilityOptionsError::from_response(response))
@@ -6276,22 +6503,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets information about the search domains owned by this account. Can be limited to specific domains. Shows all domains by default. To get the number of searchable documents in a domain, use the console or submit a <code>matchall</code> request to your domain's search endpoint: <code>q=matchall&amp;amp;q.parser=structured&amp;amp;size=0</code>. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Information about a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_domains(
-        &self,
-        input: DescribeDomainsRequest,
-    ) -> RusotoFuture<DescribeDomainsResponse, DescribeDomainsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeDomainsRequest {
+    type Output = DescribeDomainsResponse;
+    type Error = DescribeDomainsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeDomains");
         params.put("Version", "2013-01-01");
-        DescribeDomainsRequestSerializer::serialize(&mut params, "", &input);
+        DescribeDomainsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6327,22 +6559,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets the expressions configured for the search domain. Can be limited to specific expressions by name. By default, shows all expressions and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-expressions.html" target="_blank">Configuring Expressions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_expressions(
-        &self,
-        input: DescribeExpressionsRequest,
-    ) -> RusotoFuture<DescribeExpressionsResponse, DescribeExpressionsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeExpressionsRequest {
+    type Output = DescribeExpressionsResponse;
+    type Error = DescribeExpressionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeExpressions");
         params.put("Version", "2013-01-01");
-        DescribeExpressionsRequestSerializer::serialize(&mut params, "", &input);
+        DescribeExpressionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -6377,22 +6614,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets information about the index fields configured for the search domain. Can be limited to specific fields by name. By default, shows all fields and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-domain-info.html" target="_blank">Getting Domain Information</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_index_fields(
-        &self,
-        input: DescribeIndexFieldsRequest,
-    ) -> RusotoFuture<DescribeIndexFieldsResponse, DescribeIndexFieldsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeIndexFieldsRequest {
+    type Output = DescribeIndexFieldsResponse;
+    type Error = DescribeIndexFieldsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeIndexFields");
         params.put("Version", "2013-01-01");
-        DescribeIndexFieldsRequestSerializer::serialize(&mut params, "", &input);
+        DescribeIndexFieldsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -6427,22 +6669,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets the scaling parameters configured for a domain. A domain's scaling parameters specify the desired search instance type and replication count. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_scaling_parameters(
-        &self,
-        input: DescribeScalingParametersRequest,
-    ) -> RusotoFuture<DescribeScalingParametersResponse, DescribeScalingParametersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeScalingParametersRequest {
+    type Output = DescribeScalingParametersResponse;
+    type Error = DescribeScalingParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScalingParameters");
         params.put("Version", "2013-01-01");
-        DescribeScalingParametersRequestSerializer::serialize(&mut params, "", &input);
+        DescribeScalingParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScalingParametersError::from_response(response))
@@ -6475,23 +6722,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets information about the access policies that control access to the domain's document and search endpoints. By default, shows the configuration with any pending changes. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank">Configuring Access for a Search Domain</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_service_access_policies(
-        &self,
-        input: DescribeServiceAccessPoliciesRequest,
-    ) -> RusotoFuture<DescribeServiceAccessPoliciesResponse, DescribeServiceAccessPoliciesError>
-    {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeServiceAccessPoliciesRequest {
+    type Output = DescribeServiceAccessPoliciesResponse;
+    type Error = DescribeServiceAccessPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeServiceAccessPolicies");
         params.put("Version", "2013-01-01");
-        DescribeServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        DescribeServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeServiceAccessPoliciesError::from_response(response))
@@ -6524,22 +6775,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Gets the suggesters configured for a domain. A suggester enables you to display possible matches before users finish typing their queries. Can be limited to specific suggesters by name. By default, shows all suggesters and includes any pending changes to the configuration. Set the <code>Deployed</code> option to <code>true</code> to show the active configuration and exclude pending changes. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/getting-suggestions.html" target="_blank">Getting Search Suggestions</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn describe_suggesters(
-        &self,
-        input: DescribeSuggestersRequest,
-    ) -> RusotoFuture<DescribeSuggestersResponse, DescribeSuggestersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for DescribeSuggestersRequest {
+    type Output = DescribeSuggestersResponse;
+    type Error = DescribeSuggestersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeSuggesters");
         params.put("Version", "2013-01-01");
-        DescribeSuggestersRequestSerializer::serialize(&mut params, "", &input);
+        DescribeSuggestersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6575,22 +6831,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Tells the search domain to start indexing its documents using the latest indexing options. This operation must be invoked to activate options whose <a>OptionStatus</a> is <code>RequiresIndexDocuments</code>.</p>
-    fn index_documents(
-        &self,
-        input: IndexDocumentsRequest,
-    ) -> RusotoFuture<IndexDocumentsResponse, IndexDocumentsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for IndexDocumentsRequest {
+    type Output = IndexDocumentsResponse;
+    type Error = IndexDocumentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "IndexDocuments");
         params.put("Version", "2013-01-01");
-        IndexDocumentsRequestSerializer::serialize(&mut params, "", &input);
+        IndexDocumentsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6626,19 +6887,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Lists all search domains owned by an account.</p>
-    fn list_domain_names(&self) -> RusotoFuture<ListDomainNamesResponse, ListDomainNamesError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for ListDomainNamesRequest {
+    type Output = ListDomainNamesResponse;
+    type Error = ListDomainNamesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListDomainNames");
         params.put("Version", "2013-01-01");
-
+        ListDomainNamesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -6674,22 +6943,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Configures the availability options for a domain. Enabling the Multi-AZ option expands an Amazon CloudSearch domain to an additional Availability Zone in the same Region to increase fault tolerance in the event of a service disruption. Changes to the Multi-AZ option can take about half an hour to become active. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-availability-options.html" target="_blank">Configuring Availability Options</a> in the <i>Amazon CloudSearch Developer Guide</i>.</p>
-    fn update_availability_options(
-        &self,
-        input: UpdateAvailabilityOptionsRequest,
-    ) -> RusotoFuture<UpdateAvailabilityOptionsResponse, UpdateAvailabilityOptionsError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for UpdateAvailabilityOptionsRequest {
+    type Output = UpdateAvailabilityOptionsResponse;
+    type Error = UpdateAvailabilityOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAvailabilityOptions");
         params.put("Version", "2013-01-01");
-        UpdateAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &input);
+        UpdateAvailabilityOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAvailabilityOptionsError::from_response(response))
@@ -6722,22 +6996,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Configures scaling parameters for a domain. A domain's scaling parameters specify the desired search instance type and replication count. Amazon CloudSearch will still automatically scale your domain based on the volume of data and traffic, but not below the desired instance type and replication count. If the Multi-AZ option is enabled, these values control the resources used per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-scaling-options.html" target="_blank">Configuring Scaling Options</a> in the <i>Amazon CloudSearch Developer Guide</i>. </p>
-    fn update_scaling_parameters(
-        &self,
-        input: UpdateScalingParametersRequest,
-    ) -> RusotoFuture<UpdateScalingParametersResponse, UpdateScalingParametersError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for UpdateScalingParametersRequest {
+    type Output = UpdateScalingParametersResponse;
+    type Error = UpdateScalingParametersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateScalingParameters");
         params.put("Version", "2013-01-01");
-        UpdateScalingParametersRequestSerializer::serialize(&mut params, "", &input);
+        UpdateScalingParametersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateScalingParametersError::from_response(response))
@@ -6770,22 +7049,27 @@ impl CloudSearch for CloudSearchClient {
             }))
         })
     }
+}
 
-    /// <p>Configures the access rules that control access to the domain's document and search endpoints. For more information, see <a href="http://docs.aws.amazon.com/cloudsearch/latest/developerguide/configuring-access.html" target="_blank"> Configuring Access for an Amazon CloudSearch Domain</a>.</p>
-    fn update_service_access_policies(
-        &self,
-        input: UpdateServiceAccessPoliciesRequest,
-    ) -> RusotoFuture<UpdateServiceAccessPoliciesResponse, UpdateServiceAccessPoliciesError> {
-        let mut request = SignedRequest::new("POST", "cloudsearch", &self.region, "/");
+impl ServiceRequest for UpdateServiceAccessPoliciesRequest {
+    type Output = UpdateServiceAccessPoliciesResponse;
+    type Error = UpdateServiceAccessPoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "cloudsearch", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateServiceAccessPolicies");
         params.put("Version", "2013-01-01");
-        UpdateServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &input);
+        UpdateServiceAccessPoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateServiceAccessPoliciesError::from_response(response))

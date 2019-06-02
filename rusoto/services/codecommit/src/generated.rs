@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -26,7 +27,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Represents the input of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct BatchGetRepositoriesInput {
+pub struct BatchGetRepositoriesRequest {
     /// <p>The names of the repositories to get information about.</p>
     #[serde(rename = "repositoryNames")]
     pub repository_names: Vec<String>,
@@ -35,7 +36,7 @@ pub struct BatchGetRepositoriesInput {
 /// <p>Represents the output of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct BatchGetRepositoriesOutput {
+pub struct BatchGetRepositoriesResponse {
     /// <p>A list of repositories returned by the batch get repositories operation.</p>
     #[serde(rename = "repositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -224,7 +225,7 @@ pub struct Commit {
 
 /// <p>Represents the input of a create branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateBranchInput {
+pub struct CreateBranchRequest {
     /// <p>The name of the new branch to create.</p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
@@ -236,8 +237,12 @@ pub struct CreateBranchInput {
     pub repository_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateBranchResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateCommitInput {
+pub struct CreateCommitRequest {
     /// <p>The name of the author who created the commit. This information will be used as both the author and committer for the commit.</p>
     #[serde(rename = "authorName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -280,7 +285,7 @@ pub struct CreateCommitInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateCommitOutput {
+pub struct CreateCommitResponse {
     /// <p>The full commit ID of the commit that contains your committed file changes.</p>
     #[serde(rename = "commitId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -304,7 +309,7 @@ pub struct CreateCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreatePullRequestInput {
+pub struct CreatePullRequestRequest {
     /// <p><p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p> <note> <p>The AWS SDKs prepopulate client request tokens. If using an AWS SDK, you do not have to generate an idempotency token, as this will be done for you.</p> </note></p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -323,7 +328,7 @@ pub struct CreatePullRequestInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreatePullRequestOutput {
+pub struct CreatePullRequestResponse {
     /// <p>Information about the newly created pull request.</p>
     #[serde(rename = "pullRequest")]
     pub pull_request: PullRequest,
@@ -331,7 +336,7 @@ pub struct CreatePullRequestOutput {
 
 /// <p>Represents the input of a create repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateRepositoryInput {
+pub struct CreateRepositoryRequest {
     /// <p><p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     #[serde(rename = "repositoryDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -344,7 +349,7 @@ pub struct CreateRepositoryInput {
 /// <p>Represents the output of a create repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateRepositoryOutput {
+pub struct CreateRepositoryResponse {
     /// <p>Information about the newly created repository.</p>
     #[serde(rename = "repositoryMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -353,7 +358,7 @@ pub struct CreateRepositoryOutput {
 
 /// <p>Represents the input of a delete branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteBranchInput {
+pub struct DeleteBranchRequest {
     /// <p>The name of the branch to delete.</p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
@@ -365,7 +370,7 @@ pub struct DeleteBranchInput {
 /// <p>Represents the output of a delete branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteBranchOutput {
+pub struct DeleteBranchResponse {
     /// <p>Information about the branch deleted by the operation, including the branch name and the commit ID that was the tip of the branch.</p>
     #[serde(rename = "deletedBranch")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -373,7 +378,7 @@ pub struct DeleteBranchOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteCommentContentInput {
+pub struct DeleteCommentContentRequest {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
     pub comment_id: String,
@@ -381,7 +386,7 @@ pub struct DeleteCommentContentInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteCommentContentOutput {
+pub struct DeleteCommentContentResponse {
     /// <p>Information about the comment you just deleted.</p>
     #[serde(rename = "comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -397,7 +402,7 @@ pub struct DeleteFileEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteFileInput {
+pub struct DeleteFileRequest {
     /// <p>The name of the branch where the commit will be made deleting the file.</p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
@@ -430,7 +435,7 @@ pub struct DeleteFileInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteFileOutput {
+pub struct DeleteFileResponse {
     /// <p>The blob ID removed from the tree as part of deleting the file.</p>
     #[serde(rename = "blobId")]
     pub blob_id: String,
@@ -447,7 +452,7 @@ pub struct DeleteFileOutput {
 
 /// <p>Represents the input of a delete repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteRepositoryInput {
+pub struct DeleteRepositoryRequest {
     /// <p>The name of the repository to delete.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -456,7 +461,7 @@ pub struct DeleteRepositoryInput {
 /// <p>Represents the output of a delete repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteRepositoryOutput {
+pub struct DeleteRepositoryResponse {
     /// <p>The ID of the repository that was deleted.</p>
     #[serde(rename = "repositoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -464,7 +469,7 @@ pub struct DeleteRepositoryOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribePullRequestEventsInput {
+pub struct DescribePullRequestEventsRequest {
     /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with additional commits or changing the status of a pull request.</p>
     #[serde(rename = "actorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -488,7 +493,7 @@ pub struct DescribePullRequestEventsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribePullRequestEventsOutput {
+pub struct DescribePullRequestEventsResponse {
     /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -576,7 +581,7 @@ pub struct Folder {
 
 /// <p>Represents the input of a get blob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetBlobInput {
+pub struct GetBlobRequest {
     /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
     #[serde(rename = "blobId")]
     pub blob_id: String,
@@ -588,7 +593,7 @@ pub struct GetBlobInput {
 /// <p>Represents the output of a get blob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetBlobOutput {
+pub struct GetBlobResponse {
     /// <p>The content of the blob, usually a file.</p>
     #[serde(rename = "content")]
     #[serde(
@@ -601,7 +606,7 @@ pub struct GetBlobOutput {
 
 /// <p>Represents the input of a get branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetBranchInput {
+pub struct GetBranchRequest {
     /// <p>The name of the branch for which you want to retrieve information.</p>
     #[serde(rename = "branchName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -615,7 +620,7 @@ pub struct GetBranchInput {
 /// <p>Represents the output of a get branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetBranchOutput {
+pub struct GetBranchResponse {
     /// <p>The name of the branch.</p>
     #[serde(rename = "branch")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -623,7 +628,7 @@ pub struct GetBranchOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetCommentInput {
+pub struct GetCommentRequest {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
     pub comment_id: String,
@@ -631,7 +636,7 @@ pub struct GetCommentInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetCommentOutput {
+pub struct GetCommentResponse {
     /// <p>The contents of the comment.</p>
     #[serde(rename = "comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -639,7 +644,7 @@ pub struct GetCommentOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetCommentsForComparedCommitInput {
+pub struct GetCommentsForComparedCommitRequest {
     /// <p>To establish the directionality of the comparison, the full commit ID of the 'after' commit.</p>
     #[serde(rename = "afterCommitId")]
     pub after_commit_id: String,
@@ -662,7 +667,7 @@ pub struct GetCommentsForComparedCommitInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetCommentsForComparedCommitOutput {
+pub struct GetCommentsForComparedCommitResponse {
     /// <p>A list of comment objects on the compared commit.</p>
     #[serde(rename = "commentsForComparedCommitData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -674,7 +679,7 @@ pub struct GetCommentsForComparedCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetCommentsForPullRequestInput {
+pub struct GetCommentsForPullRequestRequest {
     /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the comment was made.</p>
     #[serde(rename = "afterCommitId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -702,7 +707,7 @@ pub struct GetCommentsForPullRequestInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetCommentsForPullRequestOutput {
+pub struct GetCommentsForPullRequestResponse {
     /// <p>An array of comment objects on the pull request.</p>
     #[serde(rename = "commentsForPullRequestData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -715,7 +720,7 @@ pub struct GetCommentsForPullRequestOutput {
 
 /// <p>Represents the input of a get commit operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetCommitInput {
+pub struct GetCommitRequest {
     /// <p>The commit ID. Commit IDs are the full SHA of the commit.</p>
     #[serde(rename = "commitId")]
     pub commit_id: String,
@@ -727,14 +732,14 @@ pub struct GetCommitInput {
 /// <p>Represents the output of a get commit operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetCommitOutput {
+pub struct GetCommitResponse {
     /// <p>A commit data type object that contains information about the specified commit.</p>
     #[serde(rename = "commit")]
     pub commit: Commit,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetDifferencesInput {
+pub struct GetDifferencesRequest {
     /// <p>A non-negative integer used to limit the number of returned results.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -765,7 +770,7 @@ pub struct GetDifferencesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetDifferencesOutput {
+pub struct GetDifferencesResponse {
     /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -777,7 +782,7 @@ pub struct GetDifferencesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetFileInput {
+pub struct GetFileRequest {
     /// <p>The fully-quaified reference that identifies the commit that contains the file. For example, you could specify a full commit ID, a tag, a branch name, or a reference such as refs/heads/master. If none is provided, then the head commit will be used.</p>
     #[serde(rename = "commitSpecifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -792,7 +797,7 @@ pub struct GetFileInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetFileOutput {
+pub struct GetFileResponse {
     /// <p>The blob ID of the object that represents the file content.</p>
     #[serde(rename = "blobId")]
     pub blob_id: String,
@@ -819,7 +824,7 @@ pub struct GetFileOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetFolderInput {
+pub struct GetFolderRequest {
     /// <p>A fully-qualified reference used to identify a commit that contains the version of the folder's content to return. A fully-qualified reference can be a commit ID, branch name, tag, or reference such as HEAD. If no specifier is provided, the folder content will be returned as it exists in the HEAD commit.</p>
     #[serde(rename = "commitSpecifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -834,7 +839,7 @@ pub struct GetFolderInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetFolderOutput {
+pub struct GetFolderResponse {
     /// <p>The full commit ID used as a reference for which version of the folder content is returned.</p>
     #[serde(rename = "commitId")]
     pub commit_id: String,
@@ -864,7 +869,7 @@ pub struct GetFolderOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetMergeConflictsInput {
+pub struct GetMergeConflictsRequest {
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit. For example, a branch name or a full commit ID.</p>
     #[serde(rename = "destinationCommitSpecifier")]
     pub destination_commit_specifier: String,
@@ -881,7 +886,7 @@ pub struct GetMergeConflictsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetMergeConflictsOutput {
+pub struct GetMergeConflictsResponse {
     /// <p>The commit ID of the destination commit specifier that was used in the merge evaluation.</p>
     #[serde(rename = "destinationCommitId")]
     pub destination_commit_id: String,
@@ -894,7 +899,7 @@ pub struct GetMergeConflictsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetPullRequestInput {
+pub struct GetPullRequestRequest {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
     pub pull_request_id: String,
@@ -902,7 +907,7 @@ pub struct GetPullRequestInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetPullRequestOutput {
+pub struct GetPullRequestResponse {
     /// <p>Information about the specified pull request.</p>
     #[serde(rename = "pullRequest")]
     pub pull_request: PullRequest,
@@ -910,7 +915,7 @@ pub struct GetPullRequestOutput {
 
 /// <p>Represents the input of a get repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetRepositoryInput {
+pub struct GetRepositoryRequest {
     /// <p>The name of the repository to get information about.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -919,7 +924,7 @@ pub struct GetRepositoryInput {
 /// <p>Represents the output of a get repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRepositoryOutput {
+pub struct GetRepositoryResponse {
     /// <p>Information about the repository.</p>
     #[serde(rename = "repositoryMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -928,7 +933,7 @@ pub struct GetRepositoryOutput {
 
 /// <p>Represents the input of a get repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct GetRepositoryTriggersInput {
+pub struct GetRepositoryTriggersRequest {
     /// <p>The name of the repository for which the trigger is configured.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -937,7 +942,7 @@ pub struct GetRepositoryTriggersInput {
 /// <p>Represents the output of a get repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct GetRepositoryTriggersOutput {
+pub struct GetRepositoryTriggersResponse {
     /// <p>The system-generated unique ID for the trigger.</p>
     #[serde(rename = "configurationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -950,7 +955,7 @@ pub struct GetRepositoryTriggersOutput {
 
 /// <p>Represents the input of a list branches operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListBranchesInput {
+pub struct ListBranchesRequest {
     /// <p>An enumeration token that allows the operation to batch the results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -963,7 +968,7 @@ pub struct ListBranchesInput {
 /// <p>Represents the output of a list branches operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListBranchesOutput {
+pub struct ListBranchesResponse {
     /// <p>The list of branch names.</p>
     #[serde(rename = "branches")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -975,7 +980,7 @@ pub struct ListBranchesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListPullRequestsInput {
+pub struct ListPullRequestsRequest {
     /// <p>Optional. The Amazon Resource Name (ARN) of the user who created the pull request. If used, this filters the results to pull requests created by that user.</p>
     #[serde(rename = "authorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -999,7 +1004,7 @@ pub struct ListPullRequestsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListPullRequestsOutput {
+pub struct ListPullRequestsResponse {
     /// <p>An enumeration token that when provided in a request, returns the next batch of the results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1011,7 +1016,7 @@ pub struct ListPullRequestsOutput {
 
 /// <p>Represents the input of a list repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListRepositoriesInput {
+pub struct ListRepositoriesRequest {
     /// <p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1029,7 +1034,7 @@ pub struct ListRepositoriesInput {
 /// <p>Represents the output of a list repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListRepositoriesOutput {
+pub struct ListRepositoriesResponse {
     /// <p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1072,7 +1077,7 @@ pub struct MergeMetadata {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct MergePullRequestByFastForwardInput {
+pub struct MergePullRequestByFastForwardRequest {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
     pub pull_request_id: String,
@@ -1087,7 +1092,7 @@ pub struct MergePullRequestByFastForwardInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct MergePullRequestByFastForwardOutput {
+pub struct MergePullRequestByFastForwardResponse {
     /// <p>Information about the specified pull request, including information about the merge.</p>
     #[serde(rename = "pullRequest")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1095,7 +1100,7 @@ pub struct MergePullRequestByFastForwardOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PostCommentForComparedCommitInput {
+pub struct PostCommentForComparedCommitRequest {
     /// <p>To establish the directionality of the comparison, the full commit ID of the 'after' commit.</p>
     #[serde(rename = "afterCommitId")]
     pub after_commit_id: String,
@@ -1121,7 +1126,7 @@ pub struct PostCommentForComparedCommitInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PostCommentForComparedCommitOutput {
+pub struct PostCommentForComparedCommitResponse {
     /// <p>In the directionality you established, the blob ID of the 'after' blob.</p>
     #[serde(rename = "afterBlobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1153,7 +1158,7 @@ pub struct PostCommentForComparedCommitOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PostCommentForPullRequestInput {
+pub struct PostCommentForPullRequestRequest {
     /// <p>The full commit ID of the commit in the source branch that is the current tip of the branch for the pull request when you post the comment.</p>
     #[serde(rename = "afterCommitId")]
     pub after_commit_id: String,
@@ -1181,7 +1186,7 @@ pub struct PostCommentForPullRequestInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PostCommentForPullRequestOutput {
+pub struct PostCommentForPullRequestResponse {
     /// <p>In the directionality of the pull request, the blob ID of the 'after' blob.</p>
     #[serde(rename = "afterBlobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1217,7 +1222,7 @@ pub struct PostCommentForPullRequestOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PostCommentReplyInput {
+pub struct PostCommentReplyRequest {
     /// <p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,7 +1237,7 @@ pub struct PostCommentReplyInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PostCommentReplyOutput {
+pub struct PostCommentReplyResponse {
     /// <p>Information about the reply to a comment.</p>
     #[serde(rename = "comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1453,7 +1458,7 @@ pub struct PutFileEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutFileInput {
+pub struct PutFileRequest {
     /// <p>The name of the branch where you want to add or update the file. If this is an empty repository, this branch will be created.</p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
@@ -1495,7 +1500,7 @@ pub struct PutFileInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutFileOutput {
+pub struct PutFileResponse {
     /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
     #[serde(rename = "blobId")]
     pub blob_id: String,
@@ -1509,7 +1514,7 @@ pub struct PutFileOutput {
 
 /// <p>Represents the input ofa put repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct PutRepositoryTriggersInput {
+pub struct PutRepositoryTriggersRequest {
     /// <p>The name of the repository where you want to create or update the trigger.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -1521,7 +1526,7 @@ pub struct PutRepositoryTriggersInput {
 /// <p>Represents the output of a put repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct PutRepositoryTriggersOutput {
+pub struct PutRepositoryTriggersResponse {
     /// <p>The system-generated unique ID for the create or update operation.</p>
     #[serde(rename = "configurationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1704,7 +1709,7 @@ pub struct Target {
 
 /// <p>Represents the input of a test repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct TestRepositoryTriggersInput {
+pub struct TestRepositoryTriggersRequest {
     /// <p>The name of the repository in which to test the triggers.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
@@ -1716,7 +1721,7 @@ pub struct TestRepositoryTriggersInput {
 /// <p>Represents the output of a test repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct TestRepositoryTriggersOutput {
+pub struct TestRepositoryTriggersResponse {
     /// <p>The list of triggers that were not able to be tested. This list provides the names of the triggers that could not be tested, separated by commas.</p>
     #[serde(rename = "failedExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1728,7 +1733,7 @@ pub struct TestRepositoryTriggersOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateCommentInput {
+pub struct UpdateCommentRequest {
     /// <p>The system-generated ID of the comment you want to update. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
     #[serde(rename = "commentId")]
     pub comment_id: String,
@@ -1739,7 +1744,7 @@ pub struct UpdateCommentInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateCommentOutput {
+pub struct UpdateCommentResponse {
     /// <p>Information about the updated comment.</p>
     #[serde(rename = "comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1748,7 +1753,7 @@ pub struct UpdateCommentOutput {
 
 /// <p>Represents the input of an update default branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateDefaultBranchInput {
+pub struct UpdateDefaultBranchRequest {
     /// <p>The name of the branch to set as the default.</p>
     #[serde(rename = "defaultBranchName")]
     pub default_branch_name: String,
@@ -1757,8 +1762,12 @@ pub struct UpdateDefaultBranchInput {
     pub repository_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDefaultBranchResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdatePullRequestDescriptionInput {
+pub struct UpdatePullRequestDescriptionRequest {
     /// <p>The updated content of the description for the pull request. This content will replace the existing description.</p>
     #[serde(rename = "description")]
     pub description: String,
@@ -1769,14 +1778,14 @@ pub struct UpdatePullRequestDescriptionInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdatePullRequestDescriptionOutput {
+pub struct UpdatePullRequestDescriptionResponse {
     /// <p>Information about the updated pull request.</p>
     #[serde(rename = "pullRequest")]
     pub pull_request: PullRequest,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdatePullRequestStatusInput {
+pub struct UpdatePullRequestStatusRequest {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
     pub pull_request_id: String,
@@ -1787,14 +1796,14 @@ pub struct UpdatePullRequestStatusInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdatePullRequestStatusOutput {
+pub struct UpdatePullRequestStatusResponse {
     /// <p>Information about the pull request.</p>
     #[serde(rename = "pullRequest")]
     pub pull_request: PullRequest,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdatePullRequestTitleInput {
+pub struct UpdatePullRequestTitleRequest {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
     #[serde(rename = "pullRequestId")]
     pub pull_request_id: String,
@@ -1805,7 +1814,7 @@ pub struct UpdatePullRequestTitleInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdatePullRequestTitleOutput {
+pub struct UpdatePullRequestTitleResponse {
     /// <p>Information about the updated pull request.</p>
     #[serde(rename = "pullRequest")]
     pub pull_request: PullRequest,
@@ -1813,7 +1822,7 @@ pub struct UpdatePullRequestTitleOutput {
 
 /// <p>Represents the input of an update repository description operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateRepositoryDescriptionInput {
+pub struct UpdateRepositoryDescriptionRequest {
     /// <p>The new comment or description for the specified repository. Repository descriptions are limited to 1,000 characters.</p>
     #[serde(rename = "repositoryDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1823,9 +1832,13 @@ pub struct UpdateRepositoryDescriptionInput {
     pub repository_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRepositoryDescriptionResponse {}
+
 /// <p>Represents the input of an update repository description operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateRepositoryNameInput {
+pub struct UpdateRepositoryNameRequest {
     /// <p>The new name for the repository.</p>
     #[serde(rename = "newName")]
     pub new_name: String,
@@ -1833,6 +1846,10 @@ pub struct UpdateRepositoryNameInput {
     #[serde(rename = "oldName")]
     pub old_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRepositoryNameResponse {}
 
 /// <p>Information about the user who made a specified commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -6833,221 +6850,188 @@ pub trait CodeCommit {
     /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn batch_get_repositories(
         &self,
-        input: BatchGetRepositoriesInput,
-    ) -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError>;
+        input: BatchGetRepositoriesRequest,
+    ) -> Request<BatchGetRepositoriesRequest>;
 
     /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
-    fn create_branch(&self, input: CreateBranchInput) -> RusotoFuture<(), CreateBranchError>;
+    fn create_branch(&self, input: CreateBranchRequest) -> Request<CreateBranchRequest>;
 
     /// <p>Creates a commit for a repository on the tip of a specified branch.</p>
-    fn create_commit(
-        &self,
-        input: CreateCommitInput,
-    ) -> RusotoFuture<CreateCommitOutput, CreateCommitError>;
+    fn create_commit(&self, input: CreateCommitRequest) -> Request<CreateCommitRequest>;
 
     /// <p>Creates a pull request in the specified repository.</p>
     fn create_pull_request(
         &self,
-        input: CreatePullRequestInput,
-    ) -> RusotoFuture<CreatePullRequestOutput, CreatePullRequestError>;
+        input: CreatePullRequestRequest,
+    ) -> Request<CreatePullRequestRequest>;
 
     /// <p>Creates a new, empty repository.</p>
-    fn create_repository(
-        &self,
-        input: CreateRepositoryInput,
-    ) -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError>;
+    fn create_repository(&self, input: CreateRepositoryRequest)
+        -> Request<CreateRepositoryRequest>;
 
     /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
-    fn delete_branch(
-        &self,
-        input: DeleteBranchInput,
-    ) -> RusotoFuture<DeleteBranchOutput, DeleteBranchError>;
+    fn delete_branch(&self, input: DeleteBranchRequest) -> Request<DeleteBranchRequest>;
 
     /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
     fn delete_comment_content(
         &self,
-        input: DeleteCommentContentInput,
-    ) -> RusotoFuture<DeleteCommentContentOutput, DeleteCommentContentError>;
+        input: DeleteCommentContentRequest,
+    ) -> Request<DeleteCommentContentRequest>;
 
     /// <p>Deletes a specified file from a specified branch. A commit is created on the branch that contains the revision. The file will still exist in the commits prior to the commit that contains the deletion.</p>
-    fn delete_file(
-        &self,
-        input: DeleteFileInput,
-    ) -> RusotoFuture<DeleteFileOutput, DeleteFileError>;
+    fn delete_file(&self, input: DeleteFileRequest) -> Request<DeleteFileRequest>;
 
     /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
-    fn delete_repository(
-        &self,
-        input: DeleteRepositoryInput,
-    ) -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError>;
+    fn delete_repository(&self, input: DeleteRepositoryRequest)
+        -> Request<DeleteRepositoryRequest>;
 
     /// <p>Returns information about one or more pull request events.</p>
     fn describe_pull_request_events(
         &self,
-        input: DescribePullRequestEventsInput,
-    ) -> RusotoFuture<DescribePullRequestEventsOutput, DescribePullRequestEventsError>;
+        input: DescribePullRequestEventsRequest,
+    ) -> Request<DescribePullRequestEventsRequest>;
 
     /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
-    fn get_blob(&self, input: GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError>;
+    fn get_blob(&self, input: GetBlobRequest) -> Request<GetBlobRequest>;
 
     /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
-    fn get_branch(&self, input: GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError>;
+    fn get_branch(&self, input: GetBranchRequest) -> Request<GetBranchRequest>;
 
     /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
-    fn get_comment(
-        &self,
-        input: GetCommentInput,
-    ) -> RusotoFuture<GetCommentOutput, GetCommentError>;
+    fn get_comment(&self, input: GetCommentRequest) -> Request<GetCommentRequest>;
 
     /// <p>Returns information about comments made on the comparison between two commits.</p>
     fn get_comments_for_compared_commit(
         &self,
-        input: GetCommentsForComparedCommitInput,
-    ) -> RusotoFuture<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError>;
+        input: GetCommentsForComparedCommitRequest,
+    ) -> Request<GetCommentsForComparedCommitRequest>;
 
     /// <p>Returns comments made on a pull request.</p>
     fn get_comments_for_pull_request(
         &self,
-        input: GetCommentsForPullRequestInput,
-    ) -> RusotoFuture<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError>;
+        input: GetCommentsForPullRequestRequest,
+    ) -> Request<GetCommentsForPullRequestRequest>;
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
-    fn get_commit(&self, input: GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError>;
+    fn get_commit(&self, input: GetCommitRequest) -> Request<GetCommitRequest>;
 
     /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
-    fn get_differences(
-        &self,
-        input: GetDifferencesInput,
-    ) -> RusotoFuture<GetDifferencesOutput, GetDifferencesError>;
+    fn get_differences(&self, input: GetDifferencesRequest) -> Request<GetDifferencesRequest>;
 
     /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
-    fn get_file(&self, input: GetFileInput) -> RusotoFuture<GetFileOutput, GetFileError>;
+    fn get_file(&self, input: GetFileRequest) -> Request<GetFileRequest>;
 
     /// <p>Returns the contents of a specified folder in a repository.</p>
-    fn get_folder(&self, input: GetFolderInput) -> RusotoFuture<GetFolderOutput, GetFolderError>;
+    fn get_folder(&self, input: GetFolderRequest) -> Request<GetFolderRequest>;
 
     /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
     fn get_merge_conflicts(
         &self,
-        input: GetMergeConflictsInput,
-    ) -> RusotoFuture<GetMergeConflictsOutput, GetMergeConflictsError>;
+        input: GetMergeConflictsRequest,
+    ) -> Request<GetMergeConflictsRequest>;
 
     /// <p>Gets information about a pull request in a specified repository.</p>
-    fn get_pull_request(
-        &self,
-        input: GetPullRequestInput,
-    ) -> RusotoFuture<GetPullRequestOutput, GetPullRequestError>;
+    fn get_pull_request(&self, input: GetPullRequestRequest) -> Request<GetPullRequestRequest>;
 
     /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
-    fn get_repository(
-        &self,
-        input: GetRepositoryInput,
-    ) -> RusotoFuture<GetRepositoryOutput, GetRepositoryError>;
+    fn get_repository(&self, input: GetRepositoryRequest) -> Request<GetRepositoryRequest>;
 
     /// <p>Gets information about triggers configured for a repository.</p>
     fn get_repository_triggers(
         &self,
-        input: GetRepositoryTriggersInput,
-    ) -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError>;
+        input: GetRepositoryTriggersRequest,
+    ) -> Request<GetRepositoryTriggersRequest>;
 
     /// <p>Gets information about one or more branches in a repository.</p>
-    fn list_branches(
-        &self,
-        input: ListBranchesInput,
-    ) -> RusotoFuture<ListBranchesOutput, ListBranchesError>;
+    fn list_branches(&self, input: ListBranchesRequest) -> Request<ListBranchesRequest>;
 
     /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
     fn list_pull_requests(
         &self,
-        input: ListPullRequestsInput,
-    ) -> RusotoFuture<ListPullRequestsOutput, ListPullRequestsError>;
+        input: ListPullRequestsRequest,
+    ) -> Request<ListPullRequestsRequest>;
 
     /// <p>Gets information about one or more repositories.</p>
-    fn list_repositories(
-        &self,
-        input: ListRepositoriesInput,
-    ) -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError>;
+    fn list_repositories(&self, input: ListRepositoriesRequest)
+        -> Request<ListRepositoriesRequest>;
 
     /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
     fn merge_pull_request_by_fast_forward(
         &self,
-        input: MergePullRequestByFastForwardInput,
-    ) -> RusotoFuture<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError>;
+        input: MergePullRequestByFastForwardRequest,
+    ) -> Request<MergePullRequestByFastForwardRequest>;
 
     /// <p>Posts a comment on the comparison between two commits.</p>
     fn post_comment_for_compared_commit(
         &self,
-        input: PostCommentForComparedCommitInput,
-    ) -> RusotoFuture<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError>;
+        input: PostCommentForComparedCommitRequest,
+    ) -> Request<PostCommentForComparedCommitRequest>;
 
     /// <p>Posts a comment on a pull request.</p>
     fn post_comment_for_pull_request(
         &self,
-        input: PostCommentForPullRequestInput,
-    ) -> RusotoFuture<PostCommentForPullRequestOutput, PostCommentForPullRequestError>;
+        input: PostCommentForPullRequestRequest,
+    ) -> Request<PostCommentForPullRequestRequest>;
 
     /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
     fn post_comment_reply(
         &self,
-        input: PostCommentReplyInput,
-    ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError>;
+        input: PostCommentReplyRequest,
+    ) -> Request<PostCommentReplyRequest>;
 
     /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
-    fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError>;
+    fn put_file(&self, input: PutFileRequest) -> Request<PutFileRequest>;
 
     /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
     fn put_repository_triggers(
         &self,
-        input: PutRepositoryTriggersInput,
-    ) -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError>;
+        input: PutRepositoryTriggersRequest,
+    ) -> Request<PutRepositoryTriggersRequest>;
 
     /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
     fn test_repository_triggers(
         &self,
-        input: TestRepositoryTriggersInput,
-    ) -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
+        input: TestRepositoryTriggersRequest,
+    ) -> Request<TestRepositoryTriggersRequest>;
 
     /// <p>Replaces the contents of a comment.</p>
-    fn update_comment(
-        &self,
-        input: UpdateCommentInput,
-    ) -> RusotoFuture<UpdateCommentOutput, UpdateCommentError>;
+    fn update_comment(&self, input: UpdateCommentRequest) -> Request<UpdateCommentRequest>;
 
     /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
     fn update_default_branch(
         &self,
-        input: UpdateDefaultBranchInput,
-    ) -> RusotoFuture<(), UpdateDefaultBranchError>;
+        input: UpdateDefaultBranchRequest,
+    ) -> Request<UpdateDefaultBranchRequest>;
 
     /// <p>Replaces the contents of the description of a pull request.</p>
     fn update_pull_request_description(
         &self,
-        input: UpdatePullRequestDescriptionInput,
-    ) -> RusotoFuture<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError>;
+        input: UpdatePullRequestDescriptionRequest,
+    ) -> Request<UpdatePullRequestDescriptionRequest>;
 
     /// <p>Updates the status of a pull request. </p>
     fn update_pull_request_status(
         &self,
-        input: UpdatePullRequestStatusInput,
-    ) -> RusotoFuture<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError>;
+        input: UpdatePullRequestStatusRequest,
+    ) -> Request<UpdatePullRequestStatusRequest>;
 
     /// <p>Replaces the title of a pull request.</p>
     fn update_pull_request_title(
         &self,
-        input: UpdatePullRequestTitleInput,
-    ) -> RusotoFuture<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError>;
+        input: UpdatePullRequestTitleRequest,
+    ) -> Request<UpdatePullRequestTitleRequest>;
 
     /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn update_repository_description(
         &self,
-        input: UpdateRepositoryDescriptionInput,
-    ) -> RusotoFuture<(), UpdateRepositoryDescriptionError>;
+        input: UpdateRepositoryDescriptionRequest,
+    ) -> Request<UpdateRepositoryDescriptionRequest>;
 
     /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
     fn update_repository_name(
         &self,
-        input: UpdateRepositoryNameInput,
-    ) -> RusotoFuture<(), UpdateRepositoryNameError>;
+        input: UpdateRepositoryNameRequest,
+    ) -> Request<UpdateRepositoryNameRequest>;
 }
 /// A client for the CodeCommit API.
 #[derive(Clone)]
@@ -7089,20 +7073,297 @@ impl CodeCommit for CodeCommitClient {
     /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn batch_get_repositories(
         &self,
-        input: BatchGetRepositoriesInput,
-    ) -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        input: BatchGetRepositoriesRequest,
+    ) -> Request<BatchGetRepositoriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
+    fn create_branch(&self, input: CreateBranchRequest) -> Request<CreateBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a commit for a repository on the tip of a specified branch.</p>
+    fn create_commit(&self, input: CreateCommitRequest) -> Request<CreateCommitRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a pull request in the specified repository.</p>
+    fn create_pull_request(
+        &self,
+        input: CreatePullRequestRequest,
+    ) -> Request<CreatePullRequestRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new, empty repository.</p>
+    fn create_repository(
+        &self,
+        input: CreateRepositoryRequest,
+    ) -> Request<CreateRepositoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
+    fn delete_branch(&self, input: DeleteBranchRequest) -> Request<DeleteBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
+    fn delete_comment_content(
+        &self,
+        input: DeleteCommentContentRequest,
+    ) -> Request<DeleteCommentContentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a specified file from a specified branch. A commit is created on the branch that contains the revision. The file will still exist in the commits prior to the commit that contains the deletion.</p>
+    fn delete_file(&self, input: DeleteFileRequest) -> Request<DeleteFileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
+    fn delete_repository(
+        &self,
+        input: DeleteRepositoryRequest,
+    ) -> Request<DeleteRepositoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about one or more pull request events.</p>
+    fn describe_pull_request_events(
+        &self,
+        input: DescribePullRequestEventsRequest,
+    ) -> Request<DescribePullRequestEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
+    fn get_blob(&self, input: GetBlobRequest) -> Request<GetBlobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
+    fn get_branch(&self, input: GetBranchRequest) -> Request<GetBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    fn get_comment(&self, input: GetCommentRequest) -> Request<GetCommentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    fn get_comments_for_compared_commit(
+        &self,
+        input: GetCommentsForComparedCommitRequest,
+    ) -> Request<GetCommentsForComparedCommitRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns comments made on a pull request.</p>
+    fn get_comments_for_pull_request(
+        &self,
+        input: GetCommentsForPullRequestRequest,
+    ) -> Request<GetCommentsForPullRequestRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a commit, including commit message and committer information.</p>
+    fn get_commit(&self, input: GetCommitRequest) -> Request<GetCommitRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
+    fn get_differences(&self, input: GetDifferencesRequest) -> Request<GetDifferencesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
+    fn get_file(&self, input: GetFileRequest) -> Request<GetFileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the contents of a specified folder in a repository.</p>
+    fn get_folder(&self, input: GetFolderRequest) -> Request<GetFolderRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
+    fn get_merge_conflicts(
+        &self,
+        input: GetMergeConflictsRequest,
+    ) -> Request<GetMergeConflictsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a pull request in a specified repository.</p>
+    fn get_pull_request(&self, input: GetPullRequestRequest) -> Request<GetPullRequestRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
+    fn get_repository(&self, input: GetRepositoryRequest) -> Request<GetRepositoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about triggers configured for a repository.</p>
+    fn get_repository_triggers(
+        &self,
+        input: GetRepositoryTriggersRequest,
+    ) -> Request<GetRepositoryTriggersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more branches in a repository.</p>
+    fn list_branches(&self, input: ListBranchesRequest) -> Request<ListBranchesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
+    fn list_pull_requests(
+        &self,
+        input: ListPullRequestsRequest,
+    ) -> Request<ListPullRequestsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about one or more repositories.</p>
+    fn list_repositories(
+        &self,
+        input: ListRepositoriesRequest,
+    ) -> Request<ListRepositoriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
+    fn merge_pull_request_by_fast_forward(
+        &self,
+        input: MergePullRequestByFastForwardRequest,
+    ) -> Request<MergePullRequestByFastForwardRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Posts a comment on the comparison between two commits.</p>
+    fn post_comment_for_compared_commit(
+        &self,
+        input: PostCommentForComparedCommitRequest,
+    ) -> Request<PostCommentForComparedCommitRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Posts a comment on a pull request.</p>
+    fn post_comment_for_pull_request(
+        &self,
+        input: PostCommentForPullRequestRequest,
+    ) -> Request<PostCommentForPullRequestRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
+    fn post_comment_reply(
+        &self,
+        input: PostCommentReplyRequest,
+    ) -> Request<PostCommentReplyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
+    fn put_file(&self, input: PutFileRequest) -> Request<PutFileRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
+    fn put_repository_triggers(
+        &self,
+        input: PutRepositoryTriggersRequest,
+    ) -> Request<PutRepositoryTriggersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
+    fn test_repository_triggers(
+        &self,
+        input: TestRepositoryTriggersRequest,
+    ) -> Request<TestRepositoryTriggersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces the contents of a comment.</p>
+    fn update_comment(&self, input: UpdateCommentRequest) -> Request<UpdateCommentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
+    fn update_default_branch(
+        &self,
+        input: UpdateDefaultBranchRequest,
+    ) -> Request<UpdateDefaultBranchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces the contents of the description of a pull request.</p>
+    fn update_pull_request_description(
+        &self,
+        input: UpdatePullRequestDescriptionRequest,
+    ) -> Request<UpdatePullRequestDescriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the status of a pull request. </p>
+    fn update_pull_request_status(
+        &self,
+        input: UpdatePullRequestStatusRequest,
+    ) -> Request<UpdatePullRequestStatusRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Replaces the title of a pull request.</p>
+    fn update_pull_request_title(
+        &self,
+        input: UpdatePullRequestTitleRequest,
+    ) -> Request<UpdatePullRequestTitleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
+    fn update_repository_description(
+        &self,
+        input: UpdateRepositoryDescriptionRequest,
+    ) -> Request<UpdateRepositoryDescriptionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
+    fn update_repository_name(
+        &self,
+        input: UpdateRepositoryNameRequest,
+    ) -> Request<UpdateRepositoryNameRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for BatchGetRepositoriesRequest {
+    type Output = BatchGetRepositoriesResponse;
+    type Error = BatchGetRepositoriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetRepositories");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<BatchGetRepositoriesOutput, _>()
+                        .deserialize::<BatchGetRepositoriesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7113,19 +7374,30 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
-    fn create_branch(&self, input: CreateBranchInput) -> RusotoFuture<(), CreateBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for CreateBranchRequest {
+    type Output = CreateBranchResponse;
+    type Error = CreateBranchError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateBranch");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateBranchResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7136,24 +7408,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Creates a commit for a repository on the tip of a specified branch.</p>
-    fn create_commit(
-        &self,
-        input: CreateCommitInput,
-    ) -> RusotoFuture<CreateCommitOutput, CreateCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for CreateCommitRequest {
+    type Output = CreateCommitResponse;
+    type Error = CreateCommitError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateCommit");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCommitOutput, _>()
+                        .deserialize::<CreateCommitResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7165,24 +7442,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Creates a pull request in the specified repository.</p>
-    fn create_pull_request(
-        &self,
-        input: CreatePullRequestInput,
-    ) -> RusotoFuture<CreatePullRequestOutput, CreatePullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for CreatePullRequestRequest {
+    type Output = CreatePullRequestResponse;
+    type Error = CreatePullRequestError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreatePullRequest");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePullRequestOutput, _>()
+                        .deserialize::<CreatePullRequestResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7194,24 +7476,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new, empty repository.</p>
-    fn create_repository(
-        &self,
-        input: CreateRepositoryInput,
-    ) -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for CreateRepositoryRequest {
+    type Output = CreateRepositoryResponse;
+    type Error = CreateRepositoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateRepository");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRepositoryOutput, _>()
+                        .deserialize::<CreateRepositoryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7223,24 +7510,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
-    fn delete_branch(
-        &self,
-        input: DeleteBranchInput,
-    ) -> RusotoFuture<DeleteBranchOutput, DeleteBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for DeleteBranchRequest {
+    type Output = DeleteBranchResponse;
+    type Error = DeleteBranchError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteBranch");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteBranchOutput, _>()
+                        .deserialize::<DeleteBranchResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7252,24 +7544,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
-    fn delete_comment_content(
-        &self,
-        input: DeleteCommentContentInput,
-    ) -> RusotoFuture<DeleteCommentContentOutput, DeleteCommentContentError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for DeleteCommentContentRequest {
+    type Output = DeleteCommentContentResponse;
+    type Error = DeleteCommentContentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteCommentContent");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteCommentContentOutput, _>()
+                        .deserialize::<DeleteCommentContentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7280,24 +7577,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a specified file from a specified branch. A commit is created on the branch that contains the revision. The file will still exist in the commits prior to the commit that contains the deletion.</p>
-    fn delete_file(
-        &self,
-        input: DeleteFileInput,
-    ) -> RusotoFuture<DeleteFileOutput, DeleteFileError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for DeleteFileRequest {
+    type Output = DeleteFileResponse;
+    type Error = DeleteFileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteFile");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteFileOutput, _>()
+                        .deserialize::<DeleteFileResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7309,24 +7611,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
-    fn delete_repository(
-        &self,
-        input: DeleteRepositoryInput,
-    ) -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for DeleteRepositoryRequest {
+    type Output = DeleteRepositoryResponse;
+    type Error = DeleteRepositoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteRepository");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteRepositoryOutput, _>()
+                        .deserialize::<DeleteRepositoryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7338,27 +7645,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about one or more pull request events.</p>
-    fn describe_pull_request_events(
-        &self,
-        input: DescribePullRequestEventsInput,
-    ) -> RusotoFuture<DescribePullRequestEventsOutput, DescribePullRequestEventsError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for DescribePullRequestEventsRequest {
+    type Output = DescribePullRequestEventsResponse;
+    type Error = DescribePullRequestEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DescribePullRequestEvents",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribePullRequestEventsOutput, _>()
+                        .deserialize::<DescribePullRequestEventsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7367,20 +7679,28 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
-    fn get_blob(&self, input: GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetBlobRequest {
+    type Output = GetBlobResponse;
+    type Error = GetBlobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBlob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetBlobOutput, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetBlobResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7392,20 +7712,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
-    fn get_branch(&self, input: GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetBranchRequest {
+    type Output = GetBranchResponse;
+    type Error = GetBranchError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBranch");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetBranchOutput, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetBranchResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7417,24 +7746,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
-    fn get_comment(
-        &self,
-        input: GetCommentInput,
-    ) -> RusotoFuture<GetCommentOutput, GetCommentError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetCommentRequest {
+    type Output = GetCommentResponse;
+    type Error = GetCommentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetComment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCommentOutput, _>()
+                        .deserialize::<GetCommentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7446,27 +7780,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about comments made on the comparison between two commits.</p>
-    fn get_comments_for_compared_commit(
-        &self,
-        input: GetCommentsForComparedCommitInput,
-    ) -> RusotoFuture<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetCommentsForComparedCommitRequest {
+    type Output = GetCommentsForComparedCommitResponse;
+    type Error = GetCommentsForComparedCommitError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForComparedCommit",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCommentsForComparedCommitOutput, _>()
+                        .deserialize::<GetCommentsForComparedCommitResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7475,27 +7814,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns comments made on a pull request.</p>
-    fn get_comments_for_pull_request(
-        &self,
-        input: GetCommentsForPullRequestInput,
-    ) -> RusotoFuture<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetCommentsForPullRequestRequest {
+    type Output = GetCommentsForPullRequestResponse;
+    type Error = GetCommentsForPullRequestError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForPullRequest",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetCommentsForPullRequestOutput, _>()
+                        .deserialize::<GetCommentsForPullRequestResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7504,20 +7848,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a commit, including commit message and committer information.</p>
-    fn get_commit(&self, input: GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetCommitRequest {
+    type Output = GetCommitResponse;
+    type Error = GetCommitError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetCommit");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetCommitOutput, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetCommitResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7529,24 +7882,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference). Results can be limited to a specified path.</p>
-    fn get_differences(
-        &self,
-        input: GetDifferencesInput,
-    ) -> RusotoFuture<GetDifferencesOutput, GetDifferencesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetDifferencesRequest {
+    type Output = GetDifferencesResponse;
+    type Error = GetDifferencesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetDifferences");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetDifferencesOutput, _>()
+                        .deserialize::<GetDifferencesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7558,20 +7916,28 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
-    fn get_file(&self, input: GetFileInput) -> RusotoFuture<GetFileOutput, GetFileError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetFileRequest {
+    type Output = GetFileResponse;
+    type Error = GetFileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFile");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetFileOutput, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetFileResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7583,20 +7949,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns the contents of a specified folder in a repository.</p>
-    fn get_folder(&self, input: GetFolderInput) -> RusotoFuture<GetFolderOutput, GetFolderError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetFolderRequest {
+    type Output = GetFolderResponse;
+    type Error = GetFolderError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFolder");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetFolderOutput, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetFolderResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7608,24 +7983,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
-    fn get_merge_conflicts(
-        &self,
-        input: GetMergeConflictsInput,
-    ) -> RusotoFuture<GetMergeConflictsOutput, GetMergeConflictsError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetMergeConflictsRequest {
+    type Output = GetMergeConflictsResponse;
+    type Error = GetMergeConflictsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeConflicts");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetMergeConflictsOutput, _>()
+                        .deserialize::<GetMergeConflictsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7637,24 +8017,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a pull request in a specified repository.</p>
-    fn get_pull_request(
-        &self,
-        input: GetPullRequestInput,
-    ) -> RusotoFuture<GetPullRequestOutput, GetPullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetPullRequestRequest {
+    type Output = GetPullRequestResponse;
+    type Error = GetPullRequestError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetPullRequest");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetPullRequestOutput, _>()
+                        .deserialize::<GetPullRequestResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7666,24 +8051,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
-    fn get_repository(
-        &self,
-        input: GetRepositoryInput,
-    ) -> RusotoFuture<GetRepositoryOutput, GetRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetRepositoryRequest {
+    type Output = GetRepositoryResponse;
+    type Error = GetRepositoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepository");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRepositoryOutput, _>()
+                        .deserialize::<GetRepositoryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7695,24 +8085,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about triggers configured for a repository.</p>
-    fn get_repository_triggers(
-        &self,
-        input: GetRepositoryTriggersInput,
-    ) -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for GetRepositoryTriggersRequest {
+    type Output = GetRepositoryTriggersResponse;
+    type Error = GetRepositoryTriggersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepositoryTriggers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRepositoryTriggersOutput, _>()
+                        .deserialize::<GetRepositoryTriggersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7723,24 +8118,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more branches in a repository.</p>
-    fn list_branches(
-        &self,
-        input: ListBranchesInput,
-    ) -> RusotoFuture<ListBranchesOutput, ListBranchesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for ListBranchesRequest {
+    type Output = ListBranchesResponse;
+    type Error = ListBranchesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListBranches");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListBranchesOutput, _>()
+                        .deserialize::<ListBranchesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7752,24 +8152,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
-    fn list_pull_requests(
-        &self,
-        input: ListPullRequestsInput,
-    ) -> RusotoFuture<ListPullRequestsOutput, ListPullRequestsError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for ListPullRequestsRequest {
+    type Output = ListPullRequestsResponse;
+    type Error = ListPullRequestsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListPullRequests");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListPullRequestsOutput, _>()
+                        .deserialize::<ListPullRequestsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7781,24 +8186,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about one or more repositories.</p>
-    fn list_repositories(
-        &self,
-        input: ListRepositoriesInput,
-    ) -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for ListRepositoriesRequest {
+    type Output = ListRepositoriesResponse;
+    type Error = ListRepositoriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListRepositories");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListRepositoriesOutput, _>()
+                        .deserialize::<ListRepositoriesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7810,27 +8220,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
-    fn merge_pull_request_by_fast_forward(
-        &self,
-        input: MergePullRequestByFastForwardInput,
-    ) -> RusotoFuture<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for MergePullRequestByFastForwardRequest {
+    type Output = MergePullRequestByFastForwardResponse;
+    type Error = MergePullRequestByFastForwardError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestByFastForward",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<MergePullRequestByFastForwardOutput, _>()
+                        .deserialize::<MergePullRequestByFastForwardResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7839,27 +8254,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Posts a comment on the comparison between two commits.</p>
-    fn post_comment_for_compared_commit(
-        &self,
-        input: PostCommentForComparedCommitInput,
-    ) -> RusotoFuture<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for PostCommentForComparedCommitRequest {
+    type Output = PostCommentForComparedCommitResponse;
+    type Error = PostCommentForComparedCommitError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForComparedCommit",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PostCommentForComparedCommitOutput, _>()
+                        .deserialize::<PostCommentForComparedCommitResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7868,27 +8288,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Posts a comment on a pull request.</p>
-    fn post_comment_for_pull_request(
-        &self,
-        input: PostCommentForPullRequestInput,
-    ) -> RusotoFuture<PostCommentForPullRequestOutput, PostCommentForPullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for PostCommentForPullRequestRequest {
+    type Output = PostCommentForPullRequestResponse;
+    type Error = PostCommentForPullRequestError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForPullRequest",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PostCommentForPullRequestOutput, _>()
+                        .deserialize::<PostCommentForPullRequestResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7897,24 +8322,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
-    fn post_comment_reply(
-        &self,
-        input: PostCommentReplyInput,
-    ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for PostCommentReplyRequest {
+    type Output = PostCommentReplyResponse;
+    type Error = PostCommentReplyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PostCommentReply");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PostCommentReplyOutput, _>()
+                        .deserialize::<PostCommentReplyResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7926,20 +8356,28 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
-    fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for PutFileRequest {
+    type Output = PutFileResponse;
+    type Error = PutFileError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PutFile");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<PutFileOutput, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<PutFileResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7951,24 +8389,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
-    fn put_repository_triggers(
-        &self,
-        input: PutRepositoryTriggersInput,
-    ) -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for PutRepositoryTriggersRequest {
+    type Output = PutRepositoryTriggersResponse;
+    type Error = PutRepositoryTriggersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PutRepositoryTriggers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<PutRepositoryTriggersOutput, _>()
+                        .deserialize::<PutRepositoryTriggersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7979,24 +8422,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test will send data from the last commit. If no data is available, sample data will be generated.</p>
-    fn test_repository_triggers(
-        &self,
-        input: TestRepositoryTriggersInput,
-    ) -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for TestRepositoryTriggersRequest {
+    type Output = TestRepositoryTriggersResponse;
+    type Error = TestRepositoryTriggersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.TestRepositoryTriggers");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<TestRepositoryTriggersOutput, _>()
+                        .deserialize::<TestRepositoryTriggersResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8007,24 +8455,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Replaces the contents of a comment.</p>
-    fn update_comment(
-        &self,
-        input: UpdateCommentInput,
-    ) -> RusotoFuture<UpdateCommentOutput, UpdateCommentError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for UpdateCommentRequest {
+    type Output = UpdateCommentResponse;
+    type Error = UpdateCommentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateComment");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateCommentOutput, _>()
+                        .deserialize::<UpdateCommentResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8036,22 +8489,30 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
-    fn update_default_branch(
-        &self,
-        input: UpdateDefaultBranchInput,
-    ) -> RusotoFuture<(), UpdateDefaultBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for UpdateDefaultBranchRequest {
+    type Output = UpdateDefaultBranchResponse;
+    type Error = UpdateDefaultBranchError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateDefaultBranch");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateDefaultBranchResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -8061,27 +8522,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Replaces the contents of the description of a pull request.</p>
-    fn update_pull_request_description(
-        &self,
-        input: UpdatePullRequestDescriptionInput,
-    ) -> RusotoFuture<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for UpdatePullRequestDescriptionRequest {
+    type Output = UpdatePullRequestDescriptionResponse;
+    type Error = UpdatePullRequestDescriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestDescription",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePullRequestDescriptionOutput, _>()
+                        .deserialize::<UpdatePullRequestDescriptionResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8090,27 +8556,32 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Updates the status of a pull request. </p>
-    fn update_pull_request_status(
-        &self,
-        input: UpdatePullRequestStatusInput,
-    ) -> RusotoFuture<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for UpdatePullRequestStatusRequest {
+    type Output = UpdatePullRequestStatusResponse;
+    type Error = UpdatePullRequestStatusError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestStatus",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePullRequestStatusOutput, _>()
+                        .deserialize::<UpdatePullRequestStatusResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8119,24 +8590,29 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Replaces the title of a pull request.</p>
-    fn update_pull_request_title(
-        &self,
-        input: UpdatePullRequestTitleInput,
-    ) -> RusotoFuture<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for UpdatePullRequestTitleRequest {
+    type Output = UpdatePullRequestTitleResponse;
+    type Error = UpdatePullRequestTitleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdatePullRequestTitle");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdatePullRequestTitleOutput, _>()
+                        .deserialize::<UpdatePullRequestTitleResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8147,25 +8623,33 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
-    fn update_repository_description(
-        &self,
-        input: UpdateRepositoryDescriptionInput,
-    ) -> RusotoFuture<(), UpdateRepositoryDescriptionError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for UpdateRepositoryDescriptionRequest {
+    type Output = UpdateRepositoryDescriptionResponse;
+    type Error = UpdateRepositoryDescriptionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateRepositoryDescription",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateRepositoryDescriptionResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateRepositoryDescriptionError::from_response(response))
@@ -8173,22 +8657,30 @@ impl CodeCommit for CodeCommitClient {
             }
         })
     }
+}
 
-    /// <p>Renames a repository. The repository name must be unique across the calling AWS account. In addition, repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix ".git" is prohibited. For a full description of the limits on repository names, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
-    fn update_repository_name(
-        &self,
-        input: UpdateRepositoryNameInput,
-    ) -> RusotoFuture<(), UpdateRepositoryNameError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+impl ServiceRequest for UpdateRepositoryNameRequest {
+    type Output = UpdateRepositoryNameResponse;
+    type Error = UpdateRepositoryNameError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "codecommit", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateRepositoryName");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateRepositoryNameResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {

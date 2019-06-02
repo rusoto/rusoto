@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -685,37 +686,34 @@ pub trait AWSHealth {
     fn describe_affected_entities(
         &self,
         input: DescribeAffectedEntitiesRequest,
-    ) -> RusotoFuture<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError>;
+    ) -> Request<DescribeAffectedEntitiesRequest>;
 
     /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
     fn describe_entity_aggregates(
         &self,
         input: DescribeEntityAggregatesRequest,
-    ) -> RusotoFuture<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError>;
+    ) -> Request<DescribeEntityAggregatesRequest>;
 
     /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
     fn describe_event_aggregates(
         &self,
         input: DescribeEventAggregatesRequest,
-    ) -> RusotoFuture<DescribeEventAggregatesResponse, DescribeEventAggregatesError>;
+    ) -> Request<DescribeEventAggregatesRequest>;
 
     /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
     fn describe_event_details(
         &self,
         input: DescribeEventDetailsRequest,
-    ) -> RusotoFuture<DescribeEventDetailsResponse, DescribeEventDetailsError>;
+    ) -> Request<DescribeEventDetailsRequest>;
 
     /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
     fn describe_event_types(
         &self,
         input: DescribeEventTypesRequest,
-    ) -> RusotoFuture<DescribeEventTypesResponse, DescribeEventTypesError>;
+    ) -> Request<DescribeEventTypesRequest>;
 
     /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 }
 /// A client for the AWSHealth API.
 #[derive(Clone)]
@@ -758,18 +756,68 @@ impl AWSHealth for AWSHealthClient {
     fn describe_affected_entities(
         &self,
         input: DescribeAffectedEntitiesRequest,
-    ) -> RusotoFuture<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+    ) -> Request<DescribeAffectedEntitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
+    fn describe_entity_aggregates(
+        &self,
+        input: DescribeEntityAggregatesRequest,
+    ) -> Request<DescribeEntityAggregatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
+    fn describe_event_aggregates(
+        &self,
+        input: DescribeEventAggregatesRequest,
+    ) -> Request<DescribeEventAggregatesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
+    fn describe_event_details(
+        &self,
+        input: DescribeEventDetailsRequest,
+    ) -> Request<DescribeEventDetailsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
+    fn describe_event_types(
+        &self,
+        input: DescribeEventTypesRequest,
+    ) -> Request<DescribeEventTypesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for DescribeAffectedEntitiesRequest {
+    type Output = DescribeAffectedEntitiesResponse;
+    type Error = DescribeAffectedEntitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "health", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSHealth_20160804.DescribeAffectedEntities",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -782,23 +830,28 @@ impl AWSHealth for AWSHealthClient {
             }
         })
     }
+}
 
-    /// <p>Returns the number of entities that are affected by each of the specified events. If no events are specified, the counts of all affected entities are returned.</p>
-    fn describe_entity_aggregates(
-        &self,
-        input: DescribeEntityAggregatesRequest,
-    ) -> RusotoFuture<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+impl ServiceRequest for DescribeEntityAggregatesRequest {
+    type Output = DescribeEntityAggregatesResponse;
+    type Error = DescribeEntityAggregatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "health", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSHealth_20160804.DescribeEntityAggregates",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -811,20 +864,25 @@ impl AWSHealth for AWSHealthClient {
             }
         })
     }
+}
 
-    /// <p>Returns the number of events of each event type (issue, scheduled change, and account notification). If no filter is specified, the counts of all events in each category are returned.</p>
-    fn describe_event_aggregates(
-        &self,
-        input: DescribeEventAggregatesRequest,
-    ) -> RusotoFuture<DescribeEventAggregatesResponse, DescribeEventAggregatesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+impl ServiceRequest for DescribeEventAggregatesRequest {
+    type Output = DescribeEventAggregatesResponse;
+    type Error = DescribeEventAggregatesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "health", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventAggregates");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -837,20 +895,25 @@ impl AWSHealth for AWSHealthClient {
             }
         })
     }
+}
 
-    /// <p>Returns detailed information about one or more specified events. Information includes standard event data (region, service, etc., as returned by <a>DescribeEvents</a>), a detailed event description, and possible additional metadata that depends upon the nature of the event. Affected entities are not included; to retrieve those, use the <a>DescribeAffectedEntities</a> operation.</p> <p>If a specified event cannot be retrieved, an error message is returned for that event.</p>
-    fn describe_event_details(
-        &self,
-        input: DescribeEventDetailsRequest,
-    ) -> RusotoFuture<DescribeEventDetailsResponse, DescribeEventDetailsError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+impl ServiceRequest for DescribeEventDetailsRequest {
+    type Output = DescribeEventDetailsResponse;
+    type Error = DescribeEventDetailsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "health", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventDetails");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -865,20 +928,25 @@ impl AWSHealth for AWSHealthClient {
             }
         })
     }
+}
 
-    /// <p>Returns the event types that meet the specified filter criteria. If no filter criteria are specified, all event types are returned, in no particular order.</p>
-    fn describe_event_types(
-        &self,
-        input: DescribeEventTypesRequest,
-    ) -> RusotoFuture<DescribeEventTypesResponse, DescribeEventTypesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+impl ServiceRequest for DescribeEventTypesRequest {
+    type Output = DescribeEventTypesResponse;
+    type Error = DescribeEventTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "health", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventTypes");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -894,20 +962,25 @@ impl AWSHealth for AWSHealthClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about events that meet the specified filter criteria. Events are returned in a summary form and do not include the detailed description, any additional metadata that depends on the event type, or any affected resources. To retrieve that information, use the <a>DescribeEventDetails</a> and <a>DescribeAffectedEntities</a> operations.</p> <p>If no filter criteria are specified, all events are returned. Results are sorted by <code>lastModifiedTime</code>, starting with the most recent.</p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsRequest,
-    ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "health", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEvents");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

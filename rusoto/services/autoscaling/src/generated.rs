@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -46,36 +47,6 @@ impl ActivitiesDeserializer {
                 obj.push(ActivityDeserializer::deserialize("member", stack)?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ActivitiesType {
-    /// <p>The scaling activities. Activities are sorted by start time. Activities still in progress are described first.</p>
-    pub activities: Vec<Activity>,
-    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
-    pub next_token: Option<String>,
-}
-
-struct ActivitiesTypeDeserializer;
-impl ActivitiesTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ActivitiesType, XmlParseError> {
-        deserialize_elements::<_, ActivitiesType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Activities" => {
-                    obj.activities
-                        .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
-                }
-                "NextToken" => {
-                    obj.next_token = Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -169,30 +140,6 @@ impl ActivityIdsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ActivityType {
-    /// <p>A scaling activity.</p>
-    pub activity: Option<Activity>,
-}
-
-struct ActivityTypeDeserializer;
-impl ActivityTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ActivityType, XmlParseError> {
-        deserialize_elements::<_, ActivityType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Activity" => {
-                    obj.activity = Some(ActivityDeserializer::deserialize("Activity", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Describes a policy adjustment type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AdjustmentType {
@@ -308,17 +255,17 @@ impl AssociatePublicIpAddressDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AttachInstancesQuery {
+pub struct AttachInstancesRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
     pub instance_ids: Option<Vec<String>>,
 }
 
-/// Serialize `AttachInstancesQuery` contents to a `SignedRequest`.
-struct AttachInstancesQuerySerializer;
-impl AttachInstancesQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttachInstancesQuery) {
+/// Serialize `AttachInstancesRequest` contents to a `SignedRequest`.
+struct AttachInstancesRequestSerializer;
+impl AttachInstancesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AttachInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -339,36 +286,30 @@ impl AttachInstancesQuerySerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AttachLoadBalancerTargetGroupsResultType {}
+pub struct AttachInstancesResponse {}
 
-struct AttachLoadBalancerTargetGroupsResultTypeDeserializer;
-impl AttachLoadBalancerTargetGroupsResultTypeDeserializer {
+struct AttachInstancesResponseDeserializer;
+impl AttachInstancesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AttachLoadBalancerTargetGroupsResultType, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = AttachLoadBalancerTargetGroupsResultType::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+    ) -> Result<AttachInstancesResponse, XmlParseError> {
+        Ok(AttachInstancesResponse::default())
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AttachLoadBalancerTargetGroupsType {
+pub struct AttachLoadBalancerTargetGroupsRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The Amazon Resource Names (ARN) of the target groups. You can specify up to 10 target groups.</p>
     pub target_group_ar_ns: Vec<String>,
 }
 
-/// Serialize `AttachLoadBalancerTargetGroupsType` contents to a `SignedRequest`.
-struct AttachLoadBalancerTargetGroupsTypeSerializer;
-impl AttachLoadBalancerTargetGroupsTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerTargetGroupsType) {
+/// Serialize `AttachLoadBalancerTargetGroupsRequest` contents to a `SignedRequest`.
+struct AttachLoadBalancerTargetGroupsRequestSerializer;
+impl AttachLoadBalancerTargetGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerTargetGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -387,18 +328,18 @@ impl AttachLoadBalancerTargetGroupsTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AttachLoadBalancersResultType {}
+pub struct AttachLoadBalancerTargetGroupsResponse {}
 
-struct AttachLoadBalancersResultTypeDeserializer;
-impl AttachLoadBalancersResultTypeDeserializer {
+struct AttachLoadBalancerTargetGroupsResponseDeserializer;
+impl AttachLoadBalancerTargetGroupsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<AttachLoadBalancersResultType, XmlParseError> {
+    ) -> Result<AttachLoadBalancerTargetGroupsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = AttachLoadBalancersResultType::default();
+        let obj = AttachLoadBalancerTargetGroupsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -406,17 +347,17 @@ impl AttachLoadBalancersResultTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AttachLoadBalancersType {
+pub struct AttachLoadBalancersRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The names of the load balancers. You can specify up to 10 load balancers.</p>
     pub load_balancer_names: Vec<String>,
 }
 
-/// Serialize `AttachLoadBalancersType` contents to a `SignedRequest`.
-struct AttachLoadBalancersTypeSerializer;
-impl AttachLoadBalancersTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancersType) {
+/// Serialize `AttachLoadBalancersRequest` contents to a `SignedRequest`.
+struct AttachLoadBalancersRequestSerializer;
+impl AttachLoadBalancersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -434,6 +375,25 @@ impl AttachLoadBalancersTypeSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttachLoadBalancersResponse {}
+
+struct AttachLoadBalancersResponseDeserializer;
+impl AttachLoadBalancersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AttachLoadBalancersResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = AttachLoadBalancersResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an Auto Scaling group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AutoScalingGroup {
@@ -686,41 +646,6 @@ impl AutoScalingGroupNamesSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AutoScalingGroupNamesType {
-    /// <p>The names of the Auto Scaling groups. Each name can be a maximum of 1600 characters. By default, you can only specify up to 50 names. You can optionally increase this limit using the <code>MaxRecords</code> parameter. </p> <p>If you omit this parameter, all Auto Scaling groups are described.</p>
-    pub auto_scaling_group_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>. </p>
-    pub max_records: Option<i64>,
-    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
-    pub next_token: Option<String>,
-}
-
-/// Serialize `AutoScalingGroupNamesType` contents to a `SignedRequest`.
-struct AutoScalingGroupNamesTypeSerializer;
-impl AutoScalingGroupNamesTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AutoScalingGroupNamesType) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.auto_scaling_group_names {
-            AutoScalingGroupNamesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "AutoScalingGroupNames"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.max_records {
-            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
-        }
-        if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
-        }
-    }
-}
-
 struct AutoScalingGroupsDeserializer;
 impl AutoScalingGroupsDeserializer {
     #[allow(unused_variables)]
@@ -733,39 +658,6 @@ impl AutoScalingGroupsDeserializer {
                 obj.push(AutoScalingGroupDeserializer::deserialize("member", stack)?);
             } else {
                 skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AutoScalingGroupsType {
-    /// <p>The groups.</p>
-    pub auto_scaling_groups: Vec<AutoScalingGroup>,
-    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
-    pub next_token: Option<String>,
-}
-
-struct AutoScalingGroupsTypeDeserializer;
-impl AutoScalingGroupsTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<AutoScalingGroupsType, XmlParseError> {
-        deserialize_elements::<_, AutoScalingGroupsType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "AutoScalingGroups" => {
-                    obj.auto_scaling_groups
-                        .extend(AutoScalingGroupsDeserializer::deserialize(
-                            "AutoScalingGroups",
-                            stack,
-                        )?);
-                }
-                "NextToken" => {
-                    obj.next_token = Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
-                }
-                _ => skip_tree(stack),
             }
             Ok(())
         })
@@ -872,45 +764,6 @@ impl AutoScalingInstancesDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AutoScalingInstancesType {
-    /// <p>The instances.</p>
-    pub auto_scaling_instances: Option<Vec<AutoScalingInstanceDetails>>,
-    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
-    pub next_token: Option<String>,
-}
-
-struct AutoScalingInstancesTypeDeserializer;
-impl AutoScalingInstancesTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<AutoScalingInstancesType, XmlParseError> {
-        deserialize_elements::<_, AutoScalingInstancesType, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "AutoScalingInstances" => {
-                        obj.auto_scaling_instances.get_or_insert(vec![]).extend(
-                            AutoScalingInstancesDeserializer::deserialize(
-                                "AutoScalingInstances",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct AutoScalingNotificationTypesDeserializer;
 impl AutoScalingNotificationTypesDeserializer {
     #[allow(unused_variables)]
@@ -974,19 +827,48 @@ impl AvailabilityZonesSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchDeleteScheduledActionAnswer {
+pub struct BatchDeleteScheduledActionRequest {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_name: String,
+    /// <p>The names of the scheduled actions to delete. The maximum number allowed is 50. </p>
+    pub scheduled_action_names: Vec<String>,
+}
+
+/// Serialize `BatchDeleteScheduledActionRequest` contents to a `SignedRequest`.
+struct BatchDeleteScheduledActionRequestSerializer;
+impl BatchDeleteScheduledActionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteScheduledActionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AutoScalingGroupName"),
+            &obj.auto_scaling_group_name,
+        );
+        ScheduledActionNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ScheduledActionNames"),
+            &obj.scheduled_action_names,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchDeleteScheduledActionResponse {
     /// <p>The names of the scheduled actions that could not be deleted, including an error message. </p>
     pub failed_scheduled_actions: Option<Vec<FailedScheduledUpdateGroupActionRequest>>,
 }
 
-struct BatchDeleteScheduledActionAnswerDeserializer;
-impl BatchDeleteScheduledActionAnswerDeserializer {
+struct BatchDeleteScheduledActionResponseDeserializer;
+impl BatchDeleteScheduledActionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<BatchDeleteScheduledActionAnswer, XmlParseError> {
-        deserialize_elements::<_, BatchDeleteScheduledActionAnswer, _>(
+    ) -> Result<BatchDeleteScheduledActionResponse, XmlParseError> {
+        deserialize_elements::<_, BatchDeleteScheduledActionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1007,17 +889,17 @@ impl BatchDeleteScheduledActionAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchDeleteScheduledActionType {
+pub struct BatchPutScheduledUpdateGroupActionRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The names of the scheduled actions to delete. The maximum number allowed is 50. </p>
-    pub scheduled_action_names: Vec<String>,
+    /// <p>One or more scheduled actions. The maximum number allowed is 50. </p>
+    pub scheduled_update_group_actions: Vec<ScheduledUpdateGroupActionRequest>,
 }
 
-/// Serialize `BatchDeleteScheduledActionType` contents to a `SignedRequest`.
-struct BatchDeleteScheduledActionTypeSerializer;
-impl BatchDeleteScheduledActionTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteScheduledActionType) {
+/// Serialize `BatchPutScheduledUpdateGroupActionRequest` contents to a `SignedRequest`.
+struct BatchPutScheduledUpdateGroupActionRequestSerializer;
+impl BatchPutScheduledUpdateGroupActionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &BatchPutScheduledUpdateGroupActionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1027,28 +909,28 @@ impl BatchDeleteScheduledActionTypeSerializer {
             &format!("{}{}", prefix, "AutoScalingGroupName"),
             &obj.auto_scaling_group_name,
         );
-        ScheduledActionNamesSerializer::serialize(
+        ScheduledUpdateGroupActionRequestsSerializer::serialize(
             params,
-            &format!("{}{}", prefix, "ScheduledActionNames"),
-            &obj.scheduled_action_names,
+            &format!("{}{}", prefix, "ScheduledUpdateGroupActions"),
+            &obj.scheduled_update_group_actions,
         );
     }
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchPutScheduledUpdateGroupActionAnswer {
+pub struct BatchPutScheduledUpdateGroupActionResponse {
     /// <p>The names of the scheduled actions that could not be created or updated, including an error message.</p>
     pub failed_scheduled_update_group_actions: Option<Vec<FailedScheduledUpdateGroupActionRequest>>,
 }
 
-struct BatchPutScheduledUpdateGroupActionAnswerDeserializer;
-impl BatchPutScheduledUpdateGroupActionAnswerDeserializer {
+struct BatchPutScheduledUpdateGroupActionResponseDeserializer;
+impl BatchPutScheduledUpdateGroupActionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<BatchPutScheduledUpdateGroupActionAnswer, XmlParseError> {
-        deserialize_elements::<_, BatchPutScheduledUpdateGroupActionAnswer, _>(
+    ) -> Result<BatchPutScheduledUpdateGroupActionResponse, XmlParseError> {
+        deserialize_elements::<_, BatchPutScheduledUpdateGroupActionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1070,35 +952,6 @@ impl BatchPutScheduledUpdateGroupActionAnswerDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchPutScheduledUpdateGroupActionType {
-    /// <p>The name of the Auto Scaling group.</p>
-    pub auto_scaling_group_name: String,
-    /// <p>One or more scheduled actions. The maximum number allowed is 50. </p>
-    pub scheduled_update_group_actions: Vec<ScheduledUpdateGroupActionRequest>,
-}
-
-/// Serialize `BatchPutScheduledUpdateGroupActionType` contents to a `SignedRequest`.
-struct BatchPutScheduledUpdateGroupActionTypeSerializer;
-impl BatchPutScheduledUpdateGroupActionTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BatchPutScheduledUpdateGroupActionType) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
-        );
-        ScheduledUpdateGroupActionRequestsSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "ScheduledUpdateGroupActions"),
-            &obj.scheduled_update_group_actions,
-        );
-    }
-}
-
 struct BlockDeviceEbsDeleteOnTerminationDeserializer;
 impl BlockDeviceEbsDeleteOnTerminationDeserializer {
     #[allow(unused_variables)]
@@ -1284,26 +1137,7 @@ impl ClassicLinkVPCSecurityGroupsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CompleteLifecycleActionAnswer {}
-
-struct CompleteLifecycleActionAnswerDeserializer;
-impl CompleteLifecycleActionAnswerDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<CompleteLifecycleActionAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = CompleteLifecycleActionAnswer::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CompleteLifecycleActionType {
+pub struct CompleteLifecycleActionRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The ID of the instance.</p>
@@ -1316,10 +1150,10 @@ pub struct CompleteLifecycleActionType {
     pub lifecycle_hook_name: String,
 }
 
-/// Serialize `CompleteLifecycleActionType` contents to a `SignedRequest`.
-struct CompleteLifecycleActionTypeSerializer;
-impl CompleteLifecycleActionTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CompleteLifecycleActionType) {
+/// Serialize `CompleteLifecycleActionRequest` contents to a `SignedRequest`.
+struct CompleteLifecycleActionRequestSerializer;
+impl CompleteLifecycleActionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CompleteLifecycleActionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1349,6 +1183,25 @@ impl CompleteLifecycleActionTypeSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CompleteLifecycleActionResponse {}
+
+struct CompleteLifecycleActionResponseDeserializer;
+impl CompleteLifecycleActionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CompleteLifecycleActionResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = CompleteLifecycleActionResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct CooldownDeserializer;
 impl CooldownDeserializer {
     #[allow(unused_variables)]
@@ -1361,7 +1214,7 @@ impl CooldownDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateAutoScalingGroupType {
+pub struct CreateAutoScalingGroupRequest {
     /// <p>The name of the Auto Scaling group. This name must be unique within the scope of your AWS account.</p>
     pub auto_scaling_group_name: String,
     /// <p>One or more Availability Zones for the group. This parameter is optional if you specify one or more subnets for <code>VPCZoneIdentifier</code>.</p> <p>Conditional: If your account supports EC2-Classic and VPC, this parameter is required to launch instances into EC2-Classic.</p>
@@ -1406,10 +1259,10 @@ pub struct CreateAutoScalingGroupType {
     pub vpc_zone_identifier: Option<String>,
 }
 
-/// Serialize `CreateAutoScalingGroupType` contents to a `SignedRequest`.
-struct CreateAutoScalingGroupTypeSerializer;
-impl CreateAutoScalingGroupTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateAutoScalingGroupType) {
+/// Serialize `CreateAutoScalingGroupRequest` contents to a `SignedRequest`.
+struct CreateAutoScalingGroupRequestSerializer;
+impl CreateAutoScalingGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateAutoScalingGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1519,7 +1372,20 @@ impl CreateAutoScalingGroupTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateLaunchConfigurationType {
+pub struct CreateAutoScalingGroupResponse {}
+
+struct CreateAutoScalingGroupResponseDeserializer;
+impl CreateAutoScalingGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateAutoScalingGroupResponse, XmlParseError> {
+        Ok(CreateAutoScalingGroupResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateLaunchConfigurationRequest {
     /// <p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is to assign a public IP address. If the instance is launched into a nondefault subnet, the default is not to assign a public IP address.</p>
     pub associate_public_ip_address: Option<bool>,
     /// <p>One or more mappings that specify how block devices are exposed to the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
@@ -1558,10 +1424,10 @@ pub struct CreateLaunchConfigurationType {
     pub user_data: Option<String>,
 }
 
-/// Serialize `CreateLaunchConfigurationType` contents to a `SignedRequest`.
-struct CreateLaunchConfigurationTypeSerializer;
-impl CreateLaunchConfigurationTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateLaunchConfigurationType) {
+/// Serialize `CreateLaunchConfigurationRequest` contents to a `SignedRequest`.
+struct CreateLaunchConfigurationRequestSerializer;
+impl CreateLaunchConfigurationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateLaunchConfigurationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1645,15 +1511,28 @@ impl CreateLaunchConfigurationTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateOrUpdateTagsType {
+pub struct CreateLaunchConfigurationResponse {}
+
+struct CreateLaunchConfigurationResponseDeserializer;
+impl CreateLaunchConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLaunchConfigurationResponse, XmlParseError> {
+        Ok(CreateLaunchConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateOrUpdateTagsRequest {
     /// <p>One or more tags.</p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `CreateOrUpdateTagsType` contents to a `SignedRequest`.
-struct CreateOrUpdateTagsTypeSerializer;
-impl CreateOrUpdateTagsTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateOrUpdateTagsType) {
+/// Serialize `CreateOrUpdateTagsRequest` contents to a `SignedRequest`.
+struct CreateOrUpdateTagsRequestSerializer;
+impl CreateOrUpdateTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateOrUpdateTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1663,6 +1542,19 @@ impl CreateOrUpdateTagsTypeSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateOrUpdateTagsResponse {}
+
+struct CreateOrUpdateTagsResponseDeserializer;
+impl CreateOrUpdateTagsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateOrUpdateTagsResponse, XmlParseError> {
+        Ok(CreateOrUpdateTagsResponse::default())
+    }
+}
 /// <p>Represents a CloudWatch metric of your choosing for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p> <p>To create your customized metric specification:</p> <ul> <li> <p>Add values for each required parameter from CloudWatch. You can use an existing metric, or a new metric that you create. To use your own metric, you must first publish the metric to CloudWatch. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publish Custom Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> </li> <li> <p>Choose a metric that changes proportionally with capacity. The value of the metric should increase or decrease in inverse proportion to the number of capacity units. That is, the value of the metric should decrease when capacity increases. </p> </li> </ul> <p>For more information about CloudWatch, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CustomizedMetricSpecification {
@@ -1743,17 +1635,17 @@ impl CustomizedMetricSpecificationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteAutoScalingGroupType {
+pub struct DeleteAutoScalingGroupRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>Specifies that the group is to be deleted along with all instances associated with the group, without waiting for all instances to be terminated. This parameter also deletes any lifecycle actions associated with the group.</p>
     pub force_delete: Option<bool>,
 }
 
-/// Serialize `DeleteAutoScalingGroupType` contents to a `SignedRequest`.
-struct DeleteAutoScalingGroupTypeSerializer;
-impl DeleteAutoScalingGroupTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteAutoScalingGroupType) {
+/// Serialize `DeleteAutoScalingGroupRequest` contents to a `SignedRequest`.
+struct DeleteAutoScalingGroupRequestSerializer;
+impl DeleteAutoScalingGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteAutoScalingGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1770,36 +1662,65 @@ impl DeleteAutoScalingGroupTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLifecycleHookAnswer {}
+pub struct DeleteAutoScalingGroupResponse {}
 
-struct DeleteLifecycleHookAnswerDeserializer;
-impl DeleteLifecycleHookAnswerDeserializer {
+struct DeleteAutoScalingGroupResponseDeserializer;
+impl DeleteAutoScalingGroupResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeleteLifecycleHookAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = DeleteLifecycleHookAnswer::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+    ) -> Result<DeleteAutoScalingGroupResponse, XmlParseError> {
+        Ok(DeleteAutoScalingGroupResponse::default())
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteLifecycleHookType {
+pub struct DeleteLaunchConfigurationRequest {
+    /// <p>The name of the launch configuration.</p>
+    pub launch_configuration_name: String,
+}
+
+/// Serialize `DeleteLaunchConfigurationRequest` contents to a `SignedRequest`.
+struct DeleteLaunchConfigurationRequestSerializer;
+impl DeleteLaunchConfigurationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteLaunchConfigurationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "LaunchConfigurationName"),
+            &obj.launch_configuration_name,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteLaunchConfigurationResponse {}
+
+struct DeleteLaunchConfigurationResponseDeserializer;
+impl DeleteLaunchConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLaunchConfigurationResponse, XmlParseError> {
+        Ok(DeleteLaunchConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteLifecycleHookRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The name of the lifecycle hook.</p>
     pub lifecycle_hook_name: String,
 }
 
-/// Serialize `DeleteLifecycleHookType` contents to a `SignedRequest`.
-struct DeleteLifecycleHookTypeSerializer;
-impl DeleteLifecycleHookTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteLifecycleHookType) {
+/// Serialize `DeleteLifecycleHookRequest` contents to a `SignedRequest`.
+struct DeleteLifecycleHookRequestSerializer;
+impl DeleteLifecycleHookRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteLifecycleHookRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1817,17 +1738,36 @@ impl DeleteLifecycleHookTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteNotificationConfigurationType {
+pub struct DeleteLifecycleHookResponse {}
+
+struct DeleteLifecycleHookResponseDeserializer;
+impl DeleteLifecycleHookResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLifecycleHookResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = DeleteLifecycleHookResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteNotificationConfigurationRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (Amazon SNS) topic.</p>
     pub topic_arn: String,
 }
 
-/// Serialize `DeleteNotificationConfigurationType` contents to a `SignedRequest`.
-struct DeleteNotificationConfigurationTypeSerializer;
-impl DeleteNotificationConfigurationTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteNotificationConfigurationType) {
+/// Serialize `DeleteNotificationConfigurationRequest` contents to a `SignedRequest`.
+struct DeleteNotificationConfigurationRequestSerializer;
+impl DeleteNotificationConfigurationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteNotificationConfigurationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1842,17 +1782,30 @@ impl DeleteNotificationConfigurationTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeletePolicyType {
+pub struct DeleteNotificationConfigurationResponse {}
+
+struct DeleteNotificationConfigurationResponseDeserializer;
+impl DeleteNotificationConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteNotificationConfigurationResponse, XmlParseError> {
+        Ok(DeleteNotificationConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeletePolicyRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
     /// <p>The name or Amazon Resource Name (ARN) of the policy.</p>
     pub policy_name: String,
 }
 
-/// Serialize `DeletePolicyType` contents to a `SignedRequest`.
-struct DeletePolicyTypeSerializer;
-impl DeletePolicyTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyType) {
+/// Serialize `DeletePolicyRequest` contents to a `SignedRequest`.
+struct DeletePolicyRequestSerializer;
+impl DeletePolicyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1869,17 +1822,30 @@ impl DeletePolicyTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteScheduledActionType {
+pub struct DeletePolicyResponse {}
+
+struct DeletePolicyResponseDeserializer;
+impl DeletePolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeletePolicyResponse, XmlParseError> {
+        Ok(DeletePolicyResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteScheduledActionRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The name of the action to delete.</p>
     pub scheduled_action_name: String,
 }
 
-/// Serialize `DeleteScheduledActionType` contents to a `SignedRequest`.
-struct DeleteScheduledActionTypeSerializer;
-impl DeleteScheduledActionTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteScheduledActionType) {
+/// Serialize `DeleteScheduledActionRequest` contents to a `SignedRequest`.
+struct DeleteScheduledActionRequestSerializer;
+impl DeleteScheduledActionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteScheduledActionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1897,15 +1863,28 @@ impl DeleteScheduledActionTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteTagsType {
+pub struct DeleteScheduledActionResponse {}
+
+struct DeleteScheduledActionResponseDeserializer;
+impl DeleteScheduledActionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteScheduledActionResponse, XmlParseError> {
+        Ok(DeleteScheduledActionResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteTagsRequest {
     /// <p>One or more tags.</p>
     pub tags: Vec<Tag>,
 }
 
-/// Serialize `DeleteTagsType` contents to a `SignedRequest`.
-struct DeleteTagsTypeSerializer;
-impl DeleteTagsTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteTagsType) {
+/// Serialize `DeleteTagsRequest` contents to a `SignedRequest`.
+struct DeleteTagsRequestSerializer;
+impl DeleteTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1916,7 +1895,34 @@ impl DeleteTagsTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountLimitsAnswer {
+pub struct DeleteTagsResponse {}
+
+struct DeleteTagsResponseDeserializer;
+impl DeleteTagsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTagsResponse, XmlParseError> {
+        Ok(DeleteTagsResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountLimitsRequest {}
+
+/// Serialize `DescribeAccountLimitsRequest` contents to a `SignedRequest`.
+struct DescribeAccountLimitsRequestSerializer;
+impl DescribeAccountLimitsRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAccountLimitsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountLimitsResponse {
     /// <p>The maximum number of groups allowed for your AWS account. The default limit is 200 per region.</p>
     pub max_number_of_auto_scaling_groups: Option<i64>,
     /// <p>The maximum number of launch configurations allowed for your AWS account. The default limit is 200 per region.</p>
@@ -1927,14 +1933,14 @@ pub struct DescribeAccountLimitsAnswer {
     pub number_of_launch_configurations: Option<i64>,
 }
 
-struct DescribeAccountLimitsAnswerDeserializer;
-impl DescribeAccountLimitsAnswerDeserializer {
+struct DescribeAccountLimitsResponseDeserializer;
+impl DescribeAccountLimitsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAccountLimitsAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeAccountLimitsAnswer, _>(
+    ) -> Result<DescribeAccountLimitsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAccountLimitsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1975,19 +1981,33 @@ impl DescribeAccountLimitsAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAdjustmentTypesAnswer {
+pub struct DescribeAdjustmentTypesRequest {}
+
+/// Serialize `DescribeAdjustmentTypesRequest` contents to a `SignedRequest`.
+struct DescribeAdjustmentTypesRequestSerializer;
+impl DescribeAdjustmentTypesRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAdjustmentTypesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAdjustmentTypesResponse {
     /// <p>The policy adjustment types.</p>
     pub adjustment_types: Option<Vec<AdjustmentType>>,
 }
 
-struct DescribeAdjustmentTypesAnswerDeserializer;
-impl DescribeAdjustmentTypesAnswerDeserializer {
+struct DescribeAdjustmentTypesResponseDeserializer;
+impl DescribeAdjustmentTypesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAdjustmentTypesAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeAdjustmentTypesAnswer, _>(
+    ) -> Result<DescribeAdjustmentTypesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAdjustmentTypesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2005,7 +2025,80 @@ impl DescribeAdjustmentTypesAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAutoScalingInstancesType {
+pub struct DescribeAutoScalingGroupsRequest {
+    /// <p>The names of the Auto Scaling groups. Each name can be a maximum of 1600 characters. By default, you can only specify up to 50 names. You can optionally increase this limit using the <code>MaxRecords</code> parameter. </p> <p>If you omit this parameter, all Auto Scaling groups are described.</p>
+    pub auto_scaling_group_names: Option<Vec<String>>,
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>. </p>
+    pub max_records: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeAutoScalingGroupsRequest` contents to a `SignedRequest`.
+struct DescribeAutoScalingGroupsRequestSerializer;
+impl DescribeAutoScalingGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAutoScalingGroupsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.auto_scaling_group_names {
+            AutoScalingGroupNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AutoScalingGroupNames"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAutoScalingGroupsResponse {
+    /// <p>The groups.</p>
+    pub auto_scaling_groups: Vec<AutoScalingGroup>,
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeAutoScalingGroupsResponseDeserializer;
+impl DescribeAutoScalingGroupsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAutoScalingGroupsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAutoScalingGroupsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AutoScalingGroups" => {
+                        obj.auto_scaling_groups
+                            .extend(AutoScalingGroupsDeserializer::deserialize(
+                                "AutoScalingGroups",
+                                stack,
+                            )?);
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAutoScalingInstancesRequest {
     /// <p>The IDs of the instances. You can specify up to <code>MaxRecords</code> IDs. If you omit this parameter, all Auto Scaling instances are described. If you specify an ID that does not exist, it is ignored with no error.</p>
     pub instance_ids: Option<Vec<String>>,
     /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>50</code>.</p>
@@ -2014,10 +2107,10 @@ pub struct DescribeAutoScalingInstancesType {
     pub next_token: Option<String>,
 }
 
-/// Serialize `DescribeAutoScalingInstancesType` contents to a `SignedRequest`.
-struct DescribeAutoScalingInstancesTypeSerializer;
-impl DescribeAutoScalingInstancesTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAutoScalingInstancesType) {
+/// Serialize `DescribeAutoScalingInstancesRequest` contents to a `SignedRequest`.
+struct DescribeAutoScalingInstancesRequestSerializer;
+impl DescribeAutoScalingInstancesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAutoScalingInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2040,19 +2133,76 @@ impl DescribeAutoScalingInstancesTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAutoScalingNotificationTypesAnswer {
-    /// <p>The notification types.</p>
-    pub auto_scaling_notification_types: Option<Vec<String>>,
+pub struct DescribeAutoScalingInstancesResponse {
+    /// <p>The instances.</p>
+    pub auto_scaling_instances: Option<Vec<AutoScalingInstanceDetails>>,
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
+    pub next_token: Option<String>,
 }
 
-struct DescribeAutoScalingNotificationTypesAnswerDeserializer;
-impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
+struct DescribeAutoScalingInstancesResponseDeserializer;
+impl DescribeAutoScalingInstancesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAutoScalingNotificationTypesAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeAutoScalingNotificationTypesAnswer, _>(
+    ) -> Result<DescribeAutoScalingInstancesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAutoScalingInstancesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AutoScalingInstances" => {
+                        obj.auto_scaling_instances.get_or_insert(vec![]).extend(
+                            AutoScalingInstancesDeserializer::deserialize(
+                                "AutoScalingInstances",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAutoScalingNotificationTypesRequest {}
+
+/// Serialize `DescribeAutoScalingNotificationTypesRequest` contents to a `SignedRequest`.
+struct DescribeAutoScalingNotificationTypesRequestSerializer;
+impl DescribeAutoScalingNotificationTypesRequestSerializer {
+    fn serialize(
+        _params: &mut Params,
+        name: &str,
+        _obj: &DescribeAutoScalingNotificationTypesRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAutoScalingNotificationTypesResponse {
+    /// <p>The notification types.</p>
+    pub auto_scaling_notification_types: Option<Vec<String>>,
+}
+
+struct DescribeAutoScalingNotificationTypesResponseDeserializer;
+impl DescribeAutoScalingNotificationTypesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeAutoScalingNotificationTypesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAutoScalingNotificationTypesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2073,19 +2223,107 @@ impl DescribeAutoScalingNotificationTypesAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLifecycleHookTypesAnswer {
-    /// <p>The lifecycle hook types.</p>
-    pub lifecycle_hook_types: Option<Vec<String>>,
+pub struct DescribeLaunchConfigurationsRequest {
+    /// <p>The launch configuration names. If you omit this parameter, all launch configurations are described.</p>
+    pub launch_configuration_names: Option<Vec<String>>,
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
+    pub max_records: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    pub next_token: Option<String>,
 }
 
-struct DescribeLifecycleHookTypesAnswerDeserializer;
-impl DescribeLifecycleHookTypesAnswerDeserializer {
+/// Serialize `DescribeLaunchConfigurationsRequest` contents to a `SignedRequest`.
+struct DescribeLaunchConfigurationsRequestSerializer;
+impl DescribeLaunchConfigurationsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLaunchConfigurationsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.launch_configuration_names {
+            LaunchConfigurationNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchConfigurationNames"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLaunchConfigurationsResponse {
+    /// <p>The launch configurations.</p>
+    pub launch_configurations: Vec<LaunchConfiguration>,
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeLaunchConfigurationsResponseDeserializer;
+impl DescribeLaunchConfigurationsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeLifecycleHookTypesAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeLifecycleHookTypesAnswer, _>(
+    ) -> Result<DescribeLaunchConfigurationsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLaunchConfigurationsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "LaunchConfigurations" => {
+                        obj.launch_configurations.extend(
+                            LaunchConfigurationsDeserializer::deserialize(
+                                "LaunchConfigurations",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLifecycleHookTypesRequest {}
+
+/// Serialize `DescribeLifecycleHookTypesRequest` contents to a `SignedRequest`.
+struct DescribeLifecycleHookTypesRequestSerializer;
+impl DescribeLifecycleHookTypesRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeLifecycleHookTypesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLifecycleHookTypesResponse {
+    /// <p>The lifecycle hook types.</p>
+    pub lifecycle_hook_types: Option<Vec<String>>,
+}
+
+struct DescribeLifecycleHookTypesResponseDeserializer;
+impl DescribeLifecycleHookTypesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLifecycleHookTypesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLifecycleHookTypesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2106,47 +2344,17 @@ impl DescribeLifecycleHookTypesAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLifecycleHooksAnswer {
-    /// <p>The lifecycle hooks for the specified group.</p>
-    pub lifecycle_hooks: Option<Vec<LifecycleHook>>,
-}
-
-struct DescribeLifecycleHooksAnswerDeserializer;
-impl DescribeLifecycleHooksAnswerDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DescribeLifecycleHooksAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeLifecycleHooksAnswer, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "LifecycleHooks" => {
-                        obj.lifecycle_hooks.get_or_insert(vec![]).extend(
-                            LifecycleHooksDeserializer::deserialize("LifecycleHooks", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeLifecycleHooksType {
+pub struct DescribeLifecycleHooksRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The names of one or more lifecycle hooks. If you omit this parameter, all lifecycle hooks are described.</p>
     pub lifecycle_hook_names: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeLifecycleHooksType` contents to a `SignedRequest`.
-struct DescribeLifecycleHooksTypeSerializer;
-impl DescribeLifecycleHooksTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksType) {
+/// Serialize `DescribeLifecycleHooksRequest` contents to a `SignedRequest`.
+struct DescribeLifecycleHooksRequestSerializer;
+impl DescribeLifecycleHooksRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2166,6 +2374,36 @@ impl DescribeLifecycleHooksTypeSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeLifecycleHooksResponse {
+    /// <p>The lifecycle hooks for the specified group.</p>
+    pub lifecycle_hooks: Option<Vec<LifecycleHook>>,
+}
+
+struct DescribeLifecycleHooksResponseDeserializer;
+impl DescribeLifecycleHooksResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLifecycleHooksResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeLifecycleHooksResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "LifecycleHooks" => {
+                        obj.lifecycle_hooks.get_or_insert(vec![]).extend(
+                            LifecycleHooksDeserializer::deserialize("LifecycleHooks", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeLoadBalancerTargetGroupsRequest {
     /// <p>The name of the Auto Scaling group.</p>
@@ -2306,21 +2544,35 @@ impl DescribeLoadBalancersResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeMetricCollectionTypesAnswer {
+pub struct DescribeMetricCollectionTypesRequest {}
+
+/// Serialize `DescribeMetricCollectionTypesRequest` contents to a `SignedRequest`.
+struct DescribeMetricCollectionTypesRequestSerializer;
+impl DescribeMetricCollectionTypesRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeMetricCollectionTypesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeMetricCollectionTypesResponse {
     /// <p>The granularities for the metrics.</p>
     pub granularities: Option<Vec<MetricGranularityType>>,
     /// <p>One or more metrics.</p>
     pub metrics: Option<Vec<MetricCollectionType>>,
 }
 
-struct DescribeMetricCollectionTypesAnswerDeserializer;
-impl DescribeMetricCollectionTypesAnswerDeserializer {
+struct DescribeMetricCollectionTypesResponseDeserializer;
+impl DescribeMetricCollectionTypesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeMetricCollectionTypesAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeMetricCollectionTypesAnswer, _>(
+    ) -> Result<DescribeMetricCollectionTypesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeMetricCollectionTypesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2346,21 +2598,56 @@ impl DescribeMetricCollectionTypesAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeNotificationConfigurationsAnswer {
+pub struct DescribeNotificationConfigurationsRequest {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_names: Option<Vec<String>>,
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
+    pub max_records: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeNotificationConfigurationsRequest` contents to a `SignedRequest`.
+struct DescribeNotificationConfigurationsRequestSerializer;
+impl DescribeNotificationConfigurationsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.auto_scaling_group_names {
+            AutoScalingGroupNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AutoScalingGroupNames"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeNotificationConfigurationsResponse {
     /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
     /// <p>The notification configurations.</p>
     pub notification_configurations: Vec<NotificationConfiguration>,
 }
 
-struct DescribeNotificationConfigurationsAnswerDeserializer;
-impl DescribeNotificationConfigurationsAnswerDeserializer {
+struct DescribeNotificationConfigurationsResponseDeserializer;
+impl DescribeNotificationConfigurationsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeNotificationConfigurationsAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeNotificationConfigurationsAnswer, _>(
+    ) -> Result<DescribeNotificationConfigurationsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeNotificationConfigurationsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2385,42 +2672,7 @@ impl DescribeNotificationConfigurationsAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeNotificationConfigurationsType {
-    /// <p>The name of the Auto Scaling group.</p>
-    pub auto_scaling_group_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
-    pub max_records: Option<i64>,
-    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
-    pub next_token: Option<String>,
-}
-
-/// Serialize `DescribeNotificationConfigurationsType` contents to a `SignedRequest`.
-struct DescribeNotificationConfigurationsTypeSerializer;
-impl DescribeNotificationConfigurationsTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsType) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.auto_scaling_group_names {
-            AutoScalingGroupNamesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "AutoScalingGroupNames"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.max_records {
-            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
-        }
-        if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribePoliciesType {
+pub struct DescribePoliciesRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
     /// <p>The maximum number of items to be returned with each call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
@@ -2433,10 +2685,10 @@ pub struct DescribePoliciesType {
     pub policy_types: Option<Vec<String>>,
 }
 
-/// Serialize `DescribePoliciesType` contents to a `SignedRequest`.
-struct DescribePoliciesTypeSerializer;
-impl DescribePoliciesTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribePoliciesType) {
+/// Serialize `DescribePoliciesRequest` contents to a `SignedRequest`.
+struct DescribePoliciesRequestSerializer;
+impl DescribePoliciesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribePoliciesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2472,7 +2724,43 @@ impl DescribePoliciesTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeScalingActivitiesType {
+pub struct DescribePoliciesResponse {
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
+    pub next_token: Option<String>,
+    /// <p>The scaling policies.</p>
+    pub scaling_policies: Option<Vec<ScalingPolicy>>,
+}
+
+struct DescribePoliciesResponseDeserializer;
+impl DescribePoliciesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribePoliciesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribePoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    "ScalingPolicies" => {
+                        obj.scaling_policies.get_or_insert(vec![]).extend(
+                            ScalingPoliciesDeserializer::deserialize("ScalingPolicies", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeScalingActivitiesRequest {
     /// <p>The activity IDs of the desired scaling activities. You can specify up to 50 IDs. If you omit this parameter, all activities for the past six weeks are described. If unknown activities are requested, they are ignored with no error. If you specify an Auto Scaling group, the results are limited to that group.</p>
     pub activity_ids: Option<Vec<String>>,
     /// <p>The name of the Auto Scaling group.</p>
@@ -2483,10 +2771,10 @@ pub struct DescribeScalingActivitiesType {
     pub next_token: Option<String>,
 }
 
-/// Serialize `DescribeScalingActivitiesType` contents to a `SignedRequest`.
-struct DescribeScalingActivitiesTypeSerializer;
-impl DescribeScalingActivitiesTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeScalingActivitiesType) {
+/// Serialize `DescribeScalingActivitiesRequest` contents to a `SignedRequest`.
+struct DescribeScalingActivitiesRequestSerializer;
+impl DescribeScalingActivitiesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeScalingActivitiesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2515,7 +2803,86 @@ impl DescribeScalingActivitiesTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeScheduledActionsType {
+pub struct DescribeScalingActivitiesResponse {
+    /// <p>The scaling activities. Activities are sorted by start time. Activities still in progress are described first.</p>
+    pub activities: Vec<Activity>,
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeScalingActivitiesResponseDeserializer;
+impl DescribeScalingActivitiesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeScalingActivitiesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeScalingActivitiesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Activities" => {
+                        obj.activities
+                            .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeScalingProcessTypesRequest {}
+
+/// Serialize `DescribeScalingProcessTypesRequest` contents to a `SignedRequest`.
+struct DescribeScalingProcessTypesRequestSerializer;
+impl DescribeScalingProcessTypesRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeScalingProcessTypesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeScalingProcessTypesResponse {
+    /// <p>The names of the process types.</p>
+    pub processes: Option<Vec<ProcessType>>,
+}
+
+struct DescribeScalingProcessTypesResponseDeserializer;
+impl DescribeScalingProcessTypesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeScalingProcessTypesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeScalingProcessTypesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Processes" => {
+                        obj.processes
+                            .get_or_insert(vec![])
+                            .extend(ProcessesDeserializer::deserialize("Processes", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeScheduledActionsRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
     /// <p>The latest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>
@@ -2530,10 +2897,10 @@ pub struct DescribeScheduledActionsType {
     pub start_time: Option<String>,
 }
 
-/// Serialize `DescribeScheduledActionsType` contents to a `SignedRequest`.
-struct DescribeScheduledActionsTypeSerializer;
-impl DescribeScheduledActionsTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeScheduledActionsType) {
+/// Serialize `DescribeScheduledActionsRequest` contents to a `SignedRequest`.
+struct DescribeScheduledActionsRequestSerializer;
+impl DescribeScheduledActionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeScheduledActionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2568,7 +2935,46 @@ impl DescribeScheduledActionsTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTagsType {
+pub struct DescribeScheduledActionsResponse {
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
+    pub next_token: Option<String>,
+    /// <p>The scheduled actions.</p>
+    pub scheduled_update_group_actions: Option<Vec<ScheduledUpdateGroupAction>>,
+}
+
+struct DescribeScheduledActionsResponseDeserializer;
+impl DescribeScheduledActionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeScheduledActionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeScheduledActionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    "ScheduledUpdateGroupActions" => {
+                        obj.scheduled_update_group_actions
+                            .get_or_insert(vec![])
+                            .extend(ScheduledUpdateGroupActionsDeserializer::deserialize(
+                                "ScheduledUpdateGroupActions",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTagsRequest {
     /// <p>One or more filters to scope the tags to return. The maximum number of filters per filter type (for example, <code>auto-scaling-group</code>) is 1000.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
@@ -2577,10 +2983,10 @@ pub struct DescribeTagsType {
     pub next_token: Option<String>,
 }
 
-/// Serialize `DescribeTagsType` contents to a `SignedRequest`.
-struct DescribeTagsTypeSerializer;
-impl DescribeTagsTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsType) {
+/// Serialize `DescribeTagsRequest` contents to a `SignedRequest`.
+struct DescribeTagsRequestSerializer;
+impl DescribeTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2599,19 +3005,64 @@ impl DescribeTagsTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeTerminationPolicyTypesAnswer {
-    /// <p>The termination policies supported by Amazon EC2 Auto Scaling: <code>OldestInstance</code>, <code>OldestLaunchConfiguration</code>, <code>NewestInstance</code>, <code>ClosestToNextInstanceHour</code>, <code>Default</code>, <code>OldestLaunchTemplate</code>, and <code>AllocationStrategy</code>.</p>
-    pub termination_policy_types: Option<Vec<String>>,
+pub struct DescribeTagsResponse {
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
+    pub next_token: Option<String>,
+    /// <p>One or more tags.</p>
+    pub tags: Option<Vec<TagDescription>>,
 }
 
-struct DescribeTerminationPolicyTypesAnswerDeserializer;
-impl DescribeTerminationPolicyTypesAnswerDeserializer {
+struct DescribeTagsResponseDeserializer;
+impl DescribeTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeTerminationPolicyTypesAnswer, XmlParseError> {
-        deserialize_elements::<_, DescribeTerminationPolicyTypesAnswer, _>(
+    ) -> Result<DescribeTagsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTagsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "NextToken" => {
+                    obj.next_token = Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                }
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagDescriptionListDeserializer::deserialize("Tags", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTerminationPolicyTypesRequest {}
+
+/// Serialize `DescribeTerminationPolicyTypesRequest` contents to a `SignedRequest`.
+struct DescribeTerminationPolicyTypesRequestSerializer;
+impl DescribeTerminationPolicyTypesRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeTerminationPolicyTypesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeTerminationPolicyTypesResponse {
+    /// <p>The termination policies supported by Amazon EC2 Auto Scaling: <code>OldestInstance</code>, <code>OldestLaunchConfiguration</code>, <code>NewestInstance</code>, <code>ClosestToNextInstanceHour</code>, <code>Default</code>, <code>OldestLaunchTemplate</code>, and <code>AllocationStrategy</code>.</p>
+    pub termination_policy_types: Option<Vec<String>>,
+}
+
+struct DescribeTerminationPolicyTypesResponseDeserializer;
+impl DescribeTerminationPolicyTypesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeTerminationPolicyTypesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeTerminationPolicyTypesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2632,33 +3083,7 @@ impl DescribeTerminationPolicyTypesAnswerDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachInstancesAnswer {
-    /// <p>The activities related to detaching the instances from the Auto Scaling group.</p>
-    pub activities: Option<Vec<Activity>>,
-}
-
-struct DetachInstancesAnswerDeserializer;
-impl DetachInstancesAnswerDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<DetachInstancesAnswer, XmlParseError> {
-        deserialize_elements::<_, DetachInstancesAnswer, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Activities" => {
-                    obj.activities
-                        .get_or_insert(vec![])
-                        .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachInstancesQuery {
+pub struct DetachInstancesRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
@@ -2667,10 +3092,10 @@ pub struct DetachInstancesQuery {
     pub should_decrement_desired_capacity: bool,
 }
 
-/// Serialize `DetachInstancesQuery` contents to a `SignedRequest`.
-struct DetachInstancesQuerySerializer;
-impl DetachInstancesQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DetachInstancesQuery) {
+/// Serialize `DetachInstancesRequest` contents to a `SignedRequest`.
+struct DetachInstancesRequestSerializer;
+impl DetachInstancesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DetachInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2695,36 +3120,47 @@ impl DetachInstancesQuerySerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachLoadBalancerTargetGroupsResultType {}
+pub struct DetachInstancesResponse {
+    /// <p>The activities related to detaching the instances from the Auto Scaling group.</p>
+    pub activities: Option<Vec<Activity>>,
+}
 
-struct DetachLoadBalancerTargetGroupsResultTypeDeserializer;
-impl DetachLoadBalancerTargetGroupsResultTypeDeserializer {
+struct DetachInstancesResponseDeserializer;
+impl DetachInstancesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DetachLoadBalancerTargetGroupsResultType, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = DetachLoadBalancerTargetGroupsResultType::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+    ) -> Result<DetachInstancesResponse, XmlParseError> {
+        deserialize_elements::<_, DetachInstancesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Activities" => {
+                        obj.activities
+                            .get_or_insert(vec![])
+                            .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachLoadBalancerTargetGroupsType {
+pub struct DetachLoadBalancerTargetGroupsRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The Amazon Resource Names (ARN) of the target groups. You can specify up to 10 target groups.</p>
     pub target_group_ar_ns: Vec<String>,
 }
 
-/// Serialize `DetachLoadBalancerTargetGroupsType` contents to a `SignedRequest`.
-struct DetachLoadBalancerTargetGroupsTypeSerializer;
-impl DetachLoadBalancerTargetGroupsTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerTargetGroupsType) {
+/// Serialize `DetachLoadBalancerTargetGroupsRequest` contents to a `SignedRequest`.
+struct DetachLoadBalancerTargetGroupsRequestSerializer;
+impl DetachLoadBalancerTargetGroupsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerTargetGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2743,18 +3179,18 @@ impl DetachLoadBalancerTargetGroupsTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachLoadBalancersResultType {}
+pub struct DetachLoadBalancerTargetGroupsResponse {}
 
-struct DetachLoadBalancersResultTypeDeserializer;
-impl DetachLoadBalancersResultTypeDeserializer {
+struct DetachLoadBalancerTargetGroupsResponseDeserializer;
+impl DetachLoadBalancerTargetGroupsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DetachLoadBalancersResultType, XmlParseError> {
+    ) -> Result<DetachLoadBalancerTargetGroupsResponse, XmlParseError> {
         start_element(tag_name, stack)?;
 
-        let obj = DetachLoadBalancersResultType::default();
+        let obj = DetachLoadBalancerTargetGroupsResponse::default();
 
         end_element(tag_name, stack)?;
 
@@ -2762,17 +3198,17 @@ impl DetachLoadBalancersResultTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DetachLoadBalancersType {
+pub struct DetachLoadBalancersRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The names of the load balancers. You can specify up to 10 load balancers.</p>
     pub load_balancer_names: Vec<String>,
 }
 
-/// Serialize `DetachLoadBalancersType` contents to a `SignedRequest`.
-struct DetachLoadBalancersTypeSerializer;
-impl DetachLoadBalancersTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancersType) {
+/// Serialize `DetachLoadBalancersRequest` contents to a `SignedRequest`.
+struct DetachLoadBalancersRequestSerializer;
+impl DetachLoadBalancersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2791,17 +3227,36 @@ impl DetachLoadBalancersTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DisableMetricsCollectionQuery {
+pub struct DetachLoadBalancersResponse {}
+
+struct DetachLoadBalancersResponseDeserializer;
+impl DetachLoadBalancersResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DetachLoadBalancersResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = DetachLoadBalancersResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableMetricsCollectionRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p><p>One or more of the following metrics. If you omit this parameter, all metrics are disabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul></p>
     pub metrics: Option<Vec<String>>,
 }
 
-/// Serialize `DisableMetricsCollectionQuery` contents to a `SignedRequest`.
-struct DisableMetricsCollectionQuerySerializer;
-impl DisableMetricsCollectionQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DisableMetricsCollectionQuery) {
+/// Serialize `DisableMetricsCollectionRequest` contents to a `SignedRequest`.
+struct DisableMetricsCollectionRequestSerializer;
+impl DisableMetricsCollectionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DisableMetricsCollectionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2817,6 +3272,19 @@ impl DisableMetricsCollectionQuerySerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableMetricsCollectionResponse {}
+
+struct DisableMetricsCollectionResponseDeserializer;
+impl DisableMetricsCollectionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableMetricsCollectionResponse, XmlParseError> {
+        Ok(DisableMetricsCollectionResponse::default())
+    }
+}
 struct DisableScaleInDeserializer;
 impl DisableScaleInDeserializer {
     #[allow(unused_variables)]
@@ -2937,7 +3405,7 @@ impl EbsOptimizedDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnableMetricsCollectionQuery {
+pub struct EnableMetricsCollectionRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The granularity to associate with the metrics to collect. The only valid value is <code>1Minute</code>.</p>
@@ -2946,10 +3414,10 @@ pub struct EnableMetricsCollectionQuery {
     pub metrics: Option<Vec<String>>,
 }
 
-/// Serialize `EnableMetricsCollectionQuery` contents to a `SignedRequest`.
-struct EnableMetricsCollectionQuerySerializer;
-impl EnableMetricsCollectionQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnableMetricsCollectionQuery) {
+/// Serialize `EnableMetricsCollectionRequest` contents to a `SignedRequest`.
+struct EnableMetricsCollectionRequestSerializer;
+impl EnableMetricsCollectionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &EnableMetricsCollectionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2966,6 +3434,19 @@ impl EnableMetricsCollectionQuerySerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableMetricsCollectionResponse {}
+
+struct EnableMetricsCollectionResponseDeserializer;
+impl EnableMetricsCollectionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableMetricsCollectionResponse, XmlParseError> {
+        Ok(EnableMetricsCollectionResponse::default())
+    }
+}
 /// <p>Describes an enabled metric.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnabledMetric {
@@ -3019,33 +3500,7 @@ impl EnabledMetricsDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnterStandbyAnswer {
-    /// <p>The activities related to moving instances into <code>Standby</code> mode.</p>
-    pub activities: Option<Vec<Activity>>,
-}
-
-struct EnterStandbyAnswerDeserializer;
-impl EnterStandbyAnswerDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EnterStandbyAnswer, XmlParseError> {
-        deserialize_elements::<_, EnterStandbyAnswer, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Activities" => {
-                    obj.activities
-                        .get_or_insert(vec![])
-                        .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnterStandbyQuery {
+pub struct EnterStandbyRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
@@ -3054,10 +3509,10 @@ pub struct EnterStandbyQuery {
     pub should_decrement_desired_capacity: bool,
 }
 
-/// Serialize `EnterStandbyQuery` contents to a `SignedRequest`.
-struct EnterStandbyQuerySerializer;
-impl EnterStandbyQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnterStandbyQuery) {
+/// Serialize `EnterStandbyRequest` contents to a `SignedRequest`.
+struct EnterStandbyRequestSerializer;
+impl EnterStandbyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &EnterStandbyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3081,6 +3536,32 @@ impl EnterStandbyQuerySerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnterStandbyResponse {
+    /// <p>The activities related to moving instances into <code>Standby</code> mode.</p>
+    pub activities: Option<Vec<Activity>>,
+}
+
+struct EnterStandbyResponseDeserializer;
+impl EnterStandbyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnterStandbyResponse, XmlParseError> {
+        deserialize_elements::<_, EnterStandbyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Activities" => {
+                    obj.activities
+                        .get_or_insert(vec![])
+                        .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 struct EstimatedInstanceWarmupDeserializer;
 impl EstimatedInstanceWarmupDeserializer {
     #[allow(unused_variables)]
@@ -3093,7 +3574,7 @@ impl EstimatedInstanceWarmupDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ExecutePolicyType {
+pub struct ExecutePolicyRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
     /// <p>The breach threshold for the alarm.</p> <p>Conditional: This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
@@ -3106,10 +3587,10 @@ pub struct ExecutePolicyType {
     pub policy_name: String,
 }
 
-/// Serialize `ExecutePolicyType` contents to a `SignedRequest`.
-struct ExecutePolicyTypeSerializer;
-impl ExecutePolicyTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExecutePolicyType) {
+/// Serialize `ExecutePolicyRequest` contents to a `SignedRequest`.
+struct ExecutePolicyRequestSerializer;
+impl ExecutePolicyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ExecutePolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3135,43 +3616,30 @@ impl ExecutePolicyTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ExitStandbyAnswer {
-    /// <p>The activities related to moving instances out of <code>Standby</code> mode.</p>
-    pub activities: Option<Vec<Activity>>,
-}
+pub struct ExecutePolicyResponse {}
 
-struct ExitStandbyAnswerDeserializer;
-impl ExitStandbyAnswerDeserializer {
+struct ExecutePolicyResponseDeserializer;
+impl ExecutePolicyResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ExitStandbyAnswer, XmlParseError> {
-        deserialize_elements::<_, ExitStandbyAnswer, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Activities" => {
-                    obj.activities
-                        .get_or_insert(vec![])
-                        .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
+    ) -> Result<ExecutePolicyResponse, XmlParseError> {
+        Ok(ExecutePolicyResponse::default())
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ExitStandbyQuery {
+pub struct ExitStandbyRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The IDs of the instances. You can specify up to 20 instances.</p>
     pub instance_ids: Option<Vec<String>>,
 }
 
-/// Serialize `ExitStandbyQuery` contents to a `SignedRequest`.
-struct ExitStandbyQuerySerializer;
-impl ExitStandbyQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExitStandbyQuery) {
+/// Serialize `ExitStandbyRequest` contents to a `SignedRequest`.
+struct ExitStandbyRequestSerializer;
+impl ExitStandbyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ExitStandbyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3191,6 +3659,32 @@ impl ExitStandbyQuerySerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExitStandbyResponse {
+    /// <p>The activities related to moving instances out of <code>Standby</code> mode.</p>
+    pub activities: Option<Vec<Activity>>,
+}
+
+struct ExitStandbyResponseDeserializer;
+impl ExitStandbyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ExitStandbyResponse, XmlParseError> {
+        deserialize_elements::<_, ExitStandbyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Activities" => {
+                    obj.activities
+                        .get_or_insert(vec![])
+                        .extend(ActivitiesDeserializer::deserialize("Activities", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Describes a scheduled action that could not be created, updated, or deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct FailedScheduledUpdateGroupActionRequest {
@@ -3754,27 +4248,6 @@ impl LaunchConfigurationDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct LaunchConfigurationNameType {
-    /// <p>The name of the launch configuration.</p>
-    pub launch_configuration_name: String,
-}
-
-/// Serialize `LaunchConfigurationNameType` contents to a `SignedRequest`.
-struct LaunchConfigurationNameTypeSerializer;
-impl LaunchConfigurationNameTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchConfigurationNameType) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "LaunchConfigurationName"),
-            &obj.launch_configuration_name,
-        );
-    }
-}
 
 /// Serialize `LaunchConfigurationNames` contents to a `SignedRequest`.
 struct LaunchConfigurationNamesSerializer;
@@ -3783,41 +4256,6 @@ impl LaunchConfigurationNamesSerializer {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
-        }
-    }
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct LaunchConfigurationNamesType {
-    /// <p>The launch configuration names. If you omit this parameter, all launch configurations are described.</p>
-    pub launch_configuration_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
-    pub max_records: Option<i64>,
-    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
-    pub next_token: Option<String>,
-}
-
-/// Serialize `LaunchConfigurationNamesType` contents to a `SignedRequest`.
-struct LaunchConfigurationNamesTypeSerializer;
-impl LaunchConfigurationNamesTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchConfigurationNamesType) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        if let Some(ref field_value) = obj.launch_configuration_names {
-            LaunchConfigurationNamesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "LaunchConfigurationNames"),
-                field_value,
-            );
-        }
-        if let Some(ref field_value) = obj.max_records {
-            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
-        }
-        if let Some(ref field_value) = obj.next_token {
-            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -3839,45 +4277,6 @@ impl LaunchConfigurationsDeserializer {
             }
             Ok(())
         })
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct LaunchConfigurationsType {
-    /// <p>The launch configurations.</p>
-    pub launch_configurations: Vec<LaunchConfiguration>,
-    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
-    pub next_token: Option<String>,
-}
-
-struct LaunchConfigurationsTypeDeserializer;
-impl LaunchConfigurationsTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<LaunchConfigurationsType, XmlParseError> {
-        deserialize_elements::<_, LaunchConfigurationsType, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "LaunchConfigurations" => {
-                        obj.launch_configurations.extend(
-                            LaunchConfigurationsDeserializer::deserialize(
-                                "LaunchConfigurations",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 /// <p>Describes a launch template and overrides. </p> <p>The overrides are used to override the instance type specified by the launch template with multiple instance types that can be used to launch On-Demand Instances and Spot Instances. </p>
@@ -4981,70 +5380,6 @@ impl OverridesSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct PoliciesType {
-    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
-    pub next_token: Option<String>,
-    /// <p>The scaling policies.</p>
-    pub scaling_policies: Option<Vec<ScalingPolicy>>,
-}
-
-struct PoliciesTypeDeserializer;
-impl PoliciesTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<PoliciesType, XmlParseError> {
-        deserialize_elements::<_, PoliciesType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "NextToken" => {
-                    obj.next_token = Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
-                }
-                "ScalingPolicies" => {
-                    obj.scaling_policies.get_or_insert(vec![]).extend(
-                        ScalingPoliciesDeserializer::deserialize("ScalingPolicies", stack)?,
-                    );
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-/// <p>Contains the output of PutScalingPolicy.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct PolicyARNType {
-    /// <p>The CloudWatch alarms created for the target tracking scaling policy.</p>
-    pub alarms: Option<Vec<Alarm>>,
-    /// <p>The Amazon Resource Name (ARN) of the policy.</p>
-    pub policy_arn: Option<String>,
-}
-
-struct PolicyARNTypeDeserializer;
-impl PolicyARNTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<PolicyARNType, XmlParseError> {
-        deserialize_elements::<_, PolicyARNType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Alarms" => {
-                    obj.alarms
-                        .get_or_insert(vec![])
-                        .extend(AlarmsDeserializer::deserialize("Alarms", stack)?);
-                }
-                "PolicyARN" => {
-                    obj.policy_arn =
-                        Some(ResourceNameDeserializer::deserialize("PolicyARN", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct PolicyIncrementDeserializer;
 impl PolicyIncrementDeserializer {
     #[allow(unused_variables)]
@@ -5191,32 +5526,6 @@ impl ProcessesDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ProcessesType {
-    /// <p>The names of the process types.</p>
-    pub processes: Option<Vec<ProcessType>>,
-}
-
-struct ProcessesTypeDeserializer;
-impl ProcessesTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ProcessesType, XmlParseError> {
-        deserialize_elements::<_, ProcessesType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "Processes" => {
-                    obj.processes
-                        .get_or_insert(vec![])
-                        .extend(ProcessesDeserializer::deserialize("Processes", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct ProgressDeserializer;
 impl ProgressDeserializer {
     #[allow(unused_variables)]
@@ -5240,26 +5549,7 @@ impl PropagateAtLaunchDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutLifecycleHookAnswer {}
-
-struct PutLifecycleHookAnswerDeserializer;
-impl PutLifecycleHookAnswerDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<PutLifecycleHookAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = PutLifecycleHookAnswer::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutLifecycleHookType {
+pub struct PutLifecycleHookRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. This parameter can be either <code>CONTINUE</code> or <code>ABANDON</code>. The default value is <code>ABANDON</code>.</p>
@@ -5278,10 +5568,10 @@ pub struct PutLifecycleHookType {
     pub role_arn: Option<String>,
 }
 
-/// Serialize `PutLifecycleHookType` contents to a `SignedRequest`.
-struct PutLifecycleHookTypeSerializer;
-impl PutLifecycleHookTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutLifecycleHookType) {
+/// Serialize `PutLifecycleHookRequest` contents to a `SignedRequest`.
+struct PutLifecycleHookRequestSerializer;
+impl PutLifecycleHookRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutLifecycleHookRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5326,7 +5616,26 @@ impl PutLifecycleHookTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutNotificationConfigurationType {
+pub struct PutLifecycleHookResponse {}
+
+struct PutLifecycleHookResponseDeserializer;
+impl PutLifecycleHookResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutLifecycleHookResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = PutLifecycleHookResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutNotificationConfigurationRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The type of event that causes the notification to be sent. For more information about notification types supported by Amazon EC2 Auto Scaling, see <a>DescribeAutoScalingNotificationTypes</a>.</p>
@@ -5335,10 +5644,10 @@ pub struct PutNotificationConfigurationType {
     pub topic_arn: String,
 }
 
-/// Serialize `PutNotificationConfigurationType` contents to a `SignedRequest`.
-struct PutNotificationConfigurationTypeSerializer;
-impl PutNotificationConfigurationTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutNotificationConfigurationType) {
+/// Serialize `PutNotificationConfigurationRequest` contents to a `SignedRequest`.
+struct PutNotificationConfigurationRequestSerializer;
+impl PutNotificationConfigurationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutNotificationConfigurationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5358,7 +5667,20 @@ impl PutNotificationConfigurationTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutScalingPolicyType {
+pub struct PutNotificationConfigurationResponse {}
+
+struct PutNotificationConfigurationResponseDeserializer;
+impl PutNotificationConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutNotificationConfigurationResponse, XmlParseError> {
+        Ok(PutNotificationConfigurationResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutScalingPolicyRequest {
     /// <p>The adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub adjustment_type: Option<String>,
     /// <p>The name of the Auto Scaling group.</p>
@@ -5385,10 +5707,10 @@ pub struct PutScalingPolicyType {
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
 }
 
-/// Serialize `PutScalingPolicyType` contents to a `SignedRequest`.
-struct PutScalingPolicyTypeSerializer;
-impl PutScalingPolicyTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutScalingPolicyType) {
+/// Serialize `PutScalingPolicyRequest` contents to a `SignedRequest`.
+struct PutScalingPolicyRequestSerializer;
+impl PutScalingPolicyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutScalingPolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5449,8 +5771,45 @@ impl PutScalingPolicyTypeSerializer {
     }
 }
 
+/// <p>Contains the output of PutScalingPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct PutScheduledUpdateGroupActionType {
+pub struct PutScalingPolicyResponse {
+    /// <p>The CloudWatch alarms created for the target tracking scaling policy.</p>
+    pub alarms: Option<Vec<Alarm>>,
+    /// <p>The Amazon Resource Name (ARN) of the policy.</p>
+    pub policy_arn: Option<String>,
+}
+
+struct PutScalingPolicyResponseDeserializer;
+impl PutScalingPolicyResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutScalingPolicyResponse, XmlParseError> {
+        deserialize_elements::<_, PutScalingPolicyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Alarms" => {
+                        obj.alarms
+                            .get_or_insert(vec![])
+                            .extend(AlarmsDeserializer::deserialize("Alarms", stack)?);
+                    }
+                    "PolicyARN" => {
+                        obj.policy_arn =
+                            Some(ResourceNameDeserializer::deserialize("PolicyARN", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutScheduledUpdateGroupActionRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The number of EC2 instances that should be running in the group.</p>
@@ -5471,10 +5830,10 @@ pub struct PutScheduledUpdateGroupActionType {
     pub time: Option<String>,
 }
 
-/// Serialize `PutScheduledUpdateGroupActionType` contents to a `SignedRequest`.
-struct PutScheduledUpdateGroupActionTypeSerializer;
-impl PutScheduledUpdateGroupActionTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutScheduledUpdateGroupActionType) {
+/// Serialize `PutScheduledUpdateGroupActionRequest` contents to a `SignedRequest`.
+struct PutScheduledUpdateGroupActionRequestSerializer;
+impl PutScheduledUpdateGroupActionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutScheduledUpdateGroupActionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5513,26 +5872,20 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RecordLifecycleActionHeartbeatAnswer {}
+pub struct PutScheduledUpdateGroupActionResponse {}
 
-struct RecordLifecycleActionHeartbeatAnswerDeserializer;
-impl RecordLifecycleActionHeartbeatAnswerDeserializer {
+struct PutScheduledUpdateGroupActionResponseDeserializer;
+impl PutScheduledUpdateGroupActionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RecordLifecycleActionHeartbeatAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = RecordLifecycleActionHeartbeatAnswer::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+    ) -> Result<PutScheduledUpdateGroupActionResponse, XmlParseError> {
+        Ok(PutScheduledUpdateGroupActionResponse::default())
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RecordLifecycleActionHeartbeatType {
+pub struct RecordLifecycleActionHeartbeatRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The ID of the instance.</p>
@@ -5543,10 +5896,10 @@ pub struct RecordLifecycleActionHeartbeatType {
     pub lifecycle_hook_name: String,
 }
 
-/// Serialize `RecordLifecycleActionHeartbeatType` contents to a `SignedRequest`.
-struct RecordLifecycleActionHeartbeatTypeSerializer;
-impl RecordLifecycleActionHeartbeatTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatType) {
+/// Serialize `RecordLifecycleActionHeartbeatRequest` contents to a `SignedRequest`.
+struct RecordLifecycleActionHeartbeatRequestSerializer;
+impl RecordLifecycleActionHeartbeatRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5572,6 +5925,25 @@ impl RecordLifecycleActionHeartbeatTypeSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RecordLifecycleActionHeartbeatResponse {}
+
+struct RecordLifecycleActionHeartbeatResponseDeserializer;
+impl RecordLifecycleActionHeartbeatResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RecordLifecycleActionHeartbeatResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = RecordLifecycleActionHeartbeatResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
     #[allow(unused_variables)]
@@ -5581,6 +5953,50 @@ impl ResourceNameDeserializer {
         end_element(tag_name, stack)?;
 
         Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResumeProcessesRequest {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_name: String,
+    /// <p><p>One or more of the following processes. If you omit this parameter, all processes are specified.</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> </ul></p>
+    pub scaling_processes: Option<Vec<String>>,
+}
+
+/// Serialize `ResumeProcessesRequest` contents to a `SignedRequest`.
+struct ResumeProcessesRequestSerializer;
+impl ResumeProcessesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ResumeProcessesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AutoScalingGroupName"),
+            &obj.auto_scaling_group_name,
+        );
+        if let Some(ref field_value) = obj.scaling_processes {
+            ProcessNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ScalingProcesses"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResumeProcessesResponse {}
+
+struct ResumeProcessesResponseDeserializer;
+impl ResumeProcessesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResumeProcessesResponse, XmlParseError> {
+        Ok(ResumeProcessesResponse::default())
     }
 }
 struct ScalingActivityStatusCodeDeserializer;
@@ -5738,36 +6154,6 @@ impl ScalingPolicyDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ScalingProcessQuery {
-    /// <p>The name of the Auto Scaling group.</p>
-    pub auto_scaling_group_name: String,
-    /// <p><p>One or more of the following processes. If you omit this parameter, all processes are specified.</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> </ul></p>
-    pub scaling_processes: Option<Vec<String>>,
-}
-
-/// Serialize `ScalingProcessQuery` contents to a `SignedRequest`.
-struct ScalingProcessQuerySerializer;
-impl ScalingProcessQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScalingProcessQuery) {
-        let mut prefix = name.to_string();
-        if prefix != "" {
-            prefix.push_str(".");
-        }
-
-        params.put(
-            &format!("{}{}", prefix, "AutoScalingGroupName"),
-            &obj.auto_scaling_group_name,
-        );
-        if let Some(ref field_value) = obj.scaling_processes {
-            ProcessNamesSerializer::serialize(
-                params,
-                &format!("{}{}", prefix, "ScalingProcesses"),
-                field_value,
-            );
-        }
-    }
-}
 
 /// Serialize `ScheduledActionNames` contents to a `SignedRequest`.
 struct ScheduledActionNamesSerializer;
@@ -5780,40 +6166,6 @@ impl ScheduledActionNamesSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ScheduledActionsType {
-    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
-    pub next_token: Option<String>,
-    /// <p>The scheduled actions.</p>
-    pub scheduled_update_group_actions: Option<Vec<ScheduledUpdateGroupAction>>,
-}
-
-struct ScheduledActionsTypeDeserializer;
-impl ScheduledActionsTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ScheduledActionsType, XmlParseError> {
-        deserialize_elements::<_, ScheduledActionsType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "NextToken" => {
-                    obj.next_token = Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
-                }
-                "ScheduledUpdateGroupActions" => {
-                    obj.scheduled_update_group_actions
-                        .get_or_insert(vec![])
-                        .extend(ScheduledUpdateGroupActionsDeserializer::deserialize(
-                            "ScheduledUpdateGroupActions",
-                            stack,
-                        )?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 /// <p>Describes a scheduled scaling action. Used in response to <a>DescribeScheduledActions</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledUpdateGroupAction {
@@ -6025,7 +6377,7 @@ impl SecurityGroupsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetDesiredCapacityType {
+pub struct SetDesiredCapacityRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>The number of EC2 instances that should be running in the Auto Scaling group.</p>
@@ -6034,10 +6386,10 @@ pub struct SetDesiredCapacityType {
     pub honor_cooldown: Option<bool>,
 }
 
-/// Serialize `SetDesiredCapacityType` contents to a `SignedRequest`.
-struct SetDesiredCapacityTypeSerializer;
-impl SetDesiredCapacityTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetDesiredCapacityType) {
+/// Serialize `SetDesiredCapacityRequest` contents to a `SignedRequest`.
+struct SetDesiredCapacityRequestSerializer;
+impl SetDesiredCapacityRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetDesiredCapacityRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6058,7 +6410,20 @@ impl SetDesiredCapacityTypeSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetInstanceHealthQuery {
+pub struct SetDesiredCapacityResponse {}
+
+struct SetDesiredCapacityResponseDeserializer;
+impl SetDesiredCapacityResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetDesiredCapacityResponse, XmlParseError> {
+        Ok(SetDesiredCapacityResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetInstanceHealthRequest {
     /// <p>The health status of the instance. Set to <code>Healthy</code> to have the instance remain in service. Set to <code>Unhealthy</code> to have the instance be out of service. Amazon EC2 Auto Scaling terminates and replaces the unhealthy instance.</p>
     pub health_status: String,
     /// <p>The ID of the instance.</p>
@@ -6067,10 +6432,10 @@ pub struct SetInstanceHealthQuery {
     pub should_respect_grace_period: Option<bool>,
 }
 
-/// Serialize `SetInstanceHealthQuery` contents to a `SignedRequest`.
-struct SetInstanceHealthQuerySerializer;
-impl SetInstanceHealthQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetInstanceHealthQuery) {
+/// Serialize `SetInstanceHealthRequest` contents to a `SignedRequest`.
+struct SetInstanceHealthRequestSerializer;
+impl SetInstanceHealthRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetInstanceHealthRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6088,26 +6453,20 @@ impl SetInstanceHealthQuerySerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetInstanceProtectionAnswer {}
+pub struct SetInstanceHealthResponse {}
 
-struct SetInstanceProtectionAnswerDeserializer;
-impl SetInstanceProtectionAnswerDeserializer {
+struct SetInstanceHealthResponseDeserializer;
+impl SetInstanceHealthResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<SetInstanceProtectionAnswer, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let obj = SetInstanceProtectionAnswer::default();
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+    ) -> Result<SetInstanceHealthResponse, XmlParseError> {
+        Ok(SetInstanceHealthResponse::default())
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SetInstanceProtectionQuery {
+pub struct SetInstanceProtectionRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>One or more instance IDs.</p>
@@ -6116,10 +6475,10 @@ pub struct SetInstanceProtectionQuery {
     pub protected_from_scale_in: bool,
 }
 
-/// Serialize `SetInstanceProtectionQuery` contents to a `SignedRequest`.
-struct SetInstanceProtectionQuerySerializer;
-impl SetInstanceProtectionQuerySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetInstanceProtectionQuery) {
+/// Serialize `SetInstanceProtectionRequest` contents to a `SignedRequest`.
+struct SetInstanceProtectionRequestSerializer;
+impl SetInstanceProtectionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SetInstanceProtectionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6141,6 +6500,25 @@ impl SetInstanceProtectionQuerySerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SetInstanceProtectionResponse {}
+
+struct SetInstanceProtectionResponseDeserializer;
+impl SetInstanceProtectionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SetInstanceProtectionResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = SetInstanceProtectionResponse::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct SpotInstancePoolsDeserializer;
 impl SpotInstancePoolsDeserializer {
     #[allow(unused_variables)]
@@ -6263,6 +6641,50 @@ impl StepAdjustmentsSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SuspendProcessesRequest {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_name: String,
+    /// <p><p>One or more of the following processes. If you omit this parameter, all processes are specified.</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> </ul></p>
+    pub scaling_processes: Option<Vec<String>>,
+}
+
+/// Serialize `SuspendProcessesRequest` contents to a `SignedRequest`.
+struct SuspendProcessesRequestSerializer;
+impl SuspendProcessesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SuspendProcessesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AutoScalingGroupName"),
+            &obj.auto_scaling_group_name,
+        );
+        if let Some(ref field_value) = obj.scaling_processes {
+            ProcessNamesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ScalingProcesses"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SuspendProcessesResponse {}
+
+struct SuspendProcessesResponseDeserializer;
+impl SuspendProcessesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SuspendProcessesResponse, XmlParseError> {
+        Ok(SuspendProcessesResponse::default())
+    }
+}
 /// <p>Describes an automatic scaling process that has been suspended. For more information, see <a>ProcessType</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SuspendedProcess {
@@ -6457,37 +6879,6 @@ impl TagsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagsType {
-    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
-    pub next_token: Option<String>,
-    /// <p>One or more tags.</p>
-    pub tags: Option<Vec<TagDescription>>,
-}
-
-struct TagsTypeDeserializer;
-impl TagsTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<TagsType, XmlParseError> {
-        deserialize_elements::<_, TagsType, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "NextToken" => {
-                    obj.next_token = Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
-                }
-                "Tags" => {
-                    obj.tags
-                        .get_or_insert(vec![])
-                        .extend(TagDescriptionListDeserializer::deserialize("Tags", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
 struct TargetGroupARNsDeserializer;
 impl TargetGroupARNsDeserializer {
     #[allow(unused_variables)]
@@ -6607,17 +6998,21 @@ impl TargetTrackingConfigurationSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct TerminateInstanceInAutoScalingGroupType {
+pub struct TerminateInstanceInAutoScalingGroupRequest {
     /// <p>The ID of the instance.</p>
     pub instance_id: String,
     /// <p>Indicates whether terminating the instance also decrements the size of the Auto Scaling group.</p>
     pub should_decrement_desired_capacity: bool,
 }
 
-/// Serialize `TerminateInstanceInAutoScalingGroupType` contents to a `SignedRequest`.
-struct TerminateInstanceInAutoScalingGroupTypeSerializer;
-impl TerminateInstanceInAutoScalingGroupTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TerminateInstanceInAutoScalingGroupType) {
+/// Serialize `TerminateInstanceInAutoScalingGroupRequest` contents to a `SignedRequest`.
+struct TerminateInstanceInAutoScalingGroupRequestSerializer;
+impl TerminateInstanceInAutoScalingGroupRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &TerminateInstanceInAutoScalingGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6631,6 +7026,34 @@ impl TerminateInstanceInAutoScalingGroupTypeSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TerminateInstanceInAutoScalingGroupResponse {
+    /// <p>A scaling activity.</p>
+    pub activity: Option<Activity>,
+}
+
+struct TerminateInstanceInAutoScalingGroupResponseDeserializer;
+impl TerminateInstanceInAutoScalingGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TerminateInstanceInAutoScalingGroupResponse, XmlParseError> {
+        deserialize_elements::<_, TerminateInstanceInAutoScalingGroupResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Activity" => {
+                        obj.activity = Some(ActivityDeserializer::deserialize("Activity", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct TerminationPoliciesDeserializer;
 impl TerminationPoliciesDeserializer {
     #[allow(unused_variables)]
@@ -6674,7 +7097,7 @@ impl TimestampTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateAutoScalingGroupType {
+pub struct UpdateAutoScalingGroupRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
     /// <p>One or more Availability Zones for the group.</p>
@@ -6709,10 +7132,10 @@ pub struct UpdateAutoScalingGroupType {
     pub vpc_zone_identifier: Option<String>,
 }
 
-/// Serialize `UpdateAutoScalingGroupType` contents to a `SignedRequest`.
-struct UpdateAutoScalingGroupTypeSerializer;
-impl UpdateAutoScalingGroupTypeSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateAutoScalingGroupType) {
+/// Serialize `UpdateAutoScalingGroupRequest` contents to a `SignedRequest`.
+struct UpdateAutoScalingGroupRequestSerializer;
+impl UpdateAutoScalingGroupRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateAutoScalingGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6795,6 +7218,20 @@ impl UpdateAutoScalingGroupTypeSerializer {
         if let Some(ref field_value) = obj.vpc_zone_identifier {
             params.put(&format!("{}{}", prefix, "VPCZoneIdentifier"), &field_value);
         }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateAutoScalingGroupResponse {}
+
+struct UpdateAutoScalingGroupResponseDeserializer;
+impl UpdateAutoScalingGroupResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateAutoScalingGroupResponse, XmlParseError> {
+        Ok(UpdateAutoScalingGroupResponse::default())
     }
 }
 
@@ -9944,318 +10381,278 @@ impl Error for UpdateAutoScalingGroupError {
 /// Trait representing the capabilities of the Auto Scaling API. Auto Scaling clients implement this trait.
 pub trait Autoscaling {
     /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_instances(
-        &self,
-        input: AttachInstancesQuery,
-    ) -> RusotoFuture<(), AttachInstancesError>;
+    fn attach_instances(&self, input: AttachInstancesRequest) -> Request<AttachInstancesRequest>;
 
     /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancer_target_groups(
         &self,
-        input: AttachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>;
+        input: AttachLoadBalancerTargetGroupsRequest,
+    ) -> Request<AttachLoadBalancerTargetGroupsRequest>;
 
     /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer or a Network Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancers(
         &self,
-        input: AttachLoadBalancersType,
-    ) -> RusotoFuture<AttachLoadBalancersResultType, AttachLoadBalancersError>;
+        input: AttachLoadBalancersRequest,
+    ) -> Request<AttachLoadBalancersRequest>;
 
     /// <p>Deletes one or more scheduled actions for the specified Auto Scaling group.</p>
     fn batch_delete_scheduled_action(
         &self,
-        input: BatchDeleteScheduledActionType,
-    ) -> RusotoFuture<BatchDeleteScheduledActionAnswer, BatchDeleteScheduledActionError>;
+        input: BatchDeleteScheduledActionRequest,
+    ) -> Request<BatchDeleteScheduledActionRequest>;
 
     /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>
     fn batch_put_scheduled_update_group_action(
         &self,
-        input: BatchPutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<
-        BatchPutScheduledUpdateGroupActionAnswer,
-        BatchPutScheduledUpdateGroupActionError,
-    >;
+        input: BatchPutScheduledUpdateGroupActionRequest,
+    ) -> Request<BatchPutScheduledUpdateGroupActionRequest>;
 
     /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn complete_lifecycle_action(
         &self,
-        input: CompleteLifecycleActionType,
-    ) -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
+        input: CompleteLifecycleActionRequest,
+    ) -> Request<CompleteLifecycleActionRequest>;
 
     /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_auto_scaling_group(
         &self,
-        input: CreateAutoScalingGroupType,
-    ) -> RusotoFuture<(), CreateAutoScalingGroupError>;
+        input: CreateAutoScalingGroupRequest,
+    ) -> Request<CreateAutoScalingGroupRequest>;
 
     /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_launch_configuration(
         &self,
-        input: CreateLaunchConfigurationType,
-    ) -> RusotoFuture<(), CreateLaunchConfigurationError>;
+        input: CreateLaunchConfigurationRequest,
+    ) -> Request<CreateLaunchConfigurationRequest>;
 
     /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_or_update_tags(
         &self,
-        input: CreateOrUpdateTagsType,
-    ) -> RusotoFuture<(), CreateOrUpdateTagsError>;
+        input: CreateOrUpdateTagsRequest,
+    ) -> Request<CreateOrUpdateTagsRequest>;
 
     /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity. This ensures that Amazon EC2 Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
     fn delete_auto_scaling_group(
         &self,
-        input: DeleteAutoScalingGroupType,
-    ) -> RusotoFuture<(), DeleteAutoScalingGroupError>;
+        input: DeleteAutoScalingGroupRequest,
+    ) -> Request<DeleteAutoScalingGroupRequest>;
 
     /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
     fn delete_launch_configuration(
         &self,
-        input: LaunchConfigurationNameType,
-    ) -> RusotoFuture<(), DeleteLaunchConfigurationError>;
+        input: DeleteLaunchConfigurationRequest,
+    ) -> Request<DeleteLaunchConfigurationRequest>;
 
     /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
     fn delete_lifecycle_hook(
         &self,
-        input: DeleteLifecycleHookType,
-    ) -> RusotoFuture<DeleteLifecycleHookAnswer, DeleteLifecycleHookError>;
+        input: DeleteLifecycleHookRequest,
+    ) -> Request<DeleteLifecycleHookRequest>;
 
     /// <p>Deletes the specified notification.</p>
     fn delete_notification_configuration(
         &self,
-        input: DeleteNotificationConfigurationType,
-    ) -> RusotoFuture<(), DeleteNotificationConfigurationError>;
+        input: DeleteNotificationConfigurationRequest,
+    ) -> Request<DeleteNotificationConfigurationRequest>;
 
     /// <p>Deletes the specified scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
-    fn delete_policy(&self, input: DeletePolicyType) -> RusotoFuture<(), DeletePolicyError>;
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest>;
 
     /// <p>Deletes the specified scheduled action.</p>
     fn delete_scheduled_action(
         &self,
-        input: DeleteScheduledActionType,
-    ) -> RusotoFuture<(), DeleteScheduledActionError>;
+        input: DeleteScheduledActionRequest,
+    ) -> Request<DeleteScheduledActionRequest>;
 
     /// <p>Deletes the specified tags.</p>
-    fn delete_tags(&self, input: DeleteTagsType) -> RusotoFuture<(), DeleteTagsError>;
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest>;
 
     /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_account_limits(
-        &self,
-    ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
+    fn describe_account_limits(&self) -> Request<DescribeAccountLimitsRequest>;
 
     /// <p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>
-    fn describe_adjustment_types(
-        &self,
-    ) -> RusotoFuture<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError>;
+    fn describe_adjustment_types(&self) -> Request<DescribeAdjustmentTypesRequest>;
 
     /// <p>Describes one or more Auto Scaling groups.</p>
     fn describe_auto_scaling_groups(
         &self,
-        input: AutoScalingGroupNamesType,
-    ) -> RusotoFuture<AutoScalingGroupsType, DescribeAutoScalingGroupsError>;
+        input: DescribeAutoScalingGroupsRequest,
+    ) -> Request<DescribeAutoScalingGroupsRequest>;
 
     /// <p>Describes one or more Auto Scaling instances.</p>
     fn describe_auto_scaling_instances(
         &self,
-        input: DescribeAutoScalingInstancesType,
-    ) -> RusotoFuture<AutoScalingInstancesType, DescribeAutoScalingInstancesError>;
+        input: DescribeAutoScalingInstancesRequest,
+    ) -> Request<DescribeAutoScalingInstancesRequest>;
 
     /// <p>Describes the notification types that are supported by Amazon EC2 Auto Scaling.</p>
     fn describe_auto_scaling_notification_types(
         &self,
-    ) -> RusotoFuture<
-        DescribeAutoScalingNotificationTypesAnswer,
-        DescribeAutoScalingNotificationTypesError,
-    >;
+    ) -> Request<DescribeAutoScalingNotificationTypesRequest>;
 
     /// <p>Describes one or more launch configurations.</p>
     fn describe_launch_configurations(
         &self,
-        input: LaunchConfigurationNamesType,
-    ) -> RusotoFuture<LaunchConfigurationsType, DescribeLaunchConfigurationsError>;
+        input: DescribeLaunchConfigurationsRequest,
+    ) -> Request<DescribeLaunchConfigurationsRequest>;
 
     /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
-    fn describe_lifecycle_hook_types(
-        &self,
-    ) -> RusotoFuture<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError>;
+    fn describe_lifecycle_hook_types(&self) -> Request<DescribeLifecycleHookTypesRequest>;
 
     /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
     fn describe_lifecycle_hooks(
         &self,
-        input: DescribeLifecycleHooksType,
-    ) -> RusotoFuture<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError>;
+        input: DescribeLifecycleHooksRequest,
+    ) -> Request<DescribeLifecycleHooksRequest>;
 
     /// <p>Describes the target groups for the specified Auto Scaling group.</p>
     fn describe_load_balancer_target_groups(
         &self,
         input: DescribeLoadBalancerTargetGroupsRequest,
-    ) -> RusotoFuture<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>;
+    ) -> Request<DescribeLoadBalancerTargetGroupsRequest>;
 
     /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
     fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
-    ) -> RusotoFuture<DescribeLoadBalancersResponse, DescribeLoadBalancersError>;
+    ) -> Request<DescribeLoadBalancersRequest>;
 
     /// <p>Describes the available CloudWatch metrics for Amazon EC2 Auto Scaling.</p> <p>The <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>
-    fn describe_metric_collection_types(
-        &self,
-    ) -> RusotoFuture<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError>;
+    fn describe_metric_collection_types(&self) -> Request<DescribeMetricCollectionTypesRequest>;
 
     /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
     fn describe_notification_configurations(
         &self,
-        input: DescribeNotificationConfigurationsType,
-    ) -> RusotoFuture<
-        DescribeNotificationConfigurationsAnswer,
-        DescribeNotificationConfigurationsError,
-    >;
+        input: DescribeNotificationConfigurationsRequest,
+    ) -> Request<DescribeNotificationConfigurationsRequest>;
 
     /// <p>Describes the policies for the specified Auto Scaling group.</p>
-    fn describe_policies(
-        &self,
-        input: DescribePoliciesType,
-    ) -> RusotoFuture<PoliciesType, DescribePoliciesError>;
+    fn describe_policies(&self, input: DescribePoliciesRequest)
+        -> Request<DescribePoliciesRequest>;
 
     /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
     fn describe_scaling_activities(
         &self,
-        input: DescribeScalingActivitiesType,
-    ) -> RusotoFuture<ActivitiesType, DescribeScalingActivitiesError>;
+        input: DescribeScalingActivitiesRequest,
+    ) -> Request<DescribeScalingActivitiesRequest>;
 
     /// <p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>
-    fn describe_scaling_process_types(
-        &self,
-    ) -> RusotoFuture<ProcessesType, DescribeScalingProcessTypesError>;
+    fn describe_scaling_process_types(&self) -> Request<DescribeScalingProcessTypesRequest>;
 
     /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
     fn describe_scheduled_actions(
         &self,
-        input: DescribeScheduledActionsType,
-    ) -> RusotoFuture<ScheduledActionsType, DescribeScheduledActionsError>;
+        input: DescribeScheduledActionsRequest,
+    ) -> Request<DescribeScheduledActionsRequest>;
 
     /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
-    fn describe_tags(&self, input: DescribeTagsType) -> RusotoFuture<TagsType, DescribeTagsError>;
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest>;
 
     /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_termination_policy_types(
-        &self,
-    ) -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>;
+    fn describe_termination_policy_types(&self) -> Request<DescribeTerminationPolicyTypesRequest>;
 
     /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn detach_instances(
-        &self,
-        input: DetachInstancesQuery,
-    ) -> RusotoFuture<DetachInstancesAnswer, DetachInstancesError>;
+    fn detach_instances(&self, input: DetachInstancesRequest) -> Request<DetachInstancesRequest>;
 
     /// <p>Detaches one or more target groups from the specified Auto Scaling group.</p>
     fn detach_load_balancer_target_groups(
         &self,
-        input: DetachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>;
+        input: DetachLoadBalancerTargetGroupsRequest,
+    ) -> Request<DetachLoadBalancerTargetGroupsRequest>;
 
     /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
     fn detach_load_balancers(
         &self,
-        input: DetachLoadBalancersType,
-    ) -> RusotoFuture<DetachLoadBalancersResultType, DetachLoadBalancersError>;
+        input: DetachLoadBalancersRequest,
+    ) -> Request<DetachLoadBalancersRequest>;
 
     /// <p>Disables group metrics for the specified Auto Scaling group.</p>
     fn disable_metrics_collection(
         &self,
-        input: DisableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), DisableMetricsCollectionError>;
+        input: DisableMetricsCollectionRequest,
+    ) -> Request<DisableMetricsCollectionRequest>;
 
     /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn enable_metrics_collection(
         &self,
-        input: EnableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), EnableMetricsCollectionError>;
+        input: EnableMetricsCollectionRequest,
+    ) -> Request<EnableMetricsCollectionRequest>;
 
     /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn enter_standby(
-        &self,
-        input: EnterStandbyQuery,
-    ) -> RusotoFuture<EnterStandbyAnswer, EnterStandbyError>;
+    fn enter_standby(&self, input: EnterStandbyRequest) -> Request<EnterStandbyRequest>;
 
     /// <p>Executes the specified policy.</p>
-    fn execute_policy(&self, input: ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError>;
+    fn execute_policy(&self, input: ExecutePolicyRequest) -> Request<ExecutePolicyRequest>;
 
     /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn exit_standby(
-        &self,
-        input: ExitStandbyQuery,
-    ) -> RusotoFuture<ExitStandbyAnswer, ExitStandbyError>;
+    fn exit_standby(&self, input: ExitStandbyRequest) -> Request<ExitStandbyRequest>;
 
     /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
     fn put_lifecycle_hook(
         &self,
-        input: PutLifecycleHookType,
-    ) -> RusotoFuture<PutLifecycleHookAnswer, PutLifecycleHookError>;
+        input: PutLifecycleHookRequest,
+    ) -> Request<PutLifecycleHookRequest>;
 
     /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting Amazon SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn put_notification_configuration(
         &self,
-        input: PutNotificationConfigurationType,
-    ) -> RusotoFuture<(), PutNotificationConfigurationError>;
+        input: PutNotificationConfigurationRequest,
+    ) -> Request<PutNotificationConfigurationRequest>;
 
     /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p>
     fn put_scaling_policy(
         &self,
-        input: PutScalingPolicyType,
-    ) -> RusotoFuture<PolicyARNType, PutScalingPolicyError>;
+        input: PutScalingPolicyRequest,
+    ) -> Request<PutScalingPolicyRequest>;
 
     /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn put_scheduled_update_group_action(
         &self,
-        input: PutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<(), PutScheduledUpdateGroupActionError>;
+        input: PutScheduledUpdateGroupActionRequest,
+    ) -> Request<PutScheduledUpdateGroupActionRequest>;
 
     /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn record_lifecycle_action_heartbeat(
         &self,
-        input: RecordLifecycleActionHeartbeatType,
-    ) -> RusotoFuture<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>;
+        input: RecordLifecycleActionHeartbeatRequest,
+    ) -> Request<RecordLifecycleActionHeartbeatRequest>;
 
     /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn resume_processes(
-        &self,
-        input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), ResumeProcessesError>;
+    fn resume_processes(&self, input: ResumeProcessesRequest) -> Request<ResumeProcessesRequest>;
 
     /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_desired_capacity(
         &self,
-        input: SetDesiredCapacityType,
-    ) -> RusotoFuture<(), SetDesiredCapacityError>;
+        input: SetDesiredCapacityRequest,
+    ) -> Request<SetDesiredCapacityRequest>;
 
     /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_instance_health(
         &self,
-        input: SetInstanceHealthQuery,
-    ) -> RusotoFuture<(), SetInstanceHealthError>;
+        input: SetInstanceHealthRequest,
+    ) -> Request<SetInstanceHealthRequest>;
 
     /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_instance_protection(
         &self,
-        input: SetInstanceProtectionQuery,
-    ) -> RusotoFuture<SetInstanceProtectionAnswer, SetInstanceProtectionError>;
+        input: SetInstanceProtectionRequest,
+    ) -> Request<SetInstanceProtectionRequest>;
 
     /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn suspend_processes(
-        &self,
-        input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), SuspendProcessesError>;
+    fn suspend_processes(&self, input: SuspendProcessesRequest)
+        -> Request<SuspendProcessesRequest>;
 
     /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
     fn terminate_instance_in_auto_scaling_group(
         &self,
-        input: TerminateInstanceInAutoScalingGroupType,
-    ) -> RusotoFuture<ActivityType, TerminateInstanceInAutoScalingGroupError>;
+        input: TerminateInstanceInAutoScalingGroupRequest,
+    ) -> Request<TerminateInstanceInAutoScalingGroupRequest>;
 
     /// <p><p>Updates the configuration for the specified Auto Scaling group.</p> <p>The new settings take effect on any scaling activities after this call returns. Scaling activities that are currently in progress aren&#39;t affected.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>false</code>, you must first disable the collection of group metrics. Otherwise, you get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul></p>
     fn update_auto_scaling_group(
         &self,
-        input: UpdateAutoScalingGroupType,
-    ) -> RusotoFuture<(), UpdateAutoScalingGroupError>;
+        input: UpdateAutoScalingGroupRequest,
+    ) -> Request<UpdateAutoScalingGroupRequest>;
 }
 /// A client for the Auto Scaling API.
 #[derive(Clone)]
@@ -10295,20 +10692,439 @@ impl AutoscalingClient {
 
 impl Autoscaling for AutoscalingClient {
     /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_instances(
+    fn attach_instances(&self, input: AttachInstancesRequest) -> Request<AttachInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn attach_load_balancer_target_groups(
         &self,
-        input: AttachInstancesQuery,
-    ) -> RusotoFuture<(), AttachInstancesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+        input: AttachLoadBalancerTargetGroupsRequest,
+    ) -> Request<AttachLoadBalancerTargetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer or a Network Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn attach_load_balancers(
+        &self,
+        input: AttachLoadBalancersRequest,
+    ) -> Request<AttachLoadBalancersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes one or more scheduled actions for the specified Auto Scaling group.</p>
+    fn batch_delete_scheduled_action(
+        &self,
+        input: BatchDeleteScheduledActionRequest,
+    ) -> Request<BatchDeleteScheduledActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>
+    fn batch_put_scheduled_update_group_action(
+        &self,
+        input: BatchPutScheduledUpdateGroupActionRequest,
+    ) -> Request<BatchPutScheduledUpdateGroupActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn complete_lifecycle_action(
+        &self,
+        input: CompleteLifecycleActionRequest,
+    ) -> Request<CompleteLifecycleActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn create_auto_scaling_group(
+        &self,
+        input: CreateAutoScalingGroupRequest,
+    ) -> Request<CreateAutoScalingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn create_launch_configuration(
+        &self,
+        input: CreateLaunchConfigurationRequest,
+    ) -> Request<CreateLaunchConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn create_or_update_tags(
+        &self,
+        input: CreateOrUpdateTagsRequest,
+    ) -> Request<CreateOrUpdateTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity. This ensures that Amazon EC2 Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
+    fn delete_auto_scaling_group(
+        &self,
+        input: DeleteAutoScalingGroupRequest,
+    ) -> Request<DeleteAutoScalingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
+    fn delete_launch_configuration(
+        &self,
+        input: DeleteLaunchConfigurationRequest,
+    ) -> Request<DeleteLaunchConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
+    fn delete_lifecycle_hook(
+        &self,
+        input: DeleteLifecycleHookRequest,
+    ) -> Request<DeleteLifecycleHookRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified notification.</p>
+    fn delete_notification_configuration(
+        &self,
+        input: DeleteNotificationConfigurationRequest,
+    ) -> Request<DeleteNotificationConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
+    fn delete_policy(&self, input: DeletePolicyRequest) -> Request<DeletePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified scheduled action.</p>
+    fn delete_scheduled_action(
+        &self,
+        input: DeleteScheduledActionRequest,
+    ) -> Request<DeleteScheduledActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified tags.</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn describe_account_limits(&self) -> Request<DescribeAccountLimitsRequest> {
+        Request::new(
+            DescribeAccountLimitsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>
+    fn describe_adjustment_types(&self) -> Request<DescribeAdjustmentTypesRequest> {
+        Request::new(
+            DescribeAdjustmentTypesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes one or more Auto Scaling groups.</p>
+    fn describe_auto_scaling_groups(
+        &self,
+        input: DescribeAutoScalingGroupsRequest,
+    ) -> Request<DescribeAutoScalingGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes one or more Auto Scaling instances.</p>
+    fn describe_auto_scaling_instances(
+        &self,
+        input: DescribeAutoScalingInstancesRequest,
+    ) -> Request<DescribeAutoScalingInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the notification types that are supported by Amazon EC2 Auto Scaling.</p>
+    fn describe_auto_scaling_notification_types(
+        &self,
+    ) -> Request<DescribeAutoScalingNotificationTypesRequest> {
+        Request::new(
+            DescribeAutoScalingNotificationTypesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes one or more launch configurations.</p>
+    fn describe_launch_configurations(
+        &self,
+        input: DescribeLaunchConfigurationsRequest,
+    ) -> Request<DescribeLaunchConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
+    fn describe_lifecycle_hook_types(&self) -> Request<DescribeLifecycleHookTypesRequest> {
+        Request::new(
+            DescribeLifecycleHookTypesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
+    fn describe_lifecycle_hooks(
+        &self,
+        input: DescribeLifecycleHooksRequest,
+    ) -> Request<DescribeLifecycleHooksRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the target groups for the specified Auto Scaling group.</p>
+    fn describe_load_balancer_target_groups(
+        &self,
+        input: DescribeLoadBalancerTargetGroupsRequest,
+    ) -> Request<DescribeLoadBalancerTargetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
+    fn describe_load_balancers(
+        &self,
+        input: DescribeLoadBalancersRequest,
+    ) -> Request<DescribeLoadBalancersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the available CloudWatch metrics for Amazon EC2 Auto Scaling.</p> <p>The <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>
+    fn describe_metric_collection_types(&self) -> Request<DescribeMetricCollectionTypesRequest> {
+        Request::new(
+            DescribeMetricCollectionTypesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
+    fn describe_notification_configurations(
+        &self,
+        input: DescribeNotificationConfigurationsRequest,
+    ) -> Request<DescribeNotificationConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the policies for the specified Auto Scaling group.</p>
+    fn describe_policies(
+        &self,
+        input: DescribePoliciesRequest,
+    ) -> Request<DescribePoliciesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
+    fn describe_scaling_activities(
+        &self,
+        input: DescribeScalingActivitiesRequest,
+    ) -> Request<DescribeScalingActivitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>
+    fn describe_scaling_process_types(&self) -> Request<DescribeScalingProcessTypesRequest> {
+        Request::new(
+            DescribeScalingProcessTypesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
+    fn describe_scheduled_actions(
+        &self,
+        input: DescribeScheduledActionsRequest,
+    ) -> Request<DescribeScheduledActionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
+    fn describe_tags(&self, input: DescribeTagsRequest) -> Request<DescribeTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn describe_termination_policy_types(&self) -> Request<DescribeTerminationPolicyTypesRequest> {
+        Request::new(
+            DescribeTerminationPolicyTypesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn detach_instances(&self, input: DetachInstancesRequest) -> Request<DetachInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detaches one or more target groups from the specified Auto Scaling group.</p>
+    fn detach_load_balancer_target_groups(
+        &self,
+        input: DetachLoadBalancerTargetGroupsRequest,
+    ) -> Request<DetachLoadBalancerTargetGroupsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
+    fn detach_load_balancers(
+        &self,
+        input: DetachLoadBalancersRequest,
+    ) -> Request<DetachLoadBalancersRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Disables group metrics for the specified Auto Scaling group.</p>
+    fn disable_metrics_collection(
+        &self,
+        input: DisableMetricsCollectionRequest,
+    ) -> Request<DisableMetricsCollectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn enable_metrics_collection(
+        &self,
+        input: EnableMetricsCollectionRequest,
+    ) -> Request<EnableMetricsCollectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn enter_standby(&self, input: EnterStandbyRequest) -> Request<EnterStandbyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Executes the specified policy.</p>
+    fn execute_policy(&self, input: ExecutePolicyRequest) -> Request<ExecutePolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn exit_standby(&self, input: ExitStandbyRequest) -> Request<ExitStandbyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
+    fn put_lifecycle_hook(
+        &self,
+        input: PutLifecycleHookRequest,
+    ) -> Request<PutLifecycleHookRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting Amazon SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn put_notification_configuration(
+        &self,
+        input: PutNotificationConfigurationRequest,
+    ) -> Request<PutNotificationConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p>
+    fn put_scaling_policy(
+        &self,
+        input: PutScalingPolicyRequest,
+    ) -> Request<PutScalingPolicyRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn put_scheduled_update_group_action(
+        &self,
+        input: PutScheduledUpdateGroupActionRequest,
+    ) -> Request<PutScheduledUpdateGroupActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn record_lifecycle_action_heartbeat(
+        &self,
+        input: RecordLifecycleActionHeartbeatRequest,
+    ) -> Request<RecordLifecycleActionHeartbeatRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn resume_processes(&self, input: ResumeProcessesRequest) -> Request<ResumeProcessesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn set_desired_capacity(
+        &self,
+        input: SetDesiredCapacityRequest,
+    ) -> Request<SetDesiredCapacityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn set_instance_health(
+        &self,
+        input: SetInstanceHealthRequest,
+    ) -> Request<SetInstanceHealthRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn set_instance_protection(
+        &self,
+        input: SetInstanceProtectionRequest,
+    ) -> Request<SetInstanceProtectionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    fn suspend_processes(
+        &self,
+        input: SuspendProcessesRequest,
+    ) -> Request<SuspendProcessesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
+    fn terminate_instance_in_auto_scaling_group(
+        &self,
+        input: TerminateInstanceInAutoScalingGroupRequest,
+    ) -> Request<TerminateInstanceInAutoScalingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the configuration for the specified Auto Scaling group.</p> <p>The new settings take effect on any scaling activities after this call returns. Scaling activities that are currently in progress aren&#39;t affected.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>false</code>, you must first disable the collection of group metrics. Otherwise, you get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul></p>
+    fn update_auto_scaling_group(
+        &self,
+        input: UpdateAutoScalingGroupRequest,
+    ) -> Request<UpdateAutoScalingGroupRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AttachInstancesRequest {
+    type Output = AttachInstancesResponse;
+    type Error = AttachInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachInstances");
         params.put("Version", "2011-01-01");
-        AttachInstancesQuerySerializer::serialize(&mut params, "", &input);
+        AttachInstancesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10318,26 +11134,50 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AttachInstancesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AttachInstancesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_load_balancer_target_groups(
-        &self,
-        input: AttachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>
-    {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for AttachLoadBalancerTargetGroupsRequest {
+    type Output = AttachLoadBalancerTargetGroupsResponse;
+    type Error = AttachLoadBalancerTargetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachLoadBalancerTargetGroups");
         params.put("Version", "2011-01-01");
-        AttachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
+        AttachLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AttachLoadBalancerTargetGroupsError::from_response(response))
@@ -10348,7 +11188,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AttachLoadBalancerTargetGroupsResultType::default();
+                    result = AttachLoadBalancerTargetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10358,7 +11198,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AttachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
+                    result = AttachLoadBalancerTargetGroupsResponseDeserializer::deserialize(
                         "AttachLoadBalancerTargetGroupsResult",
                         &mut stack,
                     )?;
@@ -10370,22 +11210,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer or a Network Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn attach_load_balancers(
-        &self,
-        input: AttachLoadBalancersType,
-    ) -> RusotoFuture<AttachLoadBalancersResultType, AttachLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for AttachLoadBalancersRequest {
+    type Output = AttachLoadBalancersResponse;
+    type Error = AttachLoadBalancersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "AttachLoadBalancers");
         params.put("Version", "2011-01-01");
-        AttachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
+        AttachLoadBalancersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10398,7 +11243,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AttachLoadBalancersResultType::default();
+                    result = AttachLoadBalancersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10408,7 +11253,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AttachLoadBalancersResultTypeDeserializer::deserialize(
+                    result = AttachLoadBalancersResponseDeserializer::deserialize(
                         "AttachLoadBalancersResult",
                         &mut stack,
                     )?;
@@ -10420,22 +11265,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes one or more scheduled actions for the specified Auto Scaling group.</p>
-    fn batch_delete_scheduled_action(
-        &self,
-        input: BatchDeleteScheduledActionType,
-    ) -> RusotoFuture<BatchDeleteScheduledActionAnswer, BatchDeleteScheduledActionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for BatchDeleteScheduledActionRequest {
+    type Output = BatchDeleteScheduledActionResponse;
+    type Error = BatchDeleteScheduledActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BatchDeleteScheduledAction");
         params.put("Version", "2011-01-01");
-        BatchDeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
+        BatchDeleteScheduledActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchDeleteScheduledActionError::from_response(response))
@@ -10446,7 +11296,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = BatchDeleteScheduledActionAnswer::default();
+                    result = BatchDeleteScheduledActionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10456,7 +11306,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchDeleteScheduledActionAnswerDeserializer::deserialize(
+                    result = BatchDeleteScheduledActionResponseDeserializer::deserialize(
                         "BatchDeleteScheduledActionResult",
                         &mut stack,
                     )?;
@@ -10468,25 +11318,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>
-    fn batch_put_scheduled_update_group_action(
-        &self,
-        input: BatchPutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<
-        BatchPutScheduledUpdateGroupActionAnswer,
-        BatchPutScheduledUpdateGroupActionError,
-    > {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for BatchPutScheduledUpdateGroupActionRequest {
+    type Output = BatchPutScheduledUpdateGroupActionResponse;
+    type Error = BatchPutScheduledUpdateGroupActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "BatchPutScheduledUpdateGroupAction");
         params.put("Version", "2011-01-01");
-        BatchPutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
+        BatchPutScheduledUpdateGroupActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchPutScheduledUpdateGroupActionError::from_response(
@@ -10499,7 +11351,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = BatchPutScheduledUpdateGroupActionAnswer::default();
+                    result = BatchPutScheduledUpdateGroupActionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10509,7 +11361,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchPutScheduledUpdateGroupActionAnswerDeserializer::deserialize(
+                    result = BatchPutScheduledUpdateGroupActionResponseDeserializer::deserialize(
                         "BatchPutScheduledUpdateGroupActionResult",
                         &mut stack,
                     )?;
@@ -10521,22 +11373,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn complete_lifecycle_action(
-        &self,
-        input: CompleteLifecycleActionType,
-    ) -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for CompleteLifecycleActionRequest {
+    type Output = CompleteLifecycleActionResponse;
+    type Error = CompleteLifecycleActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CompleteLifecycleAction");
         params.put("Version", "2011-01-01");
-        CompleteLifecycleActionTypeSerializer::serialize(&mut params, "", &input);
+        CompleteLifecycleActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CompleteLifecycleActionError::from_response(response))
@@ -10547,7 +11404,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CompleteLifecycleActionAnswer::default();
+                    result = CompleteLifecycleActionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10557,7 +11414,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CompleteLifecycleActionAnswerDeserializer::deserialize(
+                    result = CompleteLifecycleActionResponseDeserializer::deserialize(
                         "CompleteLifecycleActionResult",
                         &mut stack,
                     )?;
@@ -10569,72 +11426,127 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_auto_scaling_group(
-        &self,
-        input: CreateAutoScalingGroupType,
-    ) -> RusotoFuture<(), CreateAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for CreateAutoScalingGroupRequest {
+    type Output = CreateAutoScalingGroupResponse;
+    type Error = CreateAutoScalingGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateAutoScalingGroup");
         params.put("Version", "2011-01-01");
-        CreateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
+        CreateAutoScalingGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateAutoScalingGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateAutoScalingGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateAutoScalingGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_launch_configuration(
-        &self,
-        input: CreateLaunchConfigurationType,
-    ) -> RusotoFuture<(), CreateLaunchConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for CreateLaunchConfigurationRequest {
+    type Output = CreateLaunchConfigurationResponse;
+    type Error = CreateLaunchConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateLaunchConfiguration");
         params.put("Version", "2011-01-01");
-        CreateLaunchConfigurationTypeSerializer::serialize(&mut params, "", &input);
+        CreateLaunchConfigurationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateLaunchConfigurationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateLaunchConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateLaunchConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn create_or_update_tags(
-        &self,
-        input: CreateOrUpdateTagsType,
-    ) -> RusotoFuture<(), CreateOrUpdateTagsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for CreateOrUpdateTagsRequest {
+    type Output = CreateOrUpdateTagsResponse;
+    type Error = CreateOrUpdateTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateOrUpdateTags");
         params.put("Version", "2011-01-01");
-        CreateOrUpdateTagsTypeSerializer::serialize(&mut params, "", &input);
+        CreateOrUpdateTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10644,75 +11556,150 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CreateOrUpdateTagsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = CreateOrUpdateTagsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity. This ensures that Amazon EC2 Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
-    fn delete_auto_scaling_group(
-        &self,
-        input: DeleteAutoScalingGroupType,
-    ) -> RusotoFuture<(), DeleteAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DeleteAutoScalingGroupRequest {
+    type Output = DeleteAutoScalingGroupResponse;
+    type Error = DeleteAutoScalingGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteAutoScalingGroup");
         params.put("Version", "2011-01-01");
-        DeleteAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
+        DeleteAutoScalingGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteAutoScalingGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteAutoScalingGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteAutoScalingGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
-    fn delete_launch_configuration(
-        &self,
-        input: LaunchConfigurationNameType,
-    ) -> RusotoFuture<(), DeleteLaunchConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DeleteLaunchConfigurationRequest {
+    type Output = DeleteLaunchConfigurationResponse;
+    type Error = DeleteLaunchConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLaunchConfiguration");
         params.put("Version", "2011-01-01");
-        LaunchConfigurationNameTypeSerializer::serialize(&mut params, "", &input);
+        DeleteLaunchConfigurationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteLaunchConfigurationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteLaunchConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteLaunchConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
-    fn delete_lifecycle_hook(
-        &self,
-        input: DeleteLifecycleHookType,
-    ) -> RusotoFuture<DeleteLifecycleHookAnswer, DeleteLifecycleHookError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DeleteLifecycleHookRequest {
+    type Output = DeleteLifecycleHookResponse;
+    type Error = DeleteLifecycleHookError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteLifecycleHook");
         params.put("Version", "2011-01-01");
-        DeleteLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
+        DeleteLifecycleHookRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10725,7 +11712,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeleteLifecycleHookAnswer::default();
+                    result = DeleteLifecycleHookResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10735,7 +11722,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteLifecycleHookAnswerDeserializer::deserialize(
+                    result = DeleteLifecycleHookResponseDeserializer::deserialize(
                         "DeleteLifecycleHookResult",
                         &mut stack,
                     )?;
@@ -10747,22 +11734,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes the specified notification.</p>
-    fn delete_notification_configuration(
-        &self,
-        input: DeleteNotificationConfigurationType,
-    ) -> RusotoFuture<(), DeleteNotificationConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DeleteNotificationConfigurationRequest {
+    type Output = DeleteNotificationConfigurationResponse;
+    type Error = DeleteNotificationConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteNotificationConfiguration");
         params.put("Version", "2011-01-01");
-        DeleteNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
+        DeleteNotificationConfigurationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNotificationConfigurationError::from_response(
@@ -10771,22 +11763,50 @@ impl Autoscaling for AutoscalingClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteNotificationConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteNotificationConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
-    fn delete_policy(&self, input: DeletePolicyType) -> RusotoFuture<(), DeletePolicyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DeletePolicyRequest {
+    type Output = DeletePolicyResponse;
+    type Error = DeletePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeletePolicy");
         params.put("Version", "2011-01-01");
-        DeletePolicyTypeSerializer::serialize(&mut params, "", &input);
+        DeletePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10796,47 +11816,100 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeletePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeletePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified scheduled action.</p>
-    fn delete_scheduled_action(
-        &self,
-        input: DeleteScheduledActionType,
-    ) -> RusotoFuture<(), DeleteScheduledActionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DeleteScheduledActionRequest {
+    type Output = DeleteScheduledActionResponse;
+    type Error = DeleteScheduledActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteScheduledAction");
         params.put("Version", "2011-01-01");
-        DeleteScheduledActionTypeSerializer::serialize(&mut params, "", &input);
+        DeleteScheduledActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteScheduledActionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteScheduledActionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteScheduledActionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified tags.</p>
-    fn delete_tags(&self, input: DeleteTagsType) -> RusotoFuture<(), DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DeleteTagsRequest {
+    type Output = DeleteTagsResponse;
+    type Error = DeleteTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteTags");
         params.put("Version", "2011-01-01");
-        DeleteTagsTypeSerializer::serialize(&mut params, "", &input);
+        DeleteTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10846,24 +11919,48 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteTagsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        DeleteTagsResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_account_limits(
-        &self,
-    ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeAccountLimitsRequest {
+    type Output = DescribeAccountLimitsResponse;
+    type Error = DescribeAccountLimitsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountLimits");
         params.put("Version", "2011-01-01");
-
+        DescribeAccountLimitsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountLimitsError::from_response(response))
@@ -10874,7 +11971,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAccountLimitsAnswer::default();
+                    result = DescribeAccountLimitsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10884,7 +11981,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccountLimitsAnswerDeserializer::deserialize(
+                    result = DescribeAccountLimitsResponseDeserializer::deserialize(
                         "DescribeAccountLimitsResult",
                         &mut stack,
                     )?;
@@ -10896,21 +11993,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>
-    fn describe_adjustment_types(
-        &self,
-    ) -> RusotoFuture<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeAdjustmentTypesRequest {
+    type Output = DescribeAdjustmentTypesResponse;
+    type Error = DescribeAdjustmentTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAdjustmentTypes");
         params.put("Version", "2011-01-01");
-
+        DescribeAdjustmentTypesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAdjustmentTypesError::from_response(response))
@@ -10921,7 +12024,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAdjustmentTypesAnswer::default();
+                    result = DescribeAdjustmentTypesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10931,7 +12034,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAdjustmentTypesAnswerDeserializer::deserialize(
+                    result = DescribeAdjustmentTypesResponseDeserializer::deserialize(
                         "DescribeAdjustmentTypesResult",
                         &mut stack,
                     )?;
@@ -10943,22 +12046,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes one or more Auto Scaling groups.</p>
-    fn describe_auto_scaling_groups(
-        &self,
-        input: AutoScalingGroupNamesType,
-    ) -> RusotoFuture<AutoScalingGroupsType, DescribeAutoScalingGroupsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeAutoScalingGroupsRequest {
+    type Output = DescribeAutoScalingGroupsResponse;
+    type Error = DescribeAutoScalingGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAutoScalingGroups");
         params.put("Version", "2011-01-01");
-        AutoScalingGroupNamesTypeSerializer::serialize(&mut params, "", &input);
+        DescribeAutoScalingGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAutoScalingGroupsError::from_response(response))
@@ -10969,7 +12077,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AutoScalingGroupsType::default();
+                    result = DescribeAutoScalingGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10979,7 +12087,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AutoScalingGroupsTypeDeserializer::deserialize(
+                    result = DescribeAutoScalingGroupsResponseDeserializer::deserialize(
                         "DescribeAutoScalingGroupsResult",
                         &mut stack,
                     )?;
@@ -10991,22 +12099,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes one or more Auto Scaling instances.</p>
-    fn describe_auto_scaling_instances(
-        &self,
-        input: DescribeAutoScalingInstancesType,
-    ) -> RusotoFuture<AutoScalingInstancesType, DescribeAutoScalingInstancesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeAutoScalingInstancesRequest {
+    type Output = DescribeAutoScalingInstancesResponse;
+    type Error = DescribeAutoScalingInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAutoScalingInstances");
         params.put("Version", "2011-01-01");
-        DescribeAutoScalingInstancesTypeSerializer::serialize(&mut params, "", &input);
+        DescribeAutoScalingInstancesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAutoScalingInstancesError::from_response(response))
@@ -11017,7 +12130,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = AutoScalingInstancesType::default();
+                    result = DescribeAutoScalingInstancesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11027,7 +12140,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = AutoScalingInstancesTypeDeserializer::deserialize(
+                    result = DescribeAutoScalingInstancesResponseDeserializer::deserialize(
                         "DescribeAutoScalingInstancesResult",
                         &mut stack,
                     )?;
@@ -11039,24 +12152,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the notification types that are supported by Amazon EC2 Auto Scaling.</p>
-    fn describe_auto_scaling_notification_types(
-        &self,
-    ) -> RusotoFuture<
-        DescribeAutoScalingNotificationTypesAnswer,
-        DescribeAutoScalingNotificationTypesError,
-    > {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeAutoScalingNotificationTypesRequest {
+    type Output = DescribeAutoScalingNotificationTypesResponse;
+    type Error = DescribeAutoScalingNotificationTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAutoScalingNotificationTypes");
         params.put("Version", "2011-01-01");
-
+        DescribeAutoScalingNotificationTypesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAutoScalingNotificationTypesError::from_response(
@@ -11069,7 +12185,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAutoScalingNotificationTypesAnswer::default();
+                    result = DescribeAutoScalingNotificationTypesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11079,7 +12195,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAutoScalingNotificationTypesAnswerDeserializer::deserialize(
+                    result = DescribeAutoScalingNotificationTypesResponseDeserializer::deserialize(
                         "DescribeAutoScalingNotificationTypesResult",
                         &mut stack,
                     )?;
@@ -11091,22 +12207,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes one or more launch configurations.</p>
-    fn describe_launch_configurations(
-        &self,
-        input: LaunchConfigurationNamesType,
-    ) -> RusotoFuture<LaunchConfigurationsType, DescribeLaunchConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeLaunchConfigurationsRequest {
+    type Output = DescribeLaunchConfigurationsResponse;
+    type Error = DescribeLaunchConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLaunchConfigurations");
         params.put("Version", "2011-01-01");
-        LaunchConfigurationNamesTypeSerializer::serialize(&mut params, "", &input);
+        DescribeLaunchConfigurationsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLaunchConfigurationsError::from_response(response))
@@ -11117,7 +12238,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = LaunchConfigurationsType::default();
+                    result = DescribeLaunchConfigurationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11127,7 +12248,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = LaunchConfigurationsTypeDeserializer::deserialize(
+                    result = DescribeLaunchConfigurationsResponseDeserializer::deserialize(
                         "DescribeLaunchConfigurationsResult",
                         &mut stack,
                     )?;
@@ -11139,21 +12260,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
-    fn describe_lifecycle_hook_types(
-        &self,
-    ) -> RusotoFuture<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeLifecycleHookTypesRequest {
+    type Output = DescribeLifecycleHookTypesResponse;
+    type Error = DescribeLifecycleHookTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLifecycleHookTypes");
         params.put("Version", "2011-01-01");
-
+        DescribeLifecycleHookTypesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLifecycleHookTypesError::from_response(response))
@@ -11164,7 +12291,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeLifecycleHookTypesAnswer::default();
+                    result = DescribeLifecycleHookTypesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11174,7 +12301,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLifecycleHookTypesAnswerDeserializer::deserialize(
+                    result = DescribeLifecycleHookTypesResponseDeserializer::deserialize(
                         "DescribeLifecycleHookTypesResult",
                         &mut stack,
                     )?;
@@ -11186,22 +12313,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
-    fn describe_lifecycle_hooks(
-        &self,
-        input: DescribeLifecycleHooksType,
-    ) -> RusotoFuture<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeLifecycleHooksRequest {
+    type Output = DescribeLifecycleHooksResponse;
+    type Error = DescribeLifecycleHooksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLifecycleHooks");
         params.put("Version", "2011-01-01");
-        DescribeLifecycleHooksTypeSerializer::serialize(&mut params, "", &input);
+        DescribeLifecycleHooksRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLifecycleHooksError::from_response(response))
@@ -11212,7 +12344,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeLifecycleHooksAnswer::default();
+                    result = DescribeLifecycleHooksResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11222,7 +12354,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeLifecycleHooksAnswerDeserializer::deserialize(
+                    result = DescribeLifecycleHooksResponseDeserializer::deserialize(
                         "DescribeLifecycleHooksResult",
                         &mut stack,
                     )?;
@@ -11234,23 +12366,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the target groups for the specified Auto Scaling group.</p>
-    fn describe_load_balancer_target_groups(
-        &self,
-        input: DescribeLoadBalancerTargetGroupsRequest,
-    ) -> RusotoFuture<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>
-    {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancerTargetGroupsRequest {
+    type Output = DescribeLoadBalancerTargetGroupsResponse;
+    type Error = DescribeLoadBalancerTargetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancerTargetGroups");
         params.put("Version", "2011-01-01");
-        DescribeLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancerTargetGroupsError::from_response(
@@ -11285,22 +12421,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
-    fn describe_load_balancers(
-        &self,
-        input: DescribeLoadBalancersRequest,
-    ) -> RusotoFuture<DescribeLoadBalancersResponse, DescribeLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeLoadBalancersRequest {
+    type Output = DescribeLoadBalancersResponse;
+    type Error = DescribeLoadBalancersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeLoadBalancers");
         params.put("Version", "2011-01-01");
-        DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &input);
+        DescribeLoadBalancersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeLoadBalancersError::from_response(response))
@@ -11333,21 +12474,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the available CloudWatch metrics for Amazon EC2 Auto Scaling.</p> <p>The <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>
-    fn describe_metric_collection_types(
-        &self,
-    ) -> RusotoFuture<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeMetricCollectionTypesRequest {
+    type Output = DescribeMetricCollectionTypesResponse;
+    type Error = DescribeMetricCollectionTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeMetricCollectionTypes");
         params.put("Version", "2011-01-01");
-
+        DescribeMetricCollectionTypesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeMetricCollectionTypesError::from_response(response))
@@ -11358,7 +12505,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeMetricCollectionTypesAnswer::default();
+                    result = DescribeMetricCollectionTypesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11368,7 +12515,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeMetricCollectionTypesAnswerDeserializer::deserialize(
+                    result = DescribeMetricCollectionTypesResponseDeserializer::deserialize(
                         "DescribeMetricCollectionTypesResult",
                         &mut stack,
                     )?;
@@ -11380,25 +12527,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
-    fn describe_notification_configurations(
-        &self,
-        input: DescribeNotificationConfigurationsType,
-    ) -> RusotoFuture<
-        DescribeNotificationConfigurationsAnswer,
-        DescribeNotificationConfigurationsError,
-    > {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeNotificationConfigurationsRequest {
+    type Output = DescribeNotificationConfigurationsResponse;
+    type Error = DescribeNotificationConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeNotificationConfigurations");
         params.put("Version", "2011-01-01");
-        DescribeNotificationConfigurationsTypeSerializer::serialize(&mut params, "", &input);
+        DescribeNotificationConfigurationsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeNotificationConfigurationsError::from_response(
@@ -11411,7 +12560,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeNotificationConfigurationsAnswer::default();
+                    result = DescribeNotificationConfigurationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11421,7 +12570,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeNotificationConfigurationsAnswerDeserializer::deserialize(
+                    result = DescribeNotificationConfigurationsResponseDeserializer::deserialize(
                         "DescribeNotificationConfigurationsResult",
                         &mut stack,
                     )?;
@@ -11433,22 +12582,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the policies for the specified Auto Scaling group.</p>
-    fn describe_policies(
-        &self,
-        input: DescribePoliciesType,
-    ) -> RusotoFuture<PoliciesType, DescribePoliciesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribePoliciesRequest {
+    type Output = DescribePoliciesResponse;
+    type Error = DescribePoliciesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribePolicies");
         params.put("Version", "2011-01-01");
-        DescribePoliciesTypeSerializer::serialize(&mut params, "", &input);
+        DescribePoliciesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11462,7 +12616,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PoliciesType::default();
+                    result = DescribePoliciesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11472,7 +12626,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PoliciesTypeDeserializer::deserialize(
+                    result = DescribePoliciesResponseDeserializer::deserialize(
                         "DescribePoliciesResult",
                         &mut stack,
                     )?;
@@ -11484,22 +12638,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
-    fn describe_scaling_activities(
-        &self,
-        input: DescribeScalingActivitiesType,
-    ) -> RusotoFuture<ActivitiesType, DescribeScalingActivitiesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeScalingActivitiesRequest {
+    type Output = DescribeScalingActivitiesResponse;
+    type Error = DescribeScalingActivitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScalingActivities");
         params.put("Version", "2011-01-01");
-        DescribeScalingActivitiesTypeSerializer::serialize(&mut params, "", &input);
+        DescribeScalingActivitiesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScalingActivitiesError::from_response(response))
@@ -11510,7 +12669,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ActivitiesType::default();
+                    result = DescribeScalingActivitiesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11520,7 +12679,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ActivitiesTypeDeserializer::deserialize(
+                    result = DescribeScalingActivitiesResponseDeserializer::deserialize(
                         "DescribeScalingActivitiesResult",
                         &mut stack,
                     )?;
@@ -11532,21 +12691,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>
-    fn describe_scaling_process_types(
-        &self,
-    ) -> RusotoFuture<ProcessesType, DescribeScalingProcessTypesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeScalingProcessTypesRequest {
+    type Output = DescribeScalingProcessTypesResponse;
+    type Error = DescribeScalingProcessTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScalingProcessTypes");
         params.put("Version", "2011-01-01");
-
+        DescribeScalingProcessTypesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScalingProcessTypesError::from_response(response))
@@ -11557,7 +12722,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ProcessesType::default();
+                    result = DescribeScalingProcessTypesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11567,7 +12732,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ProcessesTypeDeserializer::deserialize(
+                    result = DescribeScalingProcessTypesResponseDeserializer::deserialize(
                         "DescribeScalingProcessTypesResult",
                         &mut stack,
                     )?;
@@ -11579,22 +12744,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
-    fn describe_scheduled_actions(
-        &self,
-        input: DescribeScheduledActionsType,
-    ) -> RusotoFuture<ScheduledActionsType, DescribeScheduledActionsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeScheduledActionsRequest {
+    type Output = DescribeScheduledActionsResponse;
+    type Error = DescribeScheduledActionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeScheduledActions");
         params.put("Version", "2011-01-01");
-        DescribeScheduledActionsTypeSerializer::serialize(&mut params, "", &input);
+        DescribeScheduledActionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeScheduledActionsError::from_response(response))
@@ -11605,7 +12775,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ScheduledActionsType::default();
+                    result = DescribeScheduledActionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11615,7 +12785,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ScheduledActionsTypeDeserializer::deserialize(
+                    result = DescribeScheduledActionsResponseDeserializer::deserialize(
                         "DescribeScheduledActionsResult",
                         &mut stack,
                     )?;
@@ -11627,19 +12797,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
-    fn describe_tags(&self, input: DescribeTagsType) -> RusotoFuture<TagsType, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeTagsRequest {
+    type Output = DescribeTagsResponse;
+    type Error = DescribeTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTags");
         params.put("Version", "2011-01-01");
-        DescribeTagsTypeSerializer::serialize(&mut params, "", &input);
+        DescribeTagsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11653,7 +12831,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = TagsType::default();
+                    result = DescribeTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11663,7 +12841,10 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = TagsTypeDeserializer::deserialize("DescribeTagsResult", &mut stack)?;
+                    result = DescribeTagsResponseDeserializer::deserialize(
+                        "DescribeTagsResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -11672,22 +12853,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn describe_termination_policy_types(
-        &self,
-    ) -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>
-    {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DescribeTerminationPolicyTypesRequest {
+    type Output = DescribeTerminationPolicyTypesResponse;
+    type Error = DescribeTerminationPolicyTypesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeTerminationPolicyTypes");
         params.put("Version", "2011-01-01");
-
+        DescribeTerminationPolicyTypesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeTerminationPolicyTypesError::from_response(response))
@@ -11698,7 +12884,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeTerminationPolicyTypesAnswer::default();
+                    result = DescribeTerminationPolicyTypesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11708,7 +12894,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeTerminationPolicyTypesAnswerDeserializer::deserialize(
+                    result = DescribeTerminationPolicyTypesResponseDeserializer::deserialize(
                         "DescribeTerminationPolicyTypesResult",
                         &mut stack,
                     )?;
@@ -11720,22 +12906,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn detach_instances(
-        &self,
-        input: DetachInstancesQuery,
-    ) -> RusotoFuture<DetachInstancesAnswer, DetachInstancesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DetachInstancesRequest {
+    type Output = DetachInstancesResponse;
+    type Error = DetachInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachInstances");
         params.put("Version", "2011-01-01");
-        DetachInstancesQuerySerializer::serialize(&mut params, "", &input);
+        DetachInstancesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11749,7 +12940,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DetachInstancesAnswer::default();
+                    result = DetachInstancesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11759,7 +12950,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DetachInstancesAnswerDeserializer::deserialize(
+                    result = DetachInstancesResponseDeserializer::deserialize(
                         "DetachInstancesResult",
                         &mut stack,
                     )?;
@@ -11771,23 +12962,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Detaches one or more target groups from the specified Auto Scaling group.</p>
-    fn detach_load_balancer_target_groups(
-        &self,
-        input: DetachLoadBalancerTargetGroupsType,
-    ) -> RusotoFuture<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>
-    {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DetachLoadBalancerTargetGroupsRequest {
+    type Output = DetachLoadBalancerTargetGroupsResponse;
+    type Error = DetachLoadBalancerTargetGroupsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachLoadBalancerTargetGroups");
         params.put("Version", "2011-01-01");
-        DetachLoadBalancerTargetGroupsTypeSerializer::serialize(&mut params, "", &input);
+        DetachLoadBalancerTargetGroupsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DetachLoadBalancerTargetGroupsError::from_response(response))
@@ -11798,7 +12993,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DetachLoadBalancerTargetGroupsResultType::default();
+                    result = DetachLoadBalancerTargetGroupsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11808,7 +13003,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DetachLoadBalancerTargetGroupsResultTypeDeserializer::deserialize(
+                    result = DetachLoadBalancerTargetGroupsResponseDeserializer::deserialize(
                         "DetachLoadBalancerTargetGroupsResult",
                         &mut stack,
                     )?;
@@ -11820,22 +13015,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
-    fn detach_load_balancers(
-        &self,
-        input: DetachLoadBalancersType,
-    ) -> RusotoFuture<DetachLoadBalancersResultType, DetachLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DetachLoadBalancersRequest {
+    type Output = DetachLoadBalancersResponse;
+    type Error = DetachLoadBalancersError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DetachLoadBalancers");
         params.put("Version", "2011-01-01");
-        DetachLoadBalancersTypeSerializer::serialize(&mut params, "", &input);
+        DetachLoadBalancersRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11848,7 +13048,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DetachLoadBalancersResultType::default();
+                    result = DetachLoadBalancersResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11858,7 +13058,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DetachLoadBalancersResultTypeDeserializer::deserialize(
+                    result = DetachLoadBalancersResponseDeserializer::deserialize(
                         "DetachLoadBalancersResult",
                         &mut stack,
                     )?;
@@ -11870,72 +13070,127 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Disables group metrics for the specified Auto Scaling group.</p>
-    fn disable_metrics_collection(
-        &self,
-        input: DisableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), DisableMetricsCollectionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for DisableMetricsCollectionRequest {
+    type Output = DisableMetricsCollectionResponse;
+    type Error = DisableMetricsCollectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DisableMetricsCollection");
         params.put("Version", "2011-01-01");
-        DisableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
+        DisableMetricsCollectionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisableMetricsCollectionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DisableMetricsCollectionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DisableMetricsCollectionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn enable_metrics_collection(
-        &self,
-        input: EnableMetricsCollectionQuery,
-    ) -> RusotoFuture<(), EnableMetricsCollectionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for EnableMetricsCollectionRequest {
+    type Output = EnableMetricsCollectionResponse;
+    type Error = EnableMetricsCollectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnableMetricsCollection");
         params.put("Version", "2011-01-01");
-        EnableMetricsCollectionQuerySerializer::serialize(&mut params, "", &input);
+        EnableMetricsCollectionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(EnableMetricsCollectionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = EnableMetricsCollectionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = EnableMetricsCollectionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn enter_standby(
-        &self,
-        input: EnterStandbyQuery,
-    ) -> RusotoFuture<EnterStandbyAnswer, EnterStandbyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for EnterStandbyRequest {
+    type Output = EnterStandbyResponse;
+    type Error = EnterStandbyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "EnterStandby");
         params.put("Version", "2011-01-01");
-        EnterStandbyQuerySerializer::serialize(&mut params, "", &input);
+        EnterStandbyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11949,7 +13204,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnterStandbyAnswer::default();
+                    result = EnterStandbyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11959,7 +13214,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnterStandbyAnswerDeserializer::deserialize(
+                    result = EnterStandbyResponseDeserializer::deserialize(
                         "EnterStandbyResult",
                         &mut stack,
                     )?;
@@ -11971,19 +13226,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Executes the specified policy.</p>
-    fn execute_policy(&self, input: ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for ExecutePolicyRequest {
+    type Output = ExecutePolicyResponse;
+    type Error = ExecutePolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ExecutePolicy");
         params.put("Version", "2011-01-01");
-        ExecutePolicyTypeSerializer::serialize(&mut params, "", &input);
+        ExecutePolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11993,25 +13256,50 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ExecutePolicyResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ExecutePolicyResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn exit_standby(
-        &self,
-        input: ExitStandbyQuery,
-    ) -> RusotoFuture<ExitStandbyAnswer, ExitStandbyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for ExitStandbyRequest {
+    type Output = ExitStandbyResponse;
+    type Error = ExitStandbyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ExitStandby");
         params.put("Version", "2011-01-01");
-        ExitStandbyQuerySerializer::serialize(&mut params, "", &input);
+        ExitStandbyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12025,7 +13313,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ExitStandbyAnswer::default();
+                    result = ExitStandbyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -12035,7 +13323,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ExitStandbyAnswerDeserializer::deserialize(
+                    result = ExitStandbyResponseDeserializer::deserialize(
                         "ExitStandbyResult",
                         &mut stack,
                     )?;
@@ -12047,22 +13335,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
-    fn put_lifecycle_hook(
-        &self,
-        input: PutLifecycleHookType,
-    ) -> RusotoFuture<PutLifecycleHookAnswer, PutLifecycleHookError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for PutLifecycleHookRequest {
+    type Output = PutLifecycleHookResponse;
+    type Error = PutLifecycleHookError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutLifecycleHook");
         params.put("Version", "2011-01-01");
-        PutLifecycleHookTypeSerializer::serialize(&mut params, "", &input);
+        PutLifecycleHookRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12076,7 +13369,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PutLifecycleHookAnswer::default();
+                    result = PutLifecycleHookResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -12086,7 +13379,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PutLifecycleHookAnswerDeserializer::deserialize(
+                    result = PutLifecycleHookResponseDeserializer::deserialize(
                         "PutLifecycleHookResult",
                         &mut stack,
                     )?;
@@ -12098,47 +13391,77 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting Amazon SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_notification_configuration(
-        &self,
-        input: PutNotificationConfigurationType,
-    ) -> RusotoFuture<(), PutNotificationConfigurationError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for PutNotificationConfigurationRequest {
+    type Output = PutNotificationConfigurationResponse;
+    type Error = PutNotificationConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutNotificationConfiguration");
         params.put("Version", "2011-01-01");
-        PutNotificationConfigurationTypeSerializer::serialize(&mut params, "", &input);
+        PutNotificationConfigurationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutNotificationConfigurationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutNotificationConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutNotificationConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p>
-    fn put_scaling_policy(
-        &self,
-        input: PutScalingPolicyType,
-    ) -> RusotoFuture<PolicyARNType, PutScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for PutScalingPolicyRequest {
+    type Output = PutScalingPolicyResponse;
+    type Error = PutScalingPolicyError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutScalingPolicy");
         params.put("Version", "2011-01-01");
-        PutScalingPolicyTypeSerializer::serialize(&mut params, "", &input);
+        PutScalingPolicyRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12152,7 +13475,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = PolicyARNType::default();
+                    result = PutScalingPolicyResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -12162,7 +13485,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = PolicyARNTypeDeserializer::deserialize(
+                    result = PutScalingPolicyResponseDeserializer::deserialize(
                         "PutScalingPolicyResult",
                         &mut stack,
                     )?;
@@ -12174,48 +13497,77 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn put_scheduled_update_group_action(
-        &self,
-        input: PutScheduledUpdateGroupActionType,
-    ) -> RusotoFuture<(), PutScheduledUpdateGroupActionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for PutScheduledUpdateGroupActionRequest {
+    type Output = PutScheduledUpdateGroupActionResponse;
+    type Error = PutScheduledUpdateGroupActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "PutScheduledUpdateGroupAction");
         params.put("Version", "2011-01-01");
-        PutScheduledUpdateGroupActionTypeSerializer::serialize(&mut params, "", &input);
+        PutScheduledUpdateGroupActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutScheduledUpdateGroupActionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = PutScheduledUpdateGroupActionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutScheduledUpdateGroupActionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn record_lifecycle_action_heartbeat(
-        &self,
-        input: RecordLifecycleActionHeartbeatType,
-    ) -> RusotoFuture<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>
-    {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for RecordLifecycleActionHeartbeatRequest {
+    type Output = RecordLifecycleActionHeartbeatResponse;
+    type Error = RecordLifecycleActionHeartbeatError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RecordLifecycleActionHeartbeat");
         params.put("Version", "2011-01-01");
-        RecordLifecycleActionHeartbeatTypeSerializer::serialize(&mut params, "", &input);
+        RecordLifecycleActionHeartbeatRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RecordLifecycleActionHeartbeatError::from_response(response))
@@ -12226,7 +13578,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RecordLifecycleActionHeartbeatAnswer::default();
+                    result = RecordLifecycleActionHeartbeatResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -12236,7 +13588,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RecordLifecycleActionHeartbeatAnswerDeserializer::deserialize(
+                    result = RecordLifecycleActionHeartbeatResponseDeserializer::deserialize(
                         "RecordLifecycleActionHeartbeatResult",
                         &mut stack,
                     )?;
@@ -12248,22 +13600,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn resume_processes(
-        &self,
-        input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), ResumeProcessesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for ResumeProcessesRequest {
+    type Output = ResumeProcessesResponse;
+    type Error = ResumeProcessesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ResumeProcesses");
         params.put("Version", "2011-01-01");
-        ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
+        ResumeProcessesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12273,25 +13630,50 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ResumeProcessesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ResumeProcessesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_desired_capacity(
-        &self,
-        input: SetDesiredCapacityType,
-    ) -> RusotoFuture<(), SetDesiredCapacityError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for SetDesiredCapacityRequest {
+    type Output = SetDesiredCapacityResponse;
+    type Error = SetDesiredCapacityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetDesiredCapacity");
         params.put("Version", "2011-01-01");
-        SetDesiredCapacityTypeSerializer::serialize(&mut params, "", &input);
+        SetDesiredCapacityRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12301,25 +13683,50 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetDesiredCapacityResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetDesiredCapacityResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_instance_health(
-        &self,
-        input: SetInstanceHealthQuery,
-    ) -> RusotoFuture<(), SetInstanceHealthError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for SetInstanceHealthRequest {
+    type Output = SetInstanceHealthResponse;
+    type Error = SetInstanceHealthError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetInstanceHealth");
         params.put("Version", "2011-01-01");
-        SetInstanceHealthQuerySerializer::serialize(&mut params, "", &input);
+        SetInstanceHealthRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12329,25 +13736,50 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SetInstanceHealthResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SetInstanceHealthResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn set_instance_protection(
-        &self,
-        input: SetInstanceProtectionQuery,
-    ) -> RusotoFuture<SetInstanceProtectionAnswer, SetInstanceProtectionError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for SetInstanceProtectionRequest {
+    type Output = SetInstanceProtectionResponse;
+    type Error = SetInstanceProtectionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SetInstanceProtection");
         params.put("Version", "2011-01-01");
-        SetInstanceProtectionQuerySerializer::serialize(&mut params, "", &input);
+        SetInstanceProtectionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SetInstanceProtectionError::from_response(response))
@@ -12358,7 +13790,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = SetInstanceProtectionAnswer::default();
+                    result = SetInstanceProtectionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -12368,7 +13800,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = SetInstanceProtectionAnswerDeserializer::deserialize(
+                    result = SetInstanceProtectionResponseDeserializer::deserialize(
                         "SetInstanceProtectionResult",
                         &mut stack,
                     )?;
@@ -12380,22 +13812,27 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
-    fn suspend_processes(
-        &self,
-        input: ScalingProcessQuery,
-    ) -> RusotoFuture<(), SuspendProcessesError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for SuspendProcessesRequest {
+    type Output = SuspendProcessesResponse;
+    type Error = SuspendProcessesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SuspendProcesses");
         params.put("Version", "2011-01-01");
-        ScalingProcessQuerySerializer::serialize(&mut params, "", &input);
+        SuspendProcessesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -12405,25 +13842,50 @@ impl Autoscaling for AutoscalingClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SuspendProcessesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SuspendProcessesResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
-    fn terminate_instance_in_auto_scaling_group(
-        &self,
-        input: TerminateInstanceInAutoScalingGroupType,
-    ) -> RusotoFuture<ActivityType, TerminateInstanceInAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for TerminateInstanceInAutoScalingGroupRequest {
+    type Output = TerminateInstanceInAutoScalingGroupResponse;
+    type Error = TerminateInstanceInAutoScalingGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TerminateInstanceInAutoScalingGroup");
         params.put("Version", "2011-01-01");
-        TerminateInstanceInAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
+        TerminateInstanceInAutoScalingGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(TerminateInstanceInAutoScalingGroupError::from_response(
@@ -12436,7 +13898,7 @@ impl Autoscaling for AutoscalingClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ActivityType::default();
+                    result = TerminateInstanceInAutoScalingGroupResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -12446,7 +13908,7 @@ impl Autoscaling for AutoscalingClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ActivityTypeDeserializer::deserialize(
+                    result = TerminateInstanceInAutoScalingGroupResponseDeserializer::deserialize(
                         "TerminateInstanceInAutoScalingGroupResult",
                         &mut stack,
                     )?;
@@ -12458,29 +13920,54 @@ impl Autoscaling for AutoscalingClient {
             }))
         })
     }
+}
 
-    /// <p><p>Updates the configuration for the specified Auto Scaling group.</p> <p>The new settings take effect on any scaling activities after this call returns. Scaling activities that are currently in progress aren&#39;t affected.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>false</code>, you must first disable the collection of group metrics. Otherwise, you get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul></p>
-    fn update_auto_scaling_group(
-        &self,
-        input: UpdateAutoScalingGroupType,
-    ) -> RusotoFuture<(), UpdateAutoScalingGroupError> {
-        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+impl ServiceRequest for UpdateAutoScalingGroupRequest {
+    type Output = UpdateAutoScalingGroupResponse;
+    type Error = UpdateAutoScalingGroupError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "autoscaling", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateAutoScalingGroup");
         params.put("Version", "2011-01-01");
-        UpdateAutoScalingGroupTypeSerializer::serialize(&mut params, "", &input);
+        UpdateAutoScalingGroupRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateAutoScalingGroupError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateAutoScalingGroupResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateAutoScalingGroupResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 }
@@ -12503,7 +13990,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeletePolicyType::default();
+        let request = DeletePolicyRequest::default();
         let result = client.delete_policy(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
@@ -12517,8 +14004,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.describe_adjustment_types().sync();
+        let request = DescribeAdjustmentTypesRequest::default();
+        let result = client.describe_adjustment_types(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -12531,7 +14018,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = AutoScalingGroupNamesType::default();
+        let request = DescribeAutoScalingGroupsRequest::default();
         let result = client.describe_auto_scaling_groups(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12545,7 +14032,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAutoScalingInstancesType::default();
+        let request = DescribeAutoScalingInstancesRequest::default();
         let result = client.describe_auto_scaling_instances(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12559,8 +14046,10 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.describe_auto_scaling_notification_types().sync();
+        let request = DescribeAutoScalingNotificationTypesRequest::default();
+        let result = client
+            .describe_auto_scaling_notification_types(request)
+            .sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -12573,7 +14062,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = LaunchConfigurationNamesType::default();
+        let request = DescribeLaunchConfigurationsRequest::default();
         let result = client.describe_launch_configurations(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12587,8 +14076,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.describe_metric_collection_types().sync();
+        let request = DescribeMetricCollectionTypesRequest::default();
+        let result = client.describe_metric_collection_types(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -12601,7 +14090,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeNotificationConfigurationsType::default();
+        let request = DescribeNotificationConfigurationsRequest::default();
         let result = client.describe_notification_configurations(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12615,7 +14104,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribePoliciesType::default();
+        let request = DescribePoliciesRequest::default();
         let result = client.describe_policies(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12629,7 +14118,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeScalingActivitiesType::default();
+        let request = DescribeScalingActivitiesRequest::default();
         let result = client.describe_scaling_activities(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12643,8 +14132,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.describe_scaling_process_types().sync();
+        let request = DescribeScalingProcessTypesRequest::default();
+        let result = client.describe_scaling_process_types(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -12657,7 +14146,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeScheduledActionsType::default();
+        let request = DescribeScheduledActionsRequest::default();
         let result = client.describe_scheduled_actions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12671,7 +14160,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeTagsType::default();
+        let request = DescribeTagsRequest::default();
         let result = client.describe_tags(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12685,8 +14174,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.describe_termination_policy_types().sync();
+        let request = DescribeTerminationPolicyTypesRequest::default();
+        let result = client.describe_termination_policy_types(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

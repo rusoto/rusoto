@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
@@ -1706,99 +1707,82 @@ pub trait LicenseManager {
     fn create_license_configuration(
         &self,
         input: CreateLicenseConfigurationRequest,
-    ) -> RusotoFuture<CreateLicenseConfigurationResponse, CreateLicenseConfigurationError>;
+    ) -> Request<CreateLicenseConfigurationRequest>;
 
     /// <p>Deletes an existing license configuration. This action fails if the configuration is in use.</p>
     fn delete_license_configuration(
         &self,
         input: DeleteLicenseConfigurationRequest,
-    ) -> RusotoFuture<DeleteLicenseConfigurationResponse, DeleteLicenseConfigurationError>;
+    ) -> Request<DeleteLicenseConfigurationRequest>;
 
     /// <p>Returns a detailed description of a license configuration.</p>
     fn get_license_configuration(
         &self,
         input: GetLicenseConfigurationRequest,
-    ) -> RusotoFuture<GetLicenseConfigurationResponse, GetLicenseConfigurationError>;
+    ) -> Request<GetLicenseConfigurationRequest>;
 
     /// <p>Gets License Manager settings for a region. Exposes the configured S3 bucket, SNS topic, etc., for inspection. </p>
-    fn get_service_settings(
-        &self,
-    ) -> RusotoFuture<GetServiceSettingsResponse, GetServiceSettingsError>;
+    fn get_service_settings(&self) -> Request<GetServiceSettingsRequest>;
 
     /// <p>Lists the resource associations for a license configuration. Resource associations need not consume licenses from a license configuration. For example, an AMI or a stopped instance may not consume a license (depending on the license rules). Use this operation to find all resources associated with a license configuration.</p>
     fn list_associations_for_license_configuration(
         &self,
         input: ListAssociationsForLicenseConfigurationRequest,
-    ) -> RusotoFuture<
-        ListAssociationsForLicenseConfigurationResponse,
-        ListAssociationsForLicenseConfigurationError,
-    >;
+    ) -> Request<ListAssociationsForLicenseConfigurationRequest>;
 
     /// <p>Lists license configuration objects for an account, each containing the name, description, license type, and other license terms modeled from a license agreement.</p>
     fn list_license_configurations(
         &self,
         input: ListLicenseConfigurationsRequest,
-    ) -> RusotoFuture<ListLicenseConfigurationsResponse, ListLicenseConfigurationsError>;
+    ) -> Request<ListLicenseConfigurationsRequest>;
 
     /// <p>Returns the license configuration for a resource.</p>
     fn list_license_specifications_for_resource(
         &self,
         input: ListLicenseSpecificationsForResourceRequest,
-    ) -> RusotoFuture<
-        ListLicenseSpecificationsForResourceResponse,
-        ListLicenseSpecificationsForResourceError,
-    >;
+    ) -> Request<ListLicenseSpecificationsForResourceRequest>;
 
     /// <p>Returns a detailed list of resources.</p>
     fn list_resource_inventory(
         &self,
         input: ListResourceInventoryRequest,
-    ) -> RusotoFuture<ListResourceInventoryResponse, ListResourceInventoryError>;
+    ) -> Request<ListResourceInventoryRequest>;
 
     /// <p>Lists tags attached to a resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Lists all license usage records for a license configuration, displaying license consumption details by resource at a selected point in time. Use this action to audit the current license consumption for any license inventory and configuration.</p>
     fn list_usage_for_license_configuration(
         &self,
         input: ListUsageForLicenseConfigurationRequest,
-    ) -> RusotoFuture<ListUsageForLicenseConfigurationResponse, ListUsageForLicenseConfigurationError>;
+    ) -> Request<ListUsageForLicenseConfigurationRequest>;
 
     /// <p>Attach one of more tags to any resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Remove tags from a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Modifies the attributes of an existing license configuration object. A license configuration is an abstraction of a customer license agreement that can be consumed and enforced by License Manager. Components include specifications for the license type (Instances, cores, sockets, VCPUs), tenancy (shared or Dedicated Host), host affinity (how long a VM is associated with a host), the number of licenses purchased and used.</p>
     fn update_license_configuration(
         &self,
         input: UpdateLicenseConfigurationRequest,
-    ) -> RusotoFuture<UpdateLicenseConfigurationResponse, UpdateLicenseConfigurationError>;
+    ) -> Request<UpdateLicenseConfigurationRequest>;
 
     /// <p>Adds or removes license configurations for a specified AWS resource. This operation currently supports updating the license specifications of AMIs, instances, and hosts. Launch templates and AWS CloudFormation templates are not managed from this operation as those resources send the license configurations directly to a resource creation operation, such as <code>RunInstances</code>.</p>
     fn update_license_specifications_for_resource(
         &self,
         input: UpdateLicenseSpecificationsForResourceRequest,
-    ) -> RusotoFuture<
-        UpdateLicenseSpecificationsForResourceResponse,
-        UpdateLicenseSpecificationsForResourceError,
-    >;
+    ) -> Request<UpdateLicenseSpecificationsForResourceRequest>;
 
     /// <p>Updates License Manager service settings.</p>
     fn update_service_settings(
         &self,
         input: UpdateServiceSettingsRequest,
-    ) -> RusotoFuture<UpdateServiceSettingsResponse, UpdateServiceSettingsError>;
+    ) -> Request<UpdateServiceSettingsRequest>;
 }
 /// A client for the AWS License Manager API.
 #[derive(Clone)]
@@ -1841,18 +1825,138 @@ impl LicenseManager for LicenseManagerClient {
     fn create_license_configuration(
         &self,
         input: CreateLicenseConfigurationRequest,
-    ) -> RusotoFuture<CreateLicenseConfigurationResponse, CreateLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+    ) -> Request<CreateLicenseConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing license configuration. This action fails if the configuration is in use.</p>
+    fn delete_license_configuration(
+        &self,
+        input: DeleteLicenseConfigurationRequest,
+    ) -> Request<DeleteLicenseConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a detailed description of a license configuration.</p>
+    fn get_license_configuration(
+        &self,
+        input: GetLicenseConfigurationRequest,
+    ) -> Request<GetLicenseConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets License Manager settings for a region. Exposes the configured S3 bucket, SNS topic, etc., for inspection. </p>
+    fn get_service_settings(&self) -> Request<GetServiceSettingsRequest> {
+        Request::new(
+            GetServiceSettingsRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Lists the resource associations for a license configuration. Resource associations need not consume licenses from a license configuration. For example, an AMI or a stopped instance may not consume a license (depending on the license rules). Use this operation to find all resources associated with a license configuration.</p>
+    fn list_associations_for_license_configuration(
+        &self,
+        input: ListAssociationsForLicenseConfigurationRequest,
+    ) -> Request<ListAssociationsForLicenseConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists license configuration objects for an account, each containing the name, description, license type, and other license terms modeled from a license agreement.</p>
+    fn list_license_configurations(
+        &self,
+        input: ListLicenseConfigurationsRequest,
+    ) -> Request<ListLicenseConfigurationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the license configuration for a resource.</p>
+    fn list_license_specifications_for_resource(
+        &self,
+        input: ListLicenseSpecificationsForResourceRequest,
+    ) -> Request<ListLicenseSpecificationsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a detailed list of resources.</p>
+    fn list_resource_inventory(
+        &self,
+        input: ListResourceInventoryRequest,
+    ) -> Request<ListResourceInventoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists tags attached to a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists all license usage records for a license configuration, displaying license consumption details by resource at a selected point in time. Use this action to audit the current license consumption for any license inventory and configuration.</p>
+    fn list_usage_for_license_configuration(
+        &self,
+        input: ListUsageForLicenseConfigurationRequest,
+    ) -> Request<ListUsageForLicenseConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Attach one of more tags to any resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Remove tags from a resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies the attributes of an existing license configuration object. A license configuration is an abstraction of a customer license agreement that can be consumed and enforced by License Manager. Components include specifications for the license type (Instances, cores, sockets, VCPUs), tenancy (shared or Dedicated Host), host affinity (how long a VM is associated with a host), the number of licenses purchased and used.</p>
+    fn update_license_configuration(
+        &self,
+        input: UpdateLicenseConfigurationRequest,
+    ) -> Request<UpdateLicenseConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Adds or removes license configurations for a specified AWS resource. This operation currently supports updating the license specifications of AMIs, instances, and hosts. Launch templates and AWS CloudFormation templates are not managed from this operation as those resources send the license configurations directly to a resource creation operation, such as <code>RunInstances</code>.</p>
+    fn update_license_specifications_for_resource(
+        &self,
+        input: UpdateLicenseSpecificationsForResourceRequest,
+    ) -> Request<UpdateLicenseSpecificationsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates License Manager service settings.</p>
+    fn update_service_settings(
+        &self,
+        input: UpdateServiceSettingsRequest,
+    ) -> Request<UpdateServiceSettingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateLicenseConfigurationRequest {
+    type Output = CreateLicenseConfigurationResponse;
+    type Error = CreateLicenseConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.CreateLicenseConfiguration",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1865,23 +1969,28 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing license configuration. This action fails if the configuration is in use.</p>
-    fn delete_license_configuration(
-        &self,
-        input: DeleteLicenseConfigurationRequest,
-    ) -> RusotoFuture<DeleteLicenseConfigurationResponse, DeleteLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for DeleteLicenseConfigurationRequest {
+    type Output = DeleteLicenseConfigurationResponse;
+    type Error = DeleteLicenseConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.DeleteLicenseConfiguration",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1894,20 +2003,25 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Returns a detailed description of a license configuration.</p>
-    fn get_license_configuration(
-        &self,
-        input: GetLicenseConfigurationRequest,
-    ) -> RusotoFuture<GetLicenseConfigurationResponse, GetLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for GetLicenseConfigurationRequest {
+    type Output = GetLicenseConfigurationResponse;
+    type Error = GetLicenseConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.GetLicenseConfiguration");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1920,18 +2034,24 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Gets License Manager settings for a region. Exposes the configured S3 bucket, SNS topic, etc., for inspection. </p>
-    fn get_service_settings(
-        &self,
-    ) -> RusotoFuture<GetServiceSettingsResponse, GetServiceSettingsError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for GetServiceSettingsRequest {
+    type Output = GetServiceSettingsResponse;
+    type Error = GetServiceSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.GetServiceSettings");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1947,26 +2067,28 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Lists the resource associations for a license configuration. Resource associations need not consume licenses from a license configuration. For example, an AMI or a stopped instance may not consume a license (depending on the license rules). Use this operation to find all resources associated with a license configuration.</p>
-    fn list_associations_for_license_configuration(
-        &self,
-        input: ListAssociationsForLicenseConfigurationRequest,
-    ) -> RusotoFuture<
-        ListAssociationsForLicenseConfigurationResponse,
-        ListAssociationsForLicenseConfigurationError,
-    > {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for ListAssociationsForLicenseConfigurationRequest {
+    type Output = ListAssociationsForLicenseConfigurationResponse;
+    type Error = ListAssociationsForLicenseConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListAssociationsForLicenseConfiguration",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -1981,23 +2103,28 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Lists license configuration objects for an account, each containing the name, description, license type, and other license terms modeled from a license agreement.</p>
-    fn list_license_configurations(
-        &self,
-        input: ListLicenseConfigurationsRequest,
-    ) -> RusotoFuture<ListLicenseConfigurationsResponse, ListLicenseConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for ListLicenseConfigurationsRequest {
+    type Output = ListLicenseConfigurationsResponse;
+    type Error = ListLicenseConfigurationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListLicenseConfigurations",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2010,26 +2137,28 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Returns the license configuration for a resource.</p>
-    fn list_license_specifications_for_resource(
-        &self,
-        input: ListLicenseSpecificationsForResourceRequest,
-    ) -> RusotoFuture<
-        ListLicenseSpecificationsForResourceResponse,
-        ListLicenseSpecificationsForResourceError,
-    > {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for ListLicenseSpecificationsForResourceRequest {
+    type Output = ListLicenseSpecificationsForResourceResponse;
+    type Error = ListLicenseSpecificationsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListLicenseSpecificationsForResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2044,20 +2173,25 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Returns a detailed list of resources.</p>
-    fn list_resource_inventory(
-        &self,
-        input: ListResourceInventoryRequest,
-    ) -> RusotoFuture<ListResourceInventoryResponse, ListResourceInventoryError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for ListResourceInventoryRequest {
+    type Output = ListResourceInventoryResponse;
+    type Error = ListResourceInventoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.ListResourceInventory");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2072,20 +2206,25 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Lists tags attached to a resource.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.ListTagsForResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2100,24 +2239,28 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Lists all license usage records for a license configuration, displaying license consumption details by resource at a selected point in time. Use this action to audit the current license consumption for any license inventory and configuration.</p>
-    fn list_usage_for_license_configuration(
-        &self,
-        input: ListUsageForLicenseConfigurationRequest,
-    ) -> RusotoFuture<ListUsageForLicenseConfigurationResponse, ListUsageForLicenseConfigurationError>
-    {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for ListUsageForLicenseConfigurationRequest {
+    type Output = ListUsageForLicenseConfigurationResponse;
+    type Error = ListUsageForLicenseConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListUsageForLicenseConfiguration",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2132,20 +2275,25 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Attach one of more tags to any resource.</p>
-    fn tag_resource(
-        &self,
-        input: TagResourceRequest,
-    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.TagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2161,20 +2309,25 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Remove tags from a resource.</p>
-    fn untag_resource(
-        &self,
-        input: UntagResourceRequest,
-    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.UntagResource");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2190,23 +2343,28 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Modifies the attributes of an existing license configuration object. A license configuration is an abstraction of a customer license agreement that can be consumed and enforced by License Manager. Components include specifications for the license type (Instances, cores, sockets, VCPUs), tenancy (shared or Dedicated Host), host affinity (how long a VM is associated with a host), the number of licenses purchased and used.</p>
-    fn update_license_configuration(
-        &self,
-        input: UpdateLicenseConfigurationRequest,
-    ) -> RusotoFuture<UpdateLicenseConfigurationResponse, UpdateLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for UpdateLicenseConfigurationRequest {
+    type Output = UpdateLicenseConfigurationResponse;
+    type Error = UpdateLicenseConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.UpdateLicenseConfiguration",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2219,26 +2377,28 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Adds or removes license configurations for a specified AWS resource. This operation currently supports updating the license specifications of AMIs, instances, and hosts. Launch templates and AWS CloudFormation templates are not managed from this operation as those resources send the license configurations directly to a resource creation operation, such as <code>RunInstances</code>.</p>
-    fn update_license_specifications_for_resource(
-        &self,
-        input: UpdateLicenseSpecificationsForResourceRequest,
-    ) -> RusotoFuture<
-        UpdateLicenseSpecificationsForResourceResponse,
-        UpdateLicenseSpecificationsForResourceError,
-    > {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for UpdateLicenseSpecificationsForResourceRequest {
+    type Output = UpdateLicenseSpecificationsForResourceResponse;
+    type Error = UpdateLicenseSpecificationsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.UpdateLicenseSpecificationsForResource",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -2253,20 +2413,25 @@ impl LicenseManager for LicenseManagerClient {
             }
         })
     }
+}
 
-    /// <p>Updates License Manager service settings.</p>
-    fn update_service_settings(
-        &self,
-        input: UpdateServiceSettingsRequest,
-    ) -> RusotoFuture<UpdateServiceSettingsResponse, UpdateServiceSettingsError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+impl ServiceRequest for UpdateServiceSettingsRequest {
+    type Output = UpdateServiceSettingsResponse;
+    type Error = UpdateServiceSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "license-manager", region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.UpdateServiceSettings");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

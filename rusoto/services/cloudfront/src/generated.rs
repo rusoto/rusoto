@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -1034,7 +1035,7 @@ pub struct CreateCloudFrontOriginAccessIdentityRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCloudFrontOriginAccessIdentityResult {
+pub struct CreateCloudFrontOriginAccessIdentityResponse {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
     /// <p>The current version of the origin access identity created.</p>
@@ -1043,21 +1044,21 @@ pub struct CreateCloudFrontOriginAccessIdentityResult {
     pub location: Option<String>,
 }
 
-struct CreateCloudFrontOriginAccessIdentityResultDeserializer;
-impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
+struct CreateCloudFrontOriginAccessIdentityResponseDeserializer;
+impl CreateCloudFrontOriginAccessIdentityResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        Ok(CreateCloudFrontOriginAccessIdentityResult {
+    ) -> Result<CreateCloudFrontOriginAccessIdentityResponse, XmlParseError> {
+        Ok(CreateCloudFrontOriginAccessIdentityResponse {
             cloud_front_origin_access_identity: Some(
                 CloudFrontOriginAccessIdentityDeserializer::deserialize(
                     "CloudFrontOriginAccessIdentity",
                     stack,
                 )?,
             ),
-            ..CreateCloudFrontOriginAccessIdentityResult::default()
+            ..CreateCloudFrontOriginAccessIdentityResponse::default()
         })
     }
 }
@@ -1070,7 +1071,7 @@ pub struct CreateDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDistributionResult {
+pub struct CreateDistributionResponse {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
     /// <p>The current version of the distribution created.</p>
@@ -1079,19 +1080,19 @@ pub struct CreateDistributionResult {
     pub location: Option<String>,
 }
 
-struct CreateDistributionResultDeserializer;
-impl CreateDistributionResultDeserializer {
+struct CreateDistributionResponseDeserializer;
+impl CreateDistributionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDistributionResult, XmlParseError> {
-        Ok(CreateDistributionResult {
+    ) -> Result<CreateDistributionResponse, XmlParseError> {
+        Ok(CreateDistributionResponse {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
                 stack,
             )?),
-            ..CreateDistributionResult::default()
+            ..CreateDistributionResponse::default()
         })
     }
 }
@@ -1104,7 +1105,7 @@ pub struct CreateDistributionWithTagsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateDistributionWithTagsResult {
+pub struct CreateDistributionWithTagsResponse {
     /// <p>The distribution's information. </p>
     pub distribution: Option<Distribution>,
     /// <p>The current version of the distribution created.</p>
@@ -1113,19 +1114,19 @@ pub struct CreateDistributionWithTagsResult {
     pub location: Option<String>,
 }
 
-struct CreateDistributionWithTagsResultDeserializer;
-impl CreateDistributionWithTagsResultDeserializer {
+struct CreateDistributionWithTagsResponseDeserializer;
+impl CreateDistributionWithTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateDistributionWithTagsResult, XmlParseError> {
-        Ok(CreateDistributionWithTagsResult {
+    ) -> Result<CreateDistributionWithTagsResponse, XmlParseError> {
+        Ok(CreateDistributionWithTagsResponse {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
                 stack,
             )?),
-            ..CreateDistributionWithTagsResult::default()
+            ..CreateDistributionWithTagsResponse::default()
         })
     }
 }
@@ -1140,26 +1141,26 @@ pub struct CreateInvalidationRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateInvalidationResult {
+pub struct CreateInvalidationResponse {
     /// <p>The invalidation's information.</p>
     pub invalidation: Option<Invalidation>,
     /// <p>The fully qualified URI of the distribution and invalidation batch request, including the <code>Invalidation ID</code>.</p>
     pub location: Option<String>,
 }
 
-struct CreateInvalidationResultDeserializer;
-impl CreateInvalidationResultDeserializer {
+struct CreateInvalidationResponseDeserializer;
+impl CreateInvalidationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateInvalidationResult, XmlParseError> {
-        Ok(CreateInvalidationResult {
+    ) -> Result<CreateInvalidationResponse, XmlParseError> {
+        Ok(CreateInvalidationResponse {
             invalidation: Some(InvalidationDeserializer::deserialize(
                 "Invalidation",
                 stack,
             )?),
-            ..CreateInvalidationResult::default()
+            ..CreateInvalidationResponse::default()
         })
     }
 }
@@ -1172,7 +1173,7 @@ pub struct CreateStreamingDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateStreamingDistributionResult {
+pub struct CreateStreamingDistributionResponse {
     /// <p>The current version of the streaming distribution created.</p>
     pub e_tag: Option<String>,
     /// <p>The fully qualified URI of the new streaming distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
@@ -1181,19 +1182,19 @@ pub struct CreateStreamingDistributionResult {
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
-struct CreateStreamingDistributionResultDeserializer;
-impl CreateStreamingDistributionResultDeserializer {
+struct CreateStreamingDistributionResponseDeserializer;
+impl CreateStreamingDistributionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateStreamingDistributionResult, XmlParseError> {
-        Ok(CreateStreamingDistributionResult {
+    ) -> Result<CreateStreamingDistributionResponse, XmlParseError> {
+        Ok(CreateStreamingDistributionResponse {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
                 stack,
             )?),
-            ..CreateStreamingDistributionResult::default()
+            ..CreateStreamingDistributionResponse::default()
         })
     }
 }
@@ -1206,7 +1207,7 @@ pub struct CreateStreamingDistributionWithTagsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateStreamingDistributionWithTagsResult {
+pub struct CreateStreamingDistributionWithTagsResponse {
     pub e_tag: Option<String>,
     /// <p>The fully qualified URI of the new streaming distribution resource just created. For example:<code> https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
     pub location: Option<String>,
@@ -1214,19 +1215,19 @@ pub struct CreateStreamingDistributionWithTagsResult {
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
-struct CreateStreamingDistributionWithTagsResultDeserializer;
-impl CreateStreamingDistributionWithTagsResultDeserializer {
+struct CreateStreamingDistributionWithTagsResponseDeserializer;
+impl CreateStreamingDistributionWithTagsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateStreamingDistributionWithTagsResult, XmlParseError> {
-        Ok(CreateStreamingDistributionWithTagsResult {
+    ) -> Result<CreateStreamingDistributionWithTagsResponse, XmlParseError> {
+        Ok(CreateStreamingDistributionWithTagsResponse {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
                 stack,
             )?),
-            ..CreateStreamingDistributionWithTagsResult::default()
+            ..CreateStreamingDistributionWithTagsResponse::default()
         })
     }
 }
@@ -1774,6 +1775,19 @@ pub struct DeleteCloudFrontOriginAccessIdentityRequest {
     pub if_match: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteCloudFrontOriginAccessIdentityResponse {}
+
+struct DeleteCloudFrontOriginAccessIdentityResponseDeserializer;
+impl DeleteCloudFrontOriginAccessIdentityResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteCloudFrontOriginAccessIdentityResponse, XmlParseError> {
+        Ok(DeleteCloudFrontOriginAccessIdentityResponse::default())
+    }
+}
 /// <p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDistributionRequest {
@@ -1784,10 +1798,36 @@ pub struct DeleteDistributionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteDistributionResponse {}
+
+struct DeleteDistributionResponseDeserializer;
+impl DeleteDistributionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDistributionResponse, XmlParseError> {
+        Ok(DeleteDistributionResponse::default())
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServiceLinkedRoleRequest {
     pub role_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteServiceLinkedRoleResponse {}
+
+struct DeleteServiceLinkedRoleResponseDeserializer;
+impl DeleteServiceLinkedRoleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteServiceLinkedRoleResponse, XmlParseError> {
+        Ok(DeleteServiceLinkedRoleResponse::default())
+    }
+}
 /// <p>The request to delete a streaming distribution.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteStreamingDistributionRequest {
@@ -1797,6 +1837,19 @@ pub struct DeleteStreamingDistributionRequest {
     pub if_match: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteStreamingDistributionResponse {}
+
+struct DeleteStreamingDistributionResponseDeserializer;
+impl DeleteStreamingDistributionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteStreamingDistributionResponse, XmlParseError> {
+        Ok(DeleteStreamingDistributionResponse::default())
+    }
+}
 /// <p>The distribution's information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Distribution {
@@ -2518,28 +2571,28 @@ pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetCloudFrontOriginAccessIdentityConfigResult {
+pub struct GetCloudFrontOriginAccessIdentityConfigResponse {
     /// <p>The origin access identity's configuration information. </p>
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
-struct GetCloudFrontOriginAccessIdentityConfigResultDeserializer;
-impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
+struct GetCloudFrontOriginAccessIdentityConfigResponseDeserializer;
+impl GetCloudFrontOriginAccessIdentityConfigResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, XmlParseError> {
-        Ok(GetCloudFrontOriginAccessIdentityConfigResult {
+    ) -> Result<GetCloudFrontOriginAccessIdentityConfigResponse, XmlParseError> {
+        Ok(GetCloudFrontOriginAccessIdentityConfigResponse {
             cloud_front_origin_access_identity_config: Some(
                 CloudFrontOriginAccessIdentityConfigDeserializer::deserialize(
                     "CloudFrontOriginAccessIdentityConfig",
                     stack,
                 )?,
             ),
-            ..GetCloudFrontOriginAccessIdentityConfigResult::default()
+            ..GetCloudFrontOriginAccessIdentityConfigResponse::default()
         })
     }
 }
@@ -2552,28 +2605,28 @@ pub struct GetCloudFrontOriginAccessIdentityRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetCloudFrontOriginAccessIdentityResult {
+pub struct GetCloudFrontOriginAccessIdentityResponse {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
     /// <p>The current version of the origin access identity's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
-struct GetCloudFrontOriginAccessIdentityResultDeserializer;
-impl GetCloudFrontOriginAccessIdentityResultDeserializer {
+struct GetCloudFrontOriginAccessIdentityResponseDeserializer;
+impl GetCloudFrontOriginAccessIdentityResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        Ok(GetCloudFrontOriginAccessIdentityResult {
+    ) -> Result<GetCloudFrontOriginAccessIdentityResponse, XmlParseError> {
+        Ok(GetCloudFrontOriginAccessIdentityResponse {
             cloud_front_origin_access_identity: Some(
                 CloudFrontOriginAccessIdentityDeserializer::deserialize(
                     "CloudFrontOriginAccessIdentity",
                     stack,
                 )?,
             ),
-            ..GetCloudFrontOriginAccessIdentityResult::default()
+            ..GetCloudFrontOriginAccessIdentityResponse::default()
         })
     }
 }
@@ -2586,26 +2639,26 @@ pub struct GetDistributionConfigRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetDistributionConfigResult {
+pub struct GetDistributionConfigResponse {
     /// <p>The distribution's configuration information.</p>
     pub distribution_config: Option<DistributionConfig>,
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
-struct GetDistributionConfigResultDeserializer;
-impl GetDistributionConfigResultDeserializer {
+struct GetDistributionConfigResponseDeserializer;
+impl GetDistributionConfigResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetDistributionConfigResult, XmlParseError> {
-        Ok(GetDistributionConfigResult {
+    ) -> Result<GetDistributionConfigResponse, XmlParseError> {
+        Ok(GetDistributionConfigResponse {
             distribution_config: Some(DistributionConfigDeserializer::deserialize(
                 "DistributionConfig",
                 stack,
             )?),
-            ..GetDistributionConfigResult::default()
+            ..GetDistributionConfigResponse::default()
         })
     }
 }
@@ -2618,26 +2671,26 @@ pub struct GetDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetDistributionResult {
+pub struct GetDistributionResponse {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
     /// <p>The current version of the distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
-struct GetDistributionResultDeserializer;
-impl GetDistributionResultDeserializer {
+struct GetDistributionResponseDeserializer;
+impl GetDistributionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetDistributionResult, XmlParseError> {
-        Ok(GetDistributionResult {
+    ) -> Result<GetDistributionResponse, XmlParseError> {
+        Ok(GetDistributionResponse {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
                 stack,
             )?),
-            ..GetDistributionResult::default()
+            ..GetDistributionResponse::default()
         })
     }
 }
@@ -2652,24 +2705,24 @@ pub struct GetInvalidationRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetInvalidationResult {
+pub struct GetInvalidationResponse {
     /// <p>The invalidation's information. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html">Invalidation Complex Type</a>. </p>
     pub invalidation: Option<Invalidation>,
 }
 
-struct GetInvalidationResultDeserializer;
-impl GetInvalidationResultDeserializer {
+struct GetInvalidationResponseDeserializer;
+impl GetInvalidationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetInvalidationResult, XmlParseError> {
-        Ok(GetInvalidationResult {
+    ) -> Result<GetInvalidationResponse, XmlParseError> {
+        Ok(GetInvalidationResponse {
             invalidation: Some(InvalidationDeserializer::deserialize(
                 "Invalidation",
                 stack,
             )?),
-            ..GetInvalidationResult::default()
+            ..GetInvalidationResponse::default()
         })
     }
 }
@@ -2682,28 +2735,28 @@ pub struct GetStreamingDistributionConfigRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetStreamingDistributionConfigResult {
+pub struct GetStreamingDistributionConfigResponse {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>
     pub e_tag: Option<String>,
     /// <p>The streaming distribution's configuration information.</p>
     pub streaming_distribution_config: Option<StreamingDistributionConfig>,
 }
 
-struct GetStreamingDistributionConfigResultDeserializer;
-impl GetStreamingDistributionConfigResultDeserializer {
+struct GetStreamingDistributionConfigResponseDeserializer;
+impl GetStreamingDistributionConfigResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetStreamingDistributionConfigResult, XmlParseError> {
-        Ok(GetStreamingDistributionConfigResult {
+    ) -> Result<GetStreamingDistributionConfigResponse, XmlParseError> {
+        Ok(GetStreamingDistributionConfigResponse {
             streaming_distribution_config: Some(
                 StreamingDistributionConfigDeserializer::deserialize(
                     "StreamingDistributionConfig",
                     stack,
                 )?,
             ),
-            ..GetStreamingDistributionConfigResult::default()
+            ..GetStreamingDistributionConfigResponse::default()
         })
     }
 }
@@ -2716,26 +2769,26 @@ pub struct GetStreamingDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct GetStreamingDistributionResult {
+pub struct GetStreamingDistributionResponse {
     /// <p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
     /// <p>The streaming distribution's information.</p>
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
-struct GetStreamingDistributionResultDeserializer;
-impl GetStreamingDistributionResultDeserializer {
+struct GetStreamingDistributionResponseDeserializer;
+impl GetStreamingDistributionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<GetStreamingDistributionResult, XmlParseError> {
-        Ok(GetStreamingDistributionResult {
+    ) -> Result<GetStreamingDistributionResponse, XmlParseError> {
+        Ok(GetStreamingDistributionResponse {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
                 stack,
             )?),
-            ..GetStreamingDistributionResult::default()
+            ..GetStreamingDistributionResponse::default()
         })
     }
 }
@@ -3369,26 +3422,26 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListCloudFrontOriginAccessIdentitiesResult {
+pub struct ListCloudFrontOriginAccessIdentitiesResponse {
     /// <p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>
     pub cloud_front_origin_access_identity_list: Option<CloudFrontOriginAccessIdentityList>,
 }
 
-struct ListCloudFrontOriginAccessIdentitiesResultDeserializer;
-impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
+struct ListCloudFrontOriginAccessIdentitiesResponseDeserializer;
+impl ListCloudFrontOriginAccessIdentitiesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, XmlParseError> {
-        Ok(ListCloudFrontOriginAccessIdentitiesResult {
+    ) -> Result<ListCloudFrontOriginAccessIdentitiesResponse, XmlParseError> {
+        Ok(ListCloudFrontOriginAccessIdentitiesResponse {
             cloud_front_origin_access_identity_list: Some(
                 CloudFrontOriginAccessIdentityListDeserializer::deserialize(
                     "CloudFrontOriginAccessIdentityList",
                     stack,
                 )?,
             ),
-            ..ListCloudFrontOriginAccessIdentitiesResult::default()
+            ..ListCloudFrontOriginAccessIdentitiesResponse::default()
         })
     }
 }
@@ -3405,24 +3458,24 @@ pub struct ListDistributionsByWebACLIdRequest {
 
 /// <p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListDistributionsByWebACLIdResult {
+pub struct ListDistributionsByWebACLIdResponse {
     /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
 }
 
-struct ListDistributionsByWebACLIdResultDeserializer;
-impl ListDistributionsByWebACLIdResultDeserializer {
+struct ListDistributionsByWebACLIdResponseDeserializer;
+impl ListDistributionsByWebACLIdResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListDistributionsByWebACLIdResult, XmlParseError> {
-        Ok(ListDistributionsByWebACLIdResult {
+    ) -> Result<ListDistributionsByWebACLIdResponse, XmlParseError> {
+        Ok(ListDistributionsByWebACLIdResponse {
             distribution_list: Some(DistributionListDeserializer::deserialize(
                 "DistributionList",
                 stack,
             )?),
-            ..ListDistributionsByWebACLIdResult::default()
+            ..ListDistributionsByWebACLIdResponse::default()
         })
     }
 }
@@ -3437,24 +3490,24 @@ pub struct ListDistributionsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListDistributionsResult {
+pub struct ListDistributionsResponse {
     /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
 }
 
-struct ListDistributionsResultDeserializer;
-impl ListDistributionsResultDeserializer {
+struct ListDistributionsResponseDeserializer;
+impl ListDistributionsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListDistributionsResult, XmlParseError> {
-        Ok(ListDistributionsResult {
+    ) -> Result<ListDistributionsResponse, XmlParseError> {
+        Ok(ListDistributionsResponse {
             distribution_list: Some(DistributionListDeserializer::deserialize(
                 "DistributionList",
                 stack,
             )?),
-            ..ListDistributionsResult::default()
+            ..ListDistributionsResponse::default()
         })
     }
 }
@@ -3471,24 +3524,24 @@ pub struct ListInvalidationsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListInvalidationsResult {
+pub struct ListInvalidationsResponse {
     /// <p>Information about invalidation batches. </p>
     pub invalidation_list: Option<InvalidationList>,
 }
 
-struct ListInvalidationsResultDeserializer;
-impl ListInvalidationsResultDeserializer {
+struct ListInvalidationsResponseDeserializer;
+impl ListInvalidationsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListInvalidationsResult, XmlParseError> {
-        Ok(ListInvalidationsResult {
+    ) -> Result<ListInvalidationsResponse, XmlParseError> {
+        Ok(ListInvalidationsResponse {
             invalidation_list: Some(InvalidationListDeserializer::deserialize(
                 "InvalidationList",
                 stack,
             )?),
-            ..ListInvalidationsResult::default()
+            ..ListInvalidationsResponse::default()
         })
     }
 }
@@ -3503,24 +3556,24 @@ pub struct ListStreamingDistributionsRequest {
 
 /// <p>The returned result of the corresponding request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListStreamingDistributionsResult {
+pub struct ListStreamingDistributionsResponse {
     /// <p>The <code>StreamingDistributionList</code> type. </p>
     pub streaming_distribution_list: Option<StreamingDistributionList>,
 }
 
-struct ListStreamingDistributionsResultDeserializer;
-impl ListStreamingDistributionsResultDeserializer {
+struct ListStreamingDistributionsResponseDeserializer;
+impl ListStreamingDistributionsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListStreamingDistributionsResult, XmlParseError> {
-        Ok(ListStreamingDistributionsResult {
+    ) -> Result<ListStreamingDistributionsResponse, XmlParseError> {
+        Ok(ListStreamingDistributionsResponse {
             streaming_distribution_list: Some(StreamingDistributionListDeserializer::deserialize(
                 "StreamingDistributionList",
                 stack,
             )?),
-            ..ListStreamingDistributionsResult::default()
+            ..ListStreamingDistributionsResponse::default()
         })
     }
 }
@@ -3533,21 +3586,21 @@ pub struct ListTagsForResourceRequest {
 
 /// <p> The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTagsForResourceResult {
+pub struct ListTagsForResourceResponse {
     /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
     pub tags: Tags,
 }
 
-struct ListTagsForResourceResultDeserializer;
-impl ListTagsForResourceResultDeserializer {
+struct ListTagsForResourceResponseDeserializer;
+impl ListTagsForResourceResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListTagsForResourceResult, XmlParseError> {
-        Ok(ListTagsForResourceResult {
+    ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        Ok(ListTagsForResourceResponse {
             tags: TagsDeserializer::deserialize("Tags", stack)?,
-            ..ListTagsForResourceResult::default()
+            ..ListTagsForResourceResponse::default()
         })
     }
 }
@@ -5389,6 +5442,19 @@ pub struct TagResourceRequest {
     pub tags: Tags,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagResourceResponse {}
+
+struct TagResourceResponseDeserializer;
+impl TagResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TagResourceResponse, XmlParseError> {
+        Ok(TagResourceResponse::default())
+    }
+}
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
@@ -5554,6 +5620,19 @@ pub struct UntagResourceRequest {
     pub tag_keys: TagKeys,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UntagResourceResponse {}
+
+struct UntagResourceResponseDeserializer;
+impl UntagResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UntagResourceResponse, XmlParseError> {
+        Ok(UntagResourceResponse::default())
+    }
+}
 /// <p>The request to update an origin access identity.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
@@ -5567,28 +5646,28 @@ pub struct UpdateCloudFrontOriginAccessIdentityRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateCloudFrontOriginAccessIdentityResult {
+pub struct UpdateCloudFrontOriginAccessIdentityResponse {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
-struct UpdateCloudFrontOriginAccessIdentityResultDeserializer;
-impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
+struct UpdateCloudFrontOriginAccessIdentityResponseDeserializer;
+impl UpdateCloudFrontOriginAccessIdentityResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, XmlParseError> {
-        Ok(UpdateCloudFrontOriginAccessIdentityResult {
+    ) -> Result<UpdateCloudFrontOriginAccessIdentityResponse, XmlParseError> {
+        Ok(UpdateCloudFrontOriginAccessIdentityResponse {
             cloud_front_origin_access_identity: Some(
                 CloudFrontOriginAccessIdentityDeserializer::deserialize(
                     "CloudFrontOriginAccessIdentity",
                     stack,
                 )?,
             ),
-            ..UpdateCloudFrontOriginAccessIdentityResult::default()
+            ..UpdateCloudFrontOriginAccessIdentityResponse::default()
         })
     }
 }
@@ -5605,26 +5684,26 @@ pub struct UpdateDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateDistributionResult {
+pub struct UpdateDistributionResponse {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
 }
 
-struct UpdateDistributionResultDeserializer;
-impl UpdateDistributionResultDeserializer {
+struct UpdateDistributionResponseDeserializer;
+impl UpdateDistributionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<UpdateDistributionResult, XmlParseError> {
-        Ok(UpdateDistributionResult {
+    ) -> Result<UpdateDistributionResponse, XmlParseError> {
+        Ok(UpdateDistributionResponse {
             distribution: Some(DistributionDeserializer::deserialize(
                 "Distribution",
                 stack,
             )?),
-            ..UpdateDistributionResult::default()
+            ..UpdateDistributionResponse::default()
         })
     }
 }
@@ -5641,26 +5720,26 @@ pub struct UpdateStreamingDistributionRequest {
 
 /// <p>The returned result of the corresponding request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateStreamingDistributionResult {
+pub struct UpdateStreamingDistributionResponse {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
     /// <p>The streaming distribution's information.</p>
     pub streaming_distribution: Option<StreamingDistribution>,
 }
 
-struct UpdateStreamingDistributionResultDeserializer;
-impl UpdateStreamingDistributionResultDeserializer {
+struct UpdateStreamingDistributionResponseDeserializer;
+impl UpdateStreamingDistributionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<UpdateStreamingDistributionResult, XmlParseError> {
-        Ok(UpdateStreamingDistributionResult {
+    ) -> Result<UpdateStreamingDistributionResponse, XmlParseError> {
+        Ok(UpdateStreamingDistributionResponse {
             streaming_distribution: Some(StreamingDistributionDeserializer::deserialize(
                 "StreamingDistribution",
                 stack,
             )?),
-            ..UpdateStreamingDistributionResult::default()
+            ..UpdateStreamingDistributionResponse::default()
         })
     }
 }
@@ -8827,177 +8906,156 @@ pub trait CloudFront {
     fn create_cloud_front_origin_access_identity(
         &self,
         input: CreateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
-        CreateCloudFrontOriginAccessIdentityResult,
-        CreateCloudFrontOriginAccessIdentityError,
-    >;
+    ) -> Request<CreateCloudFrontOriginAccessIdentityRequest>;
 
     /// <p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>
     fn create_distribution(
         &self,
         input: CreateDistributionRequest,
-    ) -> RusotoFuture<CreateDistributionResult, CreateDistributionError>;
+    ) -> Request<CreateDistributionRequest>;
 
     /// <p>Create a new distribution with tags.</p>
     fn create_distribution_with_tags(
         &self,
         input: CreateDistributionWithTagsRequest,
-    ) -> RusotoFuture<CreateDistributionWithTagsResult, CreateDistributionWithTagsError>;
+    ) -> Request<CreateDistributionWithTagsRequest>;
 
     /// <p>Create a new invalidation. </p>
     fn create_invalidation(
         &self,
         input: CreateInvalidationRequest,
-    ) -> RusotoFuture<CreateInvalidationResult, CreateInvalidationError>;
+    ) -> Request<CreateInvalidationRequest>;
 
     /// <p><p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
     fn create_streaming_distribution(
         &self,
         input: CreateStreamingDistributionRequest,
-    ) -> RusotoFuture<CreateStreamingDistributionResult, CreateStreamingDistributionError>;
+    ) -> Request<CreateStreamingDistributionRequest>;
 
     /// <p>Create a new streaming distribution with tags.</p>
     fn create_streaming_distribution_with_tags(
         &self,
         input: CreateStreamingDistributionWithTagsRequest,
-    ) -> RusotoFuture<
-        CreateStreamingDistributionWithTagsResult,
-        CreateStreamingDistributionWithTagsError,
-    >;
+    ) -> Request<CreateStreamingDistributionWithTagsRequest>;
 
     /// <p>Delete an origin access identity. </p>
     fn delete_cloud_front_origin_access_identity(
         &self,
         input: DeleteCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<(), DeleteCloudFrontOriginAccessIdentityError>;
+    ) -> Request<DeleteCloudFrontOriginAccessIdentityRequest>;
 
     /// <p>Delete a distribution. </p>
     fn delete_distribution(
         &self,
         input: DeleteDistributionRequest,
-    ) -> RusotoFuture<(), DeleteDistributionError>;
+    ) -> Request<DeleteDistributionRequest>;
 
     fn delete_service_linked_role(
         &self,
         input: DeleteServiceLinkedRoleRequest,
-    ) -> RusotoFuture<(), DeleteServiceLinkedRoleError>;
+    ) -> Request<DeleteServiceLinkedRoleRequest>;
 
     /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     fn delete_streaming_distribution(
         &self,
         input: DeleteStreamingDistributionRequest,
-    ) -> RusotoFuture<(), DeleteStreamingDistributionError>;
+    ) -> Request<DeleteStreamingDistributionRequest>;
 
     /// <p>Get the information about an origin access identity. </p>
     fn get_cloud_front_origin_access_identity(
         &self,
         input: GetCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>;
+    ) -> Request<GetCloudFrontOriginAccessIdentityRequest>;
 
     /// <p>Get the configuration information about an origin access identity. </p>
     fn get_cloud_front_origin_access_identity_config(
         &self,
         input: GetCloudFrontOriginAccessIdentityConfigRequest,
-    ) -> RusotoFuture<
-        GetCloudFrontOriginAccessIdentityConfigResult,
-        GetCloudFrontOriginAccessIdentityConfigError,
-    >;
+    ) -> Request<GetCloudFrontOriginAccessIdentityConfigRequest>;
 
     /// <p>Get the information about a distribution. </p>
-    fn get_distribution(
-        &self,
-        input: GetDistributionRequest,
-    ) -> RusotoFuture<GetDistributionResult, GetDistributionError>;
+    fn get_distribution(&self, input: GetDistributionRequest) -> Request<GetDistributionRequest>;
 
     /// <p>Get the configuration information about a distribution. </p>
     fn get_distribution_config(
         &self,
         input: GetDistributionConfigRequest,
-    ) -> RusotoFuture<GetDistributionConfigResult, GetDistributionConfigError>;
+    ) -> Request<GetDistributionConfigRequest>;
 
     /// <p>Get the information about an invalidation. </p>
-    fn get_invalidation(
-        &self,
-        input: GetInvalidationRequest,
-    ) -> RusotoFuture<GetInvalidationResult, GetInvalidationError>;
+    fn get_invalidation(&self, input: GetInvalidationRequest) -> Request<GetInvalidationRequest>;
 
     /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
     fn get_streaming_distribution(
         &self,
         input: GetStreamingDistributionRequest,
-    ) -> RusotoFuture<GetStreamingDistributionResult, GetStreamingDistributionError>;
+    ) -> Request<GetStreamingDistributionRequest>;
 
     /// <p>Get the configuration information about a streaming distribution. </p>
     fn get_streaming_distribution_config(
         &self,
         input: GetStreamingDistributionConfigRequest,
-    ) -> RusotoFuture<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>;
+    ) -> Request<GetStreamingDistributionConfigRequest>;
 
     /// <p>Lists origin access identities.</p>
     fn list_cloud_front_origin_access_identities(
         &self,
         input: ListCloudFrontOriginAccessIdentitiesRequest,
-    ) -> RusotoFuture<
-        ListCloudFrontOriginAccessIdentitiesResult,
-        ListCloudFrontOriginAccessIdentitiesError,
-    >;
+    ) -> Request<ListCloudFrontOriginAccessIdentitiesRequest>;
 
     /// <p>List distributions. </p>
     fn list_distributions(
         &self,
         input: ListDistributionsRequest,
-    ) -> RusotoFuture<ListDistributionsResult, ListDistributionsError>;
+    ) -> Request<ListDistributionsRequest>;
 
     /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
     fn list_distributions_by_web_acl_id(
         &self,
         input: ListDistributionsByWebACLIdRequest,
-    ) -> RusotoFuture<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError>;
+    ) -> Request<ListDistributionsByWebACLIdRequest>;
 
     /// <p>Lists invalidation batches. </p>
     fn list_invalidations(
         &self,
         input: ListInvalidationsRequest,
-    ) -> RusotoFuture<ListInvalidationsResult, ListInvalidationsError>;
+    ) -> Request<ListInvalidationsRequest>;
 
     /// <p>List streaming distributions. </p>
     fn list_streaming_distributions(
         &self,
         input: ListStreamingDistributionsRequest,
-    ) -> RusotoFuture<ListStreamingDistributionsResult, ListStreamingDistributionsError>;
+    ) -> Request<ListStreamingDistributionsRequest>;
 
     /// <p>List tags for a CloudFront resource.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError>;
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Add tags to a CloudFront resource.</p>
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest>;
 
     /// <p>Remove tags from a CloudFront resource.</p>
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest>;
 
     /// <p>Update an origin access identity. </p>
     fn update_cloud_front_origin_access_identity(
         &self,
         input: UpdateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
-        UpdateCloudFrontOriginAccessIdentityResult,
-        UpdateCloudFrontOriginAccessIdentityError,
-    >;
+    ) -> Request<UpdateCloudFrontOriginAccessIdentityRequest>;
 
     /// <p><p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can&#39;t change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values you&#39;re actually specifying.</p> </important> </li> </ol></p>
     fn update_distribution(
         &self,
         input: UpdateDistributionRequest,
-    ) -> RusotoFuture<UpdateDistributionResult, UpdateDistributionError>;
+    ) -> Request<UpdateDistributionRequest>;
 
     /// <p>Update a streaming distribution. </p>
     fn update_streaming_distribution(
         &self,
         input: UpdateStreamingDistributionRequest,
-    ) -> RusotoFuture<UpdateStreamingDistributionResult, UpdateStreamingDistributionError>;
+    ) -> Request<UpdateStreamingDistributionRequest>;
 }
 /// A client for the CloudFront API.
 #[derive(Clone)]
@@ -9037,27 +9095,240 @@ impl CloudFrontClient {
 
 impl CloudFront for CloudFrontClient {
     /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-    #[allow(unused_variables, warnings)]
     fn create_cloud_front_origin_access_identity(
         &self,
         input: CreateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
-        CreateCloudFrontOriginAccessIdentityResult,
-        CreateCloudFrontOriginAccessIdentityError,
-    > {
+    ) -> Request<CreateCloudFrontOriginAccessIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>
+    fn create_distribution(
+        &self,
+        input: CreateDistributionRequest,
+    ) -> Request<CreateDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create a new distribution with tags.</p>
+    fn create_distribution_with_tags(
+        &self,
+        input: CreateDistributionWithTagsRequest,
+    ) -> Request<CreateDistributionWithTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create a new invalidation. </p>
+    fn create_invalidation(
+        &self,
+        input: CreateInvalidationRequest,
+    ) -> Request<CreateInvalidationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
+    fn create_streaming_distribution(
+        &self,
+        input: CreateStreamingDistributionRequest,
+    ) -> Request<CreateStreamingDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create a new streaming distribution with tags.</p>
+    fn create_streaming_distribution_with_tags(
+        &self,
+        input: CreateStreamingDistributionWithTagsRequest,
+    ) -> Request<CreateStreamingDistributionWithTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Delete an origin access identity. </p>
+    fn delete_cloud_front_origin_access_identity(
+        &self,
+        input: DeleteCloudFrontOriginAccessIdentityRequest,
+    ) -> Request<DeleteCloudFrontOriginAccessIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Delete a distribution. </p>
+    fn delete_distribution(
+        &self,
+        input: DeleteDistributionRequest,
+    ) -> Request<DeleteDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    fn delete_service_linked_role(
+        &self,
+        input: DeleteServiceLinkedRoleRequest,
+    ) -> Request<DeleteServiceLinkedRoleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    fn delete_streaming_distribution(
+        &self,
+        input: DeleteStreamingDistributionRequest,
+    ) -> Request<DeleteStreamingDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get the information about an origin access identity. </p>
+    fn get_cloud_front_origin_access_identity(
+        &self,
+        input: GetCloudFrontOriginAccessIdentityRequest,
+    ) -> Request<GetCloudFrontOriginAccessIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get the configuration information about an origin access identity. </p>
+    fn get_cloud_front_origin_access_identity_config(
+        &self,
+        input: GetCloudFrontOriginAccessIdentityConfigRequest,
+    ) -> Request<GetCloudFrontOriginAccessIdentityConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get the information about a distribution. </p>
+    fn get_distribution(&self, input: GetDistributionRequest) -> Request<GetDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get the configuration information about a distribution. </p>
+    fn get_distribution_config(
+        &self,
+        input: GetDistributionConfigRequest,
+    ) -> Request<GetDistributionConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get the information about an invalidation. </p>
+    fn get_invalidation(&self, input: GetInvalidationRequest) -> Request<GetInvalidationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
+    fn get_streaming_distribution(
+        &self,
+        input: GetStreamingDistributionRequest,
+    ) -> Request<GetStreamingDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Get the configuration information about a streaming distribution. </p>
+    fn get_streaming_distribution_config(
+        &self,
+        input: GetStreamingDistributionConfigRequest,
+    ) -> Request<GetStreamingDistributionConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists origin access identities.</p>
+    fn list_cloud_front_origin_access_identities(
+        &self,
+        input: ListCloudFrontOriginAccessIdentitiesRequest,
+    ) -> Request<ListCloudFrontOriginAccessIdentitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List distributions. </p>
+    fn list_distributions(
+        &self,
+        input: ListDistributionsRequest,
+    ) -> Request<ListDistributionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
+    fn list_distributions_by_web_acl_id(
+        &self,
+        input: ListDistributionsByWebACLIdRequest,
+    ) -> Request<ListDistributionsByWebACLIdRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists invalidation batches. </p>
+    fn list_invalidations(
+        &self,
+        input: ListInvalidationsRequest,
+    ) -> Request<ListInvalidationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List streaming distributions. </p>
+    fn list_streaming_distributions(
+        &self,
+        input: ListStreamingDistributionsRequest,
+    ) -> Request<ListStreamingDistributionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>List tags for a CloudFront resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Add tags to a CloudFront resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> Request<TagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Remove tags from a CloudFront resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> Request<UntagResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Update an origin access identity. </p>
+    fn update_cloud_front_origin_access_identity(
+        &self,
+        input: UpdateCloudFrontOriginAccessIdentityRequest,
+    ) -> Request<UpdateCloudFrontOriginAccessIdentityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can&#39;t change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values you&#39;re actually specifying.</p> </important> </li> </ol></p>
+    fn update_distribution(
+        &self,
+        input: UpdateDistributionRequest,
+    ) -> Request<UpdateDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Update a streaming distribution. </p>
+    fn update_streaming_distribution(
+        &self,
+        input: UpdateStreamingDistributionRequest,
+    ) -> Request<UpdateStreamingDistributionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for CreateCloudFrontOriginAccessIdentityRequest {
+    type Output = CreateCloudFrontOriginAccessIdentityResponse;
+    type Error = CreateCloudFrontOriginAccessIdentityError;
+
+    #[allow(unused_variables, warnings)]
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut writer = EventWriter::new(Vec::new());
         CloudFrontOriginAccessIdentityConfigSerializer::serialize(
             &mut writer,
             "CloudFrontOriginAccessIdentityConfig",
-            &input.cloud_front_origin_access_identity_config,
+            &self.cloud_front_origin_access_identity_config,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCloudFrontOriginAccessIdentityError::from_response(
@@ -9070,7 +9341,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateCloudFrontOriginAccessIdentityResult::default();
+                    result = CreateCloudFrontOriginAccessIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9079,7 +9350,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                    result = CreateCloudFrontOriginAccessIdentityResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9096,26 +9367,31 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>
+impl ServiceRequest for CreateDistributionRequest {
+    type Output = CreateDistributionResponse;
+    type Error = CreateDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn create_distribution(
-        &self,
-        input: CreateDistributionRequest,
-    ) -> RusotoFuture<CreateDistributionResult, CreateDistributionError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut writer = EventWriter::new(Vec::new());
         DistributionConfigSerializer::serialize(
             &mut writer,
             "DistributionConfig",
-            &input.distribution_config,
+            &self.distribution_config,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9129,7 +9405,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateDistributionResult::default();
+                    result = CreateDistributionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9138,7 +9414,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateDistributionResultDeserializer::deserialize(
+                    result = CreateDistributionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9155,16 +9431,21 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Create a new distribution with tags.</p>
+impl ServiceRequest for CreateDistributionWithTagsRequest {
+    type Output = CreateDistributionWithTagsResponse;
+    type Error = CreateDistributionWithTagsError;
+
     #[allow(unused_variables, warnings)]
-    fn create_distribution_with_tags(
-        &self,
-        input: CreateDistributionWithTagsRequest,
-    ) -> RusotoFuture<CreateDistributionWithTagsResult, CreateDistributionWithTagsError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("WithTags");
@@ -9173,11 +9454,11 @@ impl CloudFront for CloudFrontClient {
         DistributionConfigWithTagsSerializer::serialize(
             &mut writer,
             "DistributionConfigWithTags",
-            &input.distribution_config_with_tags,
+            &self.distribution_config_with_tags,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDistributionWithTagsError::from_response(response))
@@ -9188,7 +9469,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateDistributionWithTagsResult::default();
+                    result = CreateDistributionWithTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9197,7 +9478,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateDistributionWithTagsResultDeserializer::deserialize(
+                    result = CreateDistributionWithTagsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9214,29 +9495,34 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Create a new invalidation. </p>
+impl ServiceRequest for CreateInvalidationRequest {
+    type Output = CreateInvalidationResponse;
+    type Error = CreateInvalidationError;
+
     #[allow(unused_variables, warnings)]
-    fn create_invalidation(
-        &self,
-        input: CreateInvalidationRequest,
-    ) -> RusotoFuture<CreateInvalidationResult, CreateInvalidationError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/distribution/{distribution_id}/invalidation",
-            distribution_id = input.distribution_id
+            distribution_id = self.distribution_id
         );
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut writer = EventWriter::new(Vec::new());
         InvalidationBatchSerializer::serialize(
             &mut writer,
             "InvalidationBatch",
-            &input.invalidation_batch,
+            &self.invalidation_batch,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9250,7 +9536,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateInvalidationResult::default();
+                    result = CreateInvalidationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9259,7 +9545,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateInvalidationResultDeserializer::deserialize(
+                    result = CreateInvalidationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9272,26 +9558,31 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
+impl ServiceRequest for CreateStreamingDistributionRequest {
+    type Output = CreateStreamingDistributionResponse;
+    type Error = CreateStreamingDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn create_streaming_distribution(
-        &self,
-        input: CreateStreamingDistributionRequest,
-    ) -> RusotoFuture<CreateStreamingDistributionResult, CreateStreamingDistributionError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut writer = EventWriter::new(Vec::new());
         StreamingDistributionConfigSerializer::serialize(
             &mut writer,
             "StreamingDistributionConfig",
-            &input.streaming_distribution_config,
+            &self.streaming_distribution_config,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStreamingDistributionError::from_response(response))
@@ -9302,7 +9593,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateStreamingDistributionResult::default();
+                    result = CreateStreamingDistributionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9311,7 +9602,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateStreamingDistributionResultDeserializer::deserialize(
+                    result = CreateStreamingDistributionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9328,19 +9619,21 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Create a new streaming distribution with tags.</p>
+impl ServiceRequest for CreateStreamingDistributionWithTagsRequest {
+    type Output = CreateStreamingDistributionWithTagsResponse;
+    type Error = CreateStreamingDistributionWithTagsError;
+
     #[allow(unused_variables, warnings)]
-    fn create_streaming_distribution_with_tags(
-        &self,
-        input: CreateStreamingDistributionWithTagsRequest,
-    ) -> RusotoFuture<
-        CreateStreamingDistributionWithTagsResult,
-        CreateStreamingDistributionWithTagsError,
-    > {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
         params.put_key("WithTags");
@@ -9349,11 +9642,11 @@ impl CloudFront for CloudFrontClient {
         StreamingDistributionConfigWithTagsSerializer::serialize(
             &mut writer,
             "StreamingDistributionConfigWithTags",
-            &input.streaming_distribution_config_with_tags,
+            &self.streaming_distribution_config_with_tags,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStreamingDistributionWithTagsError::from_response(
@@ -9366,7 +9659,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = CreateStreamingDistributionWithTagsResult::default();
+                    result = CreateStreamingDistributionWithTagsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9375,7 +9668,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
+                    result = CreateStreamingDistributionWithTagsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9392,25 +9685,30 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Delete an origin access identity. </p>
+impl ServiceRequest for DeleteCloudFrontOriginAccessIdentityRequest {
+    type Output = DeleteCloudFrontOriginAccessIdentityResponse;
+    type Error = DeleteCloudFrontOriginAccessIdentityError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_cloud_front_origin_access_identity(
-        &self,
-        input: DeleteCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<(), DeleteCloudFrontOriginAccessIdentityError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/origin-access-identity/cloudfront/{id}",
-            id = input.id
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCloudFrontOriginAccessIdentityError::from_response(
@@ -9419,25 +9717,50 @@ impl CloudFront for CloudFrontClient {
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteCloudFrontOriginAccessIdentityResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteCloudFrontOriginAccessIdentityResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Delete a distribution. </p>
+impl ServiceRequest for DeleteDistributionRequest {
+    type Output = DeleteDistributionResponse;
+    type Error = DeleteDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_distribution(
-        &self,
-        input: DeleteDistributionRequest,
-    ) -> RusotoFuture<(), DeleteDistributionError> {
-        let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-25/distribution/{id}", id = self.id);
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9447,73 +9770,148 @@ impl CloudFront for CloudFrontClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteDistributionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteDistributionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
+
+impl ServiceRequest for DeleteServiceLinkedRoleRequest {
+    type Output = DeleteServiceLinkedRoleResponse;
+    type Error = DeleteServiceLinkedRoleError;
 
     #[allow(unused_variables, warnings)]
-    fn delete_service_linked_role(
-        &self,
-        input: DeleteServiceLinkedRoleRequest,
-    ) -> RusotoFuture<(), DeleteServiceLinkedRoleError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/service-linked-role/{role_name}",
-            role_name = input.role_name
+            role_name = self.role_name
         );
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteServiceLinkedRoleError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteServiceLinkedRoleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteServiceLinkedRoleResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+impl ServiceRequest for DeleteStreamingDistributionRequest {
+    type Output = DeleteStreamingDistributionResponse;
+    type Error = DeleteStreamingDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn delete_streaming_distribution(
-        &self,
-        input: DeleteStreamingDistributionRequest,
-    ) -> RusotoFuture<(), DeleteStreamingDistributionError> {
-        let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = self.id);
 
-        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("DELETE", "cloudfront", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteStreamingDistributionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = DeleteStreamingDistributionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteStreamingDistributionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Get the information about an origin access identity. </p>
+impl ServiceRequest for GetCloudFrontOriginAccessIdentityRequest {
+    type Output = GetCloudFrontOriginAccessIdentityResponse;
+    type Error = GetCloudFrontOriginAccessIdentityError;
+
     #[allow(unused_variables, warnings)]
-    fn get_cloud_front_origin_access_identity(
-        &self,
-        input: GetCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>
-    {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/origin-access-identity/cloudfront/{id}",
-            id = input.id
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCloudFrontOriginAccessIdentityError::from_response(
@@ -9526,7 +9924,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetCloudFrontOriginAccessIdentityResult::default();
+                    result = GetCloudFrontOriginAccessIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9535,7 +9933,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                    result = GetCloudFrontOriginAccessIdentityResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9548,24 +9946,26 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Get the configuration information about an origin access identity. </p>
+impl ServiceRequest for GetCloudFrontOriginAccessIdentityConfigRequest {
+    type Output = GetCloudFrontOriginAccessIdentityConfigResponse;
+    type Error = GetCloudFrontOriginAccessIdentityConfigError;
+
     #[allow(unused_variables, warnings)]
-    fn get_cloud_front_origin_access_identity_config(
-        &self,
-        input: GetCloudFrontOriginAccessIdentityConfigRequest,
-    ) -> RusotoFuture<
-        GetCloudFrontOriginAccessIdentityConfigResult,
-        GetCloudFrontOriginAccessIdentityConfigError,
-    > {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/origin-access-identity/cloudfront/{id}/config",
-            id = input.id
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetCloudFrontOriginAccessIdentityConfigError::from_response(
@@ -9578,7 +9978,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetCloudFrontOriginAccessIdentityConfigResult::default();
+                    result = GetCloudFrontOriginAccessIdentityConfigResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9588,7 +9988,7 @@ impl CloudFront for CloudFrontClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result =
-                        GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
+                        GetCloudFrontOriginAccessIdentityConfigResponseDeserializer::deserialize(
                             &actual_tag_name,
                             &mut stack,
                         )?;
@@ -9601,18 +10001,23 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Get the information about a distribution. </p>
+impl ServiceRequest for GetDistributionRequest {
+    type Output = GetDistributionResponse;
+    type Error = GetDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn get_distribution(
-        &self,
-        input: GetDistributionRequest,
-    ) -> RusotoFuture<GetDistributionResult, GetDistributionError> {
-        let request_uri = format!("/2017-03-25/distribution/{id}", id = input.id);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-25/distribution/{id}", id = self.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9626,7 +10031,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetDistributionResult::default();
+                    result = GetDistributionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9635,7 +10040,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetDistributionResultDeserializer::deserialize(
+                    result = GetDistributionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9648,18 +10053,23 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Get the configuration information about a distribution. </p>
+impl ServiceRequest for GetDistributionConfigRequest {
+    type Output = GetDistributionConfigResponse;
+    type Error = GetDistributionConfigError;
+
     #[allow(unused_variables, warnings)]
-    fn get_distribution_config(
-        &self,
-        input: GetDistributionConfigRequest,
-    ) -> RusotoFuture<GetDistributionConfigResult, GetDistributionConfigError> {
-        let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-25/distribution/{id}/config", id = self.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetDistributionConfigError::from_response(response))
@@ -9670,7 +10080,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetDistributionConfigResult::default();
+                    result = GetDistributionConfigResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9679,7 +10089,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetDistributionConfigResultDeserializer::deserialize(
+                    result = GetDistributionConfigResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9692,22 +10102,27 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Get the information about an invalidation. </p>
+impl ServiceRequest for GetInvalidationRequest {
+    type Output = GetInvalidationResponse;
+    type Error = GetInvalidationError;
+
     #[allow(unused_variables, warnings)]
-    fn get_invalidation(
-        &self,
-        input: GetInvalidationRequest,
-    ) -> RusotoFuture<GetInvalidationResult, GetInvalidationError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/distribution/{distribution_id}/invalidation/{id}",
-            distribution_id = input.distribution_id,
-            id = input.id
+            distribution_id = self.distribution_id,
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9721,7 +10136,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetInvalidationResult::default();
+                    result = GetInvalidationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9730,7 +10145,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetInvalidationResultDeserializer::deserialize(
+                    result = GetInvalidationResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9740,18 +10155,23 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
+impl ServiceRequest for GetStreamingDistributionRequest {
+    type Output = GetStreamingDistributionResponse;
+    type Error = GetStreamingDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn get_streaming_distribution(
-        &self,
-        input: GetStreamingDistributionRequest,
-    ) -> RusotoFuture<GetStreamingDistributionResult, GetStreamingDistributionError> {
-        let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = input.id);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-25/streaming-distribution/{id}", id = self.id);
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetStreamingDistributionError::from_response(response))
@@ -9762,7 +10182,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetStreamingDistributionResult::default();
+                    result = GetStreamingDistributionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9771,7 +10191,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetStreamingDistributionResultDeserializer::deserialize(
+                    result = GetStreamingDistributionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9784,22 +10204,26 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Get the configuration information about a streaming distribution. </p>
+impl ServiceRequest for GetStreamingDistributionConfigRequest {
+    type Output = GetStreamingDistributionConfigResponse;
+    type Error = GetStreamingDistributionConfigError;
+
     #[allow(unused_variables, warnings)]
-    fn get_streaming_distribution_config(
-        &self,
-        input: GetStreamingDistributionConfigRequest,
-    ) -> RusotoFuture<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>
-    {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/streaming-distribution/{id}/config",
-            id = input.id
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetStreamingDistributionConfigError::from_response(response))
@@ -9810,7 +10234,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = GetStreamingDistributionConfigResult::default();
+                    result = GetStreamingDistributionConfigResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9819,7 +10243,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetStreamingDistributionConfigResultDeserializer::deserialize(
+                    result = GetStreamingDistributionConfigResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9832,30 +10256,32 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Lists origin access identities.</p>
+impl ServiceRequest for ListCloudFrontOriginAccessIdentitiesRequest {
+    type Output = ListCloudFrontOriginAccessIdentitiesResponse;
+    type Error = ListCloudFrontOriginAccessIdentitiesError;
+
     #[allow(unused_variables, warnings)]
-    fn list_cloud_front_origin_access_identities(
-        &self,
-        input: ListCloudFrontOriginAccessIdentitiesRequest,
-    ) -> RusotoFuture<
-        ListCloudFrontOriginAccessIdentitiesResult,
-        ListCloudFrontOriginAccessIdentitiesError,
-    > {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/origin-access-identity/cloudfront";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListCloudFrontOriginAccessIdentitiesError::from_response(
@@ -9868,7 +10294,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListCloudFrontOriginAccessIdentitiesResult::default();
+                    result = ListCloudFrontOriginAccessIdentitiesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9877,7 +10303,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
+                    result = ListCloudFrontOriginAccessIdentitiesResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9887,27 +10313,32 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>List distributions. </p>
+impl ServiceRequest for ListDistributionsRequest {
+    type Output = ListDistributionsResponse;
+    type Error = ListDistributionsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_distributions(
-        &self,
-        input: ListDistributionsRequest,
-    ) -> RusotoFuture<ListDistributionsResult, ListDistributionsError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/distribution";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -9921,7 +10352,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListDistributionsResult::default();
+                    result = ListDistributionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9930,7 +10361,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListDistributionsResultDeserializer::deserialize(
+                    result = ListDistributionsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9940,30 +10371,35 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
+impl ServiceRequest for ListDistributionsByWebACLIdRequest {
+    type Output = ListDistributionsByWebACLIdResponse;
+    type Error = ListDistributionsByWebACLIdError;
+
     #[allow(unused_variables, warnings)]
-    fn list_distributions_by_web_acl_id(
-        &self,
-        input: ListDistributionsByWebACLIdRequest,
-    ) -> RusotoFuture<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/distributionsByWebACLId/{web_acl_id}",
-            web_acl_id = input.web_acl_id
+            web_acl_id = self.web_acl_id
         );
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListDistributionsByWebACLIdError::from_response(response))
@@ -9974,7 +10410,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListDistributionsByWebACLIdResult::default();
+                    result = ListDistributionsByWebACLIdResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -9983,7 +10419,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListDistributionsByWebACLIdResultDeserializer::deserialize(
+                    result = ListDistributionsByWebACLIdResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -9993,30 +10429,35 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Lists invalidation batches. </p>
+impl ServiceRequest for ListInvalidationsRequest {
+    type Output = ListInvalidationsResponse;
+    type Error = ListInvalidationsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_invalidations(
-        &self,
-        input: ListInvalidationsRequest,
-    ) -> RusotoFuture<ListInvalidationsResult, ListInvalidationsError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/distribution/{distribution_id}/invalidation",
-            distribution_id = input.distribution_id
+            distribution_id = self.distribution_id
         );
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10030,7 +10471,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListInvalidationsResult::default();
+                    result = ListInvalidationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10039,7 +10480,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListInvalidationsResultDeserializer::deserialize(
+                    result = ListInvalidationsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -10049,27 +10490,32 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>List streaming distributions. </p>
+impl ServiceRequest for ListStreamingDistributionsRequest {
+    type Output = ListStreamingDistributionsResponse;
+    type Error = ListStreamingDistributionsError;
+
     #[allow(unused_variables, warnings)]
-    fn list_streaming_distributions(
-        &self,
-        input: ListStreamingDistributionsRequest,
-    ) -> RusotoFuture<ListStreamingDistributionsResult, ListStreamingDistributionsError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/streaming-distribution";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        if let Some(ref x) = input.marker {
+        if let Some(ref x) = self.marker {
             params.put("Marker", x);
         }
-        if let Some(ref x) = input.max_items {
+        if let Some(ref x) = self.max_items {
             params.put("MaxItems", x);
         }
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListStreamingDistributionsError::from_response(response))
@@ -10080,7 +10526,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListStreamingDistributionsResult::default();
+                    result = ListStreamingDistributionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10089,7 +10535,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListStreamingDistributionsResultDeserializer::deserialize(
+                    result = ListStreamingDistributionsResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -10099,22 +10545,27 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>List tags for a CloudFront resource.</p>
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
     #[allow(unused_variables, warnings)]
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceRequest,
-    ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/tagging";
 
-        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("GET", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("Resource", &input.resource);
+        params.put("Resource", &self.resource);
         request.set_params(params);
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10127,7 +10578,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = ListTagsForResourceResult::default();
+                    result = ListTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10136,7 +10587,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTagsForResourceResultDeserializer::deserialize(
+                    result = ListTagsForResourceResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -10146,23 +10597,31 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Add tags to a CloudFront resource.</p>
+impl ServiceRequest for TagResourceRequest {
+    type Output = TagResourceResponse;
+    type Error = TagResourceError;
+
     #[allow(unused_variables, warnings)]
-    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/tagging";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("Resource", &input.resource);
+        params.put("Resource", &self.resource);
         params.put("Operation", "Tag");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
-        TagsSerializer::serialize(&mut writer, "Tags", &input.tags);
+        TagsSerializer::serialize(&mut writer, "Tags", &self.tags);
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10172,26 +10631,52 @@ impl CloudFront for CloudFrontClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = TagResourceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result =
+                        TagResourceResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Remove tags from a CloudFront resource.</p>
+impl ServiceRequest for UntagResourceRequest {
+    type Output = UntagResourceResponse;
+    type Error = UntagResourceError;
+
     #[allow(unused_variables, warnings)]
-    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = "/2017-03-25/tagging";
 
-        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "cloudfront", region, &request_uri);
 
         let mut params = Params::new();
-        params.put("Resource", &input.resource);
+        params.put("Resource", &self.resource);
         params.put("Operation", "Untag");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
-        TagKeysSerializer::serialize(&mut writer, "TagKeys", &input.tag_keys);
+        TagKeysSerializer::serialize(&mut writer, "TagKeys", &self.tag_keys);
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10201,27 +10686,49 @@ impl CloudFront for CloudFrontClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = UntagResourceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UntagResourceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Update an origin access identity. </p>
+impl ServiceRequest for UpdateCloudFrontOriginAccessIdentityRequest {
+    type Output = UpdateCloudFrontOriginAccessIdentityResponse;
+    type Error = UpdateCloudFrontOriginAccessIdentityError;
+
     #[allow(unused_variables, warnings)]
-    fn update_cloud_front_origin_access_identity(
-        &self,
-        input: UpdateCloudFrontOriginAccessIdentityRequest,
-    ) -> RusotoFuture<
-        UpdateCloudFrontOriginAccessIdentityResult,
-        UpdateCloudFrontOriginAccessIdentityError,
-    > {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/origin-access-identity/cloudfront/{id}/config",
-            id = input.id
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
@@ -10229,11 +10736,11 @@ impl CloudFront for CloudFrontClient {
         CloudFrontOriginAccessIdentityConfigSerializer::serialize(
             &mut writer,
             "CloudFrontOriginAccessIdentityConfig",
-            &input.cloud_front_origin_access_identity_config,
+            &self.cloud_front_origin_access_identity_config,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateCloudFrontOriginAccessIdentityError::from_response(
@@ -10246,7 +10753,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = UpdateCloudFrontOriginAccessIdentityResult::default();
+                    result = UpdateCloudFrontOriginAccessIdentityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10255,7 +10762,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                    result = UpdateCloudFrontOriginAccessIdentityResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -10268,18 +10775,23 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p><p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can&#39;t change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values you&#39;re actually specifying.</p> </important> </li> </ol></p>
+impl ServiceRequest for UpdateDistributionRequest {
+    type Output = UpdateDistributionResponse;
+    type Error = UpdateDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn update_distribution(
-        &self,
-        input: UpdateDistributionRequest,
-    ) -> RusotoFuture<UpdateDistributionResult, UpdateDistributionError> {
-        let request_uri = format!("/2017-03-25/distribution/{id}/config", id = input.id);
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let request_uri = format!("/2017-03-25/distribution/{id}/config", id = self.id);
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
@@ -10287,11 +10799,11 @@ impl CloudFront for CloudFrontClient {
         DistributionConfigSerializer::serialize(
             &mut writer,
             "DistributionConfig",
-            &input.distribution_config,
+            &self.distribution_config,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10305,7 +10817,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = UpdateDistributionResult::default();
+                    result = UpdateDistributionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10314,7 +10826,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateDistributionResultDeserializer::deserialize(
+                    result = UpdateDistributionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -10327,21 +10839,26 @@ impl CloudFront for CloudFrontClient {
             }))
         })
     }
+}
 
-    /// <p>Update a streaming distribution. </p>
+impl ServiceRequest for UpdateStreamingDistributionRequest {
+    type Output = UpdateStreamingDistributionResponse;
+    type Error = UpdateStreamingDistributionError;
+
     #[allow(unused_variables, warnings)]
-    fn update_streaming_distribution(
-        &self,
-        input: UpdateStreamingDistributionRequest,
-    ) -> RusotoFuture<UpdateStreamingDistributionResult, UpdateStreamingDistributionError> {
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
         let request_uri = format!(
             "/2017-03-25/streaming-distribution/{id}/config",
-            id = input.id
+            id = self.id
         );
 
-        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "cloudfront", region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
+        if let Some(ref if_match) = self.if_match {
             request.add_header("If-Match", &if_match.to_string());
         }
 
@@ -10349,11 +10866,11 @@ impl CloudFront for CloudFrontClient {
         StreamingDistributionConfigSerializer::serialize(
             &mut writer,
             "StreamingDistributionConfig",
-            &input.streaming_distribution_config,
+            &self.streaming_distribution_config,
         );
         request.set_payload(Some(writer.into_inner()));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateStreamingDistributionError::from_response(response))
@@ -10364,7 +10881,7 @@ impl CloudFront for CloudFrontClient {
                 let mut result;
 
                 if response.body.is_empty() {
-                    result = UpdateStreamingDistributionResult::default();
+                    result = UpdateStreamingDistributionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10373,7 +10890,7 @@ impl CloudFront for CloudFrontClient {
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateStreamingDistributionResultDeserializer::deserialize(
+                    result = UpdateStreamingDistributionResponseDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;

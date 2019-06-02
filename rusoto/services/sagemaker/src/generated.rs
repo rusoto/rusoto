@@ -19,13 +19,14 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct AddTagsInput {
+pub struct AddTagsRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -36,7 +37,7 @@ pub struct AddTagsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct AddTagsOutput {
+pub struct AddTagsResponse {
     /// <p>A list of tags associated with the Amazon SageMaker resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -349,7 +350,7 @@ pub struct ContinuousParameterRangeSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateAlgorithmInput {
+pub struct CreateAlgorithmRequest {
     /// <p>A description of the algorithm.</p>
     #[serde(rename = "AlgorithmDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -376,14 +377,14 @@ pub struct CreateAlgorithmInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateAlgorithmOutput {
+pub struct CreateAlgorithmResponse {
     /// <p>The Amazon Resource Name (ARN) of the new algorithm.</p>
     #[serde(rename = "AlgorithmArn")]
     pub algorithm_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateCodeRepositoryInput {
+pub struct CreateCodeRepositoryRequest {
     /// <p>The name of the Git repository. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "CodeRepositoryName")]
     pub code_repository_name: String,
@@ -394,7 +395,7 @@ pub struct CreateCodeRepositoryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateCodeRepositoryOutput {
+pub struct CreateCodeRepositoryResponse {
     /// <p>The Amazon Resource Name (ARN) of the new repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
     pub code_repository_arn: String,
@@ -428,7 +429,7 @@ pub struct CreateCompilationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateEndpointConfigInput {
+pub struct CreateEndpointConfigRequest {
     /// <p>The name of the endpoint configuration. You specify this name in a <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> request. </p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
@@ -447,14 +448,14 @@ pub struct CreateEndpointConfigInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateEndpointConfigOutput {
+pub struct CreateEndpointConfigResponse {
     /// <p>The Amazon Resource Name (ARN) of the endpoint configuration. </p>
     #[serde(rename = "EndpointConfigArn")]
     pub endpoint_config_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateEndpointInput {
+pub struct CreateEndpointRequest {
     /// <p>The name of an endpoint configuration. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a>. </p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
@@ -469,7 +470,7 @@ pub struct CreateEndpointInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateEndpointOutput {
+pub struct CreateEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -552,7 +553,42 @@ pub struct CreateLabelingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateModelInput {
+pub struct CreateModelPackageRequest {
+    /// <p>Whether to certify the model package for listing on AWS Marketplace.</p>
+    #[serde(rename = "CertifyForMarketplace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certify_for_marketplace: Option<bool>,
+    /// <p><p>Specifies details about inference jobs that can be run with models based on this model package, including the following:</p> <ul> <li> <p>The Amazon ECR paths of containers that contain the inference code and model artifacts.</p> </li> <li> <p>The instance types that the model package supports for transform jobs and real-time endpoints used for inference.</p> </li> <li> <p>The input and output content formats that the model package supports for inference.</p> </li> </ul></p>
+    #[serde(rename = "InferenceSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inference_specification: Option<InferenceSpecification>,
+    /// <p>A description of the model package.</p>
+    #[serde(rename = "ModelPackageDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_package_description: Option<String>,
+    /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
+    #[serde(rename = "ModelPackageName")]
+    pub model_package_name: String,
+    /// <p>Details about the algorithm that was used to create the model package.</p>
+    #[serde(rename = "SourceAlgorithmSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_algorithm_specification: Option<SourceAlgorithmSpecification>,
+    /// <p>Specifies configurations for one or more transform jobs that Amazon SageMaker runs to test the model package.</p>
+    #[serde(rename = "ValidationSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_specification: Option<ModelPackageValidationSpecification>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateModelPackageResponse {
+    /// <p>The Amazon Resource Name (ARN) of the new model package.</p>
+    #[serde(rename = "ModelPackageArn")]
+    pub model_package_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateModelRequest {
     /// <p>Specifies the containers in the inference pipeline.</p>
     #[serde(rename = "Containers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -583,49 +619,38 @@ pub struct CreateModelInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateModelOutput {
+pub struct CreateModelResponse {
     /// <p>The ARN of the model created in Amazon SageMaker.</p>
     #[serde(rename = "ModelArn")]
     pub model_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateModelPackageInput {
-    /// <p>Whether to certify the model package for listing on AWS Marketplace.</p>
-    #[serde(rename = "CertifyForMarketplace")]
+pub struct CreateNotebookInstanceLifecycleConfigRequest {
+    /// <p>The name of the lifecycle configuration.</p>
+    #[serde(rename = "NotebookInstanceLifecycleConfigName")]
+    pub notebook_instance_lifecycle_config_name: String,
+    /// <p>A shell script that runs only once, when you create a notebook instance. The shell script must be a base64-encoded string.</p>
+    #[serde(rename = "OnCreate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub certify_for_marketplace: Option<bool>,
-    /// <p><p>Specifies details about inference jobs that can be run with models based on this model package, including the following:</p> <ul> <li> <p>The Amazon ECR paths of containers that contain the inference code and model artifacts.</p> </li> <li> <p>The instance types that the model package supports for transform jobs and real-time endpoints used for inference.</p> </li> <li> <p>The input and output content formats that the model package supports for inference.</p> </li> </ul></p>
-    #[serde(rename = "InferenceSpecification")]
+    pub on_create: Option<Vec<NotebookInstanceLifecycleHook>>,
+    /// <p>A shell script that runs every time you start a notebook instance, including when you create the notebook instance. The shell script must be a base64-encoded string.</p>
+    #[serde(rename = "OnStart")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub inference_specification: Option<InferenceSpecification>,
-    /// <p>A description of the model package.</p>
-    #[serde(rename = "ModelPackageDescription")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_package_description: Option<String>,
-    /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
-    #[serde(rename = "ModelPackageName")]
-    pub model_package_name: String,
-    /// <p>Details about the algorithm that was used to create the model package.</p>
-    #[serde(rename = "SourceAlgorithmSpecification")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_algorithm_specification: Option<SourceAlgorithmSpecification>,
-    /// <p>Specifies configurations for one or more transform jobs that Amazon SageMaker runs to test the model package.</p>
-    #[serde(rename = "ValidationSpecification")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub validation_specification: Option<ModelPackageValidationSpecification>,
+    pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateModelPackageOutput {
-    /// <p>The Amazon Resource Name (ARN) of the new model package.</p>
-    #[serde(rename = "ModelPackageArn")]
-    pub model_package_arn: String,
+pub struct CreateNotebookInstanceLifecycleConfigResponse {
+    /// <p>The Amazon Resource Name (ARN) of the lifecycle configuration.</p>
+    #[serde(rename = "NotebookInstanceLifecycleConfigArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notebook_instance_lifecycle_config_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateNotebookInstanceInput {
+pub struct CreateNotebookInstanceRequest {
     /// <p>A list of Elastic Inference (EI) instance types to associate with this notebook instance. Currently, only one instance type can be associated with a notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -681,33 +706,9 @@ pub struct CreateNotebookInstanceInput {
     pub volume_size_in_gb: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateNotebookInstanceLifecycleConfigInput {
-    /// <p>The name of the lifecycle configuration.</p>
-    #[serde(rename = "NotebookInstanceLifecycleConfigName")]
-    pub notebook_instance_lifecycle_config_name: String,
-    /// <p>A shell script that runs only once, when you create a notebook instance. The shell script must be a base64-encoded string.</p>
-    #[serde(rename = "OnCreate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub on_create: Option<Vec<NotebookInstanceLifecycleHook>>,
-    /// <p>A shell script that runs every time you start a notebook instance, including when you create the notebook instance. The shell script must be a base64-encoded string.</p>
-    #[serde(rename = "OnStart")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateNotebookInstanceLifecycleConfigOutput {
-    /// <p>The Amazon Resource Name (ARN) of the lifecycle configuration.</p>
-    #[serde(rename = "NotebookInstanceLifecycleConfigArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub notebook_instance_lifecycle_config_arn: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct CreateNotebookInstanceOutput {
+pub struct CreateNotebookInstanceResponse {
     /// <p>The Amazon Resource Name (ARN) of the notebook instance. </p>
     #[serde(rename = "NotebookInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -715,7 +716,7 @@ pub struct CreateNotebookInstanceOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreatePresignedNotebookInstanceUrlInput {
+pub struct CreatePresignedNotebookInstanceUrlRequest {
     /// <p>The name of the notebook instance.</p>
     #[serde(rename = "NotebookInstanceName")]
     pub notebook_instance_name: String,
@@ -727,7 +728,7 @@ pub struct CreatePresignedNotebookInstanceUrlInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreatePresignedNotebookInstanceUrlOutput {
+pub struct CreatePresignedNotebookInstanceUrlResponse {
     /// <p>A JSON object that contains the URL string. </p>
     #[serde(rename = "AuthorizedUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -875,63 +876,95 @@ pub struct DataSource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteAlgorithmInput {
+pub struct DeleteAlgorithmRequest {
     /// <p>The name of the algorithm to delete.</p>
     #[serde(rename = "AlgorithmName")]
     pub algorithm_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteAlgorithmResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteCodeRepositoryInput {
+pub struct DeleteCodeRepositoryRequest {
     /// <p>The name of the Git repository to delete.</p>
     #[serde(rename = "CodeRepositoryName")]
     pub code_repository_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteCodeRepositoryResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteEndpointConfigInput {
+pub struct DeleteEndpointConfigRequest {
     /// <p>The name of the endpoint configuration that you want to delete.</p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteEndpointConfigResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteEndpointInput {
+pub struct DeleteEndpointRequest {
     /// <p>The name of the endpoint that you want to delete.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteModelInput {
-    /// <p>The name of the model to delete.</p>
-    #[serde(rename = "ModelName")]
-    pub model_name: String,
-}
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteModelPackageInput {
+pub struct DeleteModelPackageRequest {
     /// <p>The name of the model package. The name must have 1 to 63 characters. Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
     #[serde(rename = "ModelPackageName")]
     pub model_package_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteNotebookInstanceInput {
-    /// <p>The name of the Amazon SageMaker notebook instance to delete.</p>
-    #[serde(rename = "NotebookInstanceName")]
-    pub notebook_instance_name: String,
-}
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteModelPackageResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteNotebookInstanceLifecycleConfigInput {
+pub struct DeleteModelRequest {
+    /// <p>The name of the model to delete.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteModelResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteNotebookInstanceLifecycleConfigRequest {
     /// <p>The name of the lifecycle configuration to delete.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
     pub notebook_instance_lifecycle_config_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteNotebookInstanceLifecycleConfigResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DeleteTagsInput {
+pub struct DeleteNotebookInstanceRequest {
+    /// <p>The name of the Amazon SageMaker notebook instance to delete.</p>
+    #[serde(rename = "NotebookInstanceName")]
+    pub notebook_instance_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteNotebookInstanceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteTagsRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags you want to delete.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -942,7 +975,7 @@ pub struct DeleteTagsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeleteTagsOutput {}
+pub struct DeleteTagsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteWorkteamRequest {
@@ -978,7 +1011,7 @@ pub struct DeployedImage {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeAlgorithmInput {
+pub struct DescribeAlgorithmRequest {
     /// <p>The name of the algorithm to describe.</p>
     #[serde(rename = "AlgorithmName")]
     pub algorithm_name: String,
@@ -986,7 +1019,7 @@ pub struct DescribeAlgorithmInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeAlgorithmOutput {
+pub struct DescribeAlgorithmResponse {
     /// <p>The Amazon Resource Name (ARN) of the algorithm.</p>
     #[serde(rename = "AlgorithmArn")]
     pub algorithm_arn: String,
@@ -1028,7 +1061,7 @@ pub struct DescribeAlgorithmOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeCodeRepositoryInput {
+pub struct DescribeCodeRepositoryRequest {
     /// <p>The name of the Git repository to describe.</p>
     #[serde(rename = "CodeRepositoryName")]
     pub code_repository_name: String,
@@ -1036,7 +1069,7 @@ pub struct DescribeCodeRepositoryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeCodeRepositoryOutput {
+pub struct DescribeCodeRepositoryResponse {
     /// <p>The Amazon Resource Name (ARN) of the Git repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
     pub code_repository_arn: String,
@@ -1109,7 +1142,7 @@ pub struct DescribeCompilationJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEndpointConfigInput {
+pub struct DescribeEndpointConfigRequest {
     /// <p>The name of the endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
@@ -1117,7 +1150,7 @@ pub struct DescribeEndpointConfigInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeEndpointConfigOutput {
+pub struct DescribeEndpointConfigResponse {
     /// <p>A timestamp that shows when the endpoint configuration was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -1137,7 +1170,7 @@ pub struct DescribeEndpointConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeEndpointInput {
+pub struct DescribeEndpointRequest {
     /// <p>The name of the endpoint.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
@@ -1145,7 +1178,7 @@ pub struct DescribeEndpointInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeEndpointOutput {
+pub struct DescribeEndpointResponse {
     /// <p>A timestamp that shows when the endpoint was created.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
@@ -1309,47 +1342,7 @@ pub struct DescribeLabelingJobResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeModelInput {
-    /// <p>The name of the model.</p>
-    #[serde(rename = "ModelName")]
-    pub model_name: String,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct DescribeModelOutput {
-    /// <p>The containers in the inference pipeline.</p>
-    #[serde(rename = "Containers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub containers: Option<Vec<ContainerDefinition>>,
-    /// <p>A timestamp that shows when the model was created.</p>
-    #[serde(rename = "CreationTime")]
-    pub creation_time: f64,
-    /// <p><p>If <code>True</code>, no inbound or outbound network calls can be made to or from the model container.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
-    #[serde(rename = "EnableNetworkIsolation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub enable_network_isolation: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role that you specified for the model.</p>
-    #[serde(rename = "ExecutionRoleArn")]
-    pub execution_role_arn: String,
-    /// <p>The Amazon Resource Name (ARN) of the model.</p>
-    #[serde(rename = "ModelArn")]
-    pub model_arn: String,
-    /// <p>Name of the Amazon SageMaker model.</p>
-    #[serde(rename = "ModelName")]
-    pub model_name: String,
-    /// <p>The location of the primary inference code, associated artifacts, and custom environment map that the inference code uses when it is deployed in production. </p>
-    #[serde(rename = "PrimaryContainer")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub primary_container: Option<ContainerDefinition>,
-    /// <p>A <a>VpcConfig</a> object that specifies the VPC that this model has access to. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html">Protect Endpoints by Using an Amazon Virtual Private Cloud</a> </p>
-    #[serde(rename = "VpcConfig")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub vpc_config: Option<VpcConfig>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeModelPackageInput {
+pub struct DescribeModelPackageRequest {
     /// <p>The name of the model package to describe.</p>
     #[serde(rename = "ModelPackageName")]
     pub model_package_name: String,
@@ -1357,7 +1350,7 @@ pub struct DescribeModelPackageInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeModelPackageOutput {
+pub struct DescribeModelPackageResponse {
     /// <p>Whether the model package is certified for listing on AWS Marketplace.</p>
     #[serde(rename = "CertifyForMarketplace")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1396,14 +1389,47 @@ pub struct DescribeModelPackageOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeNotebookInstanceInput {
-    /// <p>The name of the notebook instance that you want information about.</p>
-    #[serde(rename = "NotebookInstanceName")]
-    pub notebook_instance_name: String,
+pub struct DescribeModelRequest {
+    /// <p>The name of the model.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeModelResponse {
+    /// <p>The containers in the inference pipeline.</p>
+    #[serde(rename = "Containers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub containers: Option<Vec<ContainerDefinition>>,
+    /// <p>A timestamp that shows when the model was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p><p>If <code>True</code>, no inbound or outbound network calls can be made to or from the model container.</p> <note> <p>The Semantic Segmentation built-in algorithm does not support network isolation.</p> </note></p>
+    #[serde(rename = "EnableNetworkIsolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_network_isolation: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM role that you specified for the model.</p>
+    #[serde(rename = "ExecutionRoleArn")]
+    pub execution_role_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the model.</p>
+    #[serde(rename = "ModelArn")]
+    pub model_arn: String,
+    /// <p>Name of the Amazon SageMaker model.</p>
+    #[serde(rename = "ModelName")]
+    pub model_name: String,
+    /// <p>The location of the primary inference code, associated artifacts, and custom environment map that the inference code uses when it is deployed in production. </p>
+    #[serde(rename = "PrimaryContainer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_container: Option<ContainerDefinition>,
+    /// <p>A <a>VpcConfig</a> object that specifies the VPC that this model has access to. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html">Protect Endpoints by Using an Amazon Virtual Private Cloud</a> </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeNotebookInstanceLifecycleConfigInput {
+pub struct DescribeNotebookInstanceLifecycleConfigRequest {
     /// <p>The name of the lifecycle configuration to describe.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigName")]
     pub notebook_instance_lifecycle_config_name: String,
@@ -1411,7 +1437,7 @@ pub struct DescribeNotebookInstanceLifecycleConfigInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeNotebookInstanceLifecycleConfigOutput {
+pub struct DescribeNotebookInstanceLifecycleConfigResponse {
     /// <p>A timestamp that tells when the lifecycle configuration was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1438,9 +1464,16 @@ pub struct DescribeNotebookInstanceLifecycleConfigOutput {
     pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeNotebookInstanceRequest {
+    /// <p>The name of the notebook instance that you want information about.</p>
+    #[serde(rename = "NotebookInstanceName")]
+    pub notebook_instance_name: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DescribeNotebookInstanceOutput {
+pub struct DescribeNotebookInstanceResponse {
     /// <p>A list of the Elastic Inference (EI) instance types associated with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2397,7 +2430,7 @@ pub struct LabelingJobSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListAlgorithmsInput {
+pub struct ListAlgorithmsRequest {
     /// <p>A filter that returns only algorithms created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2430,7 +2463,7 @@ pub struct ListAlgorithmsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListAlgorithmsOutput {
+pub struct ListAlgorithmsResponse {
     /// <p>&gt;An array of <code>AlgorithmSummary</code> objects, each of which lists an algorithm.</p>
     #[serde(rename = "AlgorithmSummaryList")]
     pub algorithm_summary_list: Vec<AlgorithmSummary>,
@@ -2441,7 +2474,7 @@ pub struct ListAlgorithmsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListCodeRepositoriesInput {
+pub struct ListCodeRepositoriesRequest {
     /// <p>A filter that returns only Git repositories that were created after the specified time.</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2482,7 +2515,7 @@ pub struct ListCodeRepositoriesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListCodeRepositoriesOutput {
+pub struct ListCodeRepositoriesResponse {
     /// <p><p>Gets a list of summaries of the Git repositories. Each summary specifies the following values for the repository: </p> <ul> <li> <p>Name</p> </li> <li> <p>Amazon Resource Name (ARN)</p> </li> <li> <p>Creation time</p> </li> <li> <p>Last modified time</p> </li> <li> <p>Configuration information, including the URL location of the repository and the ARN of the AWS Secrets Manager secret that contains the credentials used to access the repository.</p> </li> </ul></p>
     #[serde(rename = "CodeRepositorySummaryList")]
     pub code_repository_summary_list: Vec<CodeRepositorySummary>,
@@ -2549,7 +2582,7 @@ pub struct ListCompilationJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListEndpointConfigsInput {
+pub struct ListEndpointConfigsRequest {
     /// <p>A filter that returns only endpoint configurations with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2582,7 +2615,7 @@ pub struct ListEndpointConfigsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListEndpointConfigsOutput {
+pub struct ListEndpointConfigsResponse {
     /// <p>An array of endpoint configurations.</p>
     #[serde(rename = "EndpointConfigs")]
     pub endpoint_configs: Vec<EndpointConfigSummary>,
@@ -2593,7 +2626,7 @@ pub struct ListEndpointConfigsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListEndpointsInput {
+pub struct ListEndpointsRequest {
     /// <p>A filter that returns only endpoints with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2638,7 +2671,7 @@ pub struct ListEndpointsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListEndpointsOutput {
+pub struct ListEndpointsResponse {
     /// <p> An array or endpoint objects. </p>
     #[serde(rename = "Endpoints")]
     pub endpoints: Vec<EndpointSummary>,
@@ -2809,7 +2842,7 @@ pub struct ListLabelingJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListModelPackagesInput {
+pub struct ListModelPackagesRequest {
     /// <p>A filter that returns only model packages created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2842,7 +2875,7 @@ pub struct ListModelPackagesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListModelPackagesOutput {
+pub struct ListModelPackagesResponse {
     /// <p>An array of <code>ModelPackageSummary</code> objects, each of which lists a model package.</p>
     #[serde(rename = "ModelPackageSummaryList")]
     pub model_package_summary_list: Vec<ModelPackageSummary>,
@@ -2853,7 +2886,7 @@ pub struct ListModelPackagesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListModelsInput {
+pub struct ListModelsRequest {
     /// <p>A filter that returns only models with a creation time greater than or equal to the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2886,7 +2919,7 @@ pub struct ListModelsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListModelsOutput {
+pub struct ListModelsResponse {
     /// <p>An array of <code>ModelSummary</code> objects, each of which lists a model.</p>
     #[serde(rename = "Models")]
     pub models: Vec<ModelSummary>,
@@ -2897,7 +2930,7 @@ pub struct ListModelsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListNotebookInstanceLifecycleConfigsInput {
+pub struct ListNotebookInstanceLifecycleConfigsRequest {
     /// <p>A filter that returns only lifecycle configurations that were created after the specified time (timestamp).</p>
     #[serde(rename = "CreationTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2938,7 +2971,7 @@ pub struct ListNotebookInstanceLifecycleConfigsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListNotebookInstanceLifecycleConfigsOutput {
+pub struct ListNotebookInstanceLifecycleConfigsResponse {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To get the next set of lifecycle configurations, use it in the next request. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2950,7 +2983,7 @@ pub struct ListNotebookInstanceLifecycleConfigsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListNotebookInstancesInput {
+pub struct ListNotebookInstancesRequest {
     /// <p>A filter that returns only notebook instances with associated with the specified git repository.</p>
     #[serde(rename = "AdditionalCodeRepositoryEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3007,7 +3040,7 @@ pub struct ListNotebookInstancesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListNotebookInstancesOutput {
+pub struct ListNotebookInstancesResponse {
     /// <p>If the response to the previous <code>ListNotebookInstances</code> request was truncated, Amazon SageMaker returns this token. To retrieve the next set of notebook instances, use the token in the next request.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3047,7 +3080,7 @@ pub struct ListSubscribedWorkteamsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct ListTagsInput {
+pub struct ListTagsRequest {
     /// <p>Maximum number of tags to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3063,7 +3096,7 @@ pub struct ListTagsInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct ListTagsOutput {
+pub struct ListTagsResponse {
     /// <p> If response is truncated, Amazon SageMaker includes a token in the response. You can use this token in your subsequent request to fetch next set of tokens. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3890,11 +3923,15 @@ pub struct SourceAlgorithmSpecification {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StartNotebookInstanceInput {
+pub struct StartNotebookInstanceRequest {
     /// <p>The name of the notebook instance to start.</p>
     #[serde(rename = "NotebookInstanceName")]
     pub notebook_instance_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartNotebookInstanceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopCompilationJobRequest {
@@ -3903,12 +3940,20 @@ pub struct StopCompilationJobRequest {
     pub compilation_job_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopCompilationJobResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopHyperParameterTuningJobRequest {
     /// <p>The name of the tuning job to stop.</p>
     #[serde(rename = "HyperParameterTuningJobName")]
     pub hyper_parameter_tuning_job_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopHyperParameterTuningJobResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopLabelingJobRequest {
@@ -3917,12 +3962,20 @@ pub struct StopLabelingJobRequest {
     pub labeling_job_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopLabelingJobResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct StopNotebookInstanceInput {
+pub struct StopNotebookInstanceRequest {
     /// <p>The name of the notebook instance to terminate.</p>
     #[serde(rename = "NotebookInstanceName")]
     pub notebook_instance_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopNotebookInstanceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopTrainingJobRequest {
@@ -3931,12 +3984,20 @@ pub struct StopTrainingJobRequest {
     pub training_job_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopTrainingJobResponse {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopTransformJobRequest {
     /// <p>The name of the transform job to stop.</p>
     #[serde(rename = "TransformJobName")]
     pub transform_job_name: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopTransformJobResponse {}
 
 /// <p>Specifies how long model training can run. When model training reaches the limit, Amazon SageMaker ends the training job. Use this API to cap model training cost.</p> <p>To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for120 seconds. Algorithms might use this 120-second window to save the model artifacts, so the results of training is not lost. </p> <p>Training algorithms provided by Amazon SageMaker automatically saves the intermediate results of a model training job (it is best effort case, as model might not be ready to save as some stages, for example training just started). This intermediate data is a valid model artifact. You can use it to create a model (<code>CreateModel</code>). </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -4376,7 +4437,7 @@ pub struct UiTemplate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateCodeRepositoryInput {
+pub struct UpdateCodeRepositoryRequest {
     /// <p>The name of the Git repository to update.</p>
     #[serde(rename = "CodeRepositoryName")]
     pub code_repository_name: String,
@@ -4388,14 +4449,14 @@ pub struct UpdateCodeRepositoryInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateCodeRepositoryOutput {
+pub struct UpdateCodeRepositoryResponse {
     /// <p>The ARN of the Git repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
     pub code_repository_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateEndpointInput {
+pub struct UpdateEndpointRequest {
     /// <p>The name of the new endpoint configuration.</p>
     #[serde(rename = "EndpointConfigName")]
     pub endpoint_config_name: String,
@@ -4406,14 +4467,14 @@ pub struct UpdateEndpointInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateEndpointOutput {
+pub struct UpdateEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateEndpointWeightsAndCapacitiesInput {
+pub struct UpdateEndpointWeightsAndCapacitiesRequest {
     /// <p>An object that provides new capacity and weight values for a variant.</p>
     #[serde(rename = "DesiredWeightsAndCapacities")]
     pub desired_weights_and_capacities: Vec<DesiredWeightAndCapacity>,
@@ -4424,14 +4485,33 @@ pub struct UpdateEndpointWeightsAndCapacitiesInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateEndpointWeightsAndCapacitiesOutput {
+pub struct UpdateEndpointWeightsAndCapacitiesResponse {
     /// <p>The Amazon Resource Name (ARN) of the updated endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateNotebookInstanceInput {
+pub struct UpdateNotebookInstanceLifecycleConfigRequest {
+    /// <p>The name of the lifecycle configuration.</p>
+    #[serde(rename = "NotebookInstanceLifecycleConfigName")]
+    pub notebook_instance_lifecycle_config_name: String,
+    /// <p>The shell script that runs only once, when you create a notebook instance</p>
+    #[serde(rename = "OnCreate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_create: Option<Vec<NotebookInstanceLifecycleHook>>,
+    /// <p>The shell script that runs every time you start a notebook instance, including when you create the notebook instance.</p>
+    #[serde(rename = "OnStart")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateNotebookInstanceLifecycleConfigResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateNotebookInstanceRequest {
     /// <p>A list of the Elastic Inference (EI) instance types to associate with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4485,28 +4565,9 @@ pub struct UpdateNotebookInstanceInput {
     pub volume_size_in_gb: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateNotebookInstanceLifecycleConfigInput {
-    /// <p>The name of the lifecycle configuration.</p>
-    #[serde(rename = "NotebookInstanceLifecycleConfigName")]
-    pub notebook_instance_lifecycle_config_name: String,
-    /// <p>The shell script that runs only once, when you create a notebook instance</p>
-    #[serde(rename = "OnCreate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub on_create: Option<Vec<NotebookInstanceLifecycleHook>>,
-    /// <p>The shell script that runs every time you start a notebook instance, including when you create the notebook instance.</p>
-    #[serde(rename = "OnStart")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub on_start: Option<Vec<NotebookInstanceLifecycleHook>>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UpdateNotebookInstanceOutput {}
+pub struct UpdateNotebookInstanceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateWorkteamRequest {
@@ -6817,460 +6878,387 @@ impl Error for UpdateWorkteamError {
 /// Trait representing the capabilities of the SageMaker API. SageMaker clients implement this trait.
 pub trait SageMaker {
     /// <p><p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints.</p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <note> <p>Tags that you add to a hyperparameter tuning job by calling this API are also added to any training jobs that the hyperparameter tuning job launches after you call this API, but not to training jobs that the hyperparameter tuning job launched before you called this API. To make sure that the tags associated with a hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches, add the tags when you first create the tuning job by specifying them in the <code>Tags</code> parameter of <a>CreateHyperParameterTuningJob</a> </p> </note></p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest>;
 
     /// <p>Create a machine learning algorithm that you can use in Amazon SageMaker and list in the AWS Marketplace.</p>
-    fn create_algorithm(
-        &self,
-        input: CreateAlgorithmInput,
-    ) -> RusotoFuture<CreateAlgorithmOutput, CreateAlgorithmError>;
+    fn create_algorithm(&self, input: CreateAlgorithmRequest) -> Request<CreateAlgorithmRequest>;
 
     /// <p>Creates a Git repository as a resource in your Amazon SageMaker account. You can associate the repository with notebook instances so that you can use Git source control for the notebooks you create. The Git repository is a resource in your Amazon SageMaker account, so it can be associated with more than one notebook instance, and it persists independently from the lifecycle of any notebook instances it is associated with.</p> <p>The repository can be hosted either in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository.</p>
     fn create_code_repository(
         &self,
-        input: CreateCodeRepositoryInput,
-    ) -> RusotoFuture<CreateCodeRepositoryOutput, CreateCodeRepositoryError>;
+        input: CreateCodeRepositoryRequest,
+    ) -> Request<CreateCodeRepositoryRequest>;
 
     /// <p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p>A name for the compilation job</p> </li> <li> <p> Information about the input model artifacts </p> </li> <li> <p>The output location for the compiled model and the device (target) that the model runs on </p> </li> <li> <p> <code>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job</code> </p> </li> </ul> <p>You can also provide a <code>Tag</code> to track the model compilation job's resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p> <p>To stop a model compilation job, use <a>StopCompilationJob</a>. To get information about a particular model compilation job, use <a>DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
     fn create_compilation_job(
         &self,
         input: CreateCompilationJobRequest,
-    ) -> RusotoFuture<CreateCompilationJobResponse, CreateCompilationJobError>;
+    ) -> Request<CreateCompilationJobRequest>;
 
     /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> <p> You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS i an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
-    fn create_endpoint(
-        &self,
-        input: CreateEndpointInput,
-    ) -> RusotoFuture<CreateEndpointOutput, CreateEndpointError>;
+    fn create_endpoint(&self, input: CreateEndpointRequest) -> Request<CreateEndpointRequest>;
 
     /// <p>Creates an endpoint configuration that Amazon SageMaker hosting services uses to deploy models. In the configuration, you identify one or more models, created using the <code>CreateModel</code> API, to deploy and the resources that you want Amazon SageMaker to provision. Then you call the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API.</p> <note> <p> Use this API only if you want to use Amazon SageMaker hosting services to deploy models into production. </p> </note> <p>In the request, you define one or more <code>ProductionVariant</code>s, each of which identifies a model. Each <code>ProductionVariant</code> parameter also describes the resources that you want Amazon SageMaker to provision. This includes the number and type of ML compute instances to deploy. </p> <p>If you are hosting multiple models, you also assign a <code>VariantWeight</code> to specify how much traffic you want to allocate to each model. For example, suppose that you want to host two models, A and B, and you assign traffic weight 2 for model A and 1 for model B. Amazon SageMaker distributes two-thirds of the traffic to Model A, and one-third to model B. </p>
     fn create_endpoint_config(
         &self,
-        input: CreateEndpointConfigInput,
-    ) -> RusotoFuture<CreateEndpointConfigOutput, CreateEndpointConfigError>;
+        input: CreateEndpointConfigRequest,
+    ) -> Request<CreateEndpointConfigRequest>;
 
     /// <p>Starts a hyperparameter tuning job. A hyperparameter tuning job finds the best version of a model by running many training jobs on your dataset using the algorithm you choose and values for hyperparameters within ranges that you specify. It then chooses the hyperparameter values that result in a model that performs the best, as measured by an objective metric that you choose.</p>
     fn create_hyper_parameter_tuning_job(
         &self,
         input: CreateHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<CreateHyperParameterTuningJobResponse, CreateHyperParameterTuningJobError>;
+    ) -> Request<CreateHyperParameterTuningJobRequest>;
 
     /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
     fn create_labeling_job(
         &self,
         input: CreateLabelingJobRequest,
-    ) -> RusotoFuture<CreateLabelingJobResponse, CreateLabelingJobError>;
+    ) -> Request<CreateLabelingJobRequest>;
 
     /// <p>Creates a model in Amazon SageMaker. In the request, you name the model and describe a primary container. For the primary container, you specify the docker image containing inference code, artifacts (from prior training), and custom environment map that the inference code uses when you deploy the model for predictions.</p> <p>Use this API to create a model if you want to use Amazon SageMaker hosting services or run a batch transform job.</p> <p>To host your model, you create an endpoint configuration with the <code>CreateEndpointConfig</code> API, and then create an endpoint with the <code>CreateEndpoint</code> API. Amazon SageMaker then deploys all of the containers that you defined for the model in the hosting environment. </p> <p>To run a batch transform using your model, you start a job with the <code>CreateTransformJob</code> API. Amazon SageMaker uses your model and your dataset to get inferences which are then saved to a specified S3 location.</p> <p>In the <code>CreateModel</code> request, you must define a container with the <code>PrimaryContainer</code> parameter.</p> <p>In the request, you also provide an IAM role that Amazon SageMaker can assume to access model artifacts and docker image for deployment on ML compute hosting instances or for batch transform jobs. In addition, you also use the IAM role to manage permissions the inference code needs. For example, if the inference code access any other AWS resources, you grant necessary permissions via this role.</p>
-    fn create_model(
-        &self,
-        input: CreateModelInput,
-    ) -> RusotoFuture<CreateModelOutput, CreateModelError>;
+    fn create_model(&self, input: CreateModelRequest) -> Request<CreateModelRequest>;
 
     /// <p>Creates a model package that you can use to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p> <p>To create a model package by specifying a Docker container that contains your inference code and the Amazon S3 location of your model artifacts, provide values for <code>InferenceSpecification</code>. To create a model from an algorithm resource that you created or subscribed to in AWS Marketplace, provide a value for <code>SourceAlgorithmSpecification</code>.</p>
     fn create_model_package(
         &self,
-        input: CreateModelPackageInput,
-    ) -> RusotoFuture<CreateModelPackageOutput, CreateModelPackageError>;
+        input: CreateModelPackageRequest,
+    ) -> Request<CreateModelPackageRequest>;
 
     /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN).</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     fn create_notebook_instance(
         &self,
-        input: CreateNotebookInstanceInput,
-    ) -> RusotoFuture<CreateNotebookInstanceOutput, CreateNotebookInstanceError>;
+        input: CreateNotebookInstanceRequest,
+    ) -> Request<CreateNotebookInstanceRequest>;
 
     /// <p>Creates a lifecycle configuration that you can associate with a notebook instance. A <i>lifecycle configuration</i> is a collection of shell scripts that run when you create or start a notebook instance.</p> <p>Each lifecycle configuration script has a limit of 16384 characters.</p> <p>The value of the <code>$PATH</code> environment variable that is available to both scripts is <code>/sbin:bin:/usr/sbin:/usr/bin</code>.</p> <p>View CloudWatch Logs for notebook instance lifecycle configurations in log group <code>/aws/sagemaker/NotebookInstances</code> in log stream <code>[notebook-instance-name]/[LifecycleConfigHook]</code>.</p> <p>Lifecycle configuration scripts cannot run for longer than 5 minutes. If a script runs for longer than 5 minutes, it fails and the notebook instance is not created or started.</p> <p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
     fn create_notebook_instance_lifecycle_config(
         &self,
-        input: CreateNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<
-        CreateNotebookInstanceLifecycleConfigOutput,
-        CreateNotebookInstanceLifecycleConfigError,
-    >;
+        input: CreateNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<CreateNotebookInstanceLifecycleConfigRequest>;
 
     /// <p><p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p> <p>You can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. To restrict access, attach an IAM policy that denies access to this API unless the call comes from an IP address in the specified list to every AWS Identity and Access Management user, group, or role used to access the notebook instance. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-ip-filter.html">Limit Access to a Notebook Instance by IP Address</a>.</p> <note> <p>The URL that you get from a call to is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
     fn create_presigned_notebook_instance_url(
         &self,
-        input: CreatePresignedNotebookInstanceUrlInput,
-    ) -> RusotoFuture<
-        CreatePresignedNotebookInstanceUrlOutput,
-        CreatePresignedNotebookInstanceUrlError,
-    >;
+        input: CreatePresignedNotebookInstanceUrlRequest,
+    ) -> Request<CreatePresignedNotebookInstanceUrlRequest>;
 
     /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to influence the quality of the final model. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - Sets a duration for training. Use this parameter to cap model training costs. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
     fn create_training_job(
         &self,
         input: CreateTrainingJobRequest,
-    ) -> RusotoFuture<CreateTrainingJobResponse, CreateTrainingJobError>;
+    ) -> Request<CreateTrainingJobRequest>;
 
     /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a>CreateModel</a>.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p> For more information about how batch transformation works Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">How It Works</a>. </p>
     fn create_transform_job(
         &self,
         input: CreateTransformJobRequest,
-    ) -> RusotoFuture<CreateTransformJobResponse, CreateTransformJobError>;
+    ) -> Request<CreateTransformJobRequest>;
 
     /// <p>Creates a new work team for labeling your data. A work team is defined by one or more Amazon Cognito user pools. You must first create the user pools before you can create a work team.</p> <p>You cannot create more than 25 work teams in an account and region.</p>
-    fn create_workteam(
-        &self,
-        input: CreateWorkteamRequest,
-    ) -> RusotoFuture<CreateWorkteamResponse, CreateWorkteamError>;
+    fn create_workteam(&self, input: CreateWorkteamRequest) -> Request<CreateWorkteamRequest>;
 
     /// <p>Removes the specified algorithm from your account.</p>
-    fn delete_algorithm(
-        &self,
-        input: DeleteAlgorithmInput,
-    ) -> RusotoFuture<(), DeleteAlgorithmError>;
+    fn delete_algorithm(&self, input: DeleteAlgorithmRequest) -> Request<DeleteAlgorithmRequest>;
 
     /// <p>Deletes the specified Git repository from your account.</p>
     fn delete_code_repository(
         &self,
-        input: DeleteCodeRepositoryInput,
-    ) -> RusotoFuture<(), DeleteCodeRepositoryError>;
+        input: DeleteCodeRepositoryRequest,
+    ) -> Request<DeleteCodeRepositoryRequest>;
 
     /// <p>Deletes an endpoint. Amazon SageMaker frees up all of the resources that were deployed when the endpoint was created. </p> <p>Amazon SageMaker retires any custom KMS key grants associated with the endpoint, meaning you don't need to use the <a href="http://docs.aws.amazon.com/kms/latest/APIReference/API_RevokeGrant.html">RevokeGrant</a> API call.</p>
-    fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError>;
+    fn delete_endpoint(&self, input: DeleteEndpointRequest) -> Request<DeleteEndpointRequest>;
 
     /// <p>Deletes an endpoint configuration. The <code>DeleteEndpointConfig</code> API deletes only the specified configuration. It does not delete endpoints created using the configuration. </p>
     fn delete_endpoint_config(
         &self,
-        input: DeleteEndpointConfigInput,
-    ) -> RusotoFuture<(), DeleteEndpointConfigError>;
+        input: DeleteEndpointConfigRequest,
+    ) -> Request<DeleteEndpointConfigRequest>;
 
     /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
-    fn delete_model(&self, input: DeleteModelInput) -> RusotoFuture<(), DeleteModelError>;
+    fn delete_model(&self, input: DeleteModelRequest) -> Request<DeleteModelRequest>;
 
     /// <p>Deletes a model package.</p> <p>A model package is used to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p>
     fn delete_model_package(
         &self,
-        input: DeleteModelPackageInput,
-    ) -> RusotoFuture<(), DeleteModelPackageError>;
+        input: DeleteModelPackageRequest,
+    ) -> Request<DeleteModelPackageRequest>;
 
     /// <p><p> Deletes an Amazon SageMaker notebook instance. Before you can delete a notebook instance, you must call the <code>StopNotebookInstance</code> API. </p> <important> <p>When you delete a notebook instance, you lose all of your data. Amazon SageMaker removes the ML compute instance, and deletes the ML storage volume and the network interface associated with the notebook instance. </p> </important></p>
     fn delete_notebook_instance(
         &self,
-        input: DeleteNotebookInstanceInput,
-    ) -> RusotoFuture<(), DeleteNotebookInstanceError>;
+        input: DeleteNotebookInstanceRequest,
+    ) -> Request<DeleteNotebookInstanceRequest>;
 
     /// <p>Deletes a notebook instance lifecycle configuration.</p>
     fn delete_notebook_instance_lifecycle_config(
         &self,
-        input: DeleteNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<(), DeleteNotebookInstanceLifecycleConfigError>;
+        input: DeleteNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<DeleteNotebookInstanceLifecycleConfigRequest>;
 
     /// <p><p>Deletes the specified tags from an Amazon SageMaker resource.</p> <p>To list a resource&#39;s tags, use the <code>ListTags</code> API. </p> <note> <p>When you call this API to delete tags from a hyperparameter tuning job, the deleted tags are not removed from training jobs that the hyperparameter tuning job launched before you called this API.</p> </note></p>
-    fn delete_tags(
-        &self,
-        input: DeleteTagsInput,
-    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError>;
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest>;
 
     /// <p>Deletes an existing work team. This operation can't be undone.</p>
-    fn delete_workteam(
-        &self,
-        input: DeleteWorkteamRequest,
-    ) -> RusotoFuture<DeleteWorkteamResponse, DeleteWorkteamError>;
+    fn delete_workteam(&self, input: DeleteWorkteamRequest) -> Request<DeleteWorkteamRequest>;
 
     /// <p>Returns a description of the specified algorithm that is in your account.</p>
     fn describe_algorithm(
         &self,
-        input: DescribeAlgorithmInput,
-    ) -> RusotoFuture<DescribeAlgorithmOutput, DescribeAlgorithmError>;
+        input: DescribeAlgorithmRequest,
+    ) -> Request<DescribeAlgorithmRequest>;
 
     /// <p>Gets details about the specified Git repository.</p>
     fn describe_code_repository(
         &self,
-        input: DescribeCodeRepositoryInput,
-    ) -> RusotoFuture<DescribeCodeRepositoryOutput, DescribeCodeRepositoryError>;
+        input: DescribeCodeRepositoryRequest,
+    ) -> Request<DescribeCodeRepositoryRequest>;
 
     /// <p>Returns information about a model compilation job.</p> <p>To create a model compilation job, use <a>CreateCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
     fn describe_compilation_job(
         &self,
         input: DescribeCompilationJobRequest,
-    ) -> RusotoFuture<DescribeCompilationJobResponse, DescribeCompilationJobError>;
+    ) -> Request<DescribeCompilationJobRequest>;
 
     /// <p>Returns the description of an endpoint.</p>
-    fn describe_endpoint(
-        &self,
-        input: DescribeEndpointInput,
-    ) -> RusotoFuture<DescribeEndpointOutput, DescribeEndpointError>;
+    fn describe_endpoint(&self, input: DescribeEndpointRequest)
+        -> Request<DescribeEndpointRequest>;
 
     /// <p>Returns the description of an endpoint configuration created using the <code>CreateEndpointConfig</code> API.</p>
     fn describe_endpoint_config(
         &self,
-        input: DescribeEndpointConfigInput,
-    ) -> RusotoFuture<DescribeEndpointConfigOutput, DescribeEndpointConfigError>;
+        input: DescribeEndpointConfigRequest,
+    ) -> Request<DescribeEndpointConfigRequest>;
 
     /// <p>Gets a description of a hyperparameter tuning job.</p>
     fn describe_hyper_parameter_tuning_job(
         &self,
         input: DescribeHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<DescribeHyperParameterTuningJobResponse, DescribeHyperParameterTuningJobError>;
+    ) -> Request<DescribeHyperParameterTuningJobRequest>;
 
     /// <p>Gets information about a labeling job.</p>
     fn describe_labeling_job(
         &self,
         input: DescribeLabelingJobRequest,
-    ) -> RusotoFuture<DescribeLabelingJobResponse, DescribeLabelingJobError>;
+    ) -> Request<DescribeLabelingJobRequest>;
 
     /// <p>Describes a model that you created using the <code>CreateModel</code> API.</p>
-    fn describe_model(
-        &self,
-        input: DescribeModelInput,
-    ) -> RusotoFuture<DescribeModelOutput, DescribeModelError>;
+    fn describe_model(&self, input: DescribeModelRequest) -> Request<DescribeModelRequest>;
 
     /// <p>Returns a description of the specified model package, which is used to create Amazon SageMaker models or list them on AWS Marketplace.</p> <p>To create models in Amazon SageMaker, buyers can subscribe to model packages listed on AWS Marketplace.</p>
     fn describe_model_package(
         &self,
-        input: DescribeModelPackageInput,
-    ) -> RusotoFuture<DescribeModelPackageOutput, DescribeModelPackageError>;
+        input: DescribeModelPackageRequest,
+    ) -> Request<DescribeModelPackageRequest>;
 
     /// <p>Returns information about a notebook instance.</p>
     fn describe_notebook_instance(
         &self,
-        input: DescribeNotebookInstanceInput,
-    ) -> RusotoFuture<DescribeNotebookInstanceOutput, DescribeNotebookInstanceError>;
+        input: DescribeNotebookInstanceRequest,
+    ) -> Request<DescribeNotebookInstanceRequest>;
 
     /// <p>Returns a description of a notebook instance lifecycle configuration.</p> <p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
     fn describe_notebook_instance_lifecycle_config(
         &self,
-        input: DescribeNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<
-        DescribeNotebookInstanceLifecycleConfigOutput,
-        DescribeNotebookInstanceLifecycleConfigError,
-    >;
+        input: DescribeNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<DescribeNotebookInstanceLifecycleConfigRequest>;
 
     /// <p>Gets information about a work team provided by a vendor. It returns details about the subscription with a vendor in the AWS Marketplace.</p>
     fn describe_subscribed_workteam(
         &self,
         input: DescribeSubscribedWorkteamRequest,
-    ) -> RusotoFuture<DescribeSubscribedWorkteamResponse, DescribeSubscribedWorkteamError>;
+    ) -> Request<DescribeSubscribedWorkteamRequest>;
 
     /// <p>Returns information about a training job.</p>
     fn describe_training_job(
         &self,
         input: DescribeTrainingJobRequest,
-    ) -> RusotoFuture<DescribeTrainingJobResponse, DescribeTrainingJobError>;
+    ) -> Request<DescribeTrainingJobRequest>;
 
     /// <p>Returns information about a transform job.</p>
     fn describe_transform_job(
         &self,
         input: DescribeTransformJobRequest,
-    ) -> RusotoFuture<DescribeTransformJobResponse, DescribeTransformJobError>;
+    ) -> Request<DescribeTransformJobRequest>;
 
     /// <p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team's Amazon Resource Name (ARN).</p>
-    fn describe_workteam(
-        &self,
-        input: DescribeWorkteamRequest,
-    ) -> RusotoFuture<DescribeWorkteamResponse, DescribeWorkteamError>;
+    fn describe_workteam(&self, input: DescribeWorkteamRequest)
+        -> Request<DescribeWorkteamRequest>;
 
     /// <p>An auto-complete API for the search functionality in the Amazon SageMaker console. It returns suggestions of possible matches for the property name to use in <code>Search</code> queries. Provides suggestions for <code>HyperParameters</code>, <code>Tags</code>, and <code>Metrics</code>.</p>
     fn get_search_suggestions(
         &self,
         input: GetSearchSuggestionsRequest,
-    ) -> RusotoFuture<GetSearchSuggestionsResponse, GetSearchSuggestionsError>;
+    ) -> Request<GetSearchSuggestionsRequest>;
 
     /// <p>Lists the machine learning algorithms that have been created.</p>
-    fn list_algorithms(
-        &self,
-        input: ListAlgorithmsInput,
-    ) -> RusotoFuture<ListAlgorithmsOutput, ListAlgorithmsError>;
+    fn list_algorithms(&self, input: ListAlgorithmsRequest) -> Request<ListAlgorithmsRequest>;
 
     /// <p>Gets a list of the Git repositories in your account.</p>
     fn list_code_repositories(
         &self,
-        input: ListCodeRepositoriesInput,
-    ) -> RusotoFuture<ListCodeRepositoriesOutput, ListCodeRepositoriesError>;
+        input: ListCodeRepositoriesRequest,
+    ) -> Request<ListCodeRepositoriesRequest>;
 
     /// <p>Lists model compilation jobs that satisfy various filters.</p> <p>To create a model compilation job, use <a>CreateCompilationJob</a>. To get information about a particular model compilation job you have created, use <a>DescribeCompilationJob</a>.</p>
     fn list_compilation_jobs(
         &self,
         input: ListCompilationJobsRequest,
-    ) -> RusotoFuture<ListCompilationJobsResponse, ListCompilationJobsError>;
+    ) -> Request<ListCompilationJobsRequest>;
 
     /// <p>Lists endpoint configurations.</p>
     fn list_endpoint_configs(
         &self,
-        input: ListEndpointConfigsInput,
-    ) -> RusotoFuture<ListEndpointConfigsOutput, ListEndpointConfigsError>;
+        input: ListEndpointConfigsRequest,
+    ) -> Request<ListEndpointConfigsRequest>;
 
     /// <p>Lists endpoints.</p>
-    fn list_endpoints(
-        &self,
-        input: ListEndpointsInput,
-    ) -> RusotoFuture<ListEndpointsOutput, ListEndpointsError>;
+    fn list_endpoints(&self, input: ListEndpointsRequest) -> Request<ListEndpointsRequest>;
 
     /// <p>Gets a list of <a>HyperParameterTuningJobSummary</a> objects that describe the hyperparameter tuning jobs launched in your account.</p>
     fn list_hyper_parameter_tuning_jobs(
         &self,
         input: ListHyperParameterTuningJobsRequest,
-    ) -> RusotoFuture<ListHyperParameterTuningJobsResponse, ListHyperParameterTuningJobsError>;
+    ) -> Request<ListHyperParameterTuningJobsRequest>;
 
     /// <p>Gets a list of labeling jobs.</p>
     fn list_labeling_jobs(
         &self,
         input: ListLabelingJobsRequest,
-    ) -> RusotoFuture<ListLabelingJobsResponse, ListLabelingJobsError>;
+    ) -> Request<ListLabelingJobsRequest>;
 
     /// <p>Gets a list of labeling jobs assigned to a specified work team.</p>
     fn list_labeling_jobs_for_workteam(
         &self,
         input: ListLabelingJobsForWorkteamRequest,
-    ) -> RusotoFuture<ListLabelingJobsForWorkteamResponse, ListLabelingJobsForWorkteamError>;
+    ) -> Request<ListLabelingJobsForWorkteamRequest>;
 
     /// <p>Lists the model packages that have been created.</p>
     fn list_model_packages(
         &self,
-        input: ListModelPackagesInput,
-    ) -> RusotoFuture<ListModelPackagesOutput, ListModelPackagesError>;
+        input: ListModelPackagesRequest,
+    ) -> Request<ListModelPackagesRequest>;
 
     /// <p>Lists models created with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API.</p>
-    fn list_models(
-        &self,
-        input: ListModelsInput,
-    ) -> RusotoFuture<ListModelsOutput, ListModelsError>;
+    fn list_models(&self, input: ListModelsRequest) -> Request<ListModelsRequest>;
 
     /// <p>Lists notebook instance lifestyle configurations created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
     fn list_notebook_instance_lifecycle_configs(
         &self,
-        input: ListNotebookInstanceLifecycleConfigsInput,
-    ) -> RusotoFuture<
-        ListNotebookInstanceLifecycleConfigsOutput,
-        ListNotebookInstanceLifecycleConfigsError,
-    >;
+        input: ListNotebookInstanceLifecycleConfigsRequest,
+    ) -> Request<ListNotebookInstanceLifecycleConfigsRequest>;
 
     /// <p>Returns a list of the Amazon SageMaker notebook instances in the requester's account in an AWS Region. </p>
     fn list_notebook_instances(
         &self,
-        input: ListNotebookInstancesInput,
-    ) -> RusotoFuture<ListNotebookInstancesOutput, ListNotebookInstancesError>;
+        input: ListNotebookInstancesRequest,
+    ) -> Request<ListNotebookInstancesRequest>;
 
     /// <p>Gets a list of the work teams that you are subscribed to in the AWS Marketplace. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
     fn list_subscribed_workteams(
         &self,
         input: ListSubscribedWorkteamsRequest,
-    ) -> RusotoFuture<ListSubscribedWorkteamsResponse, ListSubscribedWorkteamsError>;
+    ) -> Request<ListSubscribedWorkteamsRequest>;
 
     /// <p>Returns the tags for the specified Amazon SageMaker resource.</p>
-    fn list_tags(&self, input: ListTagsInput) -> RusotoFuture<ListTagsOutput, ListTagsError>;
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest>;
 
     /// <p>Lists training jobs.</p>
     fn list_training_jobs(
         &self,
         input: ListTrainingJobsRequest,
-    ) -> RusotoFuture<ListTrainingJobsResponse, ListTrainingJobsError>;
+    ) -> Request<ListTrainingJobsRequest>;
 
     /// <p>Gets a list of <a>TrainingJobSummary</a> objects that describe the training jobs that a hyperparameter tuning job launched.</p>
     fn list_training_jobs_for_hyper_parameter_tuning_job(
         &self,
         input: ListTrainingJobsForHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<
-        ListTrainingJobsForHyperParameterTuningJobResponse,
-        ListTrainingJobsForHyperParameterTuningJobError,
-    >;
+    ) -> Request<ListTrainingJobsForHyperParameterTuningJobRequest>;
 
     /// <p>Lists transform jobs.</p>
     fn list_transform_jobs(
         &self,
         input: ListTransformJobsRequest,
-    ) -> RusotoFuture<ListTransformJobsResponse, ListTransformJobsError>;
+    ) -> Request<ListTransformJobsRequest>;
 
     /// <p>Gets a list of work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
-    fn list_workteams(
-        &self,
-        input: ListWorkteamsRequest,
-    ) -> RusotoFuture<ListWorkteamsResponse, ListWorkteamsError>;
+    fn list_workteams(&self, input: ListWorkteamsRequest) -> Request<ListWorkteamsRequest>;
 
     /// <p>Renders the UI template so that you can preview the worker's experience. </p>
     fn render_ui_template(
         &self,
         input: RenderUiTemplateRequest,
-    ) -> RusotoFuture<RenderUiTemplateResponse, RenderUiTemplateError>;
+    ) -> Request<RenderUiTemplateRequest>;
 
     /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numerical, text, Booleans, and timestamps.</p>
-    fn search(&self, input: SearchRequest) -> RusotoFuture<SearchResponse, SearchError>;
+    fn search(&self, input: SearchRequest) -> Request<SearchRequest>;
 
     /// <p>Launches an ML compute instance with the latest version of the libraries and attaches your ML storage volume. After configuring the notebook instance, Amazon SageMaker sets the notebook instance status to <code>InService</code>. A notebook instance's status must be <code>InService</code> before you can connect to your Jupyter notebook. </p>
     fn start_notebook_instance(
         &self,
-        input: StartNotebookInstanceInput,
-    ) -> RusotoFuture<(), StartNotebookInstanceError>;
+        input: StartNotebookInstanceRequest,
+    ) -> Request<StartNotebookInstanceRequest>;
 
     /// <p>Stops a model compilation job.</p> <p> To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal. This gracefully shuts the job down. If the job hasn't stopped, it sends the SIGKILL signal.</p> <p>When it receives a <code>StopCompilationJob</code> request, Amazon SageMaker changes the <a>CompilationJobSummary$CompilationJobStatus</a> of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the <a>CompilationJobSummary$CompilationJobStatus</a> to <code>Stopped</code>. </p>
     fn stop_compilation_job(
         &self,
         input: StopCompilationJobRequest,
-    ) -> RusotoFuture<(), StopCompilationJobError>;
+    ) -> Request<StopCompilationJobRequest>;
 
     /// <p>Stops a running hyperparameter tuning job and all running training jobs that the tuning job launched.</p> <p>All model artifacts output from the training jobs are stored in Amazon Simple Storage Service (Amazon S3). All data that the training jobs write to Amazon CloudWatch Logs are still available in CloudWatch. After the tuning job moves to the <code>Stopped</code> state, it releases all reserved resources for the tuning job.</p>
     fn stop_hyper_parameter_tuning_job(
         &self,
         input: StopHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<(), StopHyperParameterTuningJobError>;
+    ) -> Request<StopHyperParameterTuningJobRequest>;
 
     /// <p>Stops a running labeling job. A job that is stopped cannot be restarted. Any results obtained before the job is stopped are placed in the Amazon S3 output bucket.</p>
-    fn stop_labeling_job(
-        &self,
-        input: StopLabelingJobRequest,
-    ) -> RusotoFuture<(), StopLabelingJobError>;
+    fn stop_labeling_job(&self, input: StopLabelingJobRequest) -> Request<StopLabelingJobRequest>;
 
     /// <p>Terminates the ML compute instance. Before terminating the instance, Amazon SageMaker disconnects the ML storage volume from it. Amazon SageMaker preserves the ML storage volume. Amazon SageMaker stops charging you for the ML compute instance when you call <code>StopNotebookInstance</code>.</p> <p>To access data on the ML storage volume for a notebook instance that has been terminated, call the <code>StartNotebookInstance</code> API. <code>StartNotebookInstance</code> launches another ML compute instance, configures it, and attaches the preserved ML storage volume so you can continue your work. </p>
     fn stop_notebook_instance(
         &self,
-        input: StopNotebookInstanceInput,
-    ) -> RusotoFuture<(), StopNotebookInstanceError>;
+        input: StopNotebookInstanceRequest,
+    ) -> Request<StopNotebookInstanceRequest>;
 
     /// <p>Stops a training job. To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts, so the results of the training is not lost. </p> <p>When it receives a <code>StopTrainingJob</code> request, Amazon SageMaker changes the status of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the status to <code>Stopped</code>.</p>
-    fn stop_training_job(
-        &self,
-        input: StopTrainingJobRequest,
-    ) -> RusotoFuture<(), StopTrainingJobError>;
+    fn stop_training_job(&self, input: StopTrainingJobRequest) -> Request<StopTrainingJobRequest>;
 
     /// <p>Stops a transform job.</p> <p>When Amazon SageMaker receives a <code>StopTransformJob</code> request, the status of the job changes to <code>Stopping</code>. After Amazon SageMaker stops the job, the status is set to <code>Stopped</code>. When you stop a transform job before it is completed, Amazon SageMaker doesn't store the job's output in Amazon S3.</p>
     fn stop_transform_job(
         &self,
         input: StopTransformJobRequest,
-    ) -> RusotoFuture<(), StopTransformJobError>;
+    ) -> Request<StopTransformJobRequest>;
 
     /// <p>Updates the specified Git repository with the specified values.</p>
     fn update_code_repository(
         &self,
-        input: UpdateCodeRepositoryInput,
-    ) -> RusotoFuture<UpdateCodeRepositoryOutput, UpdateCodeRepositoryError>;
+        input: UpdateCodeRepositoryRequest,
+    ) -> Request<UpdateCodeRepositoryRequest>;
 
     /// <p><p>Deploys the new <code>EndpointConfig</code> specified in the request, switches to using newly created endpoint, and then deletes resources provisioned for the endpoint using the previous <code>EndpointConfig</code> (there is no availability loss). </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p> <note> <p>You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note></p>
-    fn update_endpoint(
-        &self,
-        input: UpdateEndpointInput,
-    ) -> RusotoFuture<UpdateEndpointOutput, UpdateEndpointError>;
+    fn update_endpoint(&self, input: UpdateEndpointRequest) -> Request<UpdateEndpointRequest>;
 
     /// <p>Updates variant weight of one or more variants associated with an existing endpoint, or capacity of one variant associated with an existing endpoint. When it receives the request, Amazon SageMaker sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p>
     fn update_endpoint_weights_and_capacities(
         &self,
-        input: UpdateEndpointWeightsAndCapacitiesInput,
-    ) -> RusotoFuture<
-        UpdateEndpointWeightsAndCapacitiesOutput,
-        UpdateEndpointWeightsAndCapacitiesError,
-    >;
+        input: UpdateEndpointWeightsAndCapacitiesRequest,
+    ) -> Request<UpdateEndpointWeightsAndCapacitiesRequest>;
 
     /// <p>Updates a notebook instance. NotebookInstance updates include upgrading or downgrading the ML compute instance used for your notebook instance to accommodate changes in your workload requirements.</p>
     fn update_notebook_instance(
         &self,
-        input: UpdateNotebookInstanceInput,
-    ) -> RusotoFuture<UpdateNotebookInstanceOutput, UpdateNotebookInstanceError>;
+        input: UpdateNotebookInstanceRequest,
+    ) -> Request<UpdateNotebookInstanceRequest>;
 
     /// <p>Updates a notebook instance lifecycle configuration created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
     fn update_notebook_instance_lifecycle_config(
         &self,
-        input: UpdateNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<
-        UpdateNotebookInstanceLifecycleConfigOutput,
-        UpdateNotebookInstanceLifecycleConfigError,
-    >;
+        input: UpdateNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<UpdateNotebookInstanceLifecycleConfigRequest>;
 
     /// <p>Updates an existing work team with new member definitions or description.</p>
-    fn update_workteam(
-        &self,
-        input: UpdateWorkteamRequest,
-    ) -> RusotoFuture<UpdateWorkteamResponse, UpdateWorkteamError>;
+    fn update_workteam(&self, input: UpdateWorkteamRequest) -> Request<UpdateWorkteamRequest>;
 }
 /// A client for the SageMaker API.
 #[derive(Clone)]
@@ -7310,18 +7298,563 @@ impl SageMakerClient {
 
 impl SageMaker for SageMakerClient {
     /// <p><p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, batch transform jobs, models, labeling jobs, work teams, endpoint configurations, and endpoints.</p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <note> <p>Tags that you add to a hyperparameter tuning job by calling this API are also added to any training jobs that the hyperparameter tuning job launches after you call this API, but not to training jobs that the hyperparameter tuning job launched before you called this API. To make sure that the tags associated with a hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches, add the tags when you first create the tuning job by specifying them in the <code>Tags</code> parameter of <a>CreateHyperParameterTuningJob</a> </p> </note></p>
-    fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+    fn add_tags(&self, input: AddTagsRequest) -> Request<AddTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create a machine learning algorithm that you can use in Amazon SageMaker and list in the AWS Marketplace.</p>
+    fn create_algorithm(&self, input: CreateAlgorithmRequest) -> Request<CreateAlgorithmRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a Git repository as a resource in your Amazon SageMaker account. You can associate the repository with notebook instances so that you can use Git source control for the notebooks you create. The Git repository is a resource in your Amazon SageMaker account, so it can be associated with more than one notebook instance, and it persists independently from the lifecycle of any notebook instances it is associated with.</p> <p>The repository can be hosted either in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository.</p>
+    fn create_code_repository(
+        &self,
+        input: CreateCodeRepositoryRequest,
+    ) -> Request<CreateCodeRepositoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p>A name for the compilation job</p> </li> <li> <p> Information about the input model artifacts </p> </li> <li> <p>The output location for the compiled model and the device (target) that the model runs on </p> </li> <li> <p> <code>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job</code> </p> </li> </ul> <p>You can also provide a <code>Tag</code> to track the model compilation job's resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p> <p>To stop a model compilation job, use <a>StopCompilationJob</a>. To get information about a particular model compilation job, use <a>DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
+    fn create_compilation_job(
+        &self,
+        input: CreateCompilationJobRequest,
+    ) -> Request<CreateCompilationJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> <p> You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS i an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
+    fn create_endpoint(&self, input: CreateEndpointRequest) -> Request<CreateEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an endpoint configuration that Amazon SageMaker hosting services uses to deploy models. In the configuration, you identify one or more models, created using the <code>CreateModel</code> API, to deploy and the resources that you want Amazon SageMaker to provision. Then you call the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API.</p> <note> <p> Use this API only if you want to use Amazon SageMaker hosting services to deploy models into production. </p> </note> <p>In the request, you define one or more <code>ProductionVariant</code>s, each of which identifies a model. Each <code>ProductionVariant</code> parameter also describes the resources that you want Amazon SageMaker to provision. This includes the number and type of ML compute instances to deploy. </p> <p>If you are hosting multiple models, you also assign a <code>VariantWeight</code> to specify how much traffic you want to allocate to each model. For example, suppose that you want to host two models, A and B, and you assign traffic weight 2 for model A and 1 for model B. Amazon SageMaker distributes two-thirds of the traffic to Model A, and one-third to model B. </p>
+    fn create_endpoint_config(
+        &self,
+        input: CreateEndpointConfigRequest,
+    ) -> Request<CreateEndpointConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a hyperparameter tuning job. A hyperparameter tuning job finds the best version of a model by running many training jobs on your dataset using the algorithm you choose and values for hyperparameters within ranges that you specify. It then chooses the hyperparameter values that result in a model that performs the best, as measured by an objective metric that you choose.</p>
+    fn create_hyper_parameter_tuning_job(
+        &self,
+        input: CreateHyperParameterTuningJobRequest,
+    ) -> Request<CreateHyperParameterTuningJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
+    fn create_labeling_job(
+        &self,
+        input: CreateLabelingJobRequest,
+    ) -> Request<CreateLabelingJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a model in Amazon SageMaker. In the request, you name the model and describe a primary container. For the primary container, you specify the docker image containing inference code, artifacts (from prior training), and custom environment map that the inference code uses when you deploy the model for predictions.</p> <p>Use this API to create a model if you want to use Amazon SageMaker hosting services or run a batch transform job.</p> <p>To host your model, you create an endpoint configuration with the <code>CreateEndpointConfig</code> API, and then create an endpoint with the <code>CreateEndpoint</code> API. Amazon SageMaker then deploys all of the containers that you defined for the model in the hosting environment. </p> <p>To run a batch transform using your model, you start a job with the <code>CreateTransformJob</code> API. Amazon SageMaker uses your model and your dataset to get inferences which are then saved to a specified S3 location.</p> <p>In the <code>CreateModel</code> request, you must define a container with the <code>PrimaryContainer</code> parameter.</p> <p>In the request, you also provide an IAM role that Amazon SageMaker can assume to access model artifacts and docker image for deployment on ML compute hosting instances or for batch transform jobs. In addition, you also use the IAM role to manage permissions the inference code needs. For example, if the inference code access any other AWS resources, you grant necessary permissions via this role.</p>
+    fn create_model(&self, input: CreateModelRequest) -> Request<CreateModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a model package that you can use to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p> <p>To create a model package by specifying a Docker container that contains your inference code and the Amazon S3 location of your model artifacts, provide values for <code>InferenceSpecification</code>. To create a model from an algorithm resource that you created or subscribed to in AWS Marketplace, provide a value for <code>SourceAlgorithmSpecification</code>.</p>
+    fn create_model_package(
+        &self,
+        input: CreateModelPackageRequest,
+    ) -> Request<CreateModelPackageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN).</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    fn create_notebook_instance(
+        &self,
+        input: CreateNotebookInstanceRequest,
+    ) -> Request<CreateNotebookInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a lifecycle configuration that you can associate with a notebook instance. A <i>lifecycle configuration</i> is a collection of shell scripts that run when you create or start a notebook instance.</p> <p>Each lifecycle configuration script has a limit of 16384 characters.</p> <p>The value of the <code>$PATH</code> environment variable that is available to both scripts is <code>/sbin:bin:/usr/sbin:/usr/bin</code>.</p> <p>View CloudWatch Logs for notebook instance lifecycle configurations in log group <code>/aws/sagemaker/NotebookInstances</code> in log stream <code>[notebook-instance-name]/[LifecycleConfigHook]</code>.</p> <p>Lifecycle configuration scripts cannot run for longer than 5 minutes. If a script runs for longer than 5 minutes, it fails and the notebook instance is not created or started.</p> <p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
+    fn create_notebook_instance_lifecycle_config(
+        &self,
+        input: CreateNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<CreateNotebookInstanceLifecycleConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p> <p>You can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. To restrict access, attach an IAM policy that denies access to this API unless the call comes from an IP address in the specified list to every AWS Identity and Access Management user, group, or role used to access the notebook instance. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-ip-filter.html">Limit Access to a Notebook Instance by IP Address</a>.</p> <note> <p>The URL that you get from a call to is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
+    fn create_presigned_notebook_instance_url(
+        &self,
+        input: CreatePresignedNotebookInstanceUrlRequest,
+    ) -> Request<CreatePresignedNotebookInstanceUrlRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to influence the quality of the final model. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - Sets a duration for training. Use this parameter to cap model training costs. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
+    fn create_training_job(
+        &self,
+        input: CreateTrainingJobRequest,
+    ) -> Request<CreateTrainingJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a>CreateModel</a>.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p> For more information about how batch transformation works Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">How It Works</a>. </p>
+    fn create_transform_job(
+        &self,
+        input: CreateTransformJobRequest,
+    ) -> Request<CreateTransformJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a new work team for labeling your data. A work team is defined by one or more Amazon Cognito user pools. You must first create the user pools before you can create a work team.</p> <p>You cannot create more than 25 work teams in an account and region.</p>
+    fn create_workteam(&self, input: CreateWorkteamRequest) -> Request<CreateWorkteamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Removes the specified algorithm from your account.</p>
+    fn delete_algorithm(&self, input: DeleteAlgorithmRequest) -> Request<DeleteAlgorithmRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified Git repository from your account.</p>
+    fn delete_code_repository(
+        &self,
+        input: DeleteCodeRepositoryRequest,
+    ) -> Request<DeleteCodeRepositoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an endpoint. Amazon SageMaker frees up all of the resources that were deployed when the endpoint was created. </p> <p>Amazon SageMaker retires any custom KMS key grants associated with the endpoint, meaning you don't need to use the <a href="http://docs.aws.amazon.com/kms/latest/APIReference/API_RevokeGrant.html">RevokeGrant</a> API call.</p>
+    fn delete_endpoint(&self, input: DeleteEndpointRequest) -> Request<DeleteEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an endpoint configuration. The <code>DeleteEndpointConfig</code> API deletes only the specified configuration. It does not delete endpoints created using the configuration. </p>
+    fn delete_endpoint_config(
+        &self,
+        input: DeleteEndpointConfigRequest,
+    ) -> Request<DeleteEndpointConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
+    fn delete_model(&self, input: DeleteModelRequest) -> Request<DeleteModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a model package.</p> <p>A model package is used to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p>
+    fn delete_model_package(
+        &self,
+        input: DeleteModelPackageRequest,
+    ) -> Request<DeleteModelPackageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p> Deletes an Amazon SageMaker notebook instance. Before you can delete a notebook instance, you must call the <code>StopNotebookInstance</code> API. </p> <important> <p>When you delete a notebook instance, you lose all of your data. Amazon SageMaker removes the ML compute instance, and deletes the ML storage volume and the network interface associated with the notebook instance. </p> </important></p>
+    fn delete_notebook_instance(
+        &self,
+        input: DeleteNotebookInstanceRequest,
+    ) -> Request<DeleteNotebookInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes a notebook instance lifecycle configuration.</p>
+    fn delete_notebook_instance_lifecycle_config(
+        &self,
+        input: DeleteNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<DeleteNotebookInstanceLifecycleConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified tags from an Amazon SageMaker resource.</p> <p>To list a resource&#39;s tags, use the <code>ListTags</code> API. </p> <note> <p>When you call this API to delete tags from a hyperparameter tuning job, the deleted tags are not removed from training jobs that the hyperparameter tuning job launched before you called this API.</p> </note></p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> Request<DeleteTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes an existing work team. This operation can't be undone.</p>
+    fn delete_workteam(&self, input: DeleteWorkteamRequest) -> Request<DeleteWorkteamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a description of the specified algorithm that is in your account.</p>
+    fn describe_algorithm(
+        &self,
+        input: DescribeAlgorithmRequest,
+    ) -> Request<DescribeAlgorithmRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets details about the specified Git repository.</p>
+    fn describe_code_repository(
+        &self,
+        input: DescribeCodeRepositoryRequest,
+    ) -> Request<DescribeCodeRepositoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a model compilation job.</p> <p>To create a model compilation job, use <a>CreateCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
+    fn describe_compilation_job(
+        &self,
+        input: DescribeCompilationJobRequest,
+    ) -> Request<DescribeCompilationJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the description of an endpoint.</p>
+    fn describe_endpoint(
+        &self,
+        input: DescribeEndpointRequest,
+    ) -> Request<DescribeEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the description of an endpoint configuration created using the <code>CreateEndpointConfig</code> API.</p>
+    fn describe_endpoint_config(
+        &self,
+        input: DescribeEndpointConfigRequest,
+    ) -> Request<DescribeEndpointConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a description of a hyperparameter tuning job.</p>
+    fn describe_hyper_parameter_tuning_job(
+        &self,
+        input: DescribeHyperParameterTuningJobRequest,
+    ) -> Request<DescribeHyperParameterTuningJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a labeling job.</p>
+    fn describe_labeling_job(
+        &self,
+        input: DescribeLabelingJobRequest,
+    ) -> Request<DescribeLabelingJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes a model that you created using the <code>CreateModel</code> API.</p>
+    fn describe_model(&self, input: DescribeModelRequest) -> Request<DescribeModelRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a description of the specified model package, which is used to create Amazon SageMaker models or list them on AWS Marketplace.</p> <p>To create models in Amazon SageMaker, buyers can subscribe to model packages listed on AWS Marketplace.</p>
+    fn describe_model_package(
+        &self,
+        input: DescribeModelPackageRequest,
+    ) -> Request<DescribeModelPackageRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a notebook instance.</p>
+    fn describe_notebook_instance(
+        &self,
+        input: DescribeNotebookInstanceRequest,
+    ) -> Request<DescribeNotebookInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a description of a notebook instance lifecycle configuration.</p> <p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
+    fn describe_notebook_instance_lifecycle_config(
+        &self,
+        input: DescribeNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<DescribeNotebookInstanceLifecycleConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a work team provided by a vendor. It returns details about the subscription with a vendor in the AWS Marketplace.</p>
+    fn describe_subscribed_workteam(
+        &self,
+        input: DescribeSubscribedWorkteamRequest,
+    ) -> Request<DescribeSubscribedWorkteamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a training job.</p>
+    fn describe_training_job(
+        &self,
+        input: DescribeTrainingJobRequest,
+    ) -> Request<DescribeTrainingJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about a transform job.</p>
+    fn describe_transform_job(
+        &self,
+        input: DescribeTransformJobRequest,
+    ) -> Request<DescribeTransformJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team's Amazon Resource Name (ARN).</p>
+    fn describe_workteam(
+        &self,
+        input: DescribeWorkteamRequest,
+    ) -> Request<DescribeWorkteamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>An auto-complete API for the search functionality in the Amazon SageMaker console. It returns suggestions of possible matches for the property name to use in <code>Search</code> queries. Provides suggestions for <code>HyperParameters</code>, <code>Tags</code>, and <code>Metrics</code>.</p>
+    fn get_search_suggestions(
+        &self,
+        input: GetSearchSuggestionsRequest,
+    ) -> Request<GetSearchSuggestionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the machine learning algorithms that have been created.</p>
+    fn list_algorithms(&self, input: ListAlgorithmsRequest) -> Request<ListAlgorithmsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the Git repositories in your account.</p>
+    fn list_code_repositories(
+        &self,
+        input: ListCodeRepositoriesRequest,
+    ) -> Request<ListCodeRepositoriesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists model compilation jobs that satisfy various filters.</p> <p>To create a model compilation job, use <a>CreateCompilationJob</a>. To get information about a particular model compilation job you have created, use <a>DescribeCompilationJob</a>.</p>
+    fn list_compilation_jobs(
+        &self,
+        input: ListCompilationJobsRequest,
+    ) -> Request<ListCompilationJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists endpoint configurations.</p>
+    fn list_endpoint_configs(
+        &self,
+        input: ListEndpointConfigsRequest,
+    ) -> Request<ListEndpointConfigsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists endpoints.</p>
+    fn list_endpoints(&self, input: ListEndpointsRequest) -> Request<ListEndpointsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of <a>HyperParameterTuningJobSummary</a> objects that describe the hyperparameter tuning jobs launched in your account.</p>
+    fn list_hyper_parameter_tuning_jobs(
+        &self,
+        input: ListHyperParameterTuningJobsRequest,
+    ) -> Request<ListHyperParameterTuningJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of labeling jobs.</p>
+    fn list_labeling_jobs(
+        &self,
+        input: ListLabelingJobsRequest,
+    ) -> Request<ListLabelingJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of labeling jobs assigned to a specified work team.</p>
+    fn list_labeling_jobs_for_workteam(
+        &self,
+        input: ListLabelingJobsForWorkteamRequest,
+    ) -> Request<ListLabelingJobsForWorkteamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists the model packages that have been created.</p>
+    fn list_model_packages(
+        &self,
+        input: ListModelPackagesRequest,
+    ) -> Request<ListModelPackagesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists models created with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API.</p>
+    fn list_models(&self, input: ListModelsRequest) -> Request<ListModelsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists notebook instance lifestyle configurations created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
+    fn list_notebook_instance_lifecycle_configs(
+        &self,
+        input: ListNotebookInstanceLifecycleConfigsRequest,
+    ) -> Request<ListNotebookInstanceLifecycleConfigsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the Amazon SageMaker notebook instances in the requester's account in an AWS Region. </p>
+    fn list_notebook_instances(
+        &self,
+        input: ListNotebookInstancesRequest,
+    ) -> Request<ListNotebookInstancesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of the work teams that you are subscribed to in the AWS Marketplace. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
+    fn list_subscribed_workteams(
+        &self,
+        input: ListSubscribedWorkteamsRequest,
+    ) -> Request<ListSubscribedWorkteamsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the tags for the specified Amazon SageMaker resource.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> Request<ListTagsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists training jobs.</p>
+    fn list_training_jobs(
+        &self,
+        input: ListTrainingJobsRequest,
+    ) -> Request<ListTrainingJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of <a>TrainingJobSummary</a> objects that describe the training jobs that a hyperparameter tuning job launched.</p>
+    fn list_training_jobs_for_hyper_parameter_tuning_job(
+        &self,
+        input: ListTrainingJobsForHyperParameterTuningJobRequest,
+    ) -> Request<ListTrainingJobsForHyperParameterTuningJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists transform jobs.</p>
+    fn list_transform_jobs(
+        &self,
+        input: ListTransformJobsRequest,
+    ) -> Request<ListTransformJobsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Gets a list of work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
+    fn list_workteams(&self, input: ListWorkteamsRequest) -> Request<ListWorkteamsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Renders the UI template so that you can preview the worker's experience. </p>
+    fn render_ui_template(
+        &self,
+        input: RenderUiTemplateRequest,
+    ) -> Request<RenderUiTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numerical, text, Booleans, and timestamps.</p>
+    fn search(&self, input: SearchRequest) -> Request<SearchRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Launches an ML compute instance with the latest version of the libraries and attaches your ML storage volume. After configuring the notebook instance, Amazon SageMaker sets the notebook instance status to <code>InService</code>. A notebook instance's status must be <code>InService</code> before you can connect to your Jupyter notebook. </p>
+    fn start_notebook_instance(
+        &self,
+        input: StartNotebookInstanceRequest,
+    ) -> Request<StartNotebookInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a model compilation job.</p> <p> To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal. This gracefully shuts the job down. If the job hasn't stopped, it sends the SIGKILL signal.</p> <p>When it receives a <code>StopCompilationJob</code> request, Amazon SageMaker changes the <a>CompilationJobSummary$CompilationJobStatus</a> of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the <a>CompilationJobSummary$CompilationJobStatus</a> to <code>Stopped</code>. </p>
+    fn stop_compilation_job(
+        &self,
+        input: StopCompilationJobRequest,
+    ) -> Request<StopCompilationJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a running hyperparameter tuning job and all running training jobs that the tuning job launched.</p> <p>All model artifacts output from the training jobs are stored in Amazon Simple Storage Service (Amazon S3). All data that the training jobs write to Amazon CloudWatch Logs are still available in CloudWatch. After the tuning job moves to the <code>Stopped</code> state, it releases all reserved resources for the tuning job.</p>
+    fn stop_hyper_parameter_tuning_job(
+        &self,
+        input: StopHyperParameterTuningJobRequest,
+    ) -> Request<StopHyperParameterTuningJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a running labeling job. A job that is stopped cannot be restarted. Any results obtained before the job is stopped are placed in the Amazon S3 output bucket.</p>
+    fn stop_labeling_job(&self, input: StopLabelingJobRequest) -> Request<StopLabelingJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Terminates the ML compute instance. Before terminating the instance, Amazon SageMaker disconnects the ML storage volume from it. Amazon SageMaker preserves the ML storage volume. Amazon SageMaker stops charging you for the ML compute instance when you call <code>StopNotebookInstance</code>.</p> <p>To access data on the ML storage volume for a notebook instance that has been terminated, call the <code>StartNotebookInstance</code> API. <code>StartNotebookInstance</code> launches another ML compute instance, configures it, and attaches the preserved ML storage volume so you can continue your work. </p>
+    fn stop_notebook_instance(
+        &self,
+        input: StopNotebookInstanceRequest,
+    ) -> Request<StopNotebookInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a training job. To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts, so the results of the training is not lost. </p> <p>When it receives a <code>StopTrainingJob</code> request, Amazon SageMaker changes the status of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the status to <code>Stopped</code>.</p>
+    fn stop_training_job(&self, input: StopTrainingJobRequest) -> Request<StopTrainingJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Stops a transform job.</p> <p>When Amazon SageMaker receives a <code>StopTransformJob</code> request, the status of the job changes to <code>Stopping</code>. After Amazon SageMaker stops the job, the status is set to <code>Stopped</code>. When you stop a transform job before it is completed, Amazon SageMaker doesn't store the job's output in Amazon S3.</p>
+    fn stop_transform_job(
+        &self,
+        input: StopTransformJobRequest,
+    ) -> Request<StopTransformJobRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the specified Git repository with the specified values.</p>
+    fn update_code_repository(
+        &self,
+        input: UpdateCodeRepositoryRequest,
+    ) -> Request<UpdateCodeRepositoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deploys the new <code>EndpointConfig</code> specified in the request, switches to using newly created endpoint, and then deletes resources provisioned for the endpoint using the previous <code>EndpointConfig</code> (there is no availability loss). </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p> <note> <p>You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note></p>
+    fn update_endpoint(&self, input: UpdateEndpointRequest) -> Request<UpdateEndpointRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates variant weight of one or more variants associated with an existing endpoint, or capacity of one variant associated with an existing endpoint. When it receives the request, Amazon SageMaker sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p>
+    fn update_endpoint_weights_and_capacities(
+        &self,
+        input: UpdateEndpointWeightsAndCapacitiesRequest,
+    ) -> Request<UpdateEndpointWeightsAndCapacitiesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a notebook instance. NotebookInstance updates include upgrading or downgrading the ML compute instance used for your notebook instance to accommodate changes in your workload requirements.</p>
+    fn update_notebook_instance(
+        &self,
+        input: UpdateNotebookInstanceRequest,
+    ) -> Request<UpdateNotebookInstanceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates a notebook instance lifecycle configuration created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
+    fn update_notebook_instance_lifecycle_config(
+        &self,
+        input: UpdateNotebookInstanceLifecycleConfigRequest,
+    ) -> Request<UpdateNotebookInstanceLifecycleConfigRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates an existing work team with new member definitions or description.</p>
+    fn update_workteam(&self, input: UpdateWorkteamRequest) -> Request<UpdateWorkteamRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AddTagsRequest {
+    type Output = AddTagsResponse;
+    type Error = AddTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.AddTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
+                    proto::json::ResponsePayload::new(&response).deserialize::<AddTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7333,24 +7866,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Create a machine learning algorithm that you can use in Amazon SageMaker and list in the AWS Marketplace.</p>
-    fn create_algorithm(
-        &self,
-        input: CreateAlgorithmInput,
-    ) -> RusotoFuture<CreateAlgorithmOutput, CreateAlgorithmError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateAlgorithmRequest {
+    type Output = CreateAlgorithmResponse;
+    type Error = CreateAlgorithmError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateAlgorithm");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateAlgorithmOutput, _>()
+                        .deserialize::<CreateAlgorithmResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7362,24 +7900,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates a Git repository as a resource in your Amazon SageMaker account. You can associate the repository with notebook instances so that you can use Git source control for the notebooks you create. The Git repository is a resource in your Amazon SageMaker account, so it can be associated with more than one notebook instance, and it persists independently from the lifecycle of any notebook instances it is associated with.</p> <p>The repository can be hosted either in <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository.</p>
-    fn create_code_repository(
-        &self,
-        input: CreateCodeRepositoryInput,
-    ) -> RusotoFuture<CreateCodeRepositoryOutput, CreateCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateCodeRepositoryRequest {
+    type Output = CreateCodeRepositoryResponse;
+    type Error = CreateCodeRepositoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateCodeRepository");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateCodeRepositoryOutput, _>()
+                        .deserialize::<CreateCodeRepositoryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7390,20 +7933,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Starts a model compilation job. After the model has been compiled, Amazon SageMaker saves the resulting model artifacts to an Amazon Simple Storage Service (Amazon S3) bucket that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts with AWS IoT Greengrass. In that case, deploy them as an ML resource.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p>A name for the compilation job</p> </li> <li> <p> Information about the input model artifacts </p> </li> <li> <p>The output location for the compiled model and the device (target) that the model runs on </p> </li> <li> <p> <code>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job</code> </p> </li> </ul> <p>You can also provide a <code>Tag</code> to track the model compilation job's resource use and costs. The response body contains the <code>CompilationJobArn</code> for the compiled job.</p> <p>To stop a model compilation job, use <a>StopCompilationJob</a>. To get information about a particular model compilation job, use <a>DescribeCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
-    fn create_compilation_job(
-        &self,
-        input: CreateCompilationJobRequest,
-    ) -> RusotoFuture<CreateCompilationJobResponse, CreateCompilationJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateCompilationJobRequest {
+    type Output = CreateCompilationJobResponse;
+    type Error = CreateCompilationJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateCompilationJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -7418,24 +7966,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates an endpoint using the endpoint configuration specified in the request. Amazon SageMaker uses the endpoint to provision resources and deploy models. You create the endpoint configuration with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpointConfig.html">CreateEndpointConfig</a> API. </p> <note> <p> Use this API only for hosting models using Amazon SageMaker hosting services. </p> <p> You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note> <p>The endpoint name must be unique within an AWS Region in your AWS account. </p> <p>When it receives the request, Amazon SageMaker creates the endpoint, launches the resources (ML compute instances), and deploys the model(s) on them. </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Creating</code>. After it creates the endpoint, it sets the status to <code>InService</code>. Amazon SageMaker can then process incoming requests for inferences. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API.</p> <p>For an example, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/ex1.html">Exercise 1: Using the K-Means Algorithm Provided by Amazon SageMaker</a>. </p> <p>If any of the models hosted at this endpoint get model data from an Amazon S3 location, Amazon SageMaker uses AWS Security Token Service to download model artifacts from the S3 path you provided. AWS STS is activated in your IAM user account by default. If you previously deactivated AWS STS for a region, you need to reactivate AWS STS for that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS i an AWS Region</a> in the <i>AWS Identity and Access Management User Guide</i>.</p>
-    fn create_endpoint(
-        &self,
-        input: CreateEndpointInput,
-    ) -> RusotoFuture<CreateEndpointOutput, CreateEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateEndpointRequest {
+    type Output = CreateEndpointResponse;
+    type Error = CreateEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEndpointOutput, _>()
+                        .deserialize::<CreateEndpointResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7447,24 +8000,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates an endpoint configuration that Amazon SageMaker hosting services uses to deploy models. In the configuration, you identify one or more models, created using the <code>CreateModel</code> API, to deploy and the resources that you want Amazon SageMaker to provision. Then you call the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API.</p> <note> <p> Use this API only if you want to use Amazon SageMaker hosting services to deploy models into production. </p> </note> <p>In the request, you define one or more <code>ProductionVariant</code>s, each of which identifies a model. Each <code>ProductionVariant</code> parameter also describes the resources that you want Amazon SageMaker to provision. This includes the number and type of ML compute instances to deploy. </p> <p>If you are hosting multiple models, you also assign a <code>VariantWeight</code> to specify how much traffic you want to allocate to each model. For example, suppose that you want to host two models, A and B, and you assign traffic weight 2 for model A and 1 for model B. Amazon SageMaker distributes two-thirds of the traffic to Model A, and one-third to model B. </p>
-    fn create_endpoint_config(
-        &self,
-        input: CreateEndpointConfigInput,
-    ) -> RusotoFuture<CreateEndpointConfigOutput, CreateEndpointConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateEndpointConfigRequest {
+    type Output = CreateEndpointConfigResponse;
+    type Error = CreateEndpointConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateEndpointConfig");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateEndpointConfigOutput, _>()
+                        .deserialize::<CreateEndpointConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7475,21 +8033,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Starts a hyperparameter tuning job. A hyperparameter tuning job finds the best version of a model by running many training jobs on your dataset using the algorithm you choose and values for hyperparameters within ranges that you specify. It then chooses the hyperparameter values that result in a model that performs the best, as measured by an objective metric that you choose.</p>
-    fn create_hyper_parameter_tuning_job(
-        &self,
-        input: CreateHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<CreateHyperParameterTuningJobResponse, CreateHyperParameterTuningJobError>
-    {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateHyperParameterTuningJobRequest {
+    type Output = CreateHyperParameterTuningJobResponse;
+    type Error = CreateHyperParameterTuningJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateHyperParameterTuningJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -7502,20 +8064,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates a job that uses workers to label the data objects in your input dataset. You can use the labeled data to train machine learning models.</p> <p>You can select your workforce from one of three providers:</p> <ul> <li> <p>A private workforce that you create. It can include employees, contractors, and outside experts. Use a private workforce when want the data to stay within your organization or when a specific set of skills is required.</p> </li> <li> <p>One or more vendors that you select from the AWS Marketplace. Vendors provide expertise in specific areas. </p> </li> <li> <p>The Amazon Mechanical Turk workforce. This is the largest workforce, but it should only be used for public data or data that has been stripped of any personally identifiable information.</p> </li> </ul> <p>You can also use <i>automated data labeling</i> to reduce the number of data objects that need to be labeled by a human. Automated data labeling uses <i>active learning</i> to determine if a data object can be labeled by machine or if it needs to be sent to a human worker. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html">Using Automated Data Labeling</a>.</p> <p>The data objects to be labeled are contained in an Amazon S3 bucket. You create a <i>manifest file</i> that describes the location of each object. For more information, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/sms-data.html">Using Input and Output Data</a>.</p> <p>The output can be used as the manifest file for another labeling job or as training data for your machine learning models.</p>
-    fn create_labeling_job(
-        &self,
-        input: CreateLabelingJobRequest,
-    ) -> RusotoFuture<CreateLabelingJobResponse, CreateLabelingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateLabelingJobRequest {
+    type Output = CreateLabelingJobResponse;
+    type Error = CreateLabelingJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateLabelingJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -7531,24 +8098,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates a model in Amazon SageMaker. In the request, you name the model and describe a primary container. For the primary container, you specify the docker image containing inference code, artifacts (from prior training), and custom environment map that the inference code uses when you deploy the model for predictions.</p> <p>Use this API to create a model if you want to use Amazon SageMaker hosting services or run a batch transform job.</p> <p>To host your model, you create an endpoint configuration with the <code>CreateEndpointConfig</code> API, and then create an endpoint with the <code>CreateEndpoint</code> API. Amazon SageMaker then deploys all of the containers that you defined for the model in the hosting environment. </p> <p>To run a batch transform using your model, you start a job with the <code>CreateTransformJob</code> API. Amazon SageMaker uses your model and your dataset to get inferences which are then saved to a specified S3 location.</p> <p>In the <code>CreateModel</code> request, you must define a container with the <code>PrimaryContainer</code> parameter.</p> <p>In the request, you also provide an IAM role that Amazon SageMaker can assume to access model artifacts and docker image for deployment on ML compute hosting instances or for batch transform jobs. In addition, you also use the IAM role to manage permissions the inference code needs. For example, if the inference code access any other AWS resources, you grant necessary permissions via this role.</p>
-    fn create_model(
-        &self,
-        input: CreateModelInput,
-    ) -> RusotoFuture<CreateModelOutput, CreateModelError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateModelRequest {
+    type Output = CreateModelResponse;
+    type Error = CreateModelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateModel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateModelOutput, _>()
+                        .deserialize::<CreateModelResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7560,24 +8132,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates a model package that you can use to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p> <p>To create a model package by specifying a Docker container that contains your inference code and the Amazon S3 location of your model artifacts, provide values for <code>InferenceSpecification</code>. To create a model from an algorithm resource that you created or subscribed to in AWS Marketplace, provide a value for <code>SourceAlgorithmSpecification</code>.</p>
-    fn create_model_package(
-        &self,
-        input: CreateModelPackageInput,
-    ) -> RusotoFuture<CreateModelPackageOutput, CreateModelPackageError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateModelPackageRequest {
+    type Output = CreateModelPackageResponse;
+    type Error = CreateModelPackageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateModelPackage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateModelPackageOutput, _>()
+                        .deserialize::<CreateModelPackageResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7589,24 +8166,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a machine learning (ML) compute instance running on a Jupyter notebook. </p> <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute instance that you want to run. Amazon SageMaker launches the instance, installs common libraries that you can use to explore datasets for model training, and attaches an ML storage volume to the notebook instance. </p> <p>Amazon SageMaker also provides a set of example notebooks. Each notebook demonstrates how to use Amazon SageMaker with a specific algorithm or with a machine learning framework. </p> <p>After receiving the request, Amazon SageMaker does the following:</p> <ol> <li> <p>Creates a network interface in the Amazon SageMaker VPC.</p> </li> <li> <p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a network interface in your own VPC, which is inferred from the subnet ID that you provide in the input. When creating this network interface, Amazon SageMaker attaches the security group that you specified in the request to the network interface that it creates in your VPC.</p> </li> <li> <p>Launches an EC2 instance of the type specified in the request in the Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC, Amazon SageMaker specifies both network interfaces when launching this instance. This enables inbound traffic from your own VPC to the notebook instance, assuming that the security groups allow it.</p> </li> </ol> <p>After creating the notebook instance, Amazon SageMaker returns its Amazon Resource Name (ARN).</p> <p>After Amazon SageMaker creates the notebook instance, you can connect to the Jupyter server and work in Jupyter notebooks. For example, you can write code to explore a dataset that you can use for model training, train a model, host models by creating Amazon SageMaker endpoints, and validate hosted models. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
-    fn create_notebook_instance(
-        &self,
-        input: CreateNotebookInstanceInput,
-    ) -> RusotoFuture<CreateNotebookInstanceOutput, CreateNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateNotebookInstanceRequest {
+    type Output = CreateNotebookInstanceResponse;
+    type Error = CreateNotebookInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateNotebookInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateNotebookInstanceOutput, _>()
+                        .deserialize::<CreateNotebookInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -7617,30 +8199,32 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates a lifecycle configuration that you can associate with a notebook instance. A <i>lifecycle configuration</i> is a collection of shell scripts that run when you create or start a notebook instance.</p> <p>Each lifecycle configuration script has a limit of 16384 characters.</p> <p>The value of the <code>$PATH</code> environment variable that is available to both scripts is <code>/sbin:bin:/usr/sbin:/usr/bin</code>.</p> <p>View CloudWatch Logs for notebook instance lifecycle configurations in log group <code>/aws/sagemaker/NotebookInstances</code> in log stream <code>[notebook-instance-name]/[LifecycleConfigHook]</code>.</p> <p>Lifecycle configuration scripts cannot run for longer than 5 minutes. If a script runs for longer than 5 minutes, it fails and the notebook instance is not created or started.</p> <p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
-    fn create_notebook_instance_lifecycle_config(
-        &self,
-        input: CreateNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<
-        CreateNotebookInstanceLifecycleConfigOutput,
-        CreateNotebookInstanceLifecycleConfigError,
-    > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateNotebookInstanceLifecycleConfigRequest {
+    type Output = CreateNotebookInstanceLifecycleConfigResponse;
+    type Error = CreateNotebookInstanceLifecycleConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.CreateNotebookInstanceLifecycleConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateNotebookInstanceLifecycleConfigOutput, _>()
+                        .deserialize::<CreateNotebookInstanceLifecycleConfigResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7651,30 +8235,32 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p><p>Returns a URL that you can use to connect to the Jupyter server from a notebook instance. In the Amazon SageMaker console, when you choose <code>Open</code> next to a notebook instance, Amazon SageMaker opens a new tab showing the Jupyter server home page from the notebook instance. The console uses this API to get the URL and show the page.</p> <p>You can restrict access to this API and to the URL that it returns to a list of IP addresses that you specify. To restrict access, attach an IAM policy that denies access to this API unless the call comes from an IP address in the specified list to every AWS Identity and Access Management user, group, or role used to access the notebook instance. Use the <code>NotIpAddress</code> condition operator and the <code>aws:SourceIP</code> condition context key to specify the list of IP addresses that you want to have access to the notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-ip-filter.html">Limit Access to a Notebook Instance by IP Address</a>.</p> <note> <p>The URL that you get from a call to is valid only for 5 minutes. If you try to use the URL after the 5-minute limit expires, you are directed to the AWS console sign-in page.</p> </note></p>
-    fn create_presigned_notebook_instance_url(
-        &self,
-        input: CreatePresignedNotebookInstanceUrlInput,
-    ) -> RusotoFuture<
-        CreatePresignedNotebookInstanceUrlOutput,
-        CreatePresignedNotebookInstanceUrlError,
-    > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreatePresignedNotebookInstanceUrlRequest {
+    type Output = CreatePresignedNotebookInstanceUrlResponse;
+    type Error = CreatePresignedNotebookInstanceUrlError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.CreatePresignedNotebookInstanceUrl",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreatePresignedNotebookInstanceUrlOutput, _>()
+                        .deserialize::<CreatePresignedNotebookInstanceUrlResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7685,20 +8271,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Starts a model training job. After training completes, Amazon SageMaker saves the resulting model artifacts to an Amazon S3 location that you specify. </p> <p>If you choose to host your model using Amazon SageMaker hosting services, you can use the resulting model artifacts as part of the model. You can also use the artifacts in a machine learning service other than Amazon SageMaker, provided that you know how to use them for inferences. </p> <p>In the request body, you provide the following: </p> <ul> <li> <p> <code>AlgorithmSpecification</code> - Identifies the training algorithm to use. </p> </li> <li> <p> <code>HyperParameters</code> - Specify these algorithm-specific parameters to influence the quality of the final model. For a list of hyperparameters for each training algorithm provided by Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html">Algorithms</a>. </p> </li> <li> <p> <code>InputDataConfig</code> - Describes the training dataset and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>OutputDataConfig</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results of model training. </p> <p/> </li> <li> <p> <code>ResourceConfig</code> - Identifies the resources, ML compute instances, and ML storage volumes to deploy for model training. In distributed training, you specify more than one instance. </p> </li> <li> <p> <code>RoleARN</code> - The Amazon Resource Number (ARN) that Amazon SageMaker assumes to perform tasks on your behalf during model training. You must grant this role the necessary permissions so that Amazon SageMaker can successfully complete model training. </p> </li> <li> <p> <code>StoppingCondition</code> - Sets a duration for training. Use this parameter to cap model training costs. </p> </li> </ul> <p> For more information about Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p>
-    fn create_training_job(
-        &self,
-        input: CreateTrainingJobRequest,
-    ) -> RusotoFuture<CreateTrainingJobResponse, CreateTrainingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateTrainingJobRequest {
+    type Output = CreateTrainingJobResponse;
+    type Error = CreateTrainingJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateTrainingJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -7714,20 +8305,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Starts a transform job. A transform job uses a trained model to get inferences on a dataset and saves these results to an Amazon S3 location that you specify.</p> <p>To perform batch transformations, you create a transform job and use the data that you have readily available.</p> <p>In the request body, you provide the following:</p> <ul> <li> <p> <code>TransformJobName</code> - Identifies the transform job. The name must be unique within an AWS Region in an AWS account.</p> </li> <li> <p> <code>ModelName</code> - Identifies the model to use. <code>ModelName</code> must be the name of an existing Amazon SageMaker model in the same AWS Region and AWS account. For information on creating a model, see <a>CreateModel</a>.</p> </li> <li> <p> <code>TransformInput</code> - Describes the dataset to be transformed and the Amazon S3 location where it is stored.</p> </li> <li> <p> <code>TransformOutput</code> - Identifies the Amazon S3 location where you want Amazon SageMaker to save the results from the transform job.</p> </li> <li> <p> <code>TransformResources</code> - Identifies the ML compute instances for the transform job.</p> </li> </ul> <p> For more information about how batch transformation works Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html">How It Works</a>. </p>
-    fn create_transform_job(
-        &self,
-        input: CreateTransformJobRequest,
-    ) -> RusotoFuture<CreateTransformJobResponse, CreateTransformJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateTransformJobRequest {
+    type Output = CreateTransformJobResponse;
+    type Error = CreateTransformJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateTransformJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -7743,20 +8339,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Creates a new work team for labeling your data. A work team is defined by one or more Amazon Cognito user pools. You must first create the user pools before you can create a work team.</p> <p>You cannot create more than 25 work teams in an account and region.</p>
-    fn create_workteam(
-        &self,
-        input: CreateWorkteamRequest,
-    ) -> RusotoFuture<CreateWorkteamResponse, CreateWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for CreateWorkteamRequest {
+    type Output = CreateWorkteamResponse;
+    type Error = CreateWorkteamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateWorkteam");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -7772,22 +8373,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Removes the specified algorithm from your account.</p>
-    fn delete_algorithm(
-        &self,
-        input: DeleteAlgorithmInput,
-    ) -> RusotoFuture<(), DeleteAlgorithmError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteAlgorithmRequest {
+    type Output = DeleteAlgorithmResponse;
+    type Error = DeleteAlgorithmError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteAlgorithm");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteAlgorithmResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7798,22 +8407,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes the specified Git repository from your account.</p>
-    fn delete_code_repository(
-        &self,
-        input: DeleteCodeRepositoryInput,
-    ) -> RusotoFuture<(), DeleteCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteCodeRepositoryRequest {
+    type Output = DeleteCodeRepositoryResponse;
+    type Error = DeleteCodeRepositoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteCodeRepository");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteCodeRepositoryResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -7823,19 +8440,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an endpoint. Amazon SageMaker frees up all of the resources that were deployed when the endpoint was created. </p> <p>Amazon SageMaker retires any custom KMS key grants associated with the endpoint, meaning you don't need to use the <a href="http://docs.aws.amazon.com/kms/latest/APIReference/API_RevokeGrant.html">RevokeGrant</a> API call.</p>
-    fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteEndpointRequest {
+    type Output = DeleteEndpointResponse;
+    type Error = DeleteEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteEndpointResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7846,22 +8474,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an endpoint configuration. The <code>DeleteEndpointConfig</code> API deletes only the specified configuration. It does not delete endpoints created using the configuration. </p>
-    fn delete_endpoint_config(
-        &self,
-        input: DeleteEndpointConfigInput,
-    ) -> RusotoFuture<(), DeleteEndpointConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteEndpointConfigRequest {
+    type Output = DeleteEndpointConfigResponse;
+    type Error = DeleteEndpointConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteEndpointConfig");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteEndpointConfigResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -7871,19 +8507,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
-    fn delete_model(&self, input: DeleteModelInput) -> RusotoFuture<(), DeleteModelError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteModelRequest {
+    type Output = DeleteModelResponse;
+    type Error = DeleteModelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteModel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteModelResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7894,22 +8541,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a model package.</p> <p>A model package is used to create Amazon SageMaker models or list on AWS Marketplace. Buyers can subscribe to model packages listed on AWS Marketplace to create models in Amazon SageMaker.</p>
-    fn delete_model_package(
-        &self,
-        input: DeleteModelPackageInput,
-    ) -> RusotoFuture<(), DeleteModelPackageError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteModelPackageRequest {
+    type Output = DeleteModelPackageResponse;
+    type Error = DeleteModelPackageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteModelPackage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteModelPackageResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -7920,22 +8575,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p><p> Deletes an Amazon SageMaker notebook instance. Before you can delete a notebook instance, you must call the <code>StopNotebookInstance</code> API. </p> <important> <p>When you delete a notebook instance, you lose all of your data. Amazon SageMaker removes the ML compute instance, and deletes the ML storage volume and the network interface associated with the notebook instance. </p> </important></p>
-    fn delete_notebook_instance(
-        &self,
-        input: DeleteNotebookInstanceInput,
-    ) -> RusotoFuture<(), DeleteNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteNotebookInstanceRequest {
+    type Output = DeleteNotebookInstanceResponse;
+    type Error = DeleteNotebookInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteNotebookInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteNotebookInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -7945,25 +8608,33 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes a notebook instance lifecycle configuration.</p>
-    fn delete_notebook_instance_lifecycle_config(
-        &self,
-        input: DeleteNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<(), DeleteNotebookInstanceLifecycleConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteNotebookInstanceLifecycleConfigRequest {
+    type Output = DeleteNotebookInstanceLifecycleConfigResponse;
+    type Error = DeleteNotebookInstanceLifecycleConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.DeleteNotebookInstanceLifecycleConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteNotebookInstanceLifecycleConfigResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteNotebookInstanceLifecycleConfigError::from_response(
@@ -7973,24 +8644,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p><p>Deletes the specified tags from an Amazon SageMaker resource.</p> <p>To list a resource&#39;s tags, use the <code>ListTags</code> API. </p> <note> <p>When you call this API to delete tags from a hyperparameter tuning job, the deleted tags are not removed from training jobs that the hyperparameter tuning job launched before you called this API.</p> </note></p>
-    fn delete_tags(
-        &self,
-        input: DeleteTagsInput,
-    ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteTagsRequest {
+    type Output = DeleteTagsResponse;
+    type Error = DeleteTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DeleteTagsOutput, _>()
+                        .deserialize::<DeleteTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8002,20 +8678,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Deletes an existing work team. This operation can't be undone.</p>
-    fn delete_workteam(
-        &self,
-        input: DeleteWorkteamRequest,
-    ) -> RusotoFuture<DeleteWorkteamResponse, DeleteWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DeleteWorkteamRequest {
+    type Output = DeleteWorkteamResponse;
+    type Error = DeleteWorkteamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteWorkteam");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8031,24 +8712,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns a description of the specified algorithm that is in your account.</p>
-    fn describe_algorithm(
-        &self,
-        input: DescribeAlgorithmInput,
-    ) -> RusotoFuture<DescribeAlgorithmOutput, DescribeAlgorithmError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeAlgorithmRequest {
+    type Output = DescribeAlgorithmResponse;
+    type Error = DescribeAlgorithmError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeAlgorithm");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeAlgorithmOutput, _>()
+                        .deserialize::<DescribeAlgorithmResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8060,24 +8746,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets details about the specified Git repository.</p>
-    fn describe_code_repository(
-        &self,
-        input: DescribeCodeRepositoryInput,
-    ) -> RusotoFuture<DescribeCodeRepositoryOutput, DescribeCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeCodeRepositoryRequest {
+    type Output = DescribeCodeRepositoryResponse;
+    type Error = DescribeCodeRepositoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeCodeRepository");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeCodeRepositoryOutput, _>()
+                        .deserialize::<DescribeCodeRepositoryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8088,20 +8779,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a model compilation job.</p> <p>To create a model compilation job, use <a>CreateCompilationJob</a>. To get information about multiple model compilation jobs, use <a>ListCompilationJobs</a>.</p>
-    fn describe_compilation_job(
-        &self,
-        input: DescribeCompilationJobRequest,
-    ) -> RusotoFuture<DescribeCompilationJobResponse, DescribeCompilationJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeCompilationJobRequest {
+    type Output = DescribeCompilationJobResponse;
+    type Error = DescribeCompilationJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeCompilationJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8116,24 +8812,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns the description of an endpoint.</p>
-    fn describe_endpoint(
-        &self,
-        input: DescribeEndpointInput,
-    ) -> RusotoFuture<DescribeEndpointOutput, DescribeEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeEndpointRequest {
+    type Output = DescribeEndpointResponse;
+    type Error = DescribeEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEndpointOutput, _>()
+                        .deserialize::<DescribeEndpointResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8145,24 +8846,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns the description of an endpoint configuration created using the <code>CreateEndpointConfig</code> API.</p>
-    fn describe_endpoint_config(
-        &self,
-        input: DescribeEndpointConfigInput,
-    ) -> RusotoFuture<DescribeEndpointConfigOutput, DescribeEndpointConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeEndpointConfigRequest {
+    type Output = DescribeEndpointConfigResponse;
+    type Error = DescribeEndpointConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeEndpointConfig");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeEndpointConfigOutput, _>()
+                        .deserialize::<DescribeEndpointConfigResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8173,21 +8879,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a description of a hyperparameter tuning job.</p>
-    fn describe_hyper_parameter_tuning_job(
-        &self,
-        input: DescribeHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<DescribeHyperParameterTuningJobResponse, DescribeHyperParameterTuningJobError>
-    {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeHyperParameterTuningJobRequest {
+    type Output = DescribeHyperParameterTuningJobResponse;
+    type Error = DescribeHyperParameterTuningJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeHyperParameterTuningJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8202,20 +8912,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a labeling job.</p>
-    fn describe_labeling_job(
-        &self,
-        input: DescribeLabelingJobRequest,
-    ) -> RusotoFuture<DescribeLabelingJobResponse, DescribeLabelingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeLabelingJobRequest {
+    type Output = DescribeLabelingJobResponse;
+    type Error = DescribeLabelingJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeLabelingJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8230,24 +8945,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Describes a model that you created using the <code>CreateModel</code> API.</p>
-    fn describe_model(
-        &self,
-        input: DescribeModelInput,
-    ) -> RusotoFuture<DescribeModelOutput, DescribeModelError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeModelRequest {
+    type Output = DescribeModelResponse;
+    type Error = DescribeModelError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeModel");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeModelOutput, _>()
+                        .deserialize::<DescribeModelResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8259,24 +8979,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns a description of the specified model package, which is used to create Amazon SageMaker models or list them on AWS Marketplace.</p> <p>To create models in Amazon SageMaker, buyers can subscribe to model packages listed on AWS Marketplace.</p>
-    fn describe_model_package(
-        &self,
-        input: DescribeModelPackageInput,
-    ) -> RusotoFuture<DescribeModelPackageOutput, DescribeModelPackageError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeModelPackageRequest {
+    type Output = DescribeModelPackageResponse;
+    type Error = DescribeModelPackageError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeModelPackage");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeModelPackageOutput, _>()
+                        .deserialize::<DescribeModelPackageResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8287,24 +9012,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a notebook instance.</p>
-    fn describe_notebook_instance(
-        &self,
-        input: DescribeNotebookInstanceInput,
-    ) -> RusotoFuture<DescribeNotebookInstanceOutput, DescribeNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeNotebookInstanceRequest {
+    type Output = DescribeNotebookInstanceResponse;
+    type Error = DescribeNotebookInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeNotebookInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeNotebookInstanceOutput, _>()
+                        .deserialize::<DescribeNotebookInstanceResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8313,30 +9043,32 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns a description of a notebook instance lifecycle configuration.</p> <p>For information about notebook instance lifestyle configurations, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/notebook-lifecycle-config.html">Step 2.1: (Optional) Customize a Notebook Instance</a>.</p>
-    fn describe_notebook_instance_lifecycle_config(
-        &self,
-        input: DescribeNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<
-        DescribeNotebookInstanceLifecycleConfigOutput,
-        DescribeNotebookInstanceLifecycleConfigError,
-    > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeNotebookInstanceLifecycleConfigRequest {
+    type Output = DescribeNotebookInstanceLifecycleConfigResponse;
+    type Error = DescribeNotebookInstanceLifecycleConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.DescribeNotebookInstanceLifecycleConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<DescribeNotebookInstanceLifecycleConfigOutput, _>()
+                        .deserialize::<DescribeNotebookInstanceLifecycleConfigResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8347,20 +9079,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a work team provided by a vendor. It returns details about the subscription with a vendor in the AWS Marketplace.</p>
-    fn describe_subscribed_workteam(
-        &self,
-        input: DescribeSubscribedWorkteamRequest,
-    ) -> RusotoFuture<DescribeSubscribedWorkteamResponse, DescribeSubscribedWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeSubscribedWorkteamRequest {
+    type Output = DescribeSubscribedWorkteamResponse;
+    type Error = DescribeSubscribedWorkteamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeSubscribedWorkteam");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8373,20 +9110,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a training job.</p>
-    fn describe_training_job(
-        &self,
-        input: DescribeTrainingJobRequest,
-    ) -> RusotoFuture<DescribeTrainingJobResponse, DescribeTrainingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeTrainingJobRequest {
+    type Output = DescribeTrainingJobResponse;
+    type Error = DescribeTrainingJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeTrainingJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8401,20 +9143,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns information about a transform job.</p>
-    fn describe_transform_job(
-        &self,
-        input: DescribeTransformJobRequest,
-    ) -> RusotoFuture<DescribeTransformJobResponse, DescribeTransformJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeTransformJobRequest {
+    type Output = DescribeTransformJobResponse;
+    type Error = DescribeTransformJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeTransformJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8429,20 +9176,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets information about a specific work team. You can see information such as the create date, the last updated date, membership information, and the work team's Amazon Resource Name (ARN).</p>
-    fn describe_workteam(
-        &self,
-        input: DescribeWorkteamRequest,
-    ) -> RusotoFuture<DescribeWorkteamResponse, DescribeWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for DescribeWorkteamRequest {
+    type Output = DescribeWorkteamResponse;
+    type Error = DescribeWorkteamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeWorkteam");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8458,20 +9210,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>An auto-complete API for the search functionality in the Amazon SageMaker console. It returns suggestions of possible matches for the property name to use in <code>Search</code> queries. Provides suggestions for <code>HyperParameters</code>, <code>Tags</code>, and <code>Metrics</code>.</p>
-    fn get_search_suggestions(
-        &self,
-        input: GetSearchSuggestionsRequest,
-    ) -> RusotoFuture<GetSearchSuggestionsResponse, GetSearchSuggestionsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for GetSearchSuggestionsRequest {
+    type Output = GetSearchSuggestionsResponse;
+    type Error = GetSearchSuggestionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.GetSearchSuggestions");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8486,24 +9243,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists the machine learning algorithms that have been created.</p>
-    fn list_algorithms(
-        &self,
-        input: ListAlgorithmsInput,
-    ) -> RusotoFuture<ListAlgorithmsOutput, ListAlgorithmsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListAlgorithmsRequest {
+    type Output = ListAlgorithmsResponse;
+    type Error = ListAlgorithmsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListAlgorithms");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListAlgorithmsOutput, _>()
+                        .deserialize::<ListAlgorithmsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8515,24 +9277,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the Git repositories in your account.</p>
-    fn list_code_repositories(
-        &self,
-        input: ListCodeRepositoriesInput,
-    ) -> RusotoFuture<ListCodeRepositoriesOutput, ListCodeRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListCodeRepositoriesRequest {
+    type Output = ListCodeRepositoriesResponse;
+    type Error = ListCodeRepositoriesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListCodeRepositories");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListCodeRepositoriesOutput, _>()
+                        .deserialize::<ListCodeRepositoriesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8543,20 +9310,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists model compilation jobs that satisfy various filters.</p> <p>To create a model compilation job, use <a>CreateCompilationJob</a>. To get information about a particular model compilation job you have created, use <a>DescribeCompilationJob</a>.</p>
-    fn list_compilation_jobs(
-        &self,
-        input: ListCompilationJobsRequest,
-    ) -> RusotoFuture<ListCompilationJobsResponse, ListCompilationJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListCompilationJobsRequest {
+    type Output = ListCompilationJobsResponse;
+    type Error = ListCompilationJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListCompilationJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8571,24 +9343,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists endpoint configurations.</p>
-    fn list_endpoint_configs(
-        &self,
-        input: ListEndpointConfigsInput,
-    ) -> RusotoFuture<ListEndpointConfigsOutput, ListEndpointConfigsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListEndpointConfigsRequest {
+    type Output = ListEndpointConfigsResponse;
+    type Error = ListEndpointConfigsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListEndpointConfigs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListEndpointConfigsOutput, _>()
+                        .deserialize::<ListEndpointConfigsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8599,24 +9376,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists endpoints.</p>
-    fn list_endpoints(
-        &self,
-        input: ListEndpointsInput,
-    ) -> RusotoFuture<ListEndpointsOutput, ListEndpointsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListEndpointsRequest {
+    type Output = ListEndpointsResponse;
+    type Error = ListEndpointsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListEndpoints");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListEndpointsOutput, _>()
+                        .deserialize::<ListEndpointsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8628,20 +9410,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of <a>HyperParameterTuningJobSummary</a> objects that describe the hyperparameter tuning jobs launched in your account.</p>
-    fn list_hyper_parameter_tuning_jobs(
-        &self,
-        input: ListHyperParameterTuningJobsRequest,
-    ) -> RusotoFuture<ListHyperParameterTuningJobsResponse, ListHyperParameterTuningJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListHyperParameterTuningJobsRequest {
+    type Output = ListHyperParameterTuningJobsResponse;
+    type Error = ListHyperParameterTuningJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListHyperParameterTuningJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8654,20 +9441,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of labeling jobs.</p>
-    fn list_labeling_jobs(
-        &self,
-        input: ListLabelingJobsRequest,
-    ) -> RusotoFuture<ListLabelingJobsResponse, ListLabelingJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListLabelingJobsRequest {
+    type Output = ListLabelingJobsResponse;
+    type Error = ListLabelingJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListLabelingJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8683,20 +9475,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of labeling jobs assigned to a specified work team.</p>
-    fn list_labeling_jobs_for_workteam(
-        &self,
-        input: ListLabelingJobsForWorkteamRequest,
-    ) -> RusotoFuture<ListLabelingJobsForWorkteamResponse, ListLabelingJobsForWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListLabelingJobsForWorkteamRequest {
+    type Output = ListLabelingJobsForWorkteamResponse;
+    type Error = ListLabelingJobsForWorkteamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListLabelingJobsForWorkteam");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8709,24 +9506,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists the model packages that have been created.</p>
-    fn list_model_packages(
-        &self,
-        input: ListModelPackagesInput,
-    ) -> RusotoFuture<ListModelPackagesOutput, ListModelPackagesError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListModelPackagesRequest {
+    type Output = ListModelPackagesResponse;
+    type Error = ListModelPackagesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListModelPackages");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListModelPackagesOutput, _>()
+                        .deserialize::<ListModelPackagesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8738,24 +9540,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists models created with the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API.</p>
-    fn list_models(
-        &self,
-        input: ListModelsInput,
-    ) -> RusotoFuture<ListModelsOutput, ListModelsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListModelsRequest {
+    type Output = ListModelsResponse;
+    type Error = ListModelsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListModels");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListModelsOutput, _>()
+                        .deserialize::<ListModelsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8767,30 +9574,32 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists notebook instance lifestyle configurations created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
-    fn list_notebook_instance_lifecycle_configs(
-        &self,
-        input: ListNotebookInstanceLifecycleConfigsInput,
-    ) -> RusotoFuture<
-        ListNotebookInstanceLifecycleConfigsOutput,
-        ListNotebookInstanceLifecycleConfigsError,
-    > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListNotebookInstanceLifecycleConfigsRequest {
+    type Output = ListNotebookInstanceLifecycleConfigsResponse;
+    type Error = ListNotebookInstanceLifecycleConfigsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.ListNotebookInstanceLifecycleConfigs",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListNotebookInstanceLifecycleConfigsOutput, _>()
+                        .deserialize::<ListNotebookInstanceLifecycleConfigsResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -8801,24 +9610,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns a list of the Amazon SageMaker notebook instances in the requester's account in an AWS Region. </p>
-    fn list_notebook_instances(
-        &self,
-        input: ListNotebookInstancesInput,
-    ) -> RusotoFuture<ListNotebookInstancesOutput, ListNotebookInstancesError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListNotebookInstancesRequest {
+    type Output = ListNotebookInstancesResponse;
+    type Error = ListNotebookInstancesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListNotebookInstances");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<ListNotebookInstancesOutput, _>()
+                        .deserialize::<ListNotebookInstancesResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8829,20 +9643,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of the work teams that you are subscribed to in the AWS Marketplace. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
-    fn list_subscribed_workteams(
-        &self,
-        input: ListSubscribedWorkteamsRequest,
-    ) -> RusotoFuture<ListSubscribedWorkteamsResponse, ListSubscribedWorkteamsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListSubscribedWorkteamsRequest {
+    type Output = ListSubscribedWorkteamsResponse;
+    type Error = ListSubscribedWorkteamsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListSubscribedWorkteams");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8855,20 +9674,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Returns the tags for the specified Amazon SageMaker resource.</p>
-    fn list_tags(&self, input: ListTagsInput) -> RusotoFuture<ListTagsOutput, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListTagsRequest {
+    type Output = ListTagsResponse;
+    type Error = ListTagsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListTags");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListTagsOutput, _>()
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -8880,20 +9708,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists training jobs.</p>
-    fn list_training_jobs(
-        &self,
-        input: ListTrainingJobsRequest,
-    ) -> RusotoFuture<ListTrainingJobsResponse, ListTrainingJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListTrainingJobsRequest {
+    type Output = ListTrainingJobsResponse;
+    type Error = ListTrainingJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListTrainingJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8909,26 +9742,28 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of <a>TrainingJobSummary</a> objects that describe the training jobs that a hyperparameter tuning job launched.</p>
-    fn list_training_jobs_for_hyper_parameter_tuning_job(
-        &self,
-        input: ListTrainingJobsForHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<
-        ListTrainingJobsForHyperParameterTuningJobResponse,
-        ListTrainingJobsForHyperParameterTuningJobError,
-    > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListTrainingJobsForHyperParameterTuningJobRequest {
+    type Output = ListTrainingJobsForHyperParameterTuningJobResponse;
+    type Error = ListTrainingJobsForHyperParameterTuningJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.ListTrainingJobsForHyperParameterTuningJob",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8941,20 +9776,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Lists transform jobs.</p>
-    fn list_transform_jobs(
-        &self,
-        input: ListTransformJobsRequest,
-    ) -> RusotoFuture<ListTransformJobsResponse, ListTransformJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListTransformJobsRequest {
+    type Output = ListTransformJobsResponse;
+    type Error = ListTransformJobsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListTransformJobs");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8970,20 +9810,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Gets a list of work teams that you have defined in a region. The list may be empty if no work team satisfies the filter specified in the <code>NameContains</code> parameter.</p>
-    fn list_workteams(
-        &self,
-        input: ListWorkteamsRequest,
-    ) -> RusotoFuture<ListWorkteamsResponse, ListWorkteamsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for ListWorkteamsRequest {
+    type Output = ListWorkteamsResponse;
+    type Error = ListWorkteamsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListWorkteams");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -8999,20 +9844,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Renders the UI template so that you can preview the worker's experience. </p>
-    fn render_ui_template(
-        &self,
-        input: RenderUiTemplateRequest,
-    ) -> RusotoFuture<RenderUiTemplateResponse, RenderUiTemplateError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for RenderUiTemplateRequest {
+    type Output = RenderUiTemplateResponse;
+    type Error = RenderUiTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.RenderUiTemplate");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
@@ -9028,17 +9878,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numerical, text, Booleans, and timestamps.</p>
-    fn search(&self, input: SearchRequest) -> RusotoFuture<SearchResponse, SearchError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for SearchRequest {
+    type Output = SearchResponse;
+    type Error = SearchError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.Search");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response).deserialize::<SearchResponse, _>()
@@ -9053,22 +9911,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Launches an ML compute instance with the latest version of the libraries and attaches your ML storage volume. After configuring the notebook instance, Amazon SageMaker sets the notebook instance status to <code>InService</code>. A notebook instance's status must be <code>InService</code> before you can connect to your Jupyter notebook. </p>
-    fn start_notebook_instance(
-        &self,
-        input: StartNotebookInstanceInput,
-    ) -> RusotoFuture<(), StartNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for StartNotebookInstanceRequest {
+    type Output = StartNotebookInstanceResponse;
+    type Error = StartNotebookInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StartNotebookInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartNotebookInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9078,22 +9944,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Stops a model compilation job.</p> <p> To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal. This gracefully shuts the job down. If the job hasn't stopped, it sends the SIGKILL signal.</p> <p>When it receives a <code>StopCompilationJob</code> request, Amazon SageMaker changes the <a>CompilationJobSummary$CompilationJobStatus</a> of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the <a>CompilationJobSummary$CompilationJobStatus</a> to <code>Stopped</code>. </p>
-    fn stop_compilation_job(
-        &self,
-        input: StopCompilationJobRequest,
-    ) -> RusotoFuture<(), StopCompilationJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for StopCompilationJobRequest {
+    type Output = StopCompilationJobResponse;
+    type Error = StopCompilationJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopCompilationJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopCompilationJobResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -9104,22 +9978,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Stops a running hyperparameter tuning job and all running training jobs that the tuning job launched.</p> <p>All model artifacts output from the training jobs are stored in Amazon Simple Storage Service (Amazon S3). All data that the training jobs write to Amazon CloudWatch Logs are still available in CloudWatch. After the tuning job moves to the <code>Stopped</code> state, it releases all reserved resources for the tuning job.</p>
-    fn stop_hyper_parameter_tuning_job(
-        &self,
-        input: StopHyperParameterTuningJobRequest,
-    ) -> RusotoFuture<(), StopHyperParameterTuningJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for StopHyperParameterTuningJobRequest {
+    type Output = StopHyperParameterTuningJobResponse;
+    type Error = StopHyperParameterTuningJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopHyperParameterTuningJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopHyperParameterTuningJobResponse, _>()
+                }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StopHyperParameterTuningJobError::from_response(response))
@@ -9127,22 +10009,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Stops a running labeling job. A job that is stopped cannot be restarted. Any results obtained before the job is stopped are placed in the Amazon S3 output bucket.</p>
-    fn stop_labeling_job(
-        &self,
-        input: StopLabelingJobRequest,
-    ) -> RusotoFuture<(), StopLabelingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for StopLabelingJobRequest {
+    type Output = StopLabelingJobResponse;
+    type Error = StopLabelingJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopLabelingJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopLabelingJobResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -9153,22 +10043,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Terminates the ML compute instance. Before terminating the instance, Amazon SageMaker disconnects the ML storage volume from it. Amazon SageMaker preserves the ML storage volume. Amazon SageMaker stops charging you for the ML compute instance when you call <code>StopNotebookInstance</code>.</p> <p>To access data on the ML storage volume for a notebook instance that has been terminated, call the <code>StartNotebookInstance</code> API. <code>StartNotebookInstance</code> launches another ML compute instance, configures it, and attaches the preserved ML storage volume so you can continue your work. </p>
-    fn stop_notebook_instance(
-        &self,
-        input: StopNotebookInstanceInput,
-    ) -> RusotoFuture<(), StopNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for StopNotebookInstanceRequest {
+    type Output = StopNotebookInstanceResponse;
+    type Error = StopNotebookInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopNotebookInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopNotebookInstanceResponse, _>()
+                }))
             } else {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -9178,22 +10076,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Stops a training job. To stop a job, Amazon SageMaker sends the algorithm the <code>SIGTERM</code> signal, which delays job termination for 120 seconds. Algorithms might use this 120-second window to save the model artifacts, so the results of the training is not lost. </p> <p>When it receives a <code>StopTrainingJob</code> request, Amazon SageMaker changes the status of the job to <code>Stopping</code>. After Amazon SageMaker stops the job, it sets the status to <code>Stopped</code>.</p>
-    fn stop_training_job(
-        &self,
-        input: StopTrainingJobRequest,
-    ) -> RusotoFuture<(), StopTrainingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for StopTrainingJobRequest {
+    type Output = StopTrainingJobResponse;
+    type Error = StopTrainingJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopTrainingJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopTrainingJobResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -9204,22 +10110,30 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Stops a transform job.</p> <p>When Amazon SageMaker receives a <code>StopTransformJob</code> request, the status of the job changes to <code>Stopping</code>. After Amazon SageMaker stops the job, the status is set to <code>Stopped</code>. When you stop a transform job before it is completed, Amazon SageMaker doesn't store the job's output in Amazon S3.</p>
-    fn stop_transform_job(
-        &self,
-        input: StopTransformJobRequest,
-    ) -> RusotoFuture<(), StopTransformJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for StopTransformJobRequest {
+    type Output = StopTransformJobResponse;
+    type Error = StopTransformJobError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopTransformJob");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
-                Box::new(future::ok(::std::mem::drop(response)))
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopTransformJobResponse, _>()
+                }))
             } else {
                 Box::new(
                     response
@@ -9230,24 +10144,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Updates the specified Git repository with the specified values.</p>
-    fn update_code_repository(
-        &self,
-        input: UpdateCodeRepositoryInput,
-    ) -> RusotoFuture<UpdateCodeRepositoryOutput, UpdateCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for UpdateCodeRepositoryRequest {
+    type Output = UpdateCodeRepositoryResponse;
+    type Error = UpdateCodeRepositoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateCodeRepository");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateCodeRepositoryOutput, _>()
+                        .deserialize::<UpdateCodeRepositoryResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -9258,24 +10177,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p><p>Deploys the new <code>EndpointConfig</code> specified in the request, switches to using newly created endpoint, and then deletes resources provisioned for the endpoint using the previous <code>EndpointConfig</code> (there is no availability loss). </p> <p>When Amazon SageMaker receives the request, it sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p> <note> <p>You must not delete an <code>EndpointConfig</code> in use by an endpoint that is live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are being performed on the endpoint. To update an endpoint, you must create a new <code>EndpointConfig</code>.</p> </note></p>
-    fn update_endpoint(
-        &self,
-        input: UpdateEndpointInput,
-    ) -> RusotoFuture<UpdateEndpointOutput, UpdateEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for UpdateEndpointRequest {
+    type Output = UpdateEndpointResponse;
+    type Error = UpdateEndpointError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateEndpoint");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEndpointOutput, _>()
+                        .deserialize::<UpdateEndpointResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -9287,30 +10211,32 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Updates variant weight of one or more variants associated with an existing endpoint, or capacity of one variant associated with an existing endpoint. When it receives the request, Amazon SageMaker sets the endpoint status to <code>Updating</code>. After updating the endpoint, it sets the status to <code>InService</code>. To check the status of an endpoint, use the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_DescribeEndpoint.html">DescribeEndpoint</a> API. </p>
-    fn update_endpoint_weights_and_capacities(
-        &self,
-        input: UpdateEndpointWeightsAndCapacitiesInput,
-    ) -> RusotoFuture<
-        UpdateEndpointWeightsAndCapacitiesOutput,
-        UpdateEndpointWeightsAndCapacitiesError,
-    > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for UpdateEndpointWeightsAndCapacitiesRequest {
+    type Output = UpdateEndpointWeightsAndCapacitiesResponse;
+    type Error = UpdateEndpointWeightsAndCapacitiesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.UpdateEndpointWeightsAndCapacities",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateEndpointWeightsAndCapacitiesOutput, _>()
+                        .deserialize::<UpdateEndpointWeightsAndCapacitiesResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9321,24 +10247,29 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Updates a notebook instance. NotebookInstance updates include upgrading or downgrading the ML compute instance used for your notebook instance to accommodate changes in your workload requirements.</p>
-    fn update_notebook_instance(
-        &self,
-        input: UpdateNotebookInstanceInput,
-    ) -> RusotoFuture<UpdateNotebookInstanceOutput, UpdateNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for UpdateNotebookInstanceRequest {
+    type Output = UpdateNotebookInstanceResponse;
+    type Error = UpdateNotebookInstanceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateNotebookInstance");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateNotebookInstanceOutput, _>()
+                        .deserialize::<UpdateNotebookInstanceResponse, _>()
                 }))
             } else {
                 Box::new(
@@ -9349,30 +10280,32 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Updates a notebook instance lifecycle configuration created with the <a>CreateNotebookInstanceLifecycleConfig</a> API.</p>
-    fn update_notebook_instance_lifecycle_config(
-        &self,
-        input: UpdateNotebookInstanceLifecycleConfigInput,
-    ) -> RusotoFuture<
-        UpdateNotebookInstanceLifecycleConfigOutput,
-        UpdateNotebookInstanceLifecycleConfigError,
-    > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for UpdateNotebookInstanceLifecycleConfigRequest {
+    type Output = UpdateNotebookInstanceLifecycleConfigResponse;
+    type Error = UpdateNotebookInstanceLifecycleConfigError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.UpdateNotebookInstanceLifecycleConfig",
         );
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateNotebookInstanceLifecycleConfigOutput, _>()
+                        .deserialize::<UpdateNotebookInstanceLifecycleConfigResponse, _>()
                 }))
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -9383,20 +10316,25 @@ impl SageMaker for SageMakerClient {
             }
         })
     }
+}
 
-    /// <p>Updates an existing work team with new member definitions or description.</p>
-    fn update_workteam(
-        &self,
-        input: UpdateWorkteamRequest,
-    ) -> RusotoFuture<UpdateWorkteamResponse, UpdateWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+impl ServiceRequest for UpdateWorkteamRequest {
+    type Output = UpdateWorkteamResponse;
+    type Error = UpdateWorkteamError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "sagemaker", region, "/");
         request.set_endpoint_prefix("api.sagemaker".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateWorkteam");
-        let encoded = serde_json::to_string(&input).unwrap();
+        let encoded = serde_json::to_string(&self).unwrap();
         request.set_payload(Some(encoded));
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     proto::json::ResponsePayload::new(&response)

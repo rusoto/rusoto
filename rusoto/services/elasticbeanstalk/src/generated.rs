@@ -19,6 +19,7 @@ use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
+use rusoto_core::v2::{Dispatcher, Request, ServiceRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
@@ -47,17 +48,17 @@ impl ARNDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct AbortEnvironmentUpdateMessage {
+pub struct AbortEnvironmentUpdateRequest {
     /// <p>This specifies the ID of the environment with the in-progress update that you want to cancel.</p>
     pub environment_id: Option<String>,
     /// <p>This specifies the name of the environment with the in-progress update that you want to cancel.</p>
     pub environment_name: Option<String>,
 }
 
-/// Serialize `AbortEnvironmentUpdateMessage` contents to a `SignedRequest`.
-struct AbortEnvironmentUpdateMessageSerializer;
-impl AbortEnvironmentUpdateMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AbortEnvironmentUpdateMessage) {
+/// Serialize `AbortEnvironmentUpdateRequest` contents to a `SignedRequest`.
+struct AbortEnvironmentUpdateRequestSerializer;
+impl AbortEnvironmentUpdateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AbortEnvironmentUpdateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -72,6 +73,19 @@ impl AbortEnvironmentUpdateMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AbortEnvironmentUpdateResponse {}
+
+struct AbortEnvironmentUpdateResponseDeserializer;
+impl AbortEnvironmentUpdateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AbortEnvironmentUpdateResponse, XmlParseError> {
+        Ok(AbortEnvironmentUpdateResponse::default())
+    }
+}
 struct AbortableOperationInProgressDeserializer;
 impl AbortableOperationInProgressDeserializer {
     #[allow(unused_variables)]
@@ -226,72 +240,6 @@ impl ApplicationDescriptionListDeserializer {
         })
     }
 }
-/// <p>Result message containing a single description of an application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationDescriptionMessage {
-    /// <p> The <a>ApplicationDescription</a> of the application. </p>
-    pub application: Option<ApplicationDescription>,
-}
-
-struct ApplicationDescriptionMessageDeserializer;
-impl ApplicationDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ApplicationDescriptionMessage, XmlParseError> {
-        deserialize_elements::<_, ApplicationDescriptionMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Application" => {
-                        obj.application = Some(ApplicationDescriptionDeserializer::deserialize(
-                            "Application",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Result message containing a list of application descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationDescriptionsMessage {
-    /// <p>This parameter contains a list of <a>ApplicationDescription</a>.</p>
-    pub applications: Option<Vec<ApplicationDescription>>,
-}
-
-struct ApplicationDescriptionsMessageDeserializer;
-impl ApplicationDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ApplicationDescriptionsMessage, XmlParseError> {
-        deserialize_elements::<_, ApplicationDescriptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Applications" => {
-                        obj.applications.get_or_insert(vec![]).extend(
-                            ApplicationDescriptionListDeserializer::deserialize(
-                                "Applications",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Application request metrics for an AWS Elastic Beanstalk environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationMetrics {
@@ -422,46 +370,6 @@ impl ApplicationResourceLifecycleConfigSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationResourceLifecycleDescriptionMessage {
-    /// <p>The name of the application.</p>
-    pub application_name: Option<String>,
-    /// <p>The lifecycle configuration.</p>
-    pub resource_lifecycle_config: Option<ApplicationResourceLifecycleConfig>,
-}
-
-struct ApplicationResourceLifecycleDescriptionMessageDeserializer;
-impl ApplicationResourceLifecycleDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ApplicationResourceLifecycleDescriptionMessage, XmlParseError> {
-        deserialize_elements::<_, ApplicationResourceLifecycleDescriptionMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ApplicationName" => {
-                        obj.application_name = Some(ApplicationNameDeserializer::deserialize(
-                            "ApplicationName",
-                            stack,
-                        )?);
-                    }
-                    "ResourceLifecycleConfig" => {
-                        obj.resource_lifecycle_config =
-                            Some(ApplicationResourceLifecycleConfigDeserializer::deserialize(
-                                "ResourceLifecycleConfig",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct ApplicationVersionArnDeserializer;
 impl ApplicationVersionArnDeserializer {
     #[allow(unused_variables)]
@@ -586,78 +494,6 @@ impl ApplicationVersionDescriptionListDeserializer {
         })
     }
 }
-/// <p>Result message wrapping a single description of an application version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationVersionDescriptionMessage {
-    /// <p> The <a>ApplicationVersionDescription</a> of the application version. </p>
-    pub application_version: Option<ApplicationVersionDescription>,
-}
-
-struct ApplicationVersionDescriptionMessageDeserializer;
-impl ApplicationVersionDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ApplicationVersionDescriptionMessage, XmlParseError> {
-        deserialize_elements::<_, ApplicationVersionDescriptionMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ApplicationVersion" => {
-                        obj.application_version =
-                            Some(ApplicationVersionDescriptionDeserializer::deserialize(
-                                "ApplicationVersion",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Result message wrapping a list of application version descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationVersionDescriptionsMessage {
-    /// <p>List of <code>ApplicationVersionDescription</code> objects sorted in order of creation.</p>
-    pub application_versions: Option<Vec<ApplicationVersionDescription>>,
-    /// <p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>
-    pub next_token: Option<String>,
-}
-
-struct ApplicationVersionDescriptionsMessageDeserializer;
-impl ApplicationVersionDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ApplicationVersionDescriptionsMessage, XmlParseError> {
-        deserialize_elements::<_, ApplicationVersionDescriptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ApplicationVersions" => {
-                        obj.application_versions.get_or_insert(vec![]).extend(
-                            ApplicationVersionDescriptionListDeserializer::deserialize(
-                                "ApplicationVersions",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "NextToken" => {
-                        obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>The application version lifecycle settings for an application. Defines the rules that Elastic Beanstalk applies to an application's versions in order to avoid hitting the per-region limit for application versions.</p> <p>When Elastic Beanstalk deletes an application version from its database, you can no longer deploy that version to an environment. The source bundle remains in S3 unless you configure the rule to delete it.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationVersionLifecycleConfig {
@@ -766,7 +602,7 @@ impl ApplyEnvironmentManagedActionRequestSerializer {
 
 /// <p>The result message containing information about the managed action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplyEnvironmentManagedActionResult {
+pub struct ApplyEnvironmentManagedActionResponse {
     /// <p>A description of the managed action.</p>
     pub action_description: Option<String>,
     /// <p>The action ID of the managed action.</p>
@@ -777,14 +613,14 @@ pub struct ApplyEnvironmentManagedActionResult {
     pub status: Option<String>,
 }
 
-struct ApplyEnvironmentManagedActionResultDeserializer;
-impl ApplyEnvironmentManagedActionResultDeserializer {
+struct ApplyEnvironmentManagedActionResponseDeserializer;
+impl ApplyEnvironmentManagedActionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ApplyEnvironmentManagedActionResult, XmlParseError> {
-        deserialize_elements::<_, ApplyEnvironmentManagedActionResult, _>(
+    ) -> Result<ApplyEnvironmentManagedActionResponse, XmlParseError> {
+        deserialize_elements::<_, ApplyEnvironmentManagedActionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1069,15 +905,15 @@ impl CausesDeserializer {
 }
 /// <p>Results message indicating whether a CNAME is available.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CheckDNSAvailabilityMessage {
+pub struct CheckDNSAvailabilityRequest {
     /// <p>The prefix used when this CNAME is reserved.</p>
     pub cname_prefix: String,
 }
 
-/// Serialize `CheckDNSAvailabilityMessage` contents to a `SignedRequest`.
-struct CheckDNSAvailabilityMessageSerializer;
-impl CheckDNSAvailabilityMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CheckDNSAvailabilityMessage) {
+/// Serialize `CheckDNSAvailabilityRequest` contents to a `SignedRequest`.
+struct CheckDNSAvailabilityRequestSerializer;
+impl CheckDNSAvailabilityRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CheckDNSAvailabilityRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1089,21 +925,21 @@ impl CheckDNSAvailabilityMessageSerializer {
 
 /// <p>Indicates if the specified CNAME is available.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CheckDNSAvailabilityResultMessage {
+pub struct CheckDNSAvailabilityResponse {
     /// <p><p>Indicates if the specified CNAME is available:</p> <ul> <li> <p> <code>true</code> : The CNAME is available.</p> </li> <li> <p> <code>false</code> : The CNAME is not available.</p> </li> </ul></p>
     pub available: Option<bool>,
     /// <p>The fully qualified CNAME to reserve when <a>CreateEnvironment</a> is called with the provided prefix.</p>
     pub fully_qualified_cname: Option<String>,
 }
 
-struct CheckDNSAvailabilityResultMessageDeserializer;
-impl CheckDNSAvailabilityResultMessageDeserializer {
+struct CheckDNSAvailabilityResponseDeserializer;
+impl CheckDNSAvailabilityResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CheckDNSAvailabilityResultMessage, XmlParseError> {
-        deserialize_elements::<_, CheckDNSAvailabilityResultMessage, _>(
+    ) -> Result<CheckDNSAvailabilityResponse, XmlParseError> {
+        deserialize_elements::<_, CheckDNSAvailabilityResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -1140,7 +976,7 @@ impl CnameAvailabilityDeserializer {
 }
 /// <p>Request to create or update a group of environments.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ComposeEnvironmentsMessage {
+pub struct ComposeEnvironmentsRequest {
     /// <p>The name of the application to which the specified source bundles belong.</p>
     pub application_name: Option<String>,
     /// <p>The name of the group to which the target environments belong. Specify a group name only if the environment name defined in each target environment's manifest ends with a + (plus) character. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html">Environment Manifest (env.yaml)</a> for details.</p>
@@ -1149,10 +985,10 @@ pub struct ComposeEnvironmentsMessage {
     pub version_labels: Option<Vec<String>>,
 }
 
-/// Serialize `ComposeEnvironmentsMessage` contents to a `SignedRequest`.
-struct ComposeEnvironmentsMessageSerializer;
-impl ComposeEnvironmentsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ComposeEnvironmentsMessage) {
+/// Serialize `ComposeEnvironmentsRequest` contents to a `SignedRequest`.
+struct ComposeEnvironmentsRequestSerializer;
+impl ComposeEnvironmentsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ComposeEnvironmentsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1174,6 +1010,45 @@ impl ComposeEnvironmentsMessageSerializer {
     }
 }
 
+/// <p>Result message containing a list of environment descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ComposeEnvironmentsResponse {
+    /// <p> Returns an <a>EnvironmentDescription</a> list. </p>
+    pub environments: Option<Vec<EnvironmentDescription>>,
+    /// <p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>
+    pub next_token: Option<String>,
+}
+
+struct ComposeEnvironmentsResponseDeserializer;
+impl ComposeEnvironmentsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ComposeEnvironmentsResponse, XmlParseError> {
+        deserialize_elements::<_, ComposeEnvironmentsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Environments" => {
+                        obj.environments.get_or_insert(vec![]).extend(
+                            EnvironmentDescriptionsListDeserializer::deserialize(
+                                "Environments",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct ConfigurationDeploymentStatusDeserializer;
 impl ConfigurationDeploymentStatusDeserializer {
     #[allow(unused_variables)]
@@ -1513,53 +1388,6 @@ impl ConfigurationOptionValueTypeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the settings for a specified configuration set.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ConfigurationOptionsDescription {
-    /// <p> A list of <a>ConfigurationOptionDescription</a>. </p>
-    pub options: Option<Vec<ConfigurationOptionDescription>>,
-    /// <p>The ARN of the platform.</p>
-    pub platform_arn: Option<String>,
-    /// <p>The name of the solution stack these configuration options belong to.</p>
-    pub solution_stack_name: Option<String>,
-}
-
-struct ConfigurationOptionsDescriptionDeserializer;
-impl ConfigurationOptionsDescriptionDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ConfigurationOptionsDescription, XmlParseError> {
-        deserialize_elements::<_, ConfigurationOptionsDescription, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Options" => {
-                        obj.options.get_or_insert(vec![]).extend(
-                            ConfigurationOptionDescriptionsListDeserializer::deserialize(
-                                "Options", stack,
-                            )?,
-                        );
-                    }
-                    "PlatformArn" => {
-                        obj.platform_arn =
-                            Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
-                    }
-                    "SolutionStackName" => {
-                        obj.solution_stack_name = Some(SolutionStackNameDeserializer::deserialize(
-                            "SolutionStackName",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Describes the settings for a configuration set.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ConfigurationSettingsDescription {
@@ -1679,71 +1507,6 @@ impl ConfigurationSettingsDescriptionListDeserializer {
         })
     }
 }
-/// <p>The results from a request to change the configuration settings of an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ConfigurationSettingsDescriptions {
-    /// <p> A list of <a>ConfigurationSettingsDescription</a>. </p>
-    pub configuration_settings: Option<Vec<ConfigurationSettingsDescription>>,
-}
-
-struct ConfigurationSettingsDescriptionsDeserializer;
-impl ConfigurationSettingsDescriptionsDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ConfigurationSettingsDescriptions, XmlParseError> {
-        deserialize_elements::<_, ConfigurationSettingsDescriptions, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ConfigurationSettings" => {
-                        obj.configuration_settings.get_or_insert(vec![]).extend(
-                            ConfigurationSettingsDescriptionListDeserializer::deserialize(
-                                "ConfigurationSettings",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
-/// <p>Provides a list of validation messages.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ConfigurationSettingsValidationMessages {
-    /// <p> A list of <a>ValidationMessage</a>. </p>
-    pub messages: Option<Vec<ValidationMessage>>,
-}
-
-struct ConfigurationSettingsValidationMessagesDeserializer;
-impl ConfigurationSettingsValidationMessagesDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ConfigurationSettingsValidationMessages, XmlParseError> {
-        deserialize_elements::<_, ConfigurationSettingsValidationMessages, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Messages" => {
-                        obj.messages.get_or_insert(vec![]).extend(
-                            ValidationMessagesListDeserializer::deserialize("Messages", stack)?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 struct ConfigurationTemplateNameDeserializer;
 impl ConfigurationTemplateNameDeserializer {
     #[allow(unused_variables)]
@@ -1776,7 +1539,7 @@ impl ConfigurationTemplateNamesListDeserializer {
 }
 /// <p>Request to create an application.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateApplicationMessage {
+pub struct CreateApplicationRequest {
     /// <p>The name of the application.</p> <p>Constraint: This name must be unique within your account. If the specified name already exists, the action returns an <code>InvalidParameterValue</code> error.</p>
     pub application_name: String,
     /// <p>Describes the application.</p>
@@ -1787,10 +1550,10 @@ pub struct CreateApplicationMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// Serialize `CreateApplicationMessage` contents to a `SignedRequest`.
-struct CreateApplicationMessageSerializer;
-impl CreateApplicationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateApplicationMessage) {
+/// Serialize `CreateApplicationRequest` contents to a `SignedRequest`.
+struct CreateApplicationRequestSerializer;
+impl CreateApplicationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateApplicationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1816,9 +1579,41 @@ impl CreateApplicationMessageSerializer {
     }
 }
 
+/// <p>Result message containing a single description of an application.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateApplicationResponse {
+    /// <p> The <a>ApplicationDescription</a> of the application. </p>
+    pub application: Option<ApplicationDescription>,
+}
+
+struct CreateApplicationResponseDeserializer;
+impl CreateApplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateApplicationResponse, XmlParseError> {
+        deserialize_elements::<_, CreateApplicationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Application" => {
+                        obj.application = Some(ApplicationDescriptionDeserializer::deserialize(
+                            "Application",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateApplicationVersionMessage {
+pub struct CreateApplicationVersionRequest {
     /// <p> The name of the application. If no application is found with this name, and <code>AutoCreateApplication</code> is <code>false</code>, returns an <code>InvalidParameterValue</code> error. </p>
     pub application_name: String,
     /// <p>Set to <code>true</code> to create an application with the specified name if it doesn't already exist.</p>
@@ -1839,10 +1634,10 @@ pub struct CreateApplicationVersionMessage {
     pub version_label: String,
 }
 
-/// Serialize `CreateApplicationVersionMessage` contents to a `SignedRequest`.
-struct CreateApplicationVersionMessageSerializer;
-impl CreateApplicationVersionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateApplicationVersionMessage) {
+/// Serialize `CreateApplicationVersionRequest` contents to a `SignedRequest`.
+struct CreateApplicationVersionRequestSerializer;
+impl CreateApplicationVersionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateApplicationVersionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1892,9 +1687,42 @@ impl CreateApplicationVersionMessageSerializer {
     }
 }
 
+/// <p>Result message wrapping a single description of an application version.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateApplicationVersionResponse {
+    /// <p> The <a>ApplicationVersionDescription</a> of the application version. </p>
+    pub application_version: Option<ApplicationVersionDescription>,
+}
+
+struct CreateApplicationVersionResponseDeserializer;
+impl CreateApplicationVersionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateApplicationVersionResponse, XmlParseError> {
+        deserialize_elements::<_, CreateApplicationVersionResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApplicationVersion" => {
+                        obj.application_version =
+                            Some(ApplicationVersionDescriptionDeserializer::deserialize(
+                                "ApplicationVersion",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Request to create a configuration template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateConfigurationTemplateMessage {
+pub struct CreateConfigurationTemplateRequest {
     /// <p>The name of the application to associate with this configuration template. If no application is found with this name, AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p>
     pub application_name: String,
     /// <p>Describes this configuration.</p>
@@ -1915,10 +1743,10 @@ pub struct CreateConfigurationTemplateMessage {
     pub template_name: String,
 }
 
-/// Serialize `CreateConfigurationTemplateMessage` contents to a `SignedRequest`.
-struct CreateConfigurationTemplateMessageSerializer;
-impl CreateConfigurationTemplateMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateConfigurationTemplateMessage) {
+/// Serialize `CreateConfigurationTemplateRequest` contents to a `SignedRequest`.
+struct CreateConfigurationTemplateRequestSerializer;
+impl CreateConfigurationTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateConfigurationTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1961,9 +1789,109 @@ impl CreateConfigurationTemplateMessageSerializer {
     }
 }
 
+/// <p>Describes the settings for a configuration set.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateConfigurationTemplateResponse {
+    /// <p>The name of the application associated with this configuration set.</p>
+    pub application_name: Option<String>,
+    /// <p>The date (in UTC time) when this configuration set was created.</p>
+    pub date_created: Option<String>,
+    /// <p>The date (in UTC time) when this configuration set was last modified.</p>
+    pub date_updated: Option<String>,
+    /// <p><p> If this configuration set is associated with an environment, the <code>DeploymentStatus</code> parameter indicates the deployment status of this configuration set: </p> <ul> <li> <p> <code>null</code>: This configuration is not associated with a running environment.</p> </li> <li> <p> <code>pending</code>: This is a draft configuration that is not deployed to the associated environment but is in the process of deploying.</p> </li> <li> <p> <code>deployed</code>: This is the configuration that is currently deployed to the associated running environment.</p> </li> <li> <p> <code>failed</code>: This is a draft configuration that failed to successfully deploy.</p> </li> </ul></p>
+    pub deployment_status: Option<String>,
+    /// <p>Describes this configuration set.</p>
+    pub description: Option<String>,
+    /// <p> If not <code>null</code>, the name of the environment for this configuration set. </p>
+    pub environment_name: Option<String>,
+    /// <p>A list of the configuration options and their values in this configuration set.</p>
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
+    /// <p>The ARN of the platform.</p>
+    pub platform_arn: Option<String>,
+    /// <p>The name of the solution stack this configuration set uses.</p>
+    pub solution_stack_name: Option<String>,
+    /// <p> If not <code>null</code>, the name of the configuration template for this configuration set. </p>
+    pub template_name: Option<String>,
+}
+
+struct CreateConfigurationTemplateResponseDeserializer;
+impl CreateConfigurationTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateConfigurationTemplateResponse, XmlParseError> {
+        deserialize_elements::<_, CreateConfigurationTemplateResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApplicationName" => {
+                        obj.application_name = Some(ApplicationNameDeserializer::deserialize(
+                            "ApplicationName",
+                            stack,
+                        )?);
+                    }
+                    "DateCreated" => {
+                        obj.date_created =
+                            Some(CreationDateDeserializer::deserialize("DateCreated", stack)?);
+                    }
+                    "DateUpdated" => {
+                        obj.date_updated =
+                            Some(UpdateDateDeserializer::deserialize("DateUpdated", stack)?);
+                    }
+                    "DeploymentStatus" => {
+                        obj.deployment_status =
+                            Some(ConfigurationDeploymentStatusDeserializer::deserialize(
+                                "DeploymentStatus",
+                                stack,
+                            )?);
+                    }
+                    "Description" => {
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
+                    }
+                    "EnvironmentName" => {
+                        obj.environment_name = Some(EnvironmentNameDeserializer::deserialize(
+                            "EnvironmentName",
+                            stack,
+                        )?);
+                    }
+                    "OptionSettings" => {
+                        obj.option_settings.get_or_insert(vec![]).extend(
+                            ConfigurationOptionSettingsListDeserializer::deserialize(
+                                "OptionSettings",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "PlatformArn" => {
+                        obj.platform_arn =
+                            Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
+                    }
+                    "SolutionStackName" => {
+                        obj.solution_stack_name = Some(SolutionStackNameDeserializer::deserialize(
+                            "SolutionStackName",
+                            stack,
+                        )?);
+                    }
+                    "TemplateName" => {
+                        obj.template_name =
+                            Some(ConfigurationTemplateNameDeserializer::deserialize(
+                                "TemplateName",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateEnvironmentMessage {
+pub struct CreateEnvironmentRequest {
     /// <p>The name of the application that contains the version to be deployed.</p> <p> If no application is found with this name, <code>CreateEnvironment</code> returns an <code>InvalidParameterValue</code> error. </p>
     pub application_name: String,
     /// <p>If specified, the environment attempts to use this value as the prefix for the CNAME. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name.</p>
@@ -1992,10 +1920,10 @@ pub struct CreateEnvironmentMessage {
     pub version_label: Option<String>,
 }
 
-/// Serialize `CreateEnvironmentMessage` contents to a `SignedRequest`.
-struct CreateEnvironmentMessageSerializer;
-impl CreateEnvironmentMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateEnvironmentMessage) {
+/// Serialize `CreateEnvironmentRequest` contents to a `SignedRequest`.
+struct CreateEnvironmentRequestSerializer;
+impl CreateEnvironmentRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateEnvironmentRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2056,6 +1984,172 @@ impl CreateEnvironmentMessageSerializer {
     }
 }
 
+/// <p>Describes the properties of an environment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateEnvironmentResponse {
+    /// <p>Indicates if there is an in-progress environment configuration update or application version deployment that you can cancel.</p> <p> <code>true:</code> There is an update in progress. </p> <p> <code>false:</code> There are no updates currently in progress. </p>
+    pub abortable_operation_in_progress: Option<bool>,
+    /// <p>The name of the application associated with this environment.</p>
+    pub application_name: Option<String>,
+    /// <p>The URL to the CNAME for this environment.</p>
+    pub cname: Option<String>,
+    /// <p>The creation date for this environment.</p>
+    pub date_created: Option<String>,
+    /// <p>The last modified date for this environment.</p>
+    pub date_updated: Option<String>,
+    /// <p>Describes this environment.</p>
+    pub description: Option<String>,
+    /// <p>For load-balanced, autoscaling environments, the URL to the LoadBalancer. For single-instance environments, the IP address of the instance.</p>
+    pub endpoint_url: Option<String>,
+    /// <p>The environment's Amazon Resource Name (ARN), which can be used in other API requests that require an ARN.</p>
+    pub environment_arn: Option<String>,
+    /// <p>The ID of this environment.</p>
+    pub environment_id: Option<String>,
+    /// <p>A list of links to other environments in the same group.</p>
+    pub environment_links: Option<Vec<EnvironmentLink>>,
+    /// <p>The name of this environment.</p>
+    pub environment_name: Option<String>,
+    /// <p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironment</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>
+    pub health: Option<String>,
+    /// <p>Returns the health status of the application running in your environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
+    pub health_status: Option<String>,
+    /// <p>The ARN of the platform.</p>
+    pub platform_arn: Option<String>,
+    /// <p>The description of the AWS resources used by this environment.</p>
+    pub resources: Option<EnvironmentResourcesDescription>,
+    /// <p> The name of the <code>SolutionStack</code> deployed with this environment. </p>
+    pub solution_stack_name: Option<String>,
+    /// <p><p>The current operational status of the environment:</p> <ul> <li> <p> <code>Launching</code>: Environment is in the process of initial deployment.</p> </li> <li> <p> <code>Updating</code>: Environment is in the process of updating its configuration settings or application version.</p> </li> <li> <p> <code>Ready</code>: Environment is available to have an action performed on it, such as update or terminate.</p> </li> <li> <p> <code>Terminating</code>: Environment is in the shut-down process.</p> </li> <li> <p> <code>Terminated</code>: Environment is not running.</p> </li> </ul></p>
+    pub status: Option<String>,
+    /// <p>The name of the configuration template used to originally launch this environment.</p>
+    pub template_name: Option<String>,
+    /// <p>Describes the current tier of this environment.</p>
+    pub tier: Option<EnvironmentTier>,
+    /// <p>The application version deployed in this environment.</p>
+    pub version_label: Option<String>,
+}
+
+struct CreateEnvironmentResponseDeserializer;
+impl CreateEnvironmentResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateEnvironmentResponse, XmlParseError> {
+        deserialize_elements::<_, CreateEnvironmentResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AbortableOperationInProgress" => {
+                        obj.abortable_operation_in_progress =
+                            Some(AbortableOperationInProgressDeserializer::deserialize(
+                                "AbortableOperationInProgress",
+                                stack,
+                            )?);
+                    }
+                    "ApplicationName" => {
+                        obj.application_name = Some(ApplicationNameDeserializer::deserialize(
+                            "ApplicationName",
+                            stack,
+                        )?);
+                    }
+                    "CNAME" => {
+                        obj.cname = Some(DNSCnameDeserializer::deserialize("CNAME", stack)?);
+                    }
+                    "DateCreated" => {
+                        obj.date_created =
+                            Some(CreationDateDeserializer::deserialize("DateCreated", stack)?);
+                    }
+                    "DateUpdated" => {
+                        obj.date_updated =
+                            Some(UpdateDateDeserializer::deserialize("DateUpdated", stack)?);
+                    }
+                    "Description" => {
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
+                    }
+                    "EndpointURL" => {
+                        obj.endpoint_url =
+                            Some(EndpointURLDeserializer::deserialize("EndpointURL", stack)?);
+                    }
+                    "EnvironmentArn" => {
+                        obj.environment_arn = Some(EnvironmentArnDeserializer::deserialize(
+                            "EnvironmentArn",
+                            stack,
+                        )?);
+                    }
+                    "EnvironmentId" => {
+                        obj.environment_id = Some(EnvironmentIdDeserializer::deserialize(
+                            "EnvironmentId",
+                            stack,
+                        )?);
+                    }
+                    "EnvironmentLinks" => {
+                        obj.environment_links.get_or_insert(vec![]).extend(
+                            EnvironmentLinksDeserializer::deserialize("EnvironmentLinks", stack)?,
+                        );
+                    }
+                    "EnvironmentName" => {
+                        obj.environment_name = Some(EnvironmentNameDeserializer::deserialize(
+                            "EnvironmentName",
+                            stack,
+                        )?);
+                    }
+                    "Health" => {
+                        obj.health =
+                            Some(EnvironmentHealthDeserializer::deserialize("Health", stack)?);
+                    }
+                    "HealthStatus" => {
+                        obj.health_status = Some(EnvironmentHealthStatusDeserializer::deserialize(
+                            "HealthStatus",
+                            stack,
+                        )?);
+                    }
+                    "PlatformArn" => {
+                        obj.platform_arn =
+                            Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
+                    }
+                    "Resources" => {
+                        obj.resources =
+                            Some(EnvironmentResourcesDescriptionDeserializer::deserialize(
+                                "Resources",
+                                stack,
+                            )?);
+                    }
+                    "SolutionStackName" => {
+                        obj.solution_stack_name = Some(SolutionStackNameDeserializer::deserialize(
+                            "SolutionStackName",
+                            stack,
+                        )?);
+                    }
+                    "Status" => {
+                        obj.status =
+                            Some(EnvironmentStatusDeserializer::deserialize("Status", stack)?);
+                    }
+                    "TemplateName" => {
+                        obj.template_name =
+                            Some(ConfigurationTemplateNameDeserializer::deserialize(
+                                "TemplateName",
+                                stack,
+                            )?);
+                    }
+                    "Tier" => {
+                        obj.tier = Some(EnvironmentTierDeserializer::deserialize("Tier", stack)?);
+                    }
+                    "VersionLabel" => {
+                        obj.version_label = Some(VersionLabelDeserializer::deserialize(
+                            "VersionLabel",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Request to create a new platform version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreatePlatformVersionRequest {
@@ -2109,21 +2203,21 @@ impl CreatePlatformVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreatePlatformVersionResult {
+pub struct CreatePlatformVersionResponse {
     /// <p>The builder used to create the custom platform.</p>
     pub builder: Option<Builder>,
     /// <p>Detailed information about the new version of the custom platform.</p>
     pub platform_summary: Option<PlatformSummary>,
 }
 
-struct CreatePlatformVersionResultDeserializer;
-impl CreatePlatformVersionResultDeserializer {
+struct CreatePlatformVersionResponseDeserializer;
+impl CreatePlatformVersionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreatePlatformVersionResult, XmlParseError> {
-        deserialize_elements::<_, CreatePlatformVersionResult, _>(
+    ) -> Result<CreatePlatformVersionResponse, XmlParseError> {
+        deserialize_elements::<_, CreatePlatformVersionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2144,21 +2238,35 @@ impl CreatePlatformVersionResultDeserializer {
         )
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateStorageLocationRequest {}
+
+/// Serialize `CreateStorageLocationRequest` contents to a `SignedRequest`.
+struct CreateStorageLocationRequestSerializer;
+impl CreateStorageLocationRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &CreateStorageLocationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>Results of a <a>CreateStorageLocationResult</a> call.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateStorageLocationResultMessage {
+pub struct CreateStorageLocationResponse {
     /// <p>The name of the Amazon S3 bucket created.</p>
     pub s3_bucket: Option<String>,
 }
 
-struct CreateStorageLocationResultMessageDeserializer;
-impl CreateStorageLocationResultMessageDeserializer {
+struct CreateStorageLocationResponseDeserializer;
+impl CreateStorageLocationResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<CreateStorageLocationResultMessage, XmlParseError> {
-        deserialize_elements::<_, CreateStorageLocationResultMessage, _>(
+    ) -> Result<CreateStorageLocationResponse, XmlParseError> {
+        deserialize_elements::<_, CreateStorageLocationResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2247,17 +2355,17 @@ impl DNSCnameDeserializer {
 }
 /// <p>Request to delete an application.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteApplicationMessage {
+pub struct DeleteApplicationRequest {
     /// <p>The name of the application to delete.</p>
     pub application_name: String,
     /// <p>When set to true, running environments will be terminated before deleting the application.</p>
     pub terminate_env_by_force: Option<bool>,
 }
 
-/// Serialize `DeleteApplicationMessage` contents to a `SignedRequest`.
-struct DeleteApplicationMessageSerializer;
-impl DeleteApplicationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteApplicationMessage) {
+/// Serialize `DeleteApplicationRequest` contents to a `SignedRequest`.
+struct DeleteApplicationRequestSerializer;
+impl DeleteApplicationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteApplicationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2276,9 +2384,22 @@ impl DeleteApplicationMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteApplicationResponse {}
+
+struct DeleteApplicationResponseDeserializer;
+impl DeleteApplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteApplicationResponse, XmlParseError> {
+        Ok(DeleteApplicationResponse::default())
+    }
+}
 /// <p>Request to delete an application version.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteApplicationVersionMessage {
+pub struct DeleteApplicationVersionRequest {
     /// <p>The name of the application to which the version belongs.</p>
     pub application_name: String,
     /// <p>Set to <code>true</code> to delete the source bundle from your storage bucket. Otherwise, the application version is deleted only from Elastic Beanstalk and the source bundle remains in Amazon S3.</p>
@@ -2287,10 +2408,10 @@ pub struct DeleteApplicationVersionMessage {
     pub version_label: String,
 }
 
-/// Serialize `DeleteApplicationVersionMessage` contents to a `SignedRequest`.
-struct DeleteApplicationVersionMessageSerializer;
-impl DeleteApplicationVersionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteApplicationVersionMessage) {
+/// Serialize `DeleteApplicationVersionRequest` contents to a `SignedRequest`.
+struct DeleteApplicationVersionRequestSerializer;
+impl DeleteApplicationVersionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteApplicationVersionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2307,19 +2428,32 @@ impl DeleteApplicationVersionMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteApplicationVersionResponse {}
+
+struct DeleteApplicationVersionResponseDeserializer;
+impl DeleteApplicationVersionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteApplicationVersionResponse, XmlParseError> {
+        Ok(DeleteApplicationVersionResponse::default())
+    }
+}
 /// <p>Request to delete a configuration template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteConfigurationTemplateMessage {
+pub struct DeleteConfigurationTemplateRequest {
     /// <p>The name of the application to delete the configuration template from.</p>
     pub application_name: String,
     /// <p>The name of the configuration template to delete.</p>
     pub template_name: String,
 }
 
-/// Serialize `DeleteConfigurationTemplateMessage` contents to a `SignedRequest`.
-struct DeleteConfigurationTemplateMessageSerializer;
-impl DeleteConfigurationTemplateMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteConfigurationTemplateMessage) {
+/// Serialize `DeleteConfigurationTemplateRequest` contents to a `SignedRequest`.
+struct DeleteConfigurationTemplateRequestSerializer;
+impl DeleteConfigurationTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteConfigurationTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2333,19 +2467,32 @@ impl DeleteConfigurationTemplateMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteConfigurationTemplateResponse {}
+
+struct DeleteConfigurationTemplateResponseDeserializer;
+impl DeleteConfigurationTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteConfigurationTemplateResponse, XmlParseError> {
+        Ok(DeleteConfigurationTemplateResponse::default())
+    }
+}
 /// <p>Request to delete a draft environment configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteEnvironmentConfigurationMessage {
+pub struct DeleteEnvironmentConfigurationRequest {
     /// <p>The name of the application the environment is associated with.</p>
     pub application_name: String,
     /// <p>The name of the environment to delete the draft configuration from.</p>
     pub environment_name: String,
 }
 
-/// Serialize `DeleteEnvironmentConfigurationMessage` contents to a `SignedRequest`.
-struct DeleteEnvironmentConfigurationMessageSerializer;
-impl DeleteEnvironmentConfigurationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteEnvironmentConfigurationMessage) {
+/// Serialize `DeleteEnvironmentConfigurationRequest` contents to a `SignedRequest`.
+struct DeleteEnvironmentConfigurationRequestSerializer;
+impl DeleteEnvironmentConfigurationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteEnvironmentConfigurationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2362,6 +2509,19 @@ impl DeleteEnvironmentConfigurationMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteEnvironmentConfigurationResponse {}
+
+struct DeleteEnvironmentConfigurationResponseDeserializer;
+impl DeleteEnvironmentConfigurationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteEnvironmentConfigurationResponse, XmlParseError> {
+        Ok(DeleteEnvironmentConfigurationResponse::default())
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeletePlatformVersionRequest {
     /// <p>The ARN of the version of the custom platform.</p>
@@ -2384,19 +2544,19 @@ impl DeletePlatformVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeletePlatformVersionResult {
+pub struct DeletePlatformVersionResponse {
     /// <p>Detailed information about the version of the custom platform.</p>
     pub platform_summary: Option<PlatformSummary>,
 }
 
-struct DeletePlatformVersionResultDeserializer;
-impl DeletePlatformVersionResultDeserializer {
+struct DeletePlatformVersionResponseDeserializer;
+impl DeletePlatformVersionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DeletePlatformVersionResult, XmlParseError> {
-        deserialize_elements::<_, DeletePlatformVersionResult, _>(
+    ) -> Result<DeletePlatformVersionResponse, XmlParseError> {
+        deserialize_elements::<_, DeletePlatformVersionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2473,19 +2633,33 @@ impl DeploymentTimestampDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeAccountAttributesResult {
+pub struct DescribeAccountAttributesRequest {}
+
+/// Serialize `DescribeAccountAttributesRequest` contents to a `SignedRequest`.
+struct DescribeAccountAttributesRequestSerializer;
+impl DescribeAccountAttributesRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAccountAttributesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountAttributesResponse {
     /// <p>The Elastic Beanstalk resource quotas associated with the calling AWS account.</p>
     pub resource_quotas: Option<ResourceQuotas>,
 }
 
-struct DescribeAccountAttributesResultDeserializer;
-impl DescribeAccountAttributesResultDeserializer {
+struct DescribeAccountAttributesResponseDeserializer;
+impl DescribeAccountAttributesResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeAccountAttributesResult, XmlParseError> {
-        deserialize_elements::<_, DescribeAccountAttributesResult, _>(
+    ) -> Result<DescribeAccountAttributesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeAccountAttributesResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2505,7 +2679,7 @@ impl DescribeAccountAttributesResultDeserializer {
 }
 /// <p>Request to describe application versions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeApplicationVersionsMessage {
+pub struct DescribeApplicationVersionsRequest {
     /// <p>Specify an application name to show only application versions for that application.</p>
     pub application_name: Option<String>,
     /// <p>For a paginated request. Specify a maximum number of application versions to include in each response.</p> <p>If no <code>MaxRecords</code> is specified, all available application versions are retrieved in a single response.</p>
@@ -2516,10 +2690,10 @@ pub struct DescribeApplicationVersionsMessage {
     pub version_labels: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeApplicationVersionsMessage` contents to a `SignedRequest`.
-struct DescribeApplicationVersionsMessageSerializer;
-impl DescribeApplicationVersionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeApplicationVersionsMessage) {
+/// Serialize `DescribeApplicationVersionsRequest` contents to a `SignedRequest`.
+struct DescribeApplicationVersionsRequestSerializer;
+impl DescribeApplicationVersionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeApplicationVersionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2544,17 +2718,56 @@ impl DescribeApplicationVersionsMessageSerializer {
     }
 }
 
+/// <p>Result message wrapping a list of application version descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeApplicationVersionsResponse {
+    /// <p>List of <code>ApplicationVersionDescription</code> objects sorted in order of creation.</p>
+    pub application_versions: Option<Vec<ApplicationVersionDescription>>,
+    /// <p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeApplicationVersionsResponseDeserializer;
+impl DescribeApplicationVersionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeApplicationVersionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeApplicationVersionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApplicationVersions" => {
+                        obj.application_versions.get_or_insert(vec![]).extend(
+                            ApplicationVersionDescriptionListDeserializer::deserialize(
+                                "ApplicationVersions",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Request to describe one or more applications.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeApplicationsMessage {
+pub struct DescribeApplicationsRequest {
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to only include those with the specified names.</p>
     pub application_names: Option<Vec<String>>,
 }
 
-/// Serialize `DescribeApplicationsMessage` contents to a `SignedRequest`.
-struct DescribeApplicationsMessageSerializer;
-impl DescribeApplicationsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeApplicationsMessage) {
+/// Serialize `DescribeApplicationsRequest` contents to a `SignedRequest`.
+struct DescribeApplicationsRequestSerializer;
+impl DescribeApplicationsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeApplicationsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2570,9 +2783,43 @@ impl DescribeApplicationsMessageSerializer {
     }
 }
 
+/// <p>Result message containing a list of application descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeApplicationsResponse {
+    /// <p>This parameter contains a list of <a>ApplicationDescription</a>.</p>
+    pub applications: Option<Vec<ApplicationDescription>>,
+}
+
+struct DescribeApplicationsResponseDeserializer;
+impl DescribeApplicationsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeApplicationsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeApplicationsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Applications" => {
+                        obj.applications.get_or_insert(vec![]).extend(
+                            ApplicationDescriptionListDeserializer::deserialize(
+                                "Applications",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Result message containing a list of application version descriptions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeConfigurationOptionsMessage {
+pub struct DescribeConfigurationOptionsRequest {
     /// <p>The name of the application associated with the configuration template or environment. Only needed if you want to describe the configuration options associated with either the configuration template or environment.</p>
     pub application_name: Option<String>,
     /// <p>The name of the environment whose configuration options you want to describe.</p>
@@ -2587,10 +2834,10 @@ pub struct DescribeConfigurationOptionsMessage {
     pub template_name: Option<String>,
 }
 
-/// Serialize `DescribeConfigurationOptionsMessage` contents to a `SignedRequest`.
-struct DescribeConfigurationOptionsMessageSerializer;
-impl DescribeConfigurationOptionsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationOptionsMessage) {
+/// Serialize `DescribeConfigurationOptionsRequest` contents to a `SignedRequest`.
+struct DescribeConfigurationOptionsRequestSerializer;
+impl DescribeConfigurationOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationOptionsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2621,9 +2868,56 @@ impl DescribeConfigurationOptionsMessageSerializer {
     }
 }
 
+/// <p>Describes the settings for a specified configuration set.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeConfigurationOptionsResponse {
+    /// <p> A list of <a>ConfigurationOptionDescription</a>. </p>
+    pub options: Option<Vec<ConfigurationOptionDescription>>,
+    /// <p>The ARN of the platform.</p>
+    pub platform_arn: Option<String>,
+    /// <p>The name of the solution stack these configuration options belong to.</p>
+    pub solution_stack_name: Option<String>,
+}
+
+struct DescribeConfigurationOptionsResponseDeserializer;
+impl DescribeConfigurationOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeConfigurationOptionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeConfigurationOptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Options" => {
+                        obj.options.get_or_insert(vec![]).extend(
+                            ConfigurationOptionDescriptionsListDeserializer::deserialize(
+                                "Options", stack,
+                            )?,
+                        );
+                    }
+                    "PlatformArn" => {
+                        obj.platform_arn =
+                            Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
+                    }
+                    "SolutionStackName" => {
+                        obj.solution_stack_name = Some(SolutionStackNameDeserializer::deserialize(
+                            "SolutionStackName",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Result message containing all of the configuration settings for a specified solution stack or configuration template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeConfigurationSettingsMessage {
+pub struct DescribeConfigurationSettingsRequest {
     /// <p>The application for the environment or configuration template.</p>
     pub application_name: String,
     /// <p>The name of the environment to describe.</p> <p> Condition: You must specify either this or a TemplateName, but not both. If you specify both, AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -2632,10 +2926,10 @@ pub struct DescribeConfigurationSettingsMessage {
     pub template_name: Option<String>,
 }
 
-/// Serialize `DescribeConfigurationSettingsMessage` contents to a `SignedRequest`.
-struct DescribeConfigurationSettingsMessageSerializer;
-impl DescribeConfigurationSettingsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationSettingsMessage) {
+/// Serialize `DescribeConfigurationSettingsRequest` contents to a `SignedRequest`.
+struct DescribeConfigurationSettingsRequestSerializer;
+impl DescribeConfigurationSettingsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeConfigurationSettingsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2654,6 +2948,40 @@ impl DescribeConfigurationSettingsMessageSerializer {
     }
 }
 
+/// <p>The results from a request to change the configuration settings of an environment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeConfigurationSettingsResponse {
+    /// <p> A list of <a>ConfigurationSettingsDescription</a>. </p>
+    pub configuration_settings: Option<Vec<ConfigurationSettingsDescription>>,
+}
+
+struct DescribeConfigurationSettingsResponseDeserializer;
+impl DescribeConfigurationSettingsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeConfigurationSettingsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeConfigurationSettingsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ConfigurationSettings" => {
+                        obj.configuration_settings.get_or_insert(vec![]).extend(
+                            ConfigurationSettingsDescriptionListDeserializer::deserialize(
+                                "ConfigurationSettings",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>See the example below to learn how to create a request body.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEnvironmentHealthRequest {
@@ -2692,7 +3020,7 @@ impl DescribeEnvironmentHealthRequestSerializer {
 
 /// <p>Health details for an AWS Elastic Beanstalk environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEnvironmentHealthResult {
+pub struct DescribeEnvironmentHealthResponse {
     /// <p>Application request metrics for the environment.</p>
     pub application_metrics: Option<ApplicationMetrics>,
     /// <p>Descriptions of the data that contributed to the environment's current health status.</p>
@@ -2711,14 +3039,14 @@ pub struct DescribeEnvironmentHealthResult {
     pub status: Option<String>,
 }
 
-struct DescribeEnvironmentHealthResultDeserializer;
-impl DescribeEnvironmentHealthResultDeserializer {
+struct DescribeEnvironmentHealthResponseDeserializer;
+impl DescribeEnvironmentHealthResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeEnvironmentHealthResult, XmlParseError> {
-        deserialize_elements::<_, DescribeEnvironmentHealthResult, _>(
+    ) -> Result<DescribeEnvironmentHealthResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEnvironmentHealthResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2813,21 +3141,21 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
 
 /// <p>A result message containing a list of completed and failed managed actions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEnvironmentManagedActionHistoryResult {
+pub struct DescribeEnvironmentManagedActionHistoryResponse {
     /// <p>A list of completed and failed managed actions.</p>
     pub managed_action_history_items: Option<Vec<ManagedActionHistoryItem>>,
     /// <p>A pagination token that you pass to <a>DescribeEnvironmentManagedActionHistory</a> to get the next page of results.</p>
     pub next_token: Option<String>,
 }
 
-struct DescribeEnvironmentManagedActionHistoryResultDeserializer;
-impl DescribeEnvironmentManagedActionHistoryResultDeserializer {
+struct DescribeEnvironmentManagedActionHistoryResponseDeserializer;
+impl DescribeEnvironmentManagedActionHistoryResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeEnvironmentManagedActionHistoryResult, XmlParseError> {
-        deserialize_elements::<_, DescribeEnvironmentManagedActionHistoryResult, _>(
+    ) -> Result<DescribeEnvironmentManagedActionHistoryResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEnvironmentManagedActionHistoryResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2884,19 +3212,19 @@ impl DescribeEnvironmentManagedActionsRequestSerializer {
 
 /// <p>The result message containing a list of managed actions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEnvironmentManagedActionsResult {
+pub struct DescribeEnvironmentManagedActionsResponse {
     /// <p>A list of upcoming and in-progress managed actions.</p>
     pub managed_actions: Option<Vec<ManagedAction>>,
 }
 
-struct DescribeEnvironmentManagedActionsResultDeserializer;
-impl DescribeEnvironmentManagedActionsResultDeserializer {
+struct DescribeEnvironmentManagedActionsResponseDeserializer;
+impl DescribeEnvironmentManagedActionsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeEnvironmentManagedActionsResult, XmlParseError> {
-        deserialize_elements::<_, DescribeEnvironmentManagedActionsResult, _>(
+    ) -> Result<DescribeEnvironmentManagedActionsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEnvironmentManagedActionsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -2915,17 +3243,17 @@ impl DescribeEnvironmentManagedActionsResultDeserializer {
 }
 /// <p>Request to describe the resources in an environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEnvironmentResourcesMessage {
+pub struct DescribeEnvironmentResourcesRequest {
     /// <p>The ID of the environment to retrieve AWS resource usage data.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_id: Option<String>,
     /// <p>The name of the environment to retrieve AWS resource usage data.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_name: Option<String>,
 }
 
-/// Serialize `DescribeEnvironmentResourcesMessage` contents to a `SignedRequest`.
-struct DescribeEnvironmentResourcesMessageSerializer;
-impl DescribeEnvironmentResourcesMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentResourcesMessage) {
+/// Serialize `DescribeEnvironmentResourcesRequest` contents to a `SignedRequest`.
+struct DescribeEnvironmentResourcesRequestSerializer;
+impl DescribeEnvironmentResourcesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentResourcesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2940,9 +3268,42 @@ impl DescribeEnvironmentResourcesMessageSerializer {
     }
 }
 
+/// <p>Result message containing a list of environment resource descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEnvironmentResourcesResponse {
+    /// <p> A list of <a>EnvironmentResourceDescription</a>. </p>
+    pub environment_resources: Option<EnvironmentResourceDescription>,
+}
+
+struct DescribeEnvironmentResourcesResponseDeserializer;
+impl DescribeEnvironmentResourcesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEnvironmentResourcesResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEnvironmentResourcesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EnvironmentResources" => {
+                        obj.environment_resources =
+                            Some(EnvironmentResourceDescriptionDeserializer::deserialize(
+                                "EnvironmentResources",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Request to describe one or more environments.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEnvironmentsMessage {
+pub struct DescribeEnvironmentsRequest {
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that are associated with this application.</p>
     pub application_name: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that have the specified IDs.</p>
@@ -2961,10 +3322,10 @@ pub struct DescribeEnvironmentsMessage {
     pub version_label: Option<String>,
 }
 
-/// Serialize `DescribeEnvironmentsMessage` contents to a `SignedRequest`.
-struct DescribeEnvironmentsMessageSerializer;
-impl DescribeEnvironmentsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentsMessage) {
+/// Serialize `DescribeEnvironmentsRequest` contents to a `SignedRequest`.
+struct DescribeEnvironmentsRequestSerializer;
+impl DescribeEnvironmentsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEnvironmentsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3008,9 +3369,48 @@ impl DescribeEnvironmentsMessageSerializer {
     }
 }
 
+/// <p>Result message containing a list of environment descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEnvironmentsResponse {
+    /// <p> Returns an <a>EnvironmentDescription</a> list. </p>
+    pub environments: Option<Vec<EnvironmentDescription>>,
+    /// <p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeEnvironmentsResponseDeserializer;
+impl DescribeEnvironmentsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEnvironmentsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEnvironmentsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Environments" => {
+                        obj.environments.get_or_insert(vec![]).extend(
+                            EnvironmentDescriptionsListDeserializer::deserialize(
+                                "Environments",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Request to retrieve a list of events for an environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeEventsMessage {
+pub struct DescribeEventsRequest {
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those associated with this application.</p>
     pub application_name: Option<String>,
     /// <p> If specified, AWS Elastic Beanstalk restricts the returned descriptions to those that occur up to, but not including, the <code>EndTime</code>. </p>
@@ -3037,10 +3437,10 @@ pub struct DescribeEventsMessage {
     pub version_label: Option<String>,
 }
 
-/// Serialize `DescribeEventsMessage` contents to a `SignedRequest`.
-struct DescribeEventsMessageSerializer;
-impl DescribeEventsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsMessage) {
+/// Serialize `DescribeEventsRequest` contents to a `SignedRequest`.
+struct DescribeEventsRequestSerializer;
+impl DescribeEventsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3085,6 +3485,38 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
+/// <p>Result message wrapping a list of event descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeEventsResponse {
+    /// <p> A list of <a>EventDescription</a>. </p>
+    pub events: Option<Vec<EventDescription>>,
+    /// <p> If returned, this indicates that there are more results to obtain. Use this token in the next <a>DescribeEvents</a> call to get the next batch of events. </p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeEventsResponseDeserializer;
+impl DescribeEventsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeEventsResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeEventsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Events" => {
+                    obj.events.get_or_insert(vec![]).extend(
+                        EventDescriptionListDeserializer::deserialize("Events", stack)?,
+                    );
+                }
+                "NextToken" => {
+                    obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Parameters for a call to <code>DescribeInstancesHealth</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstancesHealthRequest {
@@ -3128,7 +3560,7 @@ impl DescribeInstancesHealthRequestSerializer {
 
 /// <p>Detailed health information about the Amazon EC2 instances in an AWS Elastic Beanstalk environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeInstancesHealthResult {
+pub struct DescribeInstancesHealthResponse {
     /// <p>Detailed health information about each instance.</p> <p>The output differs slightly between Linux and Windows environments. There is a difference in the members that are supported under the <code>&lt;CPUUtilization&gt;</code> type.</p>
     pub instance_health_list: Option<Vec<SingleInstanceHealth>>,
     /// <p>Pagination token for the next page of results, if available.</p>
@@ -3137,14 +3569,14 @@ pub struct DescribeInstancesHealthResult {
     pub refreshed_at: Option<String>,
 }
 
-struct DescribeInstancesHealthResultDeserializer;
-impl DescribeInstancesHealthResultDeserializer {
+struct DescribeInstancesHealthResponseDeserializer;
+impl DescribeInstancesHealthResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribeInstancesHealthResult, XmlParseError> {
-        deserialize_elements::<_, DescribeInstancesHealthResult, _>(
+    ) -> Result<DescribeInstancesHealthResponse, XmlParseError> {
+        deserialize_elements::<_, DescribeInstancesHealthResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3194,19 +3626,19 @@ impl DescribePlatformVersionRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribePlatformVersionResult {
+pub struct DescribePlatformVersionResponse {
     /// <p>Detailed information about the version of the platform.</p>
     pub platform_description: Option<PlatformDescription>,
 }
 
-struct DescribePlatformVersionResultDeserializer;
-impl DescribePlatformVersionResultDeserializer {
+struct DescribePlatformVersionResponseDeserializer;
+impl DescribePlatformVersionResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<DescribePlatformVersionResult, XmlParseError> {
-        deserialize_elements::<_, DescribePlatformVersionResult, _>(
+    ) -> Result<DescribePlatformVersionResponse, XmlParseError> {
+        deserialize_elements::<_, DescribePlatformVersionResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -3444,45 +3876,6 @@ impl EnvironmentDescriptionsListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Result message containing a list of environment descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnvironmentDescriptionsMessage {
-    /// <p> Returns an <a>EnvironmentDescription</a> list. </p>
-    pub environments: Option<Vec<EnvironmentDescription>>,
-    /// <p>In a paginated request, the token that you can pass in a subsequent request to get the next response page.</p>
-    pub next_token: Option<String>,
-}
-
-struct EnvironmentDescriptionsMessageDeserializer;
-impl EnvironmentDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EnvironmentDescriptionsMessage, XmlParseError> {
-        deserialize_elements::<_, EnvironmentDescriptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Environments" => {
-                        obj.environments.get_or_insert(vec![]).extend(
-                            EnvironmentDescriptionsListDeserializer::deserialize(
-                                "Environments",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "NextToken" => {
-                        obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 struct EnvironmentHealthDeserializer;
@@ -3782,39 +4175,6 @@ impl EnvironmentResourceDescriptionDeserializer {
         )
     }
 }
-/// <p>Result message containing a list of environment resource descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EnvironmentResourceDescriptionsMessage {
-    /// <p> A list of <a>EnvironmentResourceDescription</a>. </p>
-    pub environment_resources: Option<EnvironmentResourceDescription>,
-}
-
-struct EnvironmentResourceDescriptionsMessageDeserializer;
-impl EnvironmentResourceDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EnvironmentResourceDescriptionsMessage, XmlParseError> {
-        deserialize_elements::<_, EnvironmentResourceDescriptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "EnvironmentResources" => {
-                        obj.environment_resources =
-                            Some(EnvironmentResourceDescriptionDeserializer::deserialize(
-                                "EnvironmentResources",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p>Describes the AWS resources in use by this environment. This data is not live data.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnvironmentResourcesDescription {
@@ -4019,42 +4379,6 @@ impl EventDescriptionListDeserializer {
             }
             Ok(())
         })
-    }
-}
-/// <p>Result message wrapping a list of event descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct EventDescriptionsMessage {
-    /// <p> A list of <a>EventDescription</a>. </p>
-    pub events: Option<Vec<EventDescription>>,
-    /// <p> If returned, this indicates that there are more results to obtain. Use this token in the next <a>DescribeEvents</a> call to get the next batch of events. </p>
-    pub next_token: Option<String>,
-}
-
-struct EventDescriptionsMessageDeserializer;
-impl EventDescriptionsMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<EventDescriptionsMessage, XmlParseError> {
-        deserialize_elements::<_, EventDescriptionsMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Events" => {
-                        obj.events.get_or_insert(vec![]).extend(
-                            EventDescriptionListDeserializer::deserialize("Events", stack)?,
-                        );
-                    }
-                    "NextToken" => {
-                        obj.next_token = Some(TokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
     }
 }
 struct EventMessageDeserializer;
@@ -4425,23 +4749,37 @@ impl LaunchedAtDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListAvailableSolutionStacksRequest {}
+
+/// Serialize `ListAvailableSolutionStacksRequest` contents to a `SignedRequest`.
+struct ListAvailableSolutionStacksRequestSerializer;
+impl ListAvailableSolutionStacksRequestSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &ListAvailableSolutionStacksRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
 /// <p>A list of available AWS Elastic Beanstalk solution stacks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListAvailableSolutionStacksResultMessage {
+pub struct ListAvailableSolutionStacksResponse {
     /// <p> A list of available solution stacks and their <a>SolutionStackDescription</a>. </p>
     pub solution_stack_details: Option<Vec<SolutionStackDescription>>,
     /// <p>A list of available solution stacks.</p>
     pub solution_stacks: Option<Vec<String>>,
 }
 
-struct ListAvailableSolutionStacksResultMessageDeserializer;
-impl ListAvailableSolutionStacksResultMessageDeserializer {
+struct ListAvailableSolutionStacksResponseDeserializer;
+impl ListAvailableSolutionStacksResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListAvailableSolutionStacksResultMessage, XmlParseError> {
-        deserialize_elements::<_, ListAvailableSolutionStacksResultMessage, _>(
+    ) -> Result<ListAvailableSolutionStacksResponse, XmlParseError> {
+        deserialize_elements::<_, ListAvailableSolutionStacksResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4505,21 +4843,21 @@ impl ListPlatformVersionsRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListPlatformVersionsResult {
+pub struct ListPlatformVersionsResponse {
     /// <p>The starting index into the remaining list of platforms. if this value is not <code>null</code>, you can use it in a subsequent <code>ListPlatformVersion</code> call. </p>
     pub next_token: Option<String>,
     /// <p>Detailed information about the platforms.</p>
     pub platform_summary_list: Option<Vec<PlatformSummary>>,
 }
 
-struct ListPlatformVersionsResultDeserializer;
-impl ListPlatformVersionsResultDeserializer {
+struct ListPlatformVersionsResponseDeserializer;
+impl ListPlatformVersionsResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<ListPlatformVersionsResult, XmlParseError> {
-        deserialize_elements::<_, ListPlatformVersionsResult, _>(
+    ) -> Result<ListPlatformVersionsResponse, XmlParseError> {
+        deserialize_elements::<_, ListPlatformVersionsResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -4543,15 +4881,15 @@ impl ListPlatformVersionsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListTagsForResourceMessage {
+pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list is requested.</p> <p>Must be the ARN of an Elastic Beanstalk environment.</p>
     pub resource_arn: String,
 }
 
-/// Serialize `ListTagsForResourceMessage` contents to a `SignedRequest`.
-struct ListTagsForResourceMessageSerializer;
-impl ListTagsForResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
+/// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
+struct ListTagsForResourceRequestSerializer;
+impl ListTagsForResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4561,6 +4899,42 @@ impl ListTagsForResourceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListTagsForResourceResponse {
+    /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list was requested.</p>
+    pub resource_arn: Option<String>,
+    /// <p>A list of tag key-value pairs.</p>
+    pub resource_tags: Option<Vec<Tag>>,
+}
+
+struct ListTagsForResourceResponseDeserializer;
+impl ListTagsForResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListTagsForResourceResponse, XmlParseError> {
+        deserialize_elements::<_, ListTagsForResourceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ResourceArn" => {
+                        obj.resource_arn =
+                            Some(ResourceArnDeserializer::deserialize("ResourceArn", stack)?);
+                    }
+                    "ResourceTags" => {
+                        obj.resource_tags
+                            .get_or_insert(vec![])
+                            .extend(TagListDeserializer::deserialize("ResourceTags", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Describes the properties of a Listener for the LoadBalancer.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Listener {
@@ -5726,17 +6100,17 @@ impl QueueListDeserializer {
 }
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RebuildEnvironmentMessage {
+pub struct RebuildEnvironmentRequest {
     /// <p>The ID of the environment to rebuild.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_id: Option<String>,
     /// <p>The name of the environment to rebuild.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_name: Option<String>,
 }
 
-/// Serialize `RebuildEnvironmentMessage` contents to a `SignedRequest`.
-struct RebuildEnvironmentMessageSerializer;
-impl RebuildEnvironmentMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RebuildEnvironmentMessage) {
+/// Serialize `RebuildEnvironmentRequest` contents to a `SignedRequest`.
+struct RebuildEnvironmentRequestSerializer;
+impl RebuildEnvironmentRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RebuildEnvironmentRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5751,6 +6125,19 @@ impl RebuildEnvironmentMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RebuildEnvironmentResponse {}
+
+struct RebuildEnvironmentResponseDeserializer;
+impl RebuildEnvironmentResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RebuildEnvironmentResponse, XmlParseError> {
+        Ok(RebuildEnvironmentResponse::default())
+    }
+}
 struct RefreshedAtDeserializer;
 impl RefreshedAtDeserializer {
     #[allow(unused_variables)]
@@ -5797,7 +6184,7 @@ impl RequestCountDeserializer {
 }
 /// <p>Request to retrieve logs from an environment and store them in your Elastic Beanstalk storage bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RequestEnvironmentInfoMessage {
+pub struct RequestEnvironmentInfoRequest {
     /// <p>The ID of the environment of the requested data.</p> <p>If no such environment is found, <code>RequestEnvironmentInfo</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_id: Option<String>,
     /// <p>The name of the environment of the requested data.</p> <p>If no such environment is found, <code>RequestEnvironmentInfo</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -5806,10 +6193,10 @@ pub struct RequestEnvironmentInfoMessage {
     pub info_type: String,
 }
 
-/// Serialize `RequestEnvironmentInfoMessage` contents to a `SignedRequest`.
-struct RequestEnvironmentInfoMessageSerializer;
-impl RequestEnvironmentInfoMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RequestEnvironmentInfoMessage) {
+/// Serialize `RequestEnvironmentInfoRequest` contents to a `SignedRequest`.
+struct RequestEnvironmentInfoRequestSerializer;
+impl RequestEnvironmentInfoRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RequestEnvironmentInfoRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5825,6 +6212,19 @@ impl RequestEnvironmentInfoMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RequestEnvironmentInfoResponse {}
+
+struct RequestEnvironmentInfoResponseDeserializer;
+impl RequestEnvironmentInfoResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RequestEnvironmentInfoResponse, XmlParseError> {
+        Ok(RequestEnvironmentInfoResponse::default())
+    }
+}
 struct RequestIdDeserializer;
 impl RequestIdDeserializer {
     #[allow(unused_variables)]
@@ -5955,55 +6355,19 @@ impl ResourceQuotasDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResourceTagsDescriptionMessage {
-    /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list was requested.</p>
-    pub resource_arn: Option<String>,
-    /// <p>A list of tag key-value pairs.</p>
-    pub resource_tags: Option<Vec<Tag>>,
-}
-
-struct ResourceTagsDescriptionMessageDeserializer;
-impl ResourceTagsDescriptionMessageDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<ResourceTagsDescriptionMessage, XmlParseError> {
-        deserialize_elements::<_, ResourceTagsDescriptionMessage, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "ResourceArn" => {
-                        obj.resource_arn =
-                            Some(ResourceArnDeserializer::deserialize("ResourceArn", stack)?);
-                    }
-                    "ResourceTags" => {
-                        obj.resource_tags
-                            .get_or_insert(vec![])
-                            .extend(TagListDeserializer::deserialize("ResourceTags", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
-    }
-}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RestartAppServerMessage {
+pub struct RestartAppServerRequest {
     /// <p>The ID of the environment to restart the server for.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_id: Option<String>,
     /// <p>The name of the environment to restart the server for.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_name: Option<String>,
 }
 
-/// Serialize `RestartAppServerMessage` contents to a `SignedRequest`.
-struct RestartAppServerMessageSerializer;
-impl RestartAppServerMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestartAppServerMessage) {
+/// Serialize `RestartAppServerRequest` contents to a `SignedRequest`.
+struct RestartAppServerRequestSerializer;
+impl RestartAppServerRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RestartAppServerRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6018,9 +6382,22 @@ impl RestartAppServerMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct RestartAppServerResponse {}
+
+struct RestartAppServerResponseDeserializer;
+impl RestartAppServerResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RestartAppServerResponse, XmlParseError> {
+        Ok(RestartAppServerResponse::default())
+    }
+}
 /// <p>Request to download logs retrieved with <a>RequestEnvironmentInfo</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RetrieveEnvironmentInfoMessage {
+pub struct RetrieveEnvironmentInfoRequest {
     /// <p>The ID of the data's environment.</p> <p>If no such environment is found, returns an <code>InvalidParameterValue</code> error.</p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error.</p>
     pub environment_id: Option<String>,
     /// <p>The name of the data's environment.</p> <p> If no such environment is found, returns an <code>InvalidParameterValue</code> error. </p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -6029,10 +6406,10 @@ pub struct RetrieveEnvironmentInfoMessage {
     pub info_type: String,
 }
 
-/// Serialize `RetrieveEnvironmentInfoMessage` contents to a `SignedRequest`.
-struct RetrieveEnvironmentInfoMessageSerializer;
-impl RetrieveEnvironmentInfoMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RetrieveEnvironmentInfoMessage) {
+/// Serialize `RetrieveEnvironmentInfoRequest` contents to a `SignedRequest`.
+struct RetrieveEnvironmentInfoRequestSerializer;
+impl RetrieveEnvironmentInfoRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RetrieveEnvironmentInfoRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6050,19 +6427,19 @@ impl RetrieveEnvironmentInfoMessageSerializer {
 
 /// <p>Result message containing a description of the requested environment info.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct RetrieveEnvironmentInfoResultMessage {
+pub struct RetrieveEnvironmentInfoResponse {
     /// <p> The <a>EnvironmentInfoDescription</a> of the environment. </p>
     pub environment_info: Option<Vec<EnvironmentInfoDescription>>,
 }
 
-struct RetrieveEnvironmentInfoResultMessageDeserializer;
-impl RetrieveEnvironmentInfoResultMessageDeserializer {
+struct RetrieveEnvironmentInfoResponseDeserializer;
+impl RetrieveEnvironmentInfoResponseDeserializer {
     #[allow(unused_variables)]
     fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
-    ) -> Result<RetrieveEnvironmentInfoResultMessage, XmlParseError> {
-        deserialize_elements::<_, RetrieveEnvironmentInfoResultMessage, _>(
+    ) -> Result<RetrieveEnvironmentInfoResponse, XmlParseError> {
+        deserialize_elements::<_, RetrieveEnvironmentInfoResponse, _>(
             tag_name,
             stack,
             |name, stack, obj| {
@@ -6555,7 +6932,7 @@ impl SupportedTierListDeserializer {
 }
 /// <p>Swaps the CNAMEs of two environments.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct SwapEnvironmentCNAMEsMessage {
+pub struct SwapEnvironmentCNAMEsRequest {
     /// <p>The ID of the destination environment.</p> <p> Condition: You must specify at least the <code>DestinationEnvironmentID</code> or the <code>DestinationEnvironmentName</code>. You may also specify both. You must specify the <code>SourceEnvironmentId</code> with the <code>DestinationEnvironmentId</code>. </p>
     pub destination_environment_id: Option<String>,
     /// <p>The name of the destination environment.</p> <p> Condition: You must specify at least the <code>DestinationEnvironmentID</code> or the <code>DestinationEnvironmentName</code>. You may also specify both. You must specify the <code>SourceEnvironmentName</code> with the <code>DestinationEnvironmentName</code>. </p>
@@ -6566,10 +6943,10 @@ pub struct SwapEnvironmentCNAMEsMessage {
     pub source_environment_name: Option<String>,
 }
 
-/// Serialize `SwapEnvironmentCNAMEsMessage` contents to a `SignedRequest`.
-struct SwapEnvironmentCNAMEsMessageSerializer;
-impl SwapEnvironmentCNAMEsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SwapEnvironmentCNAMEsMessage) {
+/// Serialize `SwapEnvironmentCNAMEsRequest` contents to a `SignedRequest`.
+struct SwapEnvironmentCNAMEsRequestSerializer;
+impl SwapEnvironmentCNAMEsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SwapEnvironmentCNAMEsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6602,6 +6979,19 @@ impl SwapEnvironmentCNAMEsMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SwapEnvironmentCNAMEsResponse {}
+
+struct SwapEnvironmentCNAMEsResponseDeserializer;
+impl SwapEnvironmentCNAMEsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SwapEnvironmentCNAMEsResponse, XmlParseError> {
+        Ok(SwapEnvironmentCNAMEsResponse::default())
+    }
+}
 /// <p>CPU utilization and load average metrics for an Amazon EC2 instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SystemStatus {
@@ -6760,7 +7150,7 @@ impl TagsSerializer {
 
 /// <p>Request to terminate an environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct TerminateEnvironmentMessage {
+pub struct TerminateEnvironmentRequest {
     /// <p>The ID of the environment to terminate.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
     pub environment_id: Option<String>,
     /// <p>The name of the environment to terminate.</p> <p> Condition: You must specify either this or an EnvironmentId, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -6771,10 +7161,10 @@ pub struct TerminateEnvironmentMessage {
     pub terminate_resources: Option<bool>,
 }
 
-/// Serialize `TerminateEnvironmentMessage` contents to a `SignedRequest`.
-struct TerminateEnvironmentMessageSerializer;
-impl TerminateEnvironmentMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TerminateEnvironmentMessage) {
+/// Serialize `TerminateEnvironmentRequest` contents to a `SignedRequest`.
+struct TerminateEnvironmentRequestSerializer;
+impl TerminateEnvironmentRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TerminateEnvironmentRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6795,6 +7185,172 @@ impl TerminateEnvironmentMessageSerializer {
     }
 }
 
+/// <p>Describes the properties of an environment.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TerminateEnvironmentResponse {
+    /// <p>Indicates if there is an in-progress environment configuration update or application version deployment that you can cancel.</p> <p> <code>true:</code> There is an update in progress. </p> <p> <code>false:</code> There are no updates currently in progress. </p>
+    pub abortable_operation_in_progress: Option<bool>,
+    /// <p>The name of the application associated with this environment.</p>
+    pub application_name: Option<String>,
+    /// <p>The URL to the CNAME for this environment.</p>
+    pub cname: Option<String>,
+    /// <p>The creation date for this environment.</p>
+    pub date_created: Option<String>,
+    /// <p>The last modified date for this environment.</p>
+    pub date_updated: Option<String>,
+    /// <p>Describes this environment.</p>
+    pub description: Option<String>,
+    /// <p>For load-balanced, autoscaling environments, the URL to the LoadBalancer. For single-instance environments, the IP address of the instance.</p>
+    pub endpoint_url: Option<String>,
+    /// <p>The environment's Amazon Resource Name (ARN), which can be used in other API requests that require an ARN.</p>
+    pub environment_arn: Option<String>,
+    /// <p>The ID of this environment.</p>
+    pub environment_id: Option<String>,
+    /// <p>A list of links to other environments in the same group.</p>
+    pub environment_links: Option<Vec<EnvironmentLink>>,
+    /// <p>The name of this environment.</p>
+    pub environment_name: Option<String>,
+    /// <p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironment</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>
+    pub health: Option<String>,
+    /// <p>Returns the health status of the application running in your environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
+    pub health_status: Option<String>,
+    /// <p>The ARN of the platform.</p>
+    pub platform_arn: Option<String>,
+    /// <p>The description of the AWS resources used by this environment.</p>
+    pub resources: Option<EnvironmentResourcesDescription>,
+    /// <p> The name of the <code>SolutionStack</code> deployed with this environment. </p>
+    pub solution_stack_name: Option<String>,
+    /// <p><p>The current operational status of the environment:</p> <ul> <li> <p> <code>Launching</code>: Environment is in the process of initial deployment.</p> </li> <li> <p> <code>Updating</code>: Environment is in the process of updating its configuration settings or application version.</p> </li> <li> <p> <code>Ready</code>: Environment is available to have an action performed on it, such as update or terminate.</p> </li> <li> <p> <code>Terminating</code>: Environment is in the shut-down process.</p> </li> <li> <p> <code>Terminated</code>: Environment is not running.</p> </li> </ul></p>
+    pub status: Option<String>,
+    /// <p>The name of the configuration template used to originally launch this environment.</p>
+    pub template_name: Option<String>,
+    /// <p>Describes the current tier of this environment.</p>
+    pub tier: Option<EnvironmentTier>,
+    /// <p>The application version deployed in this environment.</p>
+    pub version_label: Option<String>,
+}
+
+struct TerminateEnvironmentResponseDeserializer;
+impl TerminateEnvironmentResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TerminateEnvironmentResponse, XmlParseError> {
+        deserialize_elements::<_, TerminateEnvironmentResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AbortableOperationInProgress" => {
+                        obj.abortable_operation_in_progress =
+                            Some(AbortableOperationInProgressDeserializer::deserialize(
+                                "AbortableOperationInProgress",
+                                stack,
+                            )?);
+                    }
+                    "ApplicationName" => {
+                        obj.application_name = Some(ApplicationNameDeserializer::deserialize(
+                            "ApplicationName",
+                            stack,
+                        )?);
+                    }
+                    "CNAME" => {
+                        obj.cname = Some(DNSCnameDeserializer::deserialize("CNAME", stack)?);
+                    }
+                    "DateCreated" => {
+                        obj.date_created =
+                            Some(CreationDateDeserializer::deserialize("DateCreated", stack)?);
+                    }
+                    "DateUpdated" => {
+                        obj.date_updated =
+                            Some(UpdateDateDeserializer::deserialize("DateUpdated", stack)?);
+                    }
+                    "Description" => {
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
+                    }
+                    "EndpointURL" => {
+                        obj.endpoint_url =
+                            Some(EndpointURLDeserializer::deserialize("EndpointURL", stack)?);
+                    }
+                    "EnvironmentArn" => {
+                        obj.environment_arn = Some(EnvironmentArnDeserializer::deserialize(
+                            "EnvironmentArn",
+                            stack,
+                        )?);
+                    }
+                    "EnvironmentId" => {
+                        obj.environment_id = Some(EnvironmentIdDeserializer::deserialize(
+                            "EnvironmentId",
+                            stack,
+                        )?);
+                    }
+                    "EnvironmentLinks" => {
+                        obj.environment_links.get_or_insert(vec![]).extend(
+                            EnvironmentLinksDeserializer::deserialize("EnvironmentLinks", stack)?,
+                        );
+                    }
+                    "EnvironmentName" => {
+                        obj.environment_name = Some(EnvironmentNameDeserializer::deserialize(
+                            "EnvironmentName",
+                            stack,
+                        )?);
+                    }
+                    "Health" => {
+                        obj.health =
+                            Some(EnvironmentHealthDeserializer::deserialize("Health", stack)?);
+                    }
+                    "HealthStatus" => {
+                        obj.health_status = Some(EnvironmentHealthStatusDeserializer::deserialize(
+                            "HealthStatus",
+                            stack,
+                        )?);
+                    }
+                    "PlatformArn" => {
+                        obj.platform_arn =
+                            Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
+                    }
+                    "Resources" => {
+                        obj.resources =
+                            Some(EnvironmentResourcesDescriptionDeserializer::deserialize(
+                                "Resources",
+                                stack,
+                            )?);
+                    }
+                    "SolutionStackName" => {
+                        obj.solution_stack_name = Some(SolutionStackNameDeserializer::deserialize(
+                            "SolutionStackName",
+                            stack,
+                        )?);
+                    }
+                    "Status" => {
+                        obj.status =
+                            Some(EnvironmentStatusDeserializer::deserialize("Status", stack)?);
+                    }
+                    "TemplateName" => {
+                        obj.template_name =
+                            Some(ConfigurationTemplateNameDeserializer::deserialize(
+                                "TemplateName",
+                                stack,
+                            )?);
+                    }
+                    "Tier" => {
+                        obj.tier = Some(EnvironmentTierDeserializer::deserialize("Tier", stack)?);
+                    }
+                    "VersionLabel" => {
+                        obj.version_label = Some(VersionLabelDeserializer::deserialize(
+                            "VersionLabel",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
@@ -6861,17 +7417,17 @@ impl TriggerListDeserializer {
 }
 /// <p>Request to update an application.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateApplicationMessage {
+pub struct UpdateApplicationRequest {
     /// <p>The name of the application to update. If no such application is found, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>
     pub application_name: String,
     /// <p>A new description for the application.</p> <p>Default: If not specified, AWS Elastic Beanstalk does not update the description.</p>
     pub description: Option<String>,
 }
 
-/// Serialize `UpdateApplicationMessage` contents to a `SignedRequest`.
-struct UpdateApplicationMessageSerializer;
-impl UpdateApplicationMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationMessage) {
+/// Serialize `UpdateApplicationRequest` contents to a `SignedRequest`.
+struct UpdateApplicationRequestSerializer;
+impl UpdateApplicationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6888,17 +7444,17 @@ impl UpdateApplicationMessageSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateApplicationResourceLifecycleMessage {
+pub struct UpdateApplicationResourceLifecycleRequest {
     /// <p>The name of the application.</p>
     pub application_name: String,
     /// <p>The lifecycle configuration.</p>
     pub resource_lifecycle_config: ApplicationResourceLifecycleConfig,
 }
 
-/// Serialize `UpdateApplicationResourceLifecycleMessage` contents to a `SignedRequest`.
-struct UpdateApplicationResourceLifecycleMessageSerializer;
-impl UpdateApplicationResourceLifecycleMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationResourceLifecycleMessage) {
+/// Serialize `UpdateApplicationResourceLifecycleRequest` contents to a `SignedRequest`.
+struct UpdateApplicationResourceLifecycleRequestSerializer;
+impl UpdateApplicationResourceLifecycleRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationResourceLifecycleRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6916,9 +7472,81 @@ impl UpdateApplicationResourceLifecycleMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateApplicationResourceLifecycleResponse {
+    /// <p>The name of the application.</p>
+    pub application_name: Option<String>,
+    /// <p>The lifecycle configuration.</p>
+    pub resource_lifecycle_config: Option<ApplicationResourceLifecycleConfig>,
+}
+
+struct UpdateApplicationResourceLifecycleResponseDeserializer;
+impl UpdateApplicationResourceLifecycleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateApplicationResourceLifecycleResponse, XmlParseError> {
+        deserialize_elements::<_, UpdateApplicationResourceLifecycleResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApplicationName" => {
+                        obj.application_name = Some(ApplicationNameDeserializer::deserialize(
+                            "ApplicationName",
+                            stack,
+                        )?);
+                    }
+                    "ResourceLifecycleConfig" => {
+                        obj.resource_lifecycle_config =
+                            Some(ApplicationResourceLifecycleConfigDeserializer::deserialize(
+                                "ResourceLifecycleConfig",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Result message containing a single description of an application.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateApplicationResponse {
+    /// <p> The <a>ApplicationDescription</a> of the application. </p>
+    pub application: Option<ApplicationDescription>,
+}
+
+struct UpdateApplicationResponseDeserializer;
+impl UpdateApplicationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateApplicationResponse, XmlParseError> {
+        deserialize_elements::<_, UpdateApplicationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Application" => {
+                        obj.application = Some(ApplicationDescriptionDeserializer::deserialize(
+                            "Application",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateApplicationVersionMessage {
+pub struct UpdateApplicationVersionRequest {
     /// <p>The name of the application associated with this version.</p> <p> If no application is found with this name, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error.</p>
     pub application_name: String,
     /// <p>A new description for this version.</p>
@@ -6927,10 +7555,10 @@ pub struct UpdateApplicationVersionMessage {
     pub version_label: String,
 }
 
-/// Serialize `UpdateApplicationVersionMessage` contents to a `SignedRequest`.
-struct UpdateApplicationVersionMessageSerializer;
-impl UpdateApplicationVersionMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationVersionMessage) {
+/// Serialize `UpdateApplicationVersionRequest` contents to a `SignedRequest`.
+struct UpdateApplicationVersionRequestSerializer;
+impl UpdateApplicationVersionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateApplicationVersionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6947,9 +7575,42 @@ impl UpdateApplicationVersionMessageSerializer {
     }
 }
 
+/// <p>Result message wrapping a single description of an application version.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateApplicationVersionResponse {
+    /// <p> The <a>ApplicationVersionDescription</a> of the application version. </p>
+    pub application_version: Option<ApplicationVersionDescription>,
+}
+
+struct UpdateApplicationVersionResponseDeserializer;
+impl UpdateApplicationVersionResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateApplicationVersionResponse, XmlParseError> {
+        deserialize_elements::<_, UpdateApplicationVersionResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApplicationVersion" => {
+                        obj.application_version =
+                            Some(ApplicationVersionDescriptionDeserializer::deserialize(
+                                "ApplicationVersion",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>The result message containing the options for the specified solution stack.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateConfigurationTemplateMessage {
+pub struct UpdateConfigurationTemplateRequest {
     /// <p>The name of the application associated with the configuration template to update.</p> <p> If no application is found with this name, <code>UpdateConfigurationTemplate</code> returns an <code>InvalidParameterValue</code> error. </p>
     pub application_name: String,
     /// <p>A new description for the configuration.</p>
@@ -6962,10 +7623,10 @@ pub struct UpdateConfigurationTemplateMessage {
     pub template_name: String,
 }
 
-/// Serialize `UpdateConfigurationTemplateMessage` contents to a `SignedRequest`.
-struct UpdateConfigurationTemplateMessageSerializer;
-impl UpdateConfigurationTemplateMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateConfigurationTemplateMessage) {
+/// Serialize `UpdateConfigurationTemplateRequest` contents to a `SignedRequest`.
+struct UpdateConfigurationTemplateRequestSerializer;
+impl UpdateConfigurationTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateConfigurationTemplateRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6996,6 +7657,106 @@ impl UpdateConfigurationTemplateMessageSerializer {
     }
 }
 
+/// <p>Describes the settings for a configuration set.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateConfigurationTemplateResponse {
+    /// <p>The name of the application associated with this configuration set.</p>
+    pub application_name: Option<String>,
+    /// <p>The date (in UTC time) when this configuration set was created.</p>
+    pub date_created: Option<String>,
+    /// <p>The date (in UTC time) when this configuration set was last modified.</p>
+    pub date_updated: Option<String>,
+    /// <p><p> If this configuration set is associated with an environment, the <code>DeploymentStatus</code> parameter indicates the deployment status of this configuration set: </p> <ul> <li> <p> <code>null</code>: This configuration is not associated with a running environment.</p> </li> <li> <p> <code>pending</code>: This is a draft configuration that is not deployed to the associated environment but is in the process of deploying.</p> </li> <li> <p> <code>deployed</code>: This is the configuration that is currently deployed to the associated running environment.</p> </li> <li> <p> <code>failed</code>: This is a draft configuration that failed to successfully deploy.</p> </li> </ul></p>
+    pub deployment_status: Option<String>,
+    /// <p>Describes this configuration set.</p>
+    pub description: Option<String>,
+    /// <p> If not <code>null</code>, the name of the environment for this configuration set. </p>
+    pub environment_name: Option<String>,
+    /// <p>A list of the configuration options and their values in this configuration set.</p>
+    pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
+    /// <p>The ARN of the platform.</p>
+    pub platform_arn: Option<String>,
+    /// <p>The name of the solution stack this configuration set uses.</p>
+    pub solution_stack_name: Option<String>,
+    /// <p> If not <code>null</code>, the name of the configuration template for this configuration set. </p>
+    pub template_name: Option<String>,
+}
+
+struct UpdateConfigurationTemplateResponseDeserializer;
+impl UpdateConfigurationTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateConfigurationTemplateResponse, XmlParseError> {
+        deserialize_elements::<_, UpdateConfigurationTemplateResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ApplicationName" => {
+                        obj.application_name = Some(ApplicationNameDeserializer::deserialize(
+                            "ApplicationName",
+                            stack,
+                        )?);
+                    }
+                    "DateCreated" => {
+                        obj.date_created =
+                            Some(CreationDateDeserializer::deserialize("DateCreated", stack)?);
+                    }
+                    "DateUpdated" => {
+                        obj.date_updated =
+                            Some(UpdateDateDeserializer::deserialize("DateUpdated", stack)?);
+                    }
+                    "DeploymentStatus" => {
+                        obj.deployment_status =
+                            Some(ConfigurationDeploymentStatusDeserializer::deserialize(
+                                "DeploymentStatus",
+                                stack,
+                            )?);
+                    }
+                    "Description" => {
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
+                    }
+                    "EnvironmentName" => {
+                        obj.environment_name = Some(EnvironmentNameDeserializer::deserialize(
+                            "EnvironmentName",
+                            stack,
+                        )?);
+                    }
+                    "OptionSettings" => {
+                        obj.option_settings.get_or_insert(vec![]).extend(
+                            ConfigurationOptionSettingsListDeserializer::deserialize(
+                                "OptionSettings",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "PlatformArn" => {
+                        obj.platform_arn =
+                            Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
+                    }
+                    "SolutionStackName" => {
+                        obj.solution_stack_name = Some(SolutionStackNameDeserializer::deserialize(
+                            "SolutionStackName",
+                            stack,
+                        )?);
+                    }
+                    "TemplateName" => {
+                        obj.template_name =
+                            Some(ConfigurationTemplateNameDeserializer::deserialize(
+                                "TemplateName",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 struct UpdateDateDeserializer;
 impl UpdateDateDeserializer {
     #[allow(unused_variables)]
@@ -7009,7 +7770,7 @@ impl UpdateDateDeserializer {
 }
 /// <p>Request to update an environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateEnvironmentMessage {
+pub struct UpdateEnvironmentRequest {
     /// <p>The name of the application with which the environment is associated.</p>
     pub application_name: Option<String>,
     /// <p>If this parameter is specified, AWS Elastic Beanstalk updates the description of this environment.</p>
@@ -7036,10 +7797,10 @@ pub struct UpdateEnvironmentMessage {
     pub version_label: Option<String>,
 }
 
-/// Serialize `UpdateEnvironmentMessage` contents to a `SignedRequest`.
-struct UpdateEnvironmentMessageSerializer;
-impl UpdateEnvironmentMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateEnvironmentMessage) {
+/// Serialize `UpdateEnvironmentRequest` contents to a `SignedRequest`.
+struct UpdateEnvironmentRequestSerializer;
+impl UpdateEnvironmentRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateEnvironmentRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7096,8 +7857,174 @@ impl UpdateEnvironmentMessageSerializer {
     }
 }
 
+/// <p>Describes the properties of an environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateTagsForResourceMessage {
+pub struct UpdateEnvironmentResponse {
+    /// <p>Indicates if there is an in-progress environment configuration update or application version deployment that you can cancel.</p> <p> <code>true:</code> There is an update in progress. </p> <p> <code>false:</code> There are no updates currently in progress. </p>
+    pub abortable_operation_in_progress: Option<bool>,
+    /// <p>The name of the application associated with this environment.</p>
+    pub application_name: Option<String>,
+    /// <p>The URL to the CNAME for this environment.</p>
+    pub cname: Option<String>,
+    /// <p>The creation date for this environment.</p>
+    pub date_created: Option<String>,
+    /// <p>The last modified date for this environment.</p>
+    pub date_updated: Option<String>,
+    /// <p>Describes this environment.</p>
+    pub description: Option<String>,
+    /// <p>For load-balanced, autoscaling environments, the URL to the LoadBalancer. For single-instance environments, the IP address of the instance.</p>
+    pub endpoint_url: Option<String>,
+    /// <p>The environment's Amazon Resource Name (ARN), which can be used in other API requests that require an ARN.</p>
+    pub environment_arn: Option<String>,
+    /// <p>The ID of this environment.</p>
+    pub environment_id: Option<String>,
+    /// <p>A list of links to other environments in the same group.</p>
+    pub environment_links: Option<Vec<EnvironmentLink>>,
+    /// <p>The name of this environment.</p>
+    pub environment_name: Option<String>,
+    /// <p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironment</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>
+    pub health: Option<String>,
+    /// <p>Returns the health status of the application running in your environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
+    pub health_status: Option<String>,
+    /// <p>The ARN of the platform.</p>
+    pub platform_arn: Option<String>,
+    /// <p>The description of the AWS resources used by this environment.</p>
+    pub resources: Option<EnvironmentResourcesDescription>,
+    /// <p> The name of the <code>SolutionStack</code> deployed with this environment. </p>
+    pub solution_stack_name: Option<String>,
+    /// <p><p>The current operational status of the environment:</p> <ul> <li> <p> <code>Launching</code>: Environment is in the process of initial deployment.</p> </li> <li> <p> <code>Updating</code>: Environment is in the process of updating its configuration settings or application version.</p> </li> <li> <p> <code>Ready</code>: Environment is available to have an action performed on it, such as update or terminate.</p> </li> <li> <p> <code>Terminating</code>: Environment is in the shut-down process.</p> </li> <li> <p> <code>Terminated</code>: Environment is not running.</p> </li> </ul></p>
+    pub status: Option<String>,
+    /// <p>The name of the configuration template used to originally launch this environment.</p>
+    pub template_name: Option<String>,
+    /// <p>Describes the current tier of this environment.</p>
+    pub tier: Option<EnvironmentTier>,
+    /// <p>The application version deployed in this environment.</p>
+    pub version_label: Option<String>,
+}
+
+struct UpdateEnvironmentResponseDeserializer;
+impl UpdateEnvironmentResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateEnvironmentResponse, XmlParseError> {
+        deserialize_elements::<_, UpdateEnvironmentResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AbortableOperationInProgress" => {
+                        obj.abortable_operation_in_progress =
+                            Some(AbortableOperationInProgressDeserializer::deserialize(
+                                "AbortableOperationInProgress",
+                                stack,
+                            )?);
+                    }
+                    "ApplicationName" => {
+                        obj.application_name = Some(ApplicationNameDeserializer::deserialize(
+                            "ApplicationName",
+                            stack,
+                        )?);
+                    }
+                    "CNAME" => {
+                        obj.cname = Some(DNSCnameDeserializer::deserialize("CNAME", stack)?);
+                    }
+                    "DateCreated" => {
+                        obj.date_created =
+                            Some(CreationDateDeserializer::deserialize("DateCreated", stack)?);
+                    }
+                    "DateUpdated" => {
+                        obj.date_updated =
+                            Some(UpdateDateDeserializer::deserialize("DateUpdated", stack)?);
+                    }
+                    "Description" => {
+                        obj.description =
+                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
+                    }
+                    "EndpointURL" => {
+                        obj.endpoint_url =
+                            Some(EndpointURLDeserializer::deserialize("EndpointURL", stack)?);
+                    }
+                    "EnvironmentArn" => {
+                        obj.environment_arn = Some(EnvironmentArnDeserializer::deserialize(
+                            "EnvironmentArn",
+                            stack,
+                        )?);
+                    }
+                    "EnvironmentId" => {
+                        obj.environment_id = Some(EnvironmentIdDeserializer::deserialize(
+                            "EnvironmentId",
+                            stack,
+                        )?);
+                    }
+                    "EnvironmentLinks" => {
+                        obj.environment_links.get_or_insert(vec![]).extend(
+                            EnvironmentLinksDeserializer::deserialize("EnvironmentLinks", stack)?,
+                        );
+                    }
+                    "EnvironmentName" => {
+                        obj.environment_name = Some(EnvironmentNameDeserializer::deserialize(
+                            "EnvironmentName",
+                            stack,
+                        )?);
+                    }
+                    "Health" => {
+                        obj.health =
+                            Some(EnvironmentHealthDeserializer::deserialize("Health", stack)?);
+                    }
+                    "HealthStatus" => {
+                        obj.health_status = Some(EnvironmentHealthStatusDeserializer::deserialize(
+                            "HealthStatus",
+                            stack,
+                        )?);
+                    }
+                    "PlatformArn" => {
+                        obj.platform_arn =
+                            Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
+                    }
+                    "Resources" => {
+                        obj.resources =
+                            Some(EnvironmentResourcesDescriptionDeserializer::deserialize(
+                                "Resources",
+                                stack,
+                            )?);
+                    }
+                    "SolutionStackName" => {
+                        obj.solution_stack_name = Some(SolutionStackNameDeserializer::deserialize(
+                            "SolutionStackName",
+                            stack,
+                        )?);
+                    }
+                    "Status" => {
+                        obj.status =
+                            Some(EnvironmentStatusDeserializer::deserialize("Status", stack)?);
+                    }
+                    "TemplateName" => {
+                        obj.template_name =
+                            Some(ConfigurationTemplateNameDeserializer::deserialize(
+                                "TemplateName",
+                                stack,
+                            )?);
+                    }
+                    "Tier" => {
+                        obj.tier = Some(EnvironmentTierDeserializer::deserialize("Tier", stack)?);
+                    }
+                    "VersionLabel" => {
+                        obj.version_label = Some(VersionLabelDeserializer::deserialize(
+                            "VersionLabel",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resouce to be updated.</p> <p>Must be the ARN of an Elastic Beanstalk environment.</p>
     pub resource_arn: String,
     /// <p>A list of tags to add or update.</p> <p>If a key of an existing tag is added, the tag's value is updated.</p>
@@ -7106,10 +8033,10 @@ pub struct UpdateTagsForResourceMessage {
     pub tags_to_remove: Option<Vec<String>>,
 }
 
-/// Serialize `UpdateTagsForResourceMessage` contents to a `SignedRequest`.
-struct UpdateTagsForResourceMessageSerializer;
-impl UpdateTagsForResourceMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateTagsForResourceMessage) {
+/// Serialize `UpdateTagsForResourceRequest` contents to a `SignedRequest`.
+struct UpdateTagsForResourceRequestSerializer;
+impl UpdateTagsForResourceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7133,6 +8060,19 @@ impl UpdateTagsForResourceMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateTagsForResourceResponse {}
+
+struct UpdateTagsForResourceResponseDeserializer;
+impl UpdateTagsForResourceResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateTagsForResourceResponse, XmlParseError> {
+        Ok(UpdateTagsForResourceResponse::default())
+    }
+}
 struct UserDefinedOptionDeserializer;
 impl UserDefinedOptionDeserializer {
     #[allow(unused_variables)]
@@ -7146,7 +8086,7 @@ impl UserDefinedOptionDeserializer {
 }
 /// <p>A list of validation messages for a specified configuration template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
-pub struct ValidateConfigurationSettingsMessage {
+pub struct ValidateConfigurationSettingsRequest {
     /// <p>The name of the application that the configuration template or environment belongs to.</p>
     pub application_name: String,
     /// <p>The name of the environment to validate the settings against.</p> <p>Condition: You cannot specify both this and a configuration template name.</p>
@@ -7157,10 +8097,10 @@ pub struct ValidateConfigurationSettingsMessage {
     pub template_name: Option<String>,
 }
 
-/// Serialize `ValidateConfigurationSettingsMessage` contents to a `SignedRequest`.
-struct ValidateConfigurationSettingsMessageSerializer;
-impl ValidateConfigurationSettingsMessageSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ValidateConfigurationSettingsMessage) {
+/// Serialize `ValidateConfigurationSettingsRequest` contents to a `SignedRequest`.
+struct ValidateConfigurationSettingsRequestSerializer;
+impl ValidateConfigurationSettingsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ValidateConfigurationSettingsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7184,6 +8124,37 @@ impl ValidateConfigurationSettingsMessageSerializer {
     }
 }
 
+/// <p>Provides a list of validation messages.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ValidateConfigurationSettingsResponse {
+    /// <p> A list of <a>ValidationMessage</a>. </p>
+    pub messages: Option<Vec<ValidationMessage>>,
+}
+
+struct ValidateConfigurationSettingsResponseDeserializer;
+impl ValidateConfigurationSettingsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ValidateConfigurationSettingsResponse, XmlParseError> {
+        deserialize_elements::<_, ValidateConfigurationSettingsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Messages" => {
+                        obj.messages.get_or_insert(vec![]).extend(
+                            ValidationMessagesListDeserializer::deserialize("Messages", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>An error or warning for a desired configuration option value.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidationMessage {
@@ -9643,269 +10614,254 @@ pub trait ElasticBeanstalk {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
-        input: AbortEnvironmentUpdateMessage,
-    ) -> RusotoFuture<(), AbortEnvironmentUpdateError>;
+        input: AbortEnvironmentUpdateRequest,
+    ) -> Request<AbortEnvironmentUpdateRequest>;
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
         input: ApplyEnvironmentManagedActionRequest,
-    ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError>;
+    ) -> Request<ApplyEnvironmentManagedActionRequest>;
 
     /// <p>Checks if the specified CNAME is available.</p>
     fn check_dns_availability(
         &self,
-        input: CheckDNSAvailabilityMessage,
-    ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError>;
+        input: CheckDNSAvailabilityRequest,
+    ) -> Request<CheckDNSAvailabilityRequest>;
 
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
     fn compose_environments(
         &self,
-        input: ComposeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError>;
+        input: ComposeEnvironmentsRequest,
+    ) -> Request<ComposeEnvironmentsRequest>;
 
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
     fn create_application(
         &self,
-        input: CreateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError>;
+        input: CreateApplicationRequest,
+    ) -> Request<CreateApplicationRequest>;
 
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     fn create_application_version(
         &self,
-        input: CreateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
+        input: CreateApplicationVersionRequest,
+    ) -> Request<CreateApplicationVersionRequest>;
 
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
-        input: CreateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError>;
+        input: CreateConfigurationTemplateRequest,
+    ) -> Request<CreateConfigurationTemplateRequest>;
 
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
     fn create_environment(
         &self,
-        input: CreateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError>;
+        input: CreateEnvironmentRequest,
+    ) -> Request<CreateEnvironmentRequest>;
 
     /// <p>Create a new version of your custom platform.</p>
     fn create_platform_version(
         &self,
         input: CreatePlatformVersionRequest,
-    ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError>;
+    ) -> Request<CreatePlatformVersionRequest>;
 
     /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
-    fn create_storage_location(
-        &self,
-    ) -> RusotoFuture<CreateStorageLocationResultMessage, CreateStorageLocationError>;
+    fn create_storage_location(&self) -> Request<CreateStorageLocationRequest>;
 
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
     fn delete_application(
         &self,
-        input: DeleteApplicationMessage,
-    ) -> RusotoFuture<(), DeleteApplicationError>;
+        input: DeleteApplicationRequest,
+    ) -> Request<DeleteApplicationRequest>;
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
     fn delete_application_version(
         &self,
-        input: DeleteApplicationVersionMessage,
-    ) -> RusotoFuture<(), DeleteApplicationVersionError>;
+        input: DeleteApplicationVersionRequest,
+    ) -> Request<DeleteApplicationVersionRequest>;
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
     fn delete_configuration_template(
         &self,
-        input: DeleteConfigurationTemplateMessage,
-    ) -> RusotoFuture<(), DeleteConfigurationTemplateError>;
+        input: DeleteConfigurationTemplateRequest,
+    ) -> Request<DeleteConfigurationTemplateRequest>;
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
     fn delete_environment_configuration(
         &self,
-        input: DeleteEnvironmentConfigurationMessage,
-    ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError>;
+        input: DeleteEnvironmentConfigurationRequest,
+    ) -> Request<DeleteEnvironmentConfigurationRequest>;
 
     /// <p>Deletes the specified version of a custom platform.</p>
     fn delete_platform_version(
         &self,
         input: DeletePlatformVersionRequest,
-    ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError>;
+    ) -> Request<DeletePlatformVersionRequest>;
 
     /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
-    fn describe_account_attributes(
-        &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResult, DescribeAccountAttributesError>;
+    fn describe_account_attributes(&self) -> Request<DescribeAccountAttributesRequest>;
 
     /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
         &self,
-        input: DescribeApplicationVersionsMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError>;
+        input: DescribeApplicationVersionsRequest,
+    ) -> Request<DescribeApplicationVersionsRequest>;
 
     /// <p>Returns the descriptions of existing applications.</p>
     fn describe_applications(
         &self,
-        input: DescribeApplicationsMessage,
-    ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError>;
+        input: DescribeApplicationsRequest,
+    ) -> Request<DescribeApplicationsRequest>;
 
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
     fn describe_configuration_options(
         &self,
-        input: DescribeConfigurationOptionsMessage,
-    ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError>;
+        input: DescribeConfigurationOptionsRequest,
+    ) -> Request<DescribeConfigurationOptionsRequest>;
 
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
     fn describe_configuration_settings(
         &self,
-        input: DescribeConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError>;
+        input: DescribeConfigurationSettingsRequest,
+    ) -> Request<DescribeConfigurationSettingsRequest>;
 
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
     fn describe_environment_health(
         &self,
         input: DescribeEnvironmentHealthRequest,
-    ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError>;
+    ) -> Request<DescribeEnvironmentHealthRequest>;
 
     /// <p>Lists an environment's completed and failed managed actions.</p>
     fn describe_environment_managed_action_history(
         &self,
         input: DescribeEnvironmentManagedActionHistoryRequest,
-    ) -> RusotoFuture<
-        DescribeEnvironmentManagedActionHistoryResult,
-        DescribeEnvironmentManagedActionHistoryError,
-    >;
+    ) -> Request<DescribeEnvironmentManagedActionHistoryRequest>;
 
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
     fn describe_environment_managed_actions(
         &self,
         input: DescribeEnvironmentManagedActionsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>;
+    ) -> Request<DescribeEnvironmentManagedActionsRequest>;
 
     /// <p>Returns AWS resources for this environment.</p>
     fn describe_environment_resources(
         &self,
-        input: DescribeEnvironmentResourcesMessage,
-    ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>;
+        input: DescribeEnvironmentResourcesRequest,
+    ) -> Request<DescribeEnvironmentResourcesRequest>;
 
     /// <p>Returns descriptions for existing environments.</p>
     fn describe_environments(
         &self,
-        input: DescribeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError>;
+        input: DescribeEnvironmentsRequest,
+    ) -> Request<DescribeEnvironmentsRequest>;
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError>;
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest>;
 
     /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
         input: DescribeInstancesHealthRequest,
-    ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError>;
+    ) -> Request<DescribeInstancesHealthRequest>;
 
     /// <p>Describes the version of the platform.</p>
     fn describe_platform_version(
         &self,
         input: DescribePlatformVersionRequest,
-    ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError>;
+    ) -> Request<DescribePlatformVersionRequest>;
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
-    fn list_available_solution_stacks(
-        &self,
-    ) -> RusotoFuture<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>;
+    fn list_available_solution_stacks(&self) -> Request<ListAvailableSolutionStacksRequest>;
 
     /// <p>Lists the available platforms.</p>
     fn list_platform_versions(
         &self,
         input: ListPlatformVersionsRequest,
-    ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError>;
+    ) -> Request<ListPlatformVersionsRequest>;
 
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
     fn list_tags_for_resource(
         &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError>;
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest>;
 
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
-        input: RebuildEnvironmentMessage,
-    ) -> RusotoFuture<(), RebuildEnvironmentError>;
+        input: RebuildEnvironmentRequest,
+    ) -> Request<RebuildEnvironmentRequest>;
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
     fn request_environment_info(
         &self,
-        input: RequestEnvironmentInfoMessage,
-    ) -> RusotoFuture<(), RequestEnvironmentInfoError>;
+        input: RequestEnvironmentInfoRequest,
+    ) -> Request<RequestEnvironmentInfoRequest>;
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
     fn restart_app_server(
         &self,
-        input: RestartAppServerMessage,
-    ) -> RusotoFuture<(), RestartAppServerError>;
+        input: RestartAppServerRequest,
+    ) -> Request<RestartAppServerRequest>;
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
     fn retrieve_environment_info(
         &self,
-        input: RetrieveEnvironmentInfoMessage,
-    ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError>;
+        input: RetrieveEnvironmentInfoRequest,
+    ) -> Request<RetrieveEnvironmentInfoRequest>;
 
     /// <p>Swaps the CNAMEs of two environments.</p>
     fn swap_environment_cnam_es(
         &self,
-        input: SwapEnvironmentCNAMEsMessage,
-    ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError>;
+        input: SwapEnvironmentCNAMEsRequest,
+    ) -> Request<SwapEnvironmentCNAMEsRequest>;
 
     /// <p>Terminates the specified environment.</p>
     fn terminate_environment(
         &self,
-        input: TerminateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError>;
+        input: TerminateEnvironmentRequest,
+    ) -> Request<TerminateEnvironmentRequest>;
 
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
     fn update_application(
         &self,
-        input: UpdateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError>;
+        input: UpdateApplicationRequest,
+    ) -> Request<UpdateApplicationRequest>;
 
     /// <p>Modifies lifecycle settings for an application.</p>
     fn update_application_resource_lifecycle(
         &self,
-        input: UpdateApplicationResourceLifecycleMessage,
-    ) -> RusotoFuture<
-        ApplicationResourceLifecycleDescriptionMessage,
-        UpdateApplicationResourceLifecycleError,
-    >;
+        input: UpdateApplicationResourceLifecycleRequest,
+    ) -> Request<UpdateApplicationResourceLifecycleRequest>;
 
     /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
     fn update_application_version(
         &self,
-        input: UpdateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError>;
+        input: UpdateApplicationVersionRequest,
+    ) -> Request<UpdateApplicationVersionRequest>;
 
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
     fn update_configuration_template(
         &self,
-        input: UpdateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError>;
+        input: UpdateConfigurationTemplateRequest,
+    ) -> Request<UpdateConfigurationTemplateRequest>;
 
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
     fn update_environment(
         &self,
-        input: UpdateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError>;
+        input: UpdateEnvironmentRequest,
+    ) -> Request<UpdateEnvironmentRequest>;
 
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
     fn update_tags_for_resource(
         &self,
-        input: UpdateTagsForResourceMessage,
-    ) -> RusotoFuture<(), UpdateTagsForResourceError>;
+        input: UpdateTagsForResourceRequest,
+    ) -> Request<UpdateTagsForResourceRequest>;
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
         &self,
-        input: ValidateConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
+        input: ValidateConfigurationSettingsRequest,
+    ) -> Request<ValidateConfigurationSettingsRequest>;
 }
 /// A client for the Elastic Beanstalk API.
 #[derive(Clone)]
@@ -9947,43 +10903,425 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
-        input: AbortEnvironmentUpdateMessage,
-    ) -> RusotoFuture<(), AbortEnvironmentUpdateError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AbortEnvironmentUpdate");
-        params.put("Version", "2010-12-01");
-        AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
-        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
-        request.set_content_type("application/x-www-form-urlencoded".to_owned());
-
-        self.client.sign_and_dispatch(request, |response| {
-            if !response.status.is_success() {
-                return Box::new(response.buffer().from_err().and_then(|response| {
-                    Err(AbortEnvironmentUpdateError::from_response(response))
-                }));
-            }
-
-            Box::new(future::ok(::std::mem::drop(response)))
-        })
+        input: AbortEnvironmentUpdateRequest,
+    ) -> Request<AbortEnvironmentUpdateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
     }
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
         input: ApplyEnvironmentManagedActionRequest,
-    ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+    ) -> Request<ApplyEnvironmentManagedActionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Checks if the specified CNAME is available.</p>
+    fn check_dns_availability(
+        &self,
+        input: CheckDNSAvailabilityRequest,
+    ) -> Request<CheckDNSAvailabilityRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
+    fn compose_environments(
+        &self,
+        input: ComposeEnvironmentsRequest,
+    ) -> Request<ComposeEnvironmentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
+    fn create_application(
+        &self,
+        input: CreateApplicationRequest,
+    ) -> Request<CreateApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
+    fn create_application_version(
+        &self,
+        input: CreateApplicationVersionRequest,
+    ) -> Request<CreateApplicationVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
+    fn create_configuration_template(
+        &self,
+        input: CreateConfigurationTemplateRequest,
+    ) -> Request<CreateConfigurationTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Launches an environment for the specified application using the specified configuration.</p>
+    fn create_environment(
+        &self,
+        input: CreateEnvironmentRequest,
+    ) -> Request<CreateEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Create a new version of your custom platform.</p>
+    fn create_platform_version(
+        &self,
+        input: CreatePlatformVersionRequest,
+    ) -> Request<CreatePlatformVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
+    fn create_storage_location(&self) -> Request<CreateStorageLocationRequest> {
+        Request::new(
+            CreateStorageLocationRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
+    fn delete_application(
+        &self,
+        input: DeleteApplicationRequest,
+    ) -> Request<DeleteApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
+    fn delete_application_version(
+        &self,
+        input: DeleteApplicationVersionRequest,
+    ) -> Request<DeleteApplicationVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
+    fn delete_configuration_template(
+        &self,
+        input: DeleteConfigurationTemplateRequest,
+    ) -> Request<DeleteConfigurationTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
+    fn delete_environment_configuration(
+        &self,
+        input: DeleteEnvironmentConfigurationRequest,
+    ) -> Request<DeleteEnvironmentConfigurationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes the specified version of a custom platform.</p>
+    fn delete_platform_version(
+        &self,
+        input: DeletePlatformVersionRequest,
+    ) -> Request<DeletePlatformVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
+    fn describe_account_attributes(&self) -> Request<DescribeAccountAttributesRequest> {
+        Request::new(
+            DescribeAccountAttributesRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Retrieve a list of application versions.</p>
+    fn describe_application_versions(
+        &self,
+        input: DescribeApplicationVersionsRequest,
+    ) -> Request<DescribeApplicationVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the descriptions of existing applications.</p>
+    fn describe_applications(
+        &self,
+        input: DescribeApplicationsRequest,
+    ) -> Request<DescribeApplicationsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
+    fn describe_configuration_options(
+        &self,
+        input: DescribeConfigurationOptionsRequest,
+    ) -> Request<DescribeConfigurationOptionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
+    fn describe_configuration_settings(
+        &self,
+        input: DescribeConfigurationSettingsRequest,
+    ) -> Request<DescribeConfigurationSettingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
+    fn describe_environment_health(
+        &self,
+        input: DescribeEnvironmentHealthRequest,
+    ) -> Request<DescribeEnvironmentHealthRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists an environment's completed and failed managed actions.</p>
+    fn describe_environment_managed_action_history(
+        &self,
+        input: DescribeEnvironmentManagedActionHistoryRequest,
+    ) -> Request<DescribeEnvironmentManagedActionHistoryRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
+    fn describe_environment_managed_actions(
+        &self,
+        input: DescribeEnvironmentManagedActionsRequest,
+    ) -> Request<DescribeEnvironmentManagedActionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns AWS resources for this environment.</p>
+    fn describe_environment_resources(
+        &self,
+        input: DescribeEnvironmentResourcesRequest,
+    ) -> Request<DescribeEnvironmentResourcesRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns descriptions for existing environments.</p>
+    fn describe_environments(
+        &self,
+        input: DescribeEnvironmentsRequest,
+    ) -> Request<DescribeEnvironmentsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
+    fn describe_events(&self, input: DescribeEventsRequest) -> Request<DescribeEventsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
+    fn describe_instances_health(
+        &self,
+        input: DescribeInstancesHealthRequest,
+    ) -> Request<DescribeInstancesHealthRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Describes the version of the platform.</p>
+    fn describe_platform_version(
+        &self,
+        input: DescribePlatformVersionRequest,
+    ) -> Request<DescribePlatformVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
+    fn list_available_solution_stacks(&self) -> Request<ListAvailableSolutionStacksRequest> {
+        Request::new(
+            ListAvailableSolutionStacksRequest {},
+            self.region.clone(),
+            self.client.clone(),
+        )
+    }
+
+    /// <p>Lists the available platforms.</p>
+    fn list_platform_versions(
+        &self,
+        input: ListPlatformVersionsRequest,
+    ) -> Request<ListPlatformVersionsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Request<ListTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
+    fn rebuild_environment(
+        &self,
+        input: RebuildEnvironmentRequest,
+    ) -> Request<RebuildEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
+    fn request_environment_info(
+        &self,
+        input: RequestEnvironmentInfoRequest,
+    ) -> Request<RequestEnvironmentInfoRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
+    fn restart_app_server(
+        &self,
+        input: RestartAppServerRequest,
+    ) -> Request<RestartAppServerRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
+    fn retrieve_environment_info(
+        &self,
+        input: RetrieveEnvironmentInfoRequest,
+    ) -> Request<RetrieveEnvironmentInfoRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Swaps the CNAMEs of two environments.</p>
+    fn swap_environment_cnam_es(
+        &self,
+        input: SwapEnvironmentCNAMEsRequest,
+    ) -> Request<SwapEnvironmentCNAMEsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Terminates the specified environment.</p>
+    fn terminate_environment(
+        &self,
+        input: TerminateEnvironmentRequest,
+    ) -> Request<TerminateEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
+    fn update_application(
+        &self,
+        input: UpdateApplicationRequest,
+    ) -> Request<UpdateApplicationRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Modifies lifecycle settings for an application.</p>
+    fn update_application_resource_lifecycle(
+        &self,
+        input: UpdateApplicationResourceLifecycleRequest,
+    ) -> Request<UpdateApplicationResourceLifecycleRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
+    fn update_application_version(
+        &self,
+        input: UpdateApplicationVersionRequest,
+    ) -> Request<UpdateApplicationVersionRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
+    fn update_configuration_template(
+        &self,
+        input: UpdateConfigurationTemplateRequest,
+    ) -> Request<UpdateConfigurationTemplateRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
+    fn update_environment(
+        &self,
+        input: UpdateEnvironmentRequest,
+    ) -> Request<UpdateEnvironmentRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
+    fn update_tags_for_resource(
+        &self,
+        input: UpdateTagsForResourceRequest,
+    ) -> Request<UpdateTagsForResourceRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+
+    /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
+    fn validate_configuration_settings(
+        &self,
+        input: ValidateConfigurationSettingsRequest,
+    ) -> Request<ValidateConfigurationSettingsRequest> {
+        Request::new(input, self.region.clone(), self.client.clone())
+    }
+}
+
+impl ServiceRequest for AbortEnvironmentUpdateRequest {
+    type Output = AbortEnvironmentUpdateResponse;
+    type Error = AbortEnvironmentUpdateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "AbortEnvironmentUpdate");
+        params.put("Version", "2010-12-01");
+        AbortEnvironmentUpdateRequestSerializer::serialize(&mut params, "", &self);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        dispatcher.dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AbortEnvironmentUpdateError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AbortEnvironmentUpdateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = AbortEnvironmentUpdateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+}
+
+impl ServiceRequest for ApplyEnvironmentManagedActionRequest {
+    type Output = ApplyEnvironmentManagedActionResponse;
+    type Error = ApplyEnvironmentManagedActionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ApplyEnvironmentManagedAction");
         params.put("Version", "2010-12-01");
-        ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
+        ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ApplyEnvironmentManagedActionError::from_response(response))
@@ -9994,7 +11332,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplyEnvironmentManagedActionResult::default();
+                    result = ApplyEnvironmentManagedActionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10004,7 +11342,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
+                    result = ApplyEnvironmentManagedActionResponseDeserializer::deserialize(
                         "ApplyEnvironmentManagedActionResult",
                         &mut stack,
                     )?;
@@ -10016,22 +11354,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Checks if the specified CNAME is available.</p>
-    fn check_dns_availability(
-        &self,
-        input: CheckDNSAvailabilityMessage,
-    ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for CheckDNSAvailabilityRequest {
+    type Output = CheckDNSAvailabilityResponse;
+    type Error = CheckDNSAvailabilityError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CheckDNSAvailability");
         params.put("Version", "2010-12-01");
-        CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
+        CheckDNSAvailabilityRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10044,7 +11387,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CheckDNSAvailabilityResultMessage::default();
+                    result = CheckDNSAvailabilityResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10054,7 +11397,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
+                    result = CheckDNSAvailabilityResponseDeserializer::deserialize(
                         "CheckDNSAvailabilityResult",
                         &mut stack,
                     )?;
@@ -10066,22 +11409,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
-    fn compose_environments(
-        &self,
-        input: ComposeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for ComposeEnvironmentsRequest {
+    type Output = ComposeEnvironmentsResponse;
+    type Error = ComposeEnvironmentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ComposeEnvironments");
         params.put("Version", "2010-12-01");
-        ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
+        ComposeEnvironmentsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10094,7 +11442,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnvironmentDescriptionsMessage::default();
+                    result = ComposeEnvironmentsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10104,7 +11452,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+                    result = ComposeEnvironmentsResponseDeserializer::deserialize(
                         "ComposeEnvironmentsResult",
                         &mut stack,
                     )?;
@@ -10116,22 +11464,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
-    fn create_application(
-        &self,
-        input: CreateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for CreateApplicationRequest {
+    type Output = CreateApplicationResponse;
+    type Error = CreateApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateApplication");
         params.put("Version", "2010-12-01");
-        CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
+        CreateApplicationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10145,7 +11498,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplicationDescriptionMessage::default();
+                    result = CreateApplicationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10155,7 +11508,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationDescriptionMessageDeserializer::deserialize(
+                    result = CreateApplicationResponseDeserializer::deserialize(
                         "CreateApplicationResult",
                         &mut stack,
                     )?;
@@ -10167,22 +11520,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
-    fn create_application_version(
-        &self,
-        input: CreateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for CreateApplicationVersionRequest {
+    type Output = CreateApplicationVersionResponse;
+    type Error = CreateApplicationVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateApplicationVersion");
         params.put("Version", "2010-12-01");
-        CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
+        CreateApplicationVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateApplicationVersionError::from_response(response))
@@ -10193,7 +11551,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplicationVersionDescriptionMessage::default();
+                    result = CreateApplicationVersionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10203,7 +11561,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+                    result = CreateApplicationVersionResponseDeserializer::deserialize(
                         "CreateApplicationVersionResult",
                         &mut stack,
                     )?;
@@ -10215,22 +11573,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
-    fn create_configuration_template(
-        &self,
-        input: CreateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for CreateConfigurationTemplateRequest {
+    type Output = CreateConfigurationTemplateResponse;
+    type Error = CreateConfigurationTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateConfigurationTemplate");
         params.put("Version", "2010-12-01");
-        CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
+        CreateConfigurationTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateConfigurationTemplateError::from_response(response))
@@ -10241,7 +11604,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ConfigurationSettingsDescription::default();
+                    result = CreateConfigurationTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10251,7 +11614,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+                    result = CreateConfigurationTemplateResponseDeserializer::deserialize(
                         "CreateConfigurationTemplateResult",
                         &mut stack,
                     )?;
@@ -10263,22 +11626,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Launches an environment for the specified application using the specified configuration.</p>
-    fn create_environment(
-        &self,
-        input: CreateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for CreateEnvironmentRequest {
+    type Output = CreateEnvironmentResponse;
+    type Error = CreateEnvironmentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateEnvironment");
         params.put("Version", "2010-12-01");
-        CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
+        CreateEnvironmentRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10292,7 +11660,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnvironmentDescription::default();
+                    result = CreateEnvironmentResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10302,7 +11670,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionDeserializer::deserialize(
+                    result = CreateEnvironmentResponseDeserializer::deserialize(
                         "CreateEnvironmentResult",
                         &mut stack,
                     )?;
@@ -10314,22 +11682,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Create a new version of your custom platform.</p>
-    fn create_platform_version(
-        &self,
-        input: CreatePlatformVersionRequest,
-    ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for CreatePlatformVersionRequest {
+    type Output = CreatePlatformVersionResponse;
+    type Error = CreatePlatformVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreatePlatformVersion");
         params.put("Version", "2010-12-01");
-        CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
+        CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreatePlatformVersionError::from_response(response))
@@ -10340,7 +11713,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreatePlatformVersionResult::default();
+                    result = CreatePlatformVersionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10350,7 +11723,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreatePlatformVersionResultDeserializer::deserialize(
+                    result = CreatePlatformVersionResponseDeserializer::deserialize(
                         "CreatePlatformVersionResult",
                         &mut stack,
                     )?;
@@ -10362,21 +11735,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
-    fn create_storage_location(
-        &self,
-    ) -> RusotoFuture<CreateStorageLocationResultMessage, CreateStorageLocationError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for CreateStorageLocationRequest {
+    type Output = CreateStorageLocationResponse;
+    type Error = CreateStorageLocationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "CreateStorageLocation");
         params.put("Version", "2010-12-01");
-
+        CreateStorageLocationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateStorageLocationError::from_response(response))
@@ -10387,7 +11766,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = CreateStorageLocationResultMessage::default();
+                    result = CreateStorageLocationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10397,7 +11776,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateStorageLocationResultMessageDeserializer::deserialize(
+                    result = CreateStorageLocationResponseDeserializer::deserialize(
                         "CreateStorageLocationResult",
                         &mut stack,
                     )?;
@@ -10409,22 +11788,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
-    fn delete_application(
-        &self,
-        input: DeleteApplicationMessage,
-    ) -> RusotoFuture<(), DeleteApplicationError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DeleteApplicationRequest {
+    type Output = DeleteApplicationResponse;
+    type Error = DeleteApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteApplication");
         params.put("Version", "2010-12-01");
-        DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
+        DeleteApplicationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -10434,100 +11818,200 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteApplicationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteApplicationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
-    fn delete_application_version(
-        &self,
-        input: DeleteApplicationVersionMessage,
-    ) -> RusotoFuture<(), DeleteApplicationVersionError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DeleteApplicationVersionRequest {
+    type Output = DeleteApplicationVersionResponse;
+    type Error = DeleteApplicationVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteApplicationVersion");
         params.put("Version", "2010-12-01");
-        DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
+        DeleteApplicationVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteApplicationVersionError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteApplicationVersionResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteApplicationVersionResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
-    fn delete_configuration_template(
-        &self,
-        input: DeleteConfigurationTemplateMessage,
-    ) -> RusotoFuture<(), DeleteConfigurationTemplateError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DeleteConfigurationTemplateRequest {
+    type Output = DeleteConfigurationTemplateResponse;
+    type Error = DeleteConfigurationTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteConfigurationTemplate");
         params.put("Version", "2010-12-01");
-        DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
+        DeleteConfigurationTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteConfigurationTemplateError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteConfigurationTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteConfigurationTemplateResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
-    fn delete_environment_configuration(
-        &self,
-        input: DeleteEnvironmentConfigurationMessage,
-    ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DeleteEnvironmentConfigurationRequest {
+    type Output = DeleteEnvironmentConfigurationResponse;
+    type Error = DeleteEnvironmentConfigurationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeleteEnvironmentConfiguration");
         params.put("Version", "2010-12-01");
-        DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
+        DeleteEnvironmentConfigurationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteEnvironmentConfigurationError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DeleteEnvironmentConfigurationResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DeleteEnvironmentConfigurationResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Deletes the specified version of a custom platform.</p>
-    fn delete_platform_version(
-        &self,
-        input: DeletePlatformVersionRequest,
-    ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DeletePlatformVersionRequest {
+    type Output = DeletePlatformVersionResponse;
+    type Error = DeletePlatformVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DeletePlatformVersion");
         params.put("Version", "2010-12-01");
-        DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
+        DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeletePlatformVersionError::from_response(response))
@@ -10538,7 +12022,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DeletePlatformVersionResult::default();
+                    result = DeletePlatformVersionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10548,7 +12032,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DeletePlatformVersionResultDeserializer::deserialize(
+                    result = DeletePlatformVersionResponseDeserializer::deserialize(
                         "DeletePlatformVersionResult",
                         &mut stack,
                     )?;
@@ -10560,21 +12044,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Returns attributes related to AWS Elastic Beanstalk that are associated with the calling AWS account.</p> <p>The result currently has one set of attributes—resource quotas.</p>
-    fn describe_account_attributes(
-        &self,
-    ) -> RusotoFuture<DescribeAccountAttributesResult, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeAccountAttributesRequest {
+    type Output = DescribeAccountAttributesResponse;
+    type Error = DescribeAccountAttributesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeAccountAttributes");
         params.put("Version", "2010-12-01");
-
+        DescribeAccountAttributesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeAccountAttributesError::from_response(response))
@@ -10585,7 +12075,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeAccountAttributesResult::default();
+                    result = DescribeAccountAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10595,7 +12085,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccountAttributesResultDeserializer::deserialize(
+                    result = DescribeAccountAttributesResponseDeserializer::deserialize(
                         "DescribeAccountAttributesResult",
                         &mut stack,
                     )?;
@@ -10607,22 +12097,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieve a list of application versions.</p>
-    fn describe_application_versions(
-        &self,
-        input: DescribeApplicationVersionsMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeApplicationVersionsRequest {
+    type Output = DescribeApplicationVersionsResponse;
+    type Error = DescribeApplicationVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeApplicationVersions");
         params.put("Version", "2010-12-01");
-        DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeApplicationVersionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeApplicationVersionsError::from_response(response))
@@ -10633,7 +12128,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplicationVersionDescriptionsMessage::default();
+                    result = DescribeApplicationVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10643,7 +12138,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
+                    result = DescribeApplicationVersionsResponseDeserializer::deserialize(
                         "DescribeApplicationVersionsResult",
                         &mut stack,
                     )?;
@@ -10655,22 +12150,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the descriptions of existing applications.</p>
-    fn describe_applications(
-        &self,
-        input: DescribeApplicationsMessage,
-    ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeApplicationsRequest {
+    type Output = DescribeApplicationsResponse;
+    type Error = DescribeApplicationsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeApplications");
         params.put("Version", "2010-12-01");
-        DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeApplicationsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -10683,7 +12183,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplicationDescriptionsMessage::default();
+                    result = DescribeApplicationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10693,7 +12193,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationDescriptionsMessageDeserializer::deserialize(
+                    result = DescribeApplicationsResponseDeserializer::deserialize(
                         "DescribeApplicationsResult",
                         &mut stack,
                     )?;
@@ -10705,22 +12205,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
-    fn describe_configuration_options(
-        &self,
-        input: DescribeConfigurationOptionsMessage,
-    ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeConfigurationOptionsRequest {
+    type Output = DescribeConfigurationOptionsResponse;
+    type Error = DescribeConfigurationOptionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeConfigurationOptions");
         params.put("Version", "2010-12-01");
-        DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeConfigurationOptionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeConfigurationOptionsError::from_response(response))
@@ -10731,7 +12236,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ConfigurationOptionsDescription::default();
+                    result = DescribeConfigurationOptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10741,7 +12246,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationOptionsDescriptionDeserializer::deserialize(
+                    result = DescribeConfigurationOptionsResponseDeserializer::deserialize(
                         "DescribeConfigurationOptionsResult",
                         &mut stack,
                     )?;
@@ -10753,22 +12258,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
-    fn describe_configuration_settings(
-        &self,
-        input: DescribeConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeConfigurationSettingsRequest {
+    type Output = DescribeConfigurationSettingsResponse;
+    type Error = DescribeConfigurationSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeConfigurationSettings");
         params.put("Version", "2010-12-01");
-        DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeConfigurationSettingsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeConfigurationSettingsError::from_response(response))
@@ -10779,7 +12289,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ConfigurationSettingsDescriptions::default();
+                    result = DescribeConfigurationSettingsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10789,7 +12299,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
+                    result = DescribeConfigurationSettingsResponseDeserializer::deserialize(
                         "DescribeConfigurationSettingsResult",
                         &mut stack,
                     )?;
@@ -10801,22 +12311,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
-    fn describe_environment_health(
-        &self,
-        input: DescribeEnvironmentHealthRequest,
-    ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentHealthRequest {
+    type Output = DescribeEnvironmentHealthResponse;
+    type Error = DescribeEnvironmentHealthError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEnvironmentHealth");
         params.put("Version", "2010-12-01");
-        DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
+        DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentHealthError::from_response(response))
@@ -10827,7 +12342,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEnvironmentHealthResult::default();
+                    result = DescribeEnvironmentHealthResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10837,7 +12352,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEnvironmentHealthResultDeserializer::deserialize(
+                    result = DescribeEnvironmentHealthResponseDeserializer::deserialize(
                         "DescribeEnvironmentHealthResult",
                         &mut stack,
                     )?;
@@ -10849,29 +12364,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Lists an environment's completed and failed managed actions.</p>
-    fn describe_environment_managed_action_history(
-        &self,
-        input: DescribeEnvironmentManagedActionHistoryRequest,
-    ) -> RusotoFuture<
-        DescribeEnvironmentManagedActionHistoryResult,
-        DescribeEnvironmentManagedActionHistoryError,
-    > {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentManagedActionHistoryRequest {
+    type Output = DescribeEnvironmentManagedActionHistoryResponse;
+    type Error = DescribeEnvironmentManagedActionHistoryError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEnvironmentManagedActionHistory");
         params.put("Version", "2010-12-01");
-        DescribeEnvironmentManagedActionHistoryRequestSerializer::serialize(
-            &mut params,
-            "",
-            &input,
-        );
+        DescribeEnvironmentManagedActionHistoryRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentManagedActionHistoryError::from_response(
@@ -10884,7 +12397,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEnvironmentManagedActionHistoryResult::default();
+                    result = DescribeEnvironmentManagedActionHistoryResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10895,7 +12408,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
                     result =
-                        DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
+                        DescribeEnvironmentManagedActionHistoryResponseDeserializer::deserialize(
                             "DescribeEnvironmentManagedActionHistoryResult",
                             &mut stack,
                         )?;
@@ -10907,23 +12420,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
-    fn describe_environment_managed_actions(
-        &self,
-        input: DescribeEnvironmentManagedActionsRequest,
-    ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentManagedActionsRequest {
+    type Output = DescribeEnvironmentManagedActionsResponse;
+    type Error = DescribeEnvironmentManagedActionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEnvironmentManagedActions");
         params.put("Version", "2010-12-01");
-        DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
+        DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentManagedActionsError::from_response(
@@ -10936,7 +12453,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeEnvironmentManagedActionsResult::default();
+                    result = DescribeEnvironmentManagedActionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10946,7 +12463,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
+                    result = DescribeEnvironmentManagedActionsResponseDeserializer::deserialize(
                         "DescribeEnvironmentManagedActionsResult",
                         &mut stack,
                     )?;
@@ -10958,23 +12475,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Returns AWS resources for this environment.</p>
-    fn describe_environment_resources(
-        &self,
-        input: DescribeEnvironmentResourcesMessage,
-    ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentResourcesRequest {
+    type Output = DescribeEnvironmentResourcesResponse;
+    type Error = DescribeEnvironmentResourcesError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEnvironmentResources");
         params.put("Version", "2010-12-01");
-        DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEnvironmentResourcesRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEnvironmentResourcesError::from_response(response))
@@ -10985,7 +12506,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnvironmentResourceDescriptionsMessage::default();
+                    result = DescribeEnvironmentResourcesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -10995,7 +12516,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
+                    result = DescribeEnvironmentResourcesResponseDeserializer::deserialize(
                         "DescribeEnvironmentResourcesResult",
                         &mut stack,
                     )?;
@@ -11007,22 +12528,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Returns descriptions for existing environments.</p>
-    fn describe_environments(
-        &self,
-        input: DescribeEnvironmentsMessage,
-    ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeEnvironmentsRequest {
+    type Output = DescribeEnvironmentsResponse;
+    type Error = DescribeEnvironmentsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEnvironments");
         params.put("Version", "2010-12-01");
-        DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEnvironmentsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11035,7 +12561,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnvironmentDescriptionsMessage::default();
+                    result = DescribeEnvironmentsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11045,7 +12571,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+                    result = DescribeEnvironmentsResponseDeserializer::deserialize(
                         "DescribeEnvironmentsResult",
                         &mut stack,
                     )?;
@@ -11057,22 +12583,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
-    fn describe_events(
-        &self,
-        input: DescribeEventsMessage,
-    ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeEventsRequest {
+    type Output = DescribeEventsResponse;
+    type Error = DescribeEventsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeEvents");
         params.put("Version", "2010-12-01");
-        DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
+        DescribeEventsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11086,7 +12617,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EventDescriptionsMessage::default();
+                    result = DescribeEventsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11096,7 +12627,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EventDescriptionsMessageDeserializer::deserialize(
+                    result = DescribeEventsResponseDeserializer::deserialize(
                         "DescribeEventsResult",
                         &mut stack,
                     )?;
@@ -11108,22 +12639,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Retrieves detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
-    fn describe_instances_health(
-        &self,
-        input: DescribeInstancesHealthRequest,
-    ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribeInstancesHealthRequest {
+    type Output = DescribeInstancesHealthResponse;
+    type Error = DescribeInstancesHealthError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribeInstancesHealth");
         params.put("Version", "2010-12-01");
-        DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
+        DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeInstancesHealthError::from_response(response))
@@ -11134,7 +12670,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribeInstancesHealthResult::default();
+                    result = DescribeInstancesHealthResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11144,7 +12680,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeInstancesHealthResultDeserializer::deserialize(
+                    result = DescribeInstancesHealthResponseDeserializer::deserialize(
                         "DescribeInstancesHealthResult",
                         &mut stack,
                     )?;
@@ -11156,22 +12692,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Describes the version of the platform.</p>
-    fn describe_platform_version(
-        &self,
-        input: DescribePlatformVersionRequest,
-    ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for DescribePlatformVersionRequest {
+    type Output = DescribePlatformVersionResponse;
+    type Error = DescribePlatformVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "DescribePlatformVersion");
         params.put("Version", "2010-12-01");
-        DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
+        DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribePlatformVersionError::from_response(response))
@@ -11182,7 +12723,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = DescribePlatformVersionResult::default();
+                    result = DescribePlatformVersionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11192,7 +12733,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribePlatformVersionResultDeserializer::deserialize(
+                    result = DescribePlatformVersionResponseDeserializer::deserialize(
                         "DescribePlatformVersionResult",
                         &mut stack,
                     )?;
@@ -11204,22 +12745,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
-    fn list_available_solution_stacks(
-        &self,
-    ) -> RusotoFuture<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for ListAvailableSolutionStacksRequest {
+    type Output = ListAvailableSolutionStacksResponse;
+    type Error = ListAvailableSolutionStacksError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListAvailableSolutionStacks");
         params.put("Version", "2010-12-01");
-
+        ListAvailableSolutionStacksRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAvailableSolutionStacksError::from_response(response))
@@ -11230,7 +12776,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ListAvailableSolutionStacksResultMessage::default();
+                    result = ListAvailableSolutionStacksResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11240,7 +12786,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
+                    result = ListAvailableSolutionStacksResponseDeserializer::deserialize(
                         "ListAvailableSolutionStacksResult",
                         &mut stack,
                     )?;
@@ -11252,22 +12798,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Lists the available platforms.</p>
-    fn list_platform_versions(
-        &self,
-        input: ListPlatformVersionsRequest,
-    ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for ListPlatformVersionsRequest {
+    type Output = ListPlatformVersionsResponse;
+    type Error = ListPlatformVersionsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListPlatformVersions");
         params.put("Version", "2010-12-01");
-        ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &input);
+        ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11280,7 +12831,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ListPlatformVersionsResult::default();
+                    result = ListPlatformVersionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11290,7 +12841,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ListPlatformVersionsResultDeserializer::deserialize(
+                    result = ListPlatformVersionsResponseDeserializer::deserialize(
                         "ListPlatformVersionsResult",
                         &mut stack,
                     )?;
@@ -11302,22 +12853,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
-    fn list_tags_for_resource(
-        &self,
-        input: ListTagsForResourceMessage,
-    ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for ListTagsForResourceRequest {
+    type Output = ListTagsForResourceResponse;
+    type Error = ListTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ListTagsForResource");
         params.put("Version", "2010-12-01");
-        ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
+        ListTagsForResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11330,7 +12886,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ResourceTagsDescriptionMessage::default();
+                    result = ListTagsForResourceResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11340,7 +12896,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ResourceTagsDescriptionMessageDeserializer::deserialize(
+                    result = ListTagsForResourceResponseDeserializer::deserialize(
                         "ListTagsForResourceResult",
                         &mut stack,
                     )?;
@@ -11352,22 +12908,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
-    fn rebuild_environment(
-        &self,
-        input: RebuildEnvironmentMessage,
-    ) -> RusotoFuture<(), RebuildEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for RebuildEnvironmentRequest {
+    type Output = RebuildEnvironmentResponse;
+    type Error = RebuildEnvironmentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RebuildEnvironment");
         params.put("Version", "2010-12-01");
-        RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
+        RebuildEnvironmentRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11377,50 +12938,100 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RebuildEnvironmentResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RebuildEnvironmentResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
-    fn request_environment_info(
-        &self,
-        input: RequestEnvironmentInfoMessage,
-    ) -> RusotoFuture<(), RequestEnvironmentInfoError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for RequestEnvironmentInfoRequest {
+    type Output = RequestEnvironmentInfoResponse;
+    type Error = RequestEnvironmentInfoError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RequestEnvironmentInfo");
         params.put("Version", "2010-12-01");
-        RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
+        RequestEnvironmentInfoRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RequestEnvironmentInfoError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RequestEnvironmentInfoResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RequestEnvironmentInfoResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
-    fn restart_app_server(
-        &self,
-        input: RestartAppServerMessage,
-    ) -> RusotoFuture<(), RestartAppServerError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for RestartAppServerRequest {
+    type Output = RestartAppServerResponse;
+    type Error = RestartAppServerError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RestartAppServer");
         params.put("Version", "2010-12-01");
-        RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
+        RestartAppServerRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11430,25 +13041,50 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 );
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = RestartAppServerResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = RestartAppServerResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
-    fn retrieve_environment_info(
-        &self,
-        input: RetrieveEnvironmentInfoMessage,
-    ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for RetrieveEnvironmentInfoRequest {
+    type Output = RetrieveEnvironmentInfoResponse;
+    type Error = RetrieveEnvironmentInfoError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "RetrieveEnvironmentInfo");
         params.put("Version", "2010-12-01");
-        RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
+        RetrieveEnvironmentInfoRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RetrieveEnvironmentInfoError::from_response(response))
@@ -11459,7 +13095,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = RetrieveEnvironmentInfoResultMessage::default();
+                    result = RetrieveEnvironmentInfoResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11469,7 +13105,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
+                    result = RetrieveEnvironmentInfoResponseDeserializer::deserialize(
                         "RetrieveEnvironmentInfoResult",
                         &mut stack,
                     )?;
@@ -11481,47 +13117,77 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Swaps the CNAMEs of two environments.</p>
-    fn swap_environment_cnam_es(
-        &self,
-        input: SwapEnvironmentCNAMEsMessage,
-    ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for SwapEnvironmentCNAMEsRequest {
+    type Output = SwapEnvironmentCNAMEsResponse;
+    type Error = SwapEnvironmentCNAMEsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "SwapEnvironmentCNAMEs");
         params.put("Version", "2010-12-01");
-        SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
+        SwapEnvironmentCNAMEsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(SwapEnvironmentCNAMEsError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SwapEnvironmentCNAMEsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = SwapEnvironmentCNAMEsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Terminates the specified environment.</p>
-    fn terminate_environment(
-        &self,
-        input: TerminateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for TerminateEnvironmentRequest {
+    type Output = TerminateEnvironmentResponse;
+    type Error = TerminateEnvironmentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "TerminateEnvironment");
         params.put("Version", "2010-12-01");
-        TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
+        TerminateEnvironmentRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response.buffer().from_err().and_then(|response| {
@@ -11534,7 +13200,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnvironmentDescription::default();
+                    result = TerminateEnvironmentResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11544,7 +13210,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionDeserializer::deserialize(
+                    result = TerminateEnvironmentResponseDeserializer::deserialize(
                         "TerminateEnvironmentResult",
                         &mut stack,
                     )?;
@@ -11556,22 +13222,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
-    fn update_application(
-        &self,
-        input: UpdateApplicationMessage,
-    ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for UpdateApplicationRequest {
+    type Output = UpdateApplicationResponse;
+    type Error = UpdateApplicationError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateApplication");
         params.put("Version", "2010-12-01");
-        UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
+        UpdateApplicationRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11585,7 +13256,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplicationDescriptionMessage::default();
+                    result = UpdateApplicationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11595,7 +13266,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationDescriptionMessageDeserializer::deserialize(
+                    result = UpdateApplicationResponseDeserializer::deserialize(
                         "UpdateApplicationResult",
                         &mut stack,
                     )?;
@@ -11607,25 +13278,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Modifies lifecycle settings for an application.</p>
-    fn update_application_resource_lifecycle(
-        &self,
-        input: UpdateApplicationResourceLifecycleMessage,
-    ) -> RusotoFuture<
-        ApplicationResourceLifecycleDescriptionMessage,
-        UpdateApplicationResourceLifecycleError,
-    > {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for UpdateApplicationResourceLifecycleRequest {
+    type Output = UpdateApplicationResourceLifecycleResponse;
+    type Error = UpdateApplicationResourceLifecycleError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateApplicationResourceLifecycle");
         params.put("Version", "2010-12-01");
-        UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
+        UpdateApplicationResourceLifecycleRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateApplicationResourceLifecycleError::from_response(
@@ -11638,7 +13311,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplicationResourceLifecycleDescriptionMessage::default();
+                    result = UpdateApplicationResourceLifecycleResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11648,11 +13321,10 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
-                            "UpdateApplicationResourceLifecycleResult",
-                            &mut stack,
-                        )?;
+                    result = UpdateApplicationResourceLifecycleResponseDeserializer::deserialize(
+                        "UpdateApplicationResourceLifecycleResult",
+                        &mut stack,
+                    )?;
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
@@ -11661,22 +13333,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
-    fn update_application_version(
-        &self,
-        input: UpdateApplicationVersionMessage,
-    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for UpdateApplicationVersionRequest {
+    type Output = UpdateApplicationVersionResponse;
+    type Error = UpdateApplicationVersionError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateApplicationVersion");
         params.put("Version", "2010-12-01");
-        UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
+        UpdateApplicationVersionRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateApplicationVersionError::from_response(response))
@@ -11687,7 +13364,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ApplicationVersionDescriptionMessage::default();
+                    result = UpdateApplicationVersionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11697,7 +13374,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+                    result = UpdateApplicationVersionResponseDeserializer::deserialize(
                         "UpdateApplicationVersionResult",
                         &mut stack,
                     )?;
@@ -11709,22 +13386,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
-    fn update_configuration_template(
-        &self,
-        input: UpdateConfigurationTemplateMessage,
-    ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for UpdateConfigurationTemplateRequest {
+    type Output = UpdateConfigurationTemplateResponse;
+    type Error = UpdateConfigurationTemplateError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateConfigurationTemplate");
         params.put("Version", "2010-12-01");
-        UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
+        UpdateConfigurationTemplateRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateConfigurationTemplateError::from_response(response))
@@ -11735,7 +13417,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ConfigurationSettingsDescription::default();
+                    result = UpdateConfigurationTemplateResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11745,7 +13427,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+                    result = UpdateConfigurationTemplateResponseDeserializer::deserialize(
                         "UpdateConfigurationTemplateResult",
                         &mut stack,
                     )?;
@@ -11757,22 +13439,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
-    fn update_environment(
-        &self,
-        input: UpdateEnvironmentMessage,
-    ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for UpdateEnvironmentRequest {
+    type Output = UpdateEnvironmentResponse;
+    type Error = UpdateEnvironmentError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateEnvironment");
         params.put("Version", "2010-12-01");
-        UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
+        UpdateEnvironmentRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(
                     response
@@ -11786,7 +13473,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = EnvironmentDescription::default();
+                    result = UpdateEnvironmentResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11796,7 +13483,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionDeserializer::deserialize(
+                    result = UpdateEnvironmentResponseDeserializer::deserialize(
                         "UpdateEnvironmentResult",
                         &mut stack,
                     )?;
@@ -11808,48 +13495,77 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             }))
         })
     }
+}
 
-    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
-    fn update_tags_for_resource(
-        &self,
-        input: UpdateTagsForResourceMessage,
-    ) -> RusotoFuture<(), UpdateTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for UpdateTagsForResourceRequest {
+    type Output = UpdateTagsForResourceResponse;
+    type Error = UpdateTagsForResourceError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "UpdateTagsForResource");
         params.put("Version", "2010-12-01");
-        UpdateTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
+        UpdateTagsForResourceRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateTagsForResourceError::from_response(response))
                 }));
             }
 
-            Box::new(future::ok(::std::mem::drop(response)))
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = UpdateTagsForResourceResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = UpdateTagsForResourceResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
+}
 
-    /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
-    fn validate_configuration_settings(
-        &self,
-        input: ValidateConfigurationSettingsMessage,
-    ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>
-    {
-        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+impl ServiceRequest for ValidateConfigurationSettingsRequest {
+    type Output = ValidateConfigurationSettingsResponse;
+    type Error = ValidateConfigurationSettingsError;
+
+    fn dispatch(
+        self,
+        region: &region::Region,
+        dispatcher: &impl Dispatcher,
+    ) -> RusotoFuture<Self::Output, Self::Error> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", region, "/");
         let mut params = Params::new();
 
         params.put("Action", "ValidateConfigurationSettings");
         params.put("Version", "2010-12-01");
-        ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
+        ValidateConfigurationSettingsRequestSerializer::serialize(&mut params, "", &self);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        self.client.sign_and_dispatch(request, |response| {
+        dispatcher.dispatch(request, |response| {
             if !response.status.is_success() {
                 return Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ValidateConfigurationSettingsError::from_response(response))
@@ -11860,7 +13576,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                 let result;
 
                 if response.body.is_empty() {
-                    result = ConfigurationSettingsValidationMessages::default();
+                    result = ValidateConfigurationSettingsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
@@ -11870,7 +13586,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
+                    result = ValidateConfigurationSettingsResponseDeserializer::deserialize(
                         "ValidateConfigurationSettingsResult",
                         &mut stack,
                     )?;
@@ -11902,7 +13618,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CheckDNSAvailabilityMessage::default();
+        let request = CheckDNSAvailabilityRequest::default();
         let result = client.check_dns_availability(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -11916,7 +13632,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateApplicationVersionMessage::default();
+        let request = CreateApplicationVersionRequest::default();
         let result = client.create_application_version(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -11930,7 +13646,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateApplicationMessage::default();
+        let request = CreateApplicationRequest::default();
         let result = client.create_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -11944,7 +13660,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateConfigurationTemplateMessage::default();
+        let request = CreateConfigurationTemplateRequest::default();
         let result = client.create_configuration_template(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -11958,7 +13674,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateEnvironmentMessage::default();
+        let request = CreateEnvironmentRequest::default();
         let result = client.create_environment(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -11972,8 +13688,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.create_storage_location().sync();
+        let request = CreateStorageLocationRequest::default();
+        let result = client.create_storage_location(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -11986,7 +13702,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DeleteApplicationMessage::default();
+        let request = DeleteApplicationRequest::default();
         let result = client.delete_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12000,7 +13716,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeApplicationVersionsMessage::default();
+        let request = DescribeApplicationVersionsRequest::default();
         let result = client.describe_application_versions(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12014,7 +13730,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeApplicationsMessage::default();
+        let request = DescribeApplicationsRequest::default();
         let result = client.describe_applications(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12028,7 +13744,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeConfigurationOptionsMessage::default();
+        let request = DescribeConfigurationOptionsRequest::default();
         let result = client.describe_configuration_options(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12042,7 +13758,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeEnvironmentsMessage::default();
+        let request = DescribeEnvironmentsRequest::default();
         let result = client.describe_environments(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12056,7 +13772,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeEventsMessage::default();
+        let request = DescribeEventsRequest::default();
         let result = client.describe_events(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12070,8 +13786,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-
-        let result = client.list_available_solution_stacks().sync();
+        let request = ListAvailableSolutionStacksRequest::default();
+        let result = client.list_available_solution_stacks(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -12084,7 +13800,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = RetrieveEnvironmentInfoMessage::default();
+        let request = RetrieveEnvironmentInfoRequest::default();
         let result = client.retrieve_environment_info(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12098,7 +13814,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = TerminateEnvironmentMessage::default();
+        let request = TerminateEnvironmentRequest::default();
         let result = client.terminate_environment(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12112,7 +13828,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = UpdateApplicationVersionMessage::default();
+        let request = UpdateApplicationVersionRequest::default();
         let result = client.update_application_version(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
@@ -12126,7 +13842,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = UpdateApplicationMessage::default();
+        let request = UpdateApplicationRequest::default();
         let result = client.update_application(request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
