@@ -2,7 +2,7 @@ extern crate rusoto_mock;
 
 use bytes::Bytes;
 
-use crate::generated::{GetPolicyRequest, GetPolicyResponse, Lambda, LambdaClient, InvocationRequest};
+use crate::generated::{GetPolicyRequest, GetPolicyResponse, Lambda, LambdaClient, InvokeRequest};
 
 use rusoto_core::Region;
 use rusoto_core::signature::{SignedRequest,SignedRequestPayload};
@@ -43,7 +43,7 @@ fn should_parse_invocation_response() {
 
         });
 
-    let request = InvocationRequest {
+    let request = InvokeRequest {
         function_name: "foo".to_owned(),
         client_context: Some("context".to_owned()),
         payload: Some("raw payload".to_owned().into()),
