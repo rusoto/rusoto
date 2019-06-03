@@ -64,7 +64,7 @@ pub trait Dispatcher {
     fn dispatch<T, E>(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
+        response_handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
     ) -> RusotoFuture<T, E>;
 }
 
@@ -72,7 +72,7 @@ impl Dispatcher for Client {
     fn dispatch<T, E>(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
+        response_handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
     ) -> RusotoFuture<T, E> {
         self.sign_and_dispatch(request, response_handler)
     }
