@@ -17,7 +17,7 @@ lazy_static! {
 /// Re-usable logic for all clients.
 #[derive(Clone)]
 pub struct Client {
-    inner: Arc<SignAndDispatch + Send + Sync>,
+    inner: Arc<dyn SignAndDispatch + Send + Sync>,
 }
 
 impl Client {
@@ -59,7 +59,7 @@ impl Client {
     pub fn sign_and_dispatch<T, E>(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
+        response_handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
     ) -> RusotoFuture<T, E> {
         future::new(self.inner.sign_and_dispatch(request), response_handler)
     }
@@ -74,7 +74,7 @@ trait SignAndDispatch {
     fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>;
+    ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>;
 }
 
 pub trait TimeoutFuture: Future {
@@ -106,7 +106,7 @@ where
     fn sign_and_dispatch(
         &self,
         request: SignedRequest,
-    ) -> Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send> {
+    ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send> {
         Box::new(SignAndDispatchFuture {
             inner: self.clone(),
             state: Some(SignAndDispatchState::Lazy { request }),

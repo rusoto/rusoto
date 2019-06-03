@@ -444,7 +444,7 @@ impl ChainProvider {
 
 /// Future returned from `ChainProvider`.
 pub struct ChainProviderFuture {
-    inner: Box<Future<Item = AwsCredentials, Error = CredentialsError> + Send>,
+    inner: Box<dyn Future<Item = AwsCredentials, Error = CredentialsError> + Send>,
 }
 
 impl Future for ChainProviderFuture {

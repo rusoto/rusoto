@@ -158,7 +158,7 @@ impl ProvideAwsCredentials for EnvironmentProvider {
 
 /// Grabs the Credentials from the environment.
 fn credentials_from_environment(
-    provider: &EnvironmentVariableProvider,
+    provider: &dyn EnvironmentVariableProvider,
 ) -> Result<AwsCredentials, CredentialsError> {
     let env_key = get_critical_variable(provider.access_key_id_var())?;
     let env_secret = get_critical_variable(provider.secret_access_key_var())?;

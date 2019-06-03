@@ -146,8 +146,8 @@ pub struct RusotoFuture<T, E> {
 }
 
 pub fn new<T, E>(
-    future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-    handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
+    future: Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
+    handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
 ) -> RusotoFuture<T, E> {
     RusotoFuture {
         state: Some(RusotoFutureState::SignAndDispatch { future, handler }),
@@ -266,10 +266,10 @@ impl<T, E> Future for RusotoFuture<T, E> {
 
 enum RusotoFutureState<T, E> {
     SignAndDispatch {
-        future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-        handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
+        future: Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
+        handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
     },
-    RunningResponseHandler(Box<Future<Item = T, Error = RusotoError<E>> + Send>),
+    RunningResponseHandler(Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>),
 }
 
 impl<T: Send + 'static, E: Send + 'static> From<RusotoResult<T, E>> for RusotoFuture<T, E> {
@@ -288,14 +288,14 @@ fn rusoto_future_is_send() {
 #[test]
 fn rusoto_future_from_ok() {
     use std::error::Error;
-    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> = RusotoFuture::from(Ok(42));
+    let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from(Ok(42));
     assert_eq!(fut.sync().unwrap(), 42);
 }
 
 #[test]
 fn rusoto_future_from_err() {
     use std::error::Error;
-    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> = RusotoFuture::from(
+    let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from(
         "ab".parse::<i32>()
             .map_err(|e| RusotoError::Service(e.into())),
     );
@@ -309,7 +309,7 @@ fn rusoto_future_from_delay() {
     use tokio_timer::Delay;
     let deadline = Instant::now() + Duration::from_millis(500);
     let delay = Delay::new(deadline);
-    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> = RusotoFuture::from_future(
+    let fut: RusotoFuture<i32, Box<dyn Error + Send + Sync>> = RusotoFuture::from_future(
         delay
             .map_err(|e| RusotoError::Service(e.into()))
             .map(|_| 42),

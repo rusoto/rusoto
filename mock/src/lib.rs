@@ -75,7 +75,7 @@ pub struct MockRequestDispatcher {
     outcome: RequestOutcome,
     body: Vec<u8>,
     headers: HeaderMap<String>,
-    request_checker: Option<Box<Fn(&SignedRequest) + Send + Sync>>,
+    request_checker: Option<Box<dyn Fn(&SignedRequest) + Send + Sync>>,
 }
 
 enum RequestOutcome {
