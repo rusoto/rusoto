@@ -31,6 +31,7 @@ pub struct Metadata {
     pub version: String,
     pub homepage: Option<String>,
     pub edition: String,
+    pub exclude: Option<Vec<String>>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
