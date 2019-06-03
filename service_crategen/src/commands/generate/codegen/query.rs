@@ -179,12 +179,12 @@ fn generate_serializer_body(service: &Service<'_>, shape: &Shape) -> String {
 fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
     if shape.shape_type == ShapeType::Structure && !shape.is_non_empty() {
         format!(
-            "fn serialize(_params: &mut Params, name: &str, _obj: &{})",
+            "fn serialize(_params: &mut impl ServiceParams, name: &str, _obj: &{})",
             name
         )
     } else {
         format!(
-            "fn serialize(params: &mut Params, name: &str, obj: &{})",
+            "fn serialize(params: &mut impl ServiceParams, name: &str, obj: &{})",
             name
         )
     }

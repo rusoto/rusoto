@@ -46,7 +46,7 @@ pub struct AddRoleToDBClusterRequest {
 /// Serialize `AddRoleToDBClusterRequest` contents to a `SignedRequest`.
 struct AddRoleToDBClusterRequestSerializer;
 impl AddRoleToDBClusterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddRoleToDBClusterRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddRoleToDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -84,7 +84,11 @@ pub struct AddSourceIdentifierToSubscriptionRequest {
 /// Serialize `AddSourceIdentifierToSubscriptionRequest` contents to a `SignedRequest`.
 struct AddSourceIdentifierToSubscriptionRequestSerializer;
 impl AddSourceIdentifierToSubscriptionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddSourceIdentifierToSubscriptionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AddSourceIdentifierToSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -142,7 +146,7 @@ pub struct AddTagsToResourceRequest {
 /// Serialize `AddTagsToResourceRequest` contents to a `SignedRequest`.
 struct AddTagsToResourceRequestSerializer;
 impl AddTagsToResourceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AddTagsToResourceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AddTagsToResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -190,7 +194,11 @@ pub struct ApplyPendingMaintenanceActionRequest {
 /// Serialize `ApplyPendingMaintenanceActionRequest` contents to a `SignedRequest`.
 struct ApplyPendingMaintenanceActionRequestSerializer;
 impl ApplyPendingMaintenanceActionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ApplyPendingMaintenanceActionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ApplyPendingMaintenanceActionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -257,7 +265,7 @@ impl AttributeValueListDeserializer {
 /// Serialize `AttributeValueList` contents to a `SignedRequest`.
 struct AttributeValueListSerializer;
 impl AttributeValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -331,7 +339,7 @@ impl AvailabilityZonesDeserializer {
 /// Serialize `AvailabilityZones` contents to a `SignedRequest`.
 struct AvailabilityZonesSerializer;
 impl AvailabilityZonesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -407,7 +415,11 @@ pub struct CloudwatchLogsExportConfiguration {
 /// Serialize `CloudwatchLogsExportConfiguration` contents to a `SignedRequest`.
 struct CloudwatchLogsExportConfigurationSerializer;
 impl CloudwatchLogsExportConfigurationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CloudwatchLogsExportConfiguration) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CloudwatchLogsExportConfiguration,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -445,7 +457,11 @@ pub struct CopyDBClusterParameterGroupRequest {
 /// Serialize `CopyDBClusterParameterGroupRequest` contents to a `SignedRequest`.
 struct CopyDBClusterParameterGroupRequestSerializer;
 impl CopyDBClusterParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterParameterGroupRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CopyDBClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -519,7 +535,7 @@ pub struct CopyDBClusterSnapshotRequest {
 /// Serialize `CopyDBClusterSnapshotRequest` contents to a `SignedRequest`.
 struct CopyDBClusterSnapshotRequestSerializer;
 impl CopyDBClusterSnapshotRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBClusterSnapshotRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CopyDBClusterSnapshotRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -593,7 +609,7 @@ pub struct CopyDBParameterGroupRequest {
 /// Serialize `CopyDBParameterGroupRequest` contents to a `SignedRequest`.
 struct CopyDBParameterGroupRequestSerializer;
 impl CopyDBParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CopyDBParameterGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CopyDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -662,7 +678,11 @@ pub struct CreateDBClusterParameterGroupRequest {
 /// Serialize `CreateDBClusterParameterGroupRequest` contents to a `SignedRequest`.
 struct CreateDBClusterParameterGroupRequestSerializer;
 impl CreateDBClusterParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterParameterGroupRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateDBClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -765,7 +785,7 @@ pub struct CreateDBClusterRequest {
 /// Serialize `CreateDBClusterRequest` contents to a `SignedRequest`.
 struct CreateDBClusterRequestSerializer;
 impl CreateDBClusterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -906,7 +926,11 @@ pub struct CreateDBClusterSnapshotRequest {
 /// Serialize `CreateDBClusterSnapshotRequest` contents to a `SignedRequest`.
 struct CreateDBClusterSnapshotRequestSerializer;
 impl CreateDBClusterSnapshotRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterSnapshotRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateDBClusterSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1045,7 +1069,7 @@ pub struct CreateDBInstanceRequest {
 /// Serialize `CreateDBInstanceRequest` contents to a `SignedRequest`.
 struct CreateDBInstanceRequestSerializer;
 impl CreateDBInstanceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBInstanceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1263,7 +1287,7 @@ pub struct CreateDBParameterGroupRequest {
 /// Serialize `CreateDBParameterGroupRequest` contents to a `SignedRequest`.
 struct CreateDBParameterGroupRequestSerializer;
 impl CreateDBParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBParameterGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1329,7 +1353,7 @@ pub struct CreateDBSubnetGroupRequest {
 /// Serialize `CreateDBSubnetGroupRequest` contents to a `SignedRequest`.
 struct CreateDBSubnetGroupRequestSerializer;
 impl CreateDBSubnetGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateDBSubnetGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1405,7 +1429,11 @@ pub struct CreateEventSubscriptionRequest {
 /// Serialize `CreateEventSubscriptionRequest` contents to a `SignedRequest`.
 struct CreateEventSubscriptionRequestSerializer;
 impl CreateEventSubscriptionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateEventSubscriptionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3063,7 +3091,7 @@ impl DBSecurityGroupMembershipListDeserializer {
 /// Serialize `DBSecurityGroupNameList` contents to a `SignedRequest`.
 struct DBSecurityGroupNameListSerializer;
 impl DBSecurityGroupNameListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3158,7 +3186,11 @@ pub struct DeleteDBClusterParameterGroupRequest {
 /// Serialize `DeleteDBClusterParameterGroupRequest` contents to a `SignedRequest`.
 struct DeleteDBClusterParameterGroupRequestSerializer;
 impl DeleteDBClusterParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterParameterGroupRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteDBClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3197,7 +3229,7 @@ pub struct DeleteDBClusterRequest {
 /// Serialize `DeleteDBClusterRequest` contents to a `SignedRequest`.
 struct DeleteDBClusterRequestSerializer;
 impl DeleteDBClusterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3256,7 +3288,11 @@ pub struct DeleteDBClusterSnapshotRequest {
 /// Serialize `DeleteDBClusterSnapshotRequest` contents to a `SignedRequest`.
 struct DeleteDBClusterSnapshotRequestSerializer;
 impl DeleteDBClusterSnapshotRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterSnapshotRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteDBClusterSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3312,7 +3348,7 @@ pub struct DeleteDBInstanceRequest {
 /// Serialize `DeleteDBInstanceRequest` contents to a `SignedRequest`.
 struct DeleteDBInstanceRequestSerializer;
 impl DeleteDBInstanceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBInstanceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3371,7 +3407,7 @@ pub struct DeleteDBParameterGroupRequest {
 /// Serialize `DeleteDBParameterGroupRequest` contents to a `SignedRequest`.
 struct DeleteDBParameterGroupRequestSerializer;
 impl DeleteDBParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBParameterGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3406,7 +3442,7 @@ pub struct DeleteDBSubnetGroupRequest {
 /// Serialize `DeleteDBSubnetGroupRequest` contents to a `SignedRequest`.
 struct DeleteDBSubnetGroupRequestSerializer;
 impl DeleteDBSubnetGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBSubnetGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3441,7 +3477,11 @@ pub struct DeleteEventSubscriptionRequest {
 /// Serialize `DeleteEventSubscriptionRequest` contents to a `SignedRequest`.
 struct DeleteEventSubscriptionRequestSerializer;
 impl DeleteEventSubscriptionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteEventSubscriptionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3499,7 +3539,11 @@ pub struct DescribeDBClusterParameterGroupsRequest {
 /// Serialize `DescribeDBClusterParameterGroupsRequest` contents to a `SignedRequest`.
 struct DescribeDBClusterParameterGroupsRequestSerializer;
 impl DescribeDBClusterParameterGroupsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParameterGroupsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterParameterGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3582,7 +3626,11 @@ pub struct DescribeDBClusterParametersRequest {
 /// Serialize `DescribeDBClusterParametersRequest` contents to a `SignedRequest`.
 struct DescribeDBClusterParametersRequestSerializer;
 impl DescribeDBClusterParametersRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterParametersRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterParametersRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3656,7 +3704,7 @@ pub struct DescribeDBClusterSnapshotAttributesRequest {
 struct DescribeDBClusterSnapshotAttributesRequestSerializer;
 impl DescribeDBClusterSnapshotAttributesRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &DescribeDBClusterSnapshotAttributesRequest,
     ) {
@@ -3726,7 +3774,11 @@ pub struct DescribeDBClusterSnapshotsRequest {
 /// Serialize `DescribeDBClusterSnapshotsRequest` contents to a `SignedRequest`.
 struct DescribeDBClusterSnapshotsRequestSerializer;
 impl DescribeDBClusterSnapshotsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterSnapshotsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBClusterSnapshotsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3822,7 +3874,7 @@ pub struct DescribeDBClustersRequest {
 /// Serialize `DescribeDBClustersRequest` contents to a `SignedRequest`.
 struct DescribeDBClustersRequestSerializer;
 impl DescribeDBClustersRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClustersRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBClustersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3910,7 +3962,11 @@ pub struct DescribeDBEngineVersionsRequest {
 /// Serialize `DescribeDBEngineVersionsRequest` contents to a `SignedRequest`.
 struct DescribeDBEngineVersionsRequestSerializer;
 impl DescribeDBEngineVersionsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBEngineVersionsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBEngineVersionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4012,7 +4068,7 @@ pub struct DescribeDBInstancesRequest {
 /// Serialize `DescribeDBInstancesRequest` contents to a `SignedRequest`.
 struct DescribeDBInstancesRequestSerializer;
 impl DescribeDBInstancesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBInstancesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4090,7 +4146,11 @@ pub struct DescribeDBParameterGroupsRequest {
 /// Serialize `DescribeDBParameterGroupsRequest` contents to a `SignedRequest`.
 struct DescribeDBParameterGroupsRequestSerializer;
 impl DescribeDBParameterGroupsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParameterGroupsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeDBParameterGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4173,7 +4233,7 @@ pub struct DescribeDBParametersRequest {
 /// Serialize `DescribeDBParametersRequest` contents to a `SignedRequest`.
 struct DescribeDBParametersRequestSerializer;
 impl DescribeDBParametersRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBParametersRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBParametersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4252,7 +4312,7 @@ pub struct DescribeDBSubnetGroupsRequest {
 /// Serialize `DescribeDBSubnetGroupsRequest` contents to a `SignedRequest`.
 struct DescribeDBSubnetGroupsRequestSerializer;
 impl DescribeDBSubnetGroupsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBSubnetGroupsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeDBSubnetGroupsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4328,7 +4388,7 @@ pub struct DescribeEngineDefaultClusterParametersRequest {
 struct DescribeEngineDefaultClusterParametersRequestSerializer;
 impl DescribeEngineDefaultClusterParametersRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &DescribeEngineDefaultClusterParametersRequest,
     ) {
@@ -4402,7 +4462,11 @@ pub struct DescribeEngineDefaultParametersRequest {
 /// Serialize `DescribeEngineDefaultParametersRequest` contents to a `SignedRequest`.
 struct DescribeEngineDefaultParametersRequestSerializer;
 impl DescribeEngineDefaultParametersRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEngineDefaultParametersRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEngineDefaultParametersRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4469,7 +4533,11 @@ pub struct DescribeEventCategoriesRequest {
 /// Serialize `DescribeEventCategoriesRequest` contents to a `SignedRequest`.
 struct DescribeEventCategoriesRequestSerializer;
 impl DescribeEventCategoriesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventCategoriesRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEventCategoriesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4536,7 +4604,11 @@ pub struct DescribeEventSubscriptionsRequest {
 /// Serialize `DescribeEventSubscriptionsRequest` contents to a `SignedRequest`.
 struct DescribeEventSubscriptionsRequestSerializer;
 impl DescribeEventSubscriptionsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventSubscriptionsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeEventSubscriptionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4624,7 +4696,7 @@ pub struct DescribeEventsRequest {
 /// Serialize `DescribeEventsRequest` contents to a `SignedRequest`.
 struct DescribeEventsRequestSerializer;
 impl DescribeEventsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeEventsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4722,7 +4794,11 @@ pub struct DescribeOrderableDBInstanceOptionsRequest {
 /// Serialize `DescribeOrderableDBInstanceOptionsRequest` contents to a `SignedRequest`.
 struct DescribeOrderableDBInstanceOptionsRequestSerializer;
 impl DescribeOrderableDBInstanceOptionsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeOrderableDBInstanceOptionsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeOrderableDBInstanceOptionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4810,7 +4886,11 @@ pub struct DescribePendingMaintenanceActionsRequest {
 /// Serialize `DescribePendingMaintenanceActionsRequest` contents to a `SignedRequest`.
 struct DescribePendingMaintenanceActionsRequestSerializer;
 impl DescribePendingMaintenanceActionsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribePendingMaintenanceActionsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribePendingMaintenanceActionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4883,7 +4963,7 @@ pub struct DescribeValidDBInstanceModificationsRequest {
 struct DescribeValidDBInstanceModificationsRequestSerializer;
 impl DescribeValidDBInstanceModificationsRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &DescribeValidDBInstanceModificationsRequest,
     ) {
@@ -5209,7 +5289,7 @@ impl EventCategoriesListDeserializer {
 /// Serialize `EventCategoriesList` contents to a `SignedRequest`.
 struct EventCategoriesListSerializer;
 impl EventCategoriesListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5402,7 +5482,7 @@ pub struct FailoverDBClusterRequest {
 /// Serialize `FailoverDBClusterRequest` contents to a `SignedRequest`.
 struct FailoverDBClusterRequestSerializer;
 impl FailoverDBClusterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &FailoverDBClusterRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &FailoverDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5463,7 +5543,7 @@ pub struct Filter {
 /// Serialize `Filter` contents to a `SignedRequest`.
 struct FilterSerializer;
 impl FilterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Filter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5481,7 +5561,7 @@ impl FilterSerializer {
 /// Serialize `FilterList` contents to a `SignedRequest`.
 struct FilterListSerializer;
 impl FilterListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             FilterSerializer::serialize(params, &key, obj);
@@ -5492,7 +5572,7 @@ impl FilterListSerializer {
 /// Serialize `FilterValueList` contents to a `SignedRequest`.
 struct FilterValueListSerializer;
 impl FilterValueListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5526,7 +5606,7 @@ impl IntegerOptionalDeserializer {
 /// Serialize `KeyList` contents to a `SignedRequest`.
 struct KeyListSerializer;
 impl KeyListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5545,7 +5625,7 @@ pub struct ListTagsForResourceRequest {
 /// Serialize `ListTagsForResourceRequest` contents to a `SignedRequest`.
 struct ListTagsForResourceRequestSerializer;
 impl ListTagsForResourceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListTagsForResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5613,7 +5693,7 @@ impl LogTypeListDeserializer {
 /// Serialize `LogTypeList` contents to a `SignedRequest`.
 struct LogTypeListSerializer;
 impl LogTypeListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5632,7 +5712,11 @@ pub struct ModifyDBClusterParameterGroupRequest {
 /// Serialize `ModifyDBClusterParameterGroupRequest` contents to a `SignedRequest`.
 struct ModifyDBClusterParameterGroupRequestSerializer;
 impl ModifyDBClusterParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterParameterGroupRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyDBClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5713,7 +5797,7 @@ pub struct ModifyDBClusterRequest {
 /// Serialize `ModifyDBClusterRequest` contents to a `SignedRequest`.
 struct ModifyDBClusterRequestSerializer;
 impl ModifyDBClusterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBClusterRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5827,7 +5911,11 @@ pub struct ModifyDBClusterSnapshotAttributeRequest {
 /// Serialize `ModifyDBClusterSnapshotAttributeRequest` contents to a `SignedRequest`.
 struct ModifyDBClusterSnapshotAttributeRequestSerializer;
 impl ModifyDBClusterSnapshotAttributeRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterSnapshotAttributeRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyDBClusterSnapshotAttributeRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5966,7 +6054,7 @@ pub struct ModifyDBInstanceRequest {
 /// Serialize `ModifyDBInstanceRequest` contents to a `SignedRequest`.
 struct ModifyDBInstanceRequestSerializer;
 impl ModifyDBInstanceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBInstanceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6169,7 +6257,7 @@ pub struct ModifyDBParameterGroupRequest {
 /// Serialize `ModifyDBParameterGroupRequest` contents to a `SignedRequest`.
 struct ModifyDBParameterGroupRequestSerializer;
 impl ModifyDBParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBParameterGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6231,7 +6319,7 @@ pub struct ModifyDBSubnetGroupRequest {
 /// Serialize `ModifyDBSubnetGroupRequest` contents to a `SignedRequest`.
 struct ModifyDBSubnetGroupRequestSerializer;
 impl ModifyDBSubnetGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBSubnetGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ModifyDBSubnetGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6302,7 +6390,11 @@ pub struct ModifyEventSubscriptionRequest {
 /// Serialize `ModifyEventSubscriptionRequest` contents to a `SignedRequest`.
 struct ModifyEventSubscriptionRequestSerializer;
 impl ModifyEventSubscriptionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ModifyEventSubscriptionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ModifyEventSubscriptionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6685,7 +6777,7 @@ impl ParameterDeserializer {
 /// Serialize `Parameter` contents to a `SignedRequest`.
 struct ParameterSerializer;
 impl ParameterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Parameter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Parameter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6748,7 +6840,7 @@ impl ParametersListDeserializer {
 /// Serialize `ParametersList` contents to a `SignedRequest`.
 struct ParametersListSerializer;
 impl ParametersListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Parameter>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Parameter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ParameterSerializer::serialize(params, &key, obj);
@@ -7018,7 +7110,11 @@ pub struct PromoteReadReplicaDBClusterRequest {
 /// Serialize `PromoteReadReplicaDBClusterRequest` contents to a `SignedRequest`.
 struct PromoteReadReplicaDBClusterRequestSerializer;
 impl PromoteReadReplicaDBClusterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PromoteReadReplicaDBClusterRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &PromoteReadReplicaDBClusterRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7179,7 +7275,7 @@ pub struct RebootDBInstanceRequest {
 /// Serialize `RebootDBInstanceRequest` contents to a `SignedRequest`.
 struct RebootDBInstanceRequestSerializer;
 impl RebootDBInstanceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RebootDBInstanceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RebootDBInstanceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7234,7 +7330,11 @@ pub struct RemoveRoleFromDBClusterRequest {
 /// Serialize `RemoveRoleFromDBClusterRequest` contents to a `SignedRequest`.
 struct RemoveRoleFromDBClusterRequestSerializer;
 impl RemoveRoleFromDBClusterRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveRoleFromDBClusterRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RemoveRoleFromDBClusterRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7273,7 +7373,7 @@ pub struct RemoveSourceIdentifierFromSubscriptionRequest {
 struct RemoveSourceIdentifierFromSubscriptionRequestSerializer;
 impl RemoveSourceIdentifierFromSubscriptionRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &RemoveSourceIdentifierFromSubscriptionRequest,
     ) {
@@ -7334,7 +7434,7 @@ pub struct RemoveTagsFromResourceRequest {
 /// Serialize `RemoveTagsFromResourceRequest` contents to a `SignedRequest`.
 struct RemoveTagsFromResourceRequestSerializer;
 impl RemoveTagsFromResourceRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RemoveTagsFromResourceRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &RemoveTagsFromResourceRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7371,7 +7471,11 @@ pub struct ResetDBClusterParameterGroupRequest {
 /// Serialize `ResetDBClusterParameterGroupRequest` contents to a `SignedRequest`.
 struct ResetDBClusterParameterGroupRequestSerializer;
 impl ResetDBClusterParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResetDBClusterParameterGroupRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ResetDBClusterParameterGroupRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7437,7 +7541,7 @@ pub struct ResetDBParameterGroupRequest {
 /// Serialize `ResetDBParameterGroupRequest` contents to a `SignedRequest`.
 struct ResetDBParameterGroupRequestSerializer;
 impl ResetDBParameterGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResetDBParameterGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ResetDBParameterGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7568,7 +7672,11 @@ pub struct RestoreDBClusterFromSnapshotRequest {
 /// Serialize `RestoreDBClusterFromSnapshotRequest` contents to a `SignedRequest`.
 struct RestoreDBClusterFromSnapshotRequestSerializer;
 impl RestoreDBClusterFromSnapshotRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterFromSnapshotRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreDBClusterFromSnapshotRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7694,7 +7802,11 @@ pub struct RestoreDBClusterToPointInTimeRequest {
 /// Serialize `RestoreDBClusterToPointInTimeRequest` contents to a `SignedRequest`.
 struct RestoreDBClusterToPointInTimeRequestSerializer;
 impl RestoreDBClusterToPointInTimeRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RestoreDBClusterToPointInTimeRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RestoreDBClusterToPointInTimeRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7806,7 +7918,7 @@ impl SourceIdsListDeserializer {
 /// Serialize `SourceIdsList` contents to a `SignedRequest`.
 struct SourceIdsListSerializer;
 impl SourceIdsListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7877,7 +7989,7 @@ impl SubnetDeserializer {
 /// Serialize `SubnetIdentifierList` contents to a `SignedRequest`.
 struct SubnetIdentifierListSerializer;
 impl SubnetIdentifierListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7981,7 +8093,7 @@ impl TagDeserializer {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tag) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -8017,7 +8129,7 @@ impl TagListDeserializer {
 /// Serialize `TagList` contents to a `SignedRequest`.
 struct TagListSerializer;
 impl TagListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -8222,7 +8334,7 @@ impl ValidUpgradeTargetListDeserializer {
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);

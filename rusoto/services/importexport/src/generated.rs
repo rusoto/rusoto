@@ -91,7 +91,7 @@ pub struct CancelJobRequest {
 /// Serialize `CancelJobRequest` contents to a `SignedRequest`.
 struct CancelJobRequestSerializer;
 impl CancelJobRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CancelJobRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CancelJobRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -152,7 +152,7 @@ pub struct CreateJobRequest {
 /// Serialize `CreateJobRequest` contents to a `SignedRequest`.
 struct CreateJobRequestSerializer;
 impl CreateJobRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateJobRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateJobRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -297,7 +297,7 @@ pub struct GetShippingLabelRequest {
 /// Serialize `GetShippingLabelRequest` contents to a `SignedRequest`.
 struct GetShippingLabelRequestSerializer;
 impl GetShippingLabelRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetShippingLabelRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetShippingLabelRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -385,7 +385,7 @@ pub struct GetStatusRequest {
 /// Serialize `GetStatusRequest` contents to a `SignedRequest`.
 struct GetStatusRequestSerializer;
 impl GetStatusRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &GetStatusRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &GetStatusRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -583,7 +583,7 @@ impl JobIdDeserializer {
 /// Serialize `JobIdList` contents to a `SignedRequest`.
 struct JobIdListSerializer;
 impl JobIdListSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -630,7 +630,7 @@ pub struct ListJobsRequest {
 /// Serialize `ListJobsRequest` contents to a `SignedRequest`.
 struct ListJobsRequestSerializer;
 impl ListJobsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ListJobsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ListJobsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -813,7 +813,7 @@ pub struct UpdateJobRequest {
 /// Serialize `UpdateJobRequest` contents to a `SignedRequest`.
 struct UpdateJobRequestSerializer;
 impl UpdateJobRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateJobRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &UpdateJobRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");

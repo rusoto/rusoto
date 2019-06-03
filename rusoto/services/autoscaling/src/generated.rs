@@ -132,7 +132,7 @@ impl ActivityDeserializer {
 /// Serialize `ActivityIds` contents to a `SignedRequest`.
 struct ActivityIdsSerializer;
 impl ActivityIdsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -265,7 +265,7 @@ pub struct AttachInstancesRequest {
 /// Serialize `AttachInstancesRequest` contents to a `SignedRequest`.
 struct AttachInstancesRequestSerializer;
 impl AttachInstancesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttachInstancesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AttachInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -309,7 +309,11 @@ pub struct AttachLoadBalancerTargetGroupsRequest {
 /// Serialize `AttachLoadBalancerTargetGroupsRequest` contents to a `SignedRequest`.
 struct AttachLoadBalancerTargetGroupsRequestSerializer;
 impl AttachLoadBalancerTargetGroupsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancerTargetGroupsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &AttachLoadBalancerTargetGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -357,7 +361,7 @@ pub struct AttachLoadBalancersRequest {
 /// Serialize `AttachLoadBalancersRequest` contents to a `SignedRequest`.
 struct AttachLoadBalancersRequestSerializer;
 impl AttachLoadBalancersRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &AttachLoadBalancersRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &AttachLoadBalancersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -638,7 +642,7 @@ impl AutoScalingGroupMinSizeDeserializer {
 /// Serialize `AutoScalingGroupNames` contents to a `SignedRequest`.
 struct AutoScalingGroupNamesSerializer;
 impl AutoScalingGroupNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -787,7 +791,7 @@ impl AutoScalingNotificationTypesDeserializer {
 /// Serialize `AutoScalingNotificationTypes` contents to a `SignedRequest`.
 struct AutoScalingNotificationTypesSerializer;
 impl AutoScalingNotificationTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -818,7 +822,7 @@ impl AvailabilityZonesDeserializer {
 /// Serialize `AvailabilityZones` contents to a `SignedRequest`.
 struct AvailabilityZonesSerializer;
 impl AvailabilityZonesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -837,7 +841,11 @@ pub struct BatchDeleteScheduledActionRequest {
 /// Serialize `BatchDeleteScheduledActionRequest` contents to a `SignedRequest`.
 struct BatchDeleteScheduledActionRequestSerializer;
 impl BatchDeleteScheduledActionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteScheduledActionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &BatchDeleteScheduledActionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -899,7 +907,11 @@ pub struct BatchPutScheduledUpdateGroupActionRequest {
 /// Serialize `BatchPutScheduledUpdateGroupActionRequest` contents to a `SignedRequest`.
 struct BatchPutScheduledUpdateGroupActionRequestSerializer;
 impl BatchPutScheduledUpdateGroupActionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BatchPutScheduledUpdateGroupActionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &BatchPutScheduledUpdateGroupActionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1055,7 +1067,7 @@ impl BlockDeviceMappingDeserializer {
 /// Serialize `BlockDeviceMapping` contents to a `SignedRequest`.
 struct BlockDeviceMappingSerializer;
 impl BlockDeviceMappingSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &BlockDeviceMapping) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &BlockDeviceMapping) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1097,7 +1109,7 @@ impl BlockDeviceMappingsDeserializer {
 /// Serialize `BlockDeviceMappings` contents to a `SignedRequest`.
 struct BlockDeviceMappingsSerializer;
 impl BlockDeviceMappingsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<BlockDeviceMapping>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<BlockDeviceMapping>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             BlockDeviceMappingSerializer::serialize(params, &key, obj);
@@ -1128,7 +1140,7 @@ impl ClassicLinkVPCSecurityGroupsDeserializer {
 /// Serialize `ClassicLinkVPCSecurityGroups` contents to a `SignedRequest`.
 struct ClassicLinkVPCSecurityGroupsSerializer;
 impl ClassicLinkVPCSecurityGroupsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -1153,7 +1165,11 @@ pub struct CompleteLifecycleActionRequest {
 /// Serialize `CompleteLifecycleActionRequest` contents to a `SignedRequest`.
 struct CompleteLifecycleActionRequestSerializer;
 impl CompleteLifecycleActionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CompleteLifecycleActionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CompleteLifecycleActionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1262,7 +1278,7 @@ pub struct CreateAutoScalingGroupRequest {
 /// Serialize `CreateAutoScalingGroupRequest` contents to a `SignedRequest`.
 struct CreateAutoScalingGroupRequestSerializer;
 impl CreateAutoScalingGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateAutoScalingGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateAutoScalingGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1427,7 +1443,11 @@ pub struct CreateLaunchConfigurationRequest {
 /// Serialize `CreateLaunchConfigurationRequest` contents to a `SignedRequest`.
 struct CreateLaunchConfigurationRequestSerializer;
 impl CreateLaunchConfigurationRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateLaunchConfigurationRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &CreateLaunchConfigurationRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1532,7 +1552,7 @@ pub struct CreateOrUpdateTagsRequest {
 /// Serialize `CreateOrUpdateTagsRequest` contents to a `SignedRequest`.
 struct CreateOrUpdateTagsRequestSerializer;
 impl CreateOrUpdateTagsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CreateOrUpdateTagsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CreateOrUpdateTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1612,7 +1632,7 @@ impl CustomizedMetricSpecificationDeserializer {
 /// Serialize `CustomizedMetricSpecification` contents to a `SignedRequest`.
 struct CustomizedMetricSpecificationSerializer;
 impl CustomizedMetricSpecificationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &CustomizedMetricSpecification) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &CustomizedMetricSpecification) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1645,7 +1665,7 @@ pub struct DeleteAutoScalingGroupRequest {
 /// Serialize `DeleteAutoScalingGroupRequest` contents to a `SignedRequest`.
 struct DeleteAutoScalingGroupRequestSerializer;
 impl DeleteAutoScalingGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteAutoScalingGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteAutoScalingGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1683,7 +1703,11 @@ pub struct DeleteLaunchConfigurationRequest {
 /// Serialize `DeleteLaunchConfigurationRequest` contents to a `SignedRequest`.
 struct DeleteLaunchConfigurationRequestSerializer;
 impl DeleteLaunchConfigurationRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteLaunchConfigurationRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteLaunchConfigurationRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1720,7 +1744,7 @@ pub struct DeleteLifecycleHookRequest {
 /// Serialize `DeleteLifecycleHookRequest` contents to a `SignedRequest`.
 struct DeleteLifecycleHookRequestSerializer;
 impl DeleteLifecycleHookRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteLifecycleHookRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteLifecycleHookRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1767,7 +1791,11 @@ pub struct DeleteNotificationConfigurationRequest {
 /// Serialize `DeleteNotificationConfigurationRequest` contents to a `SignedRequest`.
 struct DeleteNotificationConfigurationRequestSerializer;
 impl DeleteNotificationConfigurationRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteNotificationConfigurationRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DeleteNotificationConfigurationRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1805,7 +1833,7 @@ pub struct DeletePolicyRequest {
 /// Serialize `DeletePolicyRequest` contents to a `SignedRequest`.
 struct DeletePolicyRequestSerializer;
 impl DeletePolicyRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeletePolicyRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeletePolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1845,7 +1873,7 @@ pub struct DeleteScheduledActionRequest {
 /// Serialize `DeleteScheduledActionRequest` contents to a `SignedRequest`.
 struct DeleteScheduledActionRequestSerializer;
 impl DeleteScheduledActionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteScheduledActionRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteScheduledActionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1884,7 +1912,7 @@ pub struct DeleteTagsRequest {
 /// Serialize `DeleteTagsRequest` contents to a `SignedRequest`.
 struct DeleteTagsRequestSerializer;
 impl DeleteTagsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DeleteTagsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DeleteTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1913,7 +1941,11 @@ pub struct DescribeAccountLimitsRequest {}
 /// Serialize `DescribeAccountLimitsRequest` contents to a `SignedRequest`.
 struct DescribeAccountLimitsRequestSerializer;
 impl DescribeAccountLimitsRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAccountLimitsRequest) {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeAccountLimitsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -1986,7 +2018,11 @@ pub struct DescribeAdjustmentTypesRequest {}
 /// Serialize `DescribeAdjustmentTypesRequest` contents to a `SignedRequest`.
 struct DescribeAdjustmentTypesRequestSerializer;
 impl DescribeAdjustmentTypesRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeAdjustmentTypesRequest) {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeAdjustmentTypesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2037,7 +2073,11 @@ pub struct DescribeAutoScalingGroupsRequest {
 /// Serialize `DescribeAutoScalingGroupsRequest` contents to a `SignedRequest`.
 struct DescribeAutoScalingGroupsRequestSerializer;
 impl DescribeAutoScalingGroupsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAutoScalingGroupsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeAutoScalingGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2110,7 +2150,11 @@ pub struct DescribeAutoScalingInstancesRequest {
 /// Serialize `DescribeAutoScalingInstancesRequest` contents to a `SignedRequest`.
 struct DescribeAutoScalingInstancesRequestSerializer;
 impl DescribeAutoScalingInstancesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeAutoScalingInstancesRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeAutoScalingInstancesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2178,7 +2222,7 @@ pub struct DescribeAutoScalingNotificationTypesRequest {}
 struct DescribeAutoScalingNotificationTypesRequestSerializer;
 impl DescribeAutoScalingNotificationTypesRequestSerializer {
     fn serialize(
-        _params: &mut Params,
+        _params: &mut impl ServiceParams,
         name: &str,
         _obj: &DescribeAutoScalingNotificationTypesRequest,
     ) {
@@ -2235,7 +2279,11 @@ pub struct DescribeLaunchConfigurationsRequest {
 /// Serialize `DescribeLaunchConfigurationsRequest` contents to a `SignedRequest`.
 struct DescribeLaunchConfigurationsRequestSerializer;
 impl DescribeLaunchConfigurationsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLaunchConfigurationsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeLaunchConfigurationsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2302,7 +2350,11 @@ pub struct DescribeLifecycleHookTypesRequest {}
 /// Serialize `DescribeLifecycleHookTypesRequest` contents to a `SignedRequest`.
 struct DescribeLifecycleHookTypesRequestSerializer;
 impl DescribeLifecycleHookTypesRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeLifecycleHookTypesRequest) {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeLifecycleHookTypesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2354,7 +2406,7 @@ pub struct DescribeLifecycleHooksRequest {
 /// Serialize `DescribeLifecycleHooksRequest` contents to a `SignedRequest`.
 struct DescribeLifecycleHooksRequestSerializer;
 impl DescribeLifecycleHooksRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLifecycleHooksRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeLifecycleHooksRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2417,7 +2469,11 @@ pub struct DescribeLoadBalancerTargetGroupsRequest {
 /// Serialize `DescribeLoadBalancerTargetGroupsRequest` contents to a `SignedRequest`.
 struct DescribeLoadBalancerTargetGroupsRequestSerializer;
 impl DescribeLoadBalancerTargetGroupsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancerTargetGroupsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeLoadBalancerTargetGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2488,7 +2544,7 @@ pub struct DescribeLoadBalancersRequest {
 /// Serialize `DescribeLoadBalancersRequest` contents to a `SignedRequest`.
 struct DescribeLoadBalancersRequestSerializer;
 impl DescribeLoadBalancersRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeLoadBalancersRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeLoadBalancersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2549,7 +2605,11 @@ pub struct DescribeMetricCollectionTypesRequest {}
 /// Serialize `DescribeMetricCollectionTypesRequest` contents to a `SignedRequest`.
 struct DescribeMetricCollectionTypesRequestSerializer;
 impl DescribeMetricCollectionTypesRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeMetricCollectionTypesRequest) {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeMetricCollectionTypesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2610,7 +2670,11 @@ pub struct DescribeNotificationConfigurationsRequest {
 /// Serialize `DescribeNotificationConfigurationsRequest` contents to a `SignedRequest`.
 struct DescribeNotificationConfigurationsRequestSerializer;
 impl DescribeNotificationConfigurationsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeNotificationConfigurationsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeNotificationConfigurationsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2688,7 +2752,7 @@ pub struct DescribePoliciesRequest {
 /// Serialize `DescribePoliciesRequest` contents to a `SignedRequest`.
 struct DescribePoliciesRequestSerializer;
 impl DescribePoliciesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribePoliciesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribePoliciesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2774,7 +2838,11 @@ pub struct DescribeScalingActivitiesRequest {
 /// Serialize `DescribeScalingActivitiesRequest` contents to a `SignedRequest`.
 struct DescribeScalingActivitiesRequestSerializer;
 impl DescribeScalingActivitiesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeScalingActivitiesRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeScalingActivitiesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2843,7 +2911,11 @@ pub struct DescribeScalingProcessTypesRequest {}
 /// Serialize `DescribeScalingProcessTypesRequest` contents to a `SignedRequest`.
 struct DescribeScalingProcessTypesRequestSerializer;
 impl DescribeScalingProcessTypesRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeScalingProcessTypesRequest) {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeScalingProcessTypesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2900,7 +2972,11 @@ pub struct DescribeScheduledActionsRequest {
 /// Serialize `DescribeScheduledActionsRequest` contents to a `SignedRequest`.
 struct DescribeScheduledActionsRequestSerializer;
 impl DescribeScheduledActionsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeScheduledActionsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DescribeScheduledActionsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -2986,7 +3062,7 @@ pub struct DescribeTagsRequest {
 /// Serialize `DescribeTagsRequest` contents to a `SignedRequest`.
 struct DescribeTagsRequestSerializer;
 impl DescribeTagsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeTagsRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DescribeTagsRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3041,7 +3117,11 @@ pub struct DescribeTerminationPolicyTypesRequest {}
 /// Serialize `DescribeTerminationPolicyTypesRequest` contents to a `SignedRequest`.
 struct DescribeTerminationPolicyTypesRequestSerializer;
 impl DescribeTerminationPolicyTypesRequestSerializer {
-    fn serialize(_params: &mut Params, name: &str, _obj: &DescribeTerminationPolicyTypesRequest) {
+    fn serialize(
+        _params: &mut impl ServiceParams,
+        name: &str,
+        _obj: &DescribeTerminationPolicyTypesRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3095,7 +3175,7 @@ pub struct DetachInstancesRequest {
 /// Serialize `DetachInstancesRequest` contents to a `SignedRequest`.
 struct DetachInstancesRequestSerializer;
 impl DetachInstancesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DetachInstancesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DetachInstancesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3160,7 +3240,11 @@ pub struct DetachLoadBalancerTargetGroupsRequest {
 /// Serialize `DetachLoadBalancerTargetGroupsRequest` contents to a `SignedRequest`.
 struct DetachLoadBalancerTargetGroupsRequestSerializer;
 impl DetachLoadBalancerTargetGroupsRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancerTargetGroupsRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DetachLoadBalancerTargetGroupsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3208,7 +3292,7 @@ pub struct DetachLoadBalancersRequest {
 /// Serialize `DetachLoadBalancersRequest` contents to a `SignedRequest`.
 struct DetachLoadBalancersRequestSerializer;
 impl DetachLoadBalancersRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DetachLoadBalancersRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &DetachLoadBalancersRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3256,7 +3340,11 @@ pub struct DisableMetricsCollectionRequest {
 /// Serialize `DisableMetricsCollectionRequest` contents to a `SignedRequest`.
 struct DisableMetricsCollectionRequestSerializer;
 impl DisableMetricsCollectionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DisableMetricsCollectionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &DisableMetricsCollectionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3363,7 +3451,7 @@ impl EbsDeserializer {
 /// Serialize `Ebs` contents to a `SignedRequest`.
 struct EbsSerializer;
 impl EbsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Ebs) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Ebs) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3417,7 +3505,11 @@ pub struct EnableMetricsCollectionRequest {
 /// Serialize `EnableMetricsCollectionRequest` contents to a `SignedRequest`.
 struct EnableMetricsCollectionRequestSerializer;
 impl EnableMetricsCollectionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnableMetricsCollectionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &EnableMetricsCollectionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3512,7 +3604,7 @@ pub struct EnterStandbyRequest {
 /// Serialize `EnterStandbyRequest` contents to a `SignedRequest`.
 struct EnterStandbyRequestSerializer;
 impl EnterStandbyRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &EnterStandbyRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &EnterStandbyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3590,7 +3682,7 @@ pub struct ExecutePolicyRequest {
 /// Serialize `ExecutePolicyRequest` contents to a `SignedRequest`.
 struct ExecutePolicyRequestSerializer;
 impl ExecutePolicyRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExecutePolicyRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ExecutePolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3639,7 +3731,7 @@ pub struct ExitStandbyRequest {
 /// Serialize `ExitStandbyRequest` contents to a `SignedRequest`.
 struct ExitStandbyRequestSerializer;
 impl ExitStandbyRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ExitStandbyRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ExitStandbyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3764,7 +3856,7 @@ pub struct Filter {
 /// Serialize `Filter` contents to a `SignedRequest`.
 struct FilterSerializer;
 impl FilterSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Filter) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Filter) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -3782,7 +3874,7 @@ impl FilterSerializer {
 /// Serialize `Filters` contents to a `SignedRequest`.
 struct FiltersSerializer;
 impl FiltersSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Filter>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Filter>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             FilterSerializer::serialize(params, &key, obj);
@@ -3895,7 +3987,7 @@ impl InstanceDeserializer {
 /// Serialize `InstanceIds` contents to a `SignedRequest`.
 struct InstanceIdsSerializer;
 impl InstanceIdsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -3934,7 +4026,7 @@ impl InstanceMonitoringDeserializer {
 /// Serialize `InstanceMonitoring` contents to a `SignedRequest`.
 struct InstanceMonitoringSerializer;
 impl InstanceMonitoringSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &InstanceMonitoring) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &InstanceMonitoring) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4049,7 +4141,7 @@ impl InstancesDistributionDeserializer {
 /// Serialize `InstancesDistribution` contents to a `SignedRequest`.
 struct InstancesDistributionSerializer;
 impl InstancesDistributionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &InstancesDistribution) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &InstancesDistribution) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4252,7 +4344,7 @@ impl LaunchConfigurationDeserializer {
 /// Serialize `LaunchConfigurationNames` contents to a `SignedRequest`.
 struct LaunchConfigurationNamesSerializer;
 impl LaunchConfigurationNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4319,7 +4411,7 @@ impl LaunchTemplateDeserializer {
 /// Serialize `LaunchTemplate` contents to a `SignedRequest`.
 struct LaunchTemplateSerializer;
 impl LaunchTemplateSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplate) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &LaunchTemplate) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4389,7 +4481,7 @@ impl LaunchTemplateOverridesDeserializer {
 /// Serialize `LaunchTemplateOverrides` contents to a `SignedRequest`.
 struct LaunchTemplateOverridesSerializer;
 impl LaunchTemplateOverridesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateOverrides) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &LaunchTemplateOverrides) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4453,7 +4545,7 @@ impl LaunchTemplateSpecificationDeserializer {
 /// Serialize `LaunchTemplateSpecification` contents to a `SignedRequest`.
 struct LaunchTemplateSpecificationSerializer;
 impl LaunchTemplateSpecificationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateSpecification) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &LaunchTemplateSpecification) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4575,7 +4667,7 @@ impl LifecycleHookDeserializer {
 /// Serialize `LifecycleHookNames` contents to a `SignedRequest`.
 struct LifecycleHookNamesSerializer;
 impl LifecycleHookNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4605,7 +4697,7 @@ pub struct LifecycleHookSpecification {
 /// Serialize `LifecycleHookSpecification` contents to a `SignedRequest`.
 struct LifecycleHookSpecificationSerializer;
 impl LifecycleHookSpecificationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &LifecycleHookSpecification) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &LifecycleHookSpecification) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4646,7 +4738,11 @@ impl LifecycleHookSpecificationSerializer {
 /// Serialize `LifecycleHookSpecifications` contents to a `SignedRequest`.
 struct LifecycleHookSpecificationsSerializer;
 impl LifecycleHookSpecificationsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<LifecycleHookSpecification>) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &Vec<LifecycleHookSpecification>,
+    ) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             LifecycleHookSpecificationSerializer::serialize(params, &key, obj);
@@ -4716,7 +4812,7 @@ impl LoadBalancerNamesDeserializer {
 /// Serialize `LoadBalancerNames` contents to a `SignedRequest`.
 struct LoadBalancerNamesSerializer;
 impl LoadBalancerNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -4934,7 +5030,7 @@ impl MetricDimensionDeserializer {
 /// Serialize `MetricDimension` contents to a `SignedRequest`.
 struct MetricDimensionSerializer;
 impl MetricDimensionSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &MetricDimension) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &MetricDimension) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -4988,7 +5084,7 @@ impl MetricDimensionsDeserializer {
 /// Serialize `MetricDimensions` contents to a `SignedRequest`.
 struct MetricDimensionsSerializer;
 impl MetricDimensionsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<MetricDimension>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<MetricDimension>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             MetricDimensionSerializer::serialize(params, &key, obj);
@@ -5113,7 +5209,7 @@ impl MetricUnitDeserializer {
 /// Serialize `Metrics` contents to a `SignedRequest`.
 struct MetricsSerializer;
 impl MetricsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5195,7 +5291,7 @@ impl MixedInstancesPolicyDeserializer {
 /// Serialize `MixedInstancesPolicy` contents to a `SignedRequest`.
 struct MixedInstancesPolicySerializer;
 impl MixedInstancesPolicySerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &MixedInstancesPolicy) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &MixedInstancesPolicy) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5372,7 +5468,7 @@ impl OverridesDeserializer {
 /// Serialize `Overrides` contents to a `SignedRequest`.
 struct OverridesSerializer;
 impl OverridesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<LaunchTemplateOverrides>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<LaunchTemplateOverrides>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             LaunchTemplateOverridesSerializer::serialize(params, &key, obj);
@@ -5395,7 +5491,7 @@ impl PolicyIncrementDeserializer {
 /// Serialize `PolicyNames` contents to a `SignedRequest`.
 struct PolicyNamesSerializer;
 impl PolicyNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5406,7 +5502,7 @@ impl PolicyNamesSerializer {
 /// Serialize `PolicyTypes` contents to a `SignedRequest`.
 struct PolicyTypesSerializer;
 impl PolicyTypesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5456,7 +5552,7 @@ impl PredefinedMetricSpecificationDeserializer {
 /// Serialize `PredefinedMetricSpecification` contents to a `SignedRequest`.
 struct PredefinedMetricSpecificationSerializer;
 impl PredefinedMetricSpecificationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PredefinedMetricSpecification) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &PredefinedMetricSpecification) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5475,7 +5571,7 @@ impl PredefinedMetricSpecificationSerializer {
 /// Serialize `ProcessNames` contents to a `SignedRequest`.
 struct ProcessNamesSerializer;
 impl ProcessNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -5571,7 +5667,7 @@ pub struct PutLifecycleHookRequest {
 /// Serialize `PutLifecycleHookRequest` contents to a `SignedRequest`.
 struct PutLifecycleHookRequestSerializer;
 impl PutLifecycleHookRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutLifecycleHookRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &PutLifecycleHookRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5647,7 +5743,11 @@ pub struct PutNotificationConfigurationRequest {
 /// Serialize `PutNotificationConfigurationRequest` contents to a `SignedRequest`.
 struct PutNotificationConfigurationRequestSerializer;
 impl PutNotificationConfigurationRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutNotificationConfigurationRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &PutNotificationConfigurationRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5710,7 +5810,7 @@ pub struct PutScalingPolicyRequest {
 /// Serialize `PutScalingPolicyRequest` contents to a `SignedRequest`.
 struct PutScalingPolicyRequestSerializer;
 impl PutScalingPolicyRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutScalingPolicyRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &PutScalingPolicyRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5833,7 +5933,11 @@ pub struct PutScheduledUpdateGroupActionRequest {
 /// Serialize `PutScheduledUpdateGroupActionRequest` contents to a `SignedRequest`.
 struct PutScheduledUpdateGroupActionRequestSerializer;
 impl PutScheduledUpdateGroupActionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &PutScheduledUpdateGroupActionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &PutScheduledUpdateGroupActionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5899,7 +6003,11 @@ pub struct RecordLifecycleActionHeartbeatRequest {
 /// Serialize `RecordLifecycleActionHeartbeatRequest` contents to a `SignedRequest`.
 struct RecordLifecycleActionHeartbeatRequestSerializer;
 impl RecordLifecycleActionHeartbeatRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &RecordLifecycleActionHeartbeatRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &RecordLifecycleActionHeartbeatRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -5966,7 +6074,7 @@ pub struct ResumeProcessesRequest {
 /// Serialize `ResumeProcessesRequest` contents to a `SignedRequest`.
 struct ResumeProcessesRequestSerializer;
 impl ResumeProcessesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ResumeProcessesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &ResumeProcessesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6158,7 +6266,7 @@ impl ScalingPolicyDeserializer {
 /// Serialize `ScheduledActionNames` contents to a `SignedRequest`.
 struct ScheduledActionNamesSerializer;
 impl ScheduledActionNamesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6286,7 +6394,11 @@ pub struct ScheduledUpdateGroupActionRequest {
 /// Serialize `ScheduledUpdateGroupActionRequest` contents to a `SignedRequest`.
 struct ScheduledUpdateGroupActionRequestSerializer;
 impl ScheduledUpdateGroupActionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &ScheduledUpdateGroupActionRequest) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &ScheduledUpdateGroupActionRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6320,7 +6432,11 @@ impl ScheduledUpdateGroupActionRequestSerializer {
 /// Serialize `ScheduledUpdateGroupActionRequests` contents to a `SignedRequest`.
 struct ScheduledUpdateGroupActionRequestsSerializer;
 impl ScheduledUpdateGroupActionRequestsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<ScheduledUpdateGroupActionRequest>) {
+    fn serialize(
+        params: &mut impl ServiceParams,
+        name: &str,
+        obj: &Vec<ScheduledUpdateGroupActionRequest>,
+    ) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             ScheduledUpdateGroupActionRequestSerializer::serialize(params, &key, obj);
@@ -6368,7 +6484,7 @@ impl SecurityGroupsDeserializer {
 /// Serialize `SecurityGroups` contents to a `SignedRequest`.
 struct SecurityGroupsSerializer;
 impl SecurityGroupsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6389,7 +6505,7 @@ pub struct SetDesiredCapacityRequest {
 /// Serialize `SetDesiredCapacityRequest` contents to a `SignedRequest`.
 struct SetDesiredCapacityRequestSerializer;
 impl SetDesiredCapacityRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetDesiredCapacityRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetDesiredCapacityRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6435,7 +6551,7 @@ pub struct SetInstanceHealthRequest {
 /// Serialize `SetInstanceHealthRequest` contents to a `SignedRequest`.
 struct SetInstanceHealthRequestSerializer;
 impl SetInstanceHealthRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetInstanceHealthRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetInstanceHealthRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6478,7 +6594,7 @@ pub struct SetInstanceProtectionRequest {
 /// Serialize `SetInstanceProtectionRequest` contents to a `SignedRequest`.
 struct SetInstanceProtectionRequestSerializer;
 impl SetInstanceProtectionRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SetInstanceProtectionRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SetInstanceProtectionRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6587,7 +6703,7 @@ impl StepAdjustmentDeserializer {
 /// Serialize `StepAdjustment` contents to a `SignedRequest`.
 struct StepAdjustmentSerializer;
 impl StepAdjustmentSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &StepAdjustment) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &StepAdjustment) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6633,7 +6749,7 @@ impl StepAdjustmentsDeserializer {
 /// Serialize `StepAdjustments` contents to a `SignedRequest`.
 struct StepAdjustmentsSerializer;
 impl StepAdjustmentsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<StepAdjustment>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<StepAdjustment>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             StepAdjustmentSerializer::serialize(params, &key, obj);
@@ -6652,7 +6768,7 @@ pub struct SuspendProcessesRequest {
 /// Serialize `SuspendProcessesRequest` contents to a `SignedRequest`.
 struct SuspendProcessesRequestSerializer;
 impl SuspendProcessesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &SuspendProcessesRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &SuspendProcessesRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6756,7 +6872,7 @@ pub struct Tag {
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Tag) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Tag) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -6871,7 +6987,7 @@ impl TagValueDeserializer {
 /// Serialize `Tags` contents to a `SignedRequest`.
 struct TagsSerializer;
 impl TagsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<Tag>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             TagSerializer::serialize(params, &key, obj);
@@ -6902,7 +7018,7 @@ impl TargetGroupARNsDeserializer {
 /// Serialize `TargetGroupARNs` contents to a `SignedRequest`.
 struct TargetGroupARNsSerializer;
 impl TargetGroupARNsSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -6970,7 +7086,7 @@ impl TargetTrackingConfigurationDeserializer {
 /// Serialize `TargetTrackingConfiguration` contents to a `SignedRequest`.
 struct TargetTrackingConfigurationSerializer;
 impl TargetTrackingConfigurationSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &TargetTrackingConfiguration) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &TargetTrackingConfiguration) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7009,7 +7125,7 @@ pub struct TerminateInstanceInAutoScalingGroupRequest {
 struct TerminateInstanceInAutoScalingGroupRequestSerializer;
 impl TerminateInstanceInAutoScalingGroupRequestSerializer {
     fn serialize(
-        params: &mut Params,
+        params: &mut impl ServiceParams,
         name: &str,
         obj: &TerminateInstanceInAutoScalingGroupRequest,
     ) {
@@ -7077,7 +7193,7 @@ impl TerminationPoliciesDeserializer {
 /// Serialize `TerminationPolicies` contents to a `SignedRequest`.
 struct TerminationPoliciesSerializer;
 impl TerminationPoliciesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
@@ -7135,7 +7251,7 @@ pub struct UpdateAutoScalingGroupRequest {
 /// Serialize `UpdateAutoScalingGroupRequest` contents to a `SignedRequest`.
 struct UpdateAutoScalingGroupRequestSerializer;
 impl UpdateAutoScalingGroupRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &UpdateAutoScalingGroupRequest) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &UpdateAutoScalingGroupRequest) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
@@ -7238,7 +7354,7 @@ impl UpdateAutoScalingGroupResponseDeserializer {
 /// Serialize `Values` contents to a `SignedRequest`.
 struct ValuesSerializer;
 impl ValuesSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+    fn serialize(params: &mut impl ServiceParams, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.member.{}", name, index + 1);
             params.put(&key, &obj);
