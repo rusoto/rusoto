@@ -206,7 +206,7 @@ fn xml_body_parser(
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) -> String {
     match (service.endpoint_prefix(), name) {
-        ("s3", "GetBucketLocationOutput") => {
+        ("s3", "GetBucketLocationResponse") => {
             // override custom deserializer
             let struct_field_deserializers = shape
                 .members

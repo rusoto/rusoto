@@ -4650,23 +4650,12 @@ impl GetBucketLocationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetBucketLocationResponse, XmlParseError> {
-        deserialize_elements::<_, GetBucketLocationResponse, _>(
-            tag_name,
+        let mut obj = GetBucketLocationResponse::default();
+        obj.location_constraint = Some(BucketLocationConstraintDeserializer::deserialize(
+            "LocationConstraint",
             stack,
-            |name, stack, obj| {
-                match name {
-                    "LocationConstraint" => {
-                        obj.location_constraint =
-                            Some(BucketLocationConstraintDeserializer::deserialize(
-                                "LocationConstraint",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+        )?);
+        Ok(obj)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
