@@ -8,7 +8,7 @@ use tokio::io::AsyncRead;
 /// Stream of bytes.
 pub struct ByteStream {
     size_hint: Option<usize>,
-    inner: Box<Stream<Item = Bytes, Error = io::Error> + Send>,
+    inner: Box<dyn Stream<Item = Bytes, Error = io::Error> + Send>,
 }
 
 impl ByteStream {
@@ -64,11 +64,11 @@ impl Stream for ByteStream {
 
 struct ImplAsyncRead {
     buffer: io::Cursor<Bytes>,
-    stream: stream::Fuse<Box<Stream<Item = Bytes, Error = io::Error> + Send>>,
+    stream: stream::Fuse<Box<dyn Stream<Item = Bytes, Error = io::Error> + Send>>,
 }
 
 impl ImplAsyncRead {
-    fn new(stream: Box<Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
+    fn new(stream: Box<dyn Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
         ImplAsyncRead {
             buffer: io::Cursor::new(Bytes::new()),
             stream: stream.fuse(),
@@ -109,7 +109,7 @@ struct ImplBlockingRead {
 }
 
 impl ImplBlockingRead {
-    fn new(stream: Box<Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
+    fn new(stream: Box<dyn Stream<Item = Bytes, Error = io::Error> + Send>) -> Self {
         ImplBlockingRead {
             inner: ImplAsyncRead::new(stream),
         }

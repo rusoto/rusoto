@@ -146,8 +146,8 @@ pub struct RusotoFuture<T, E> {
 }
 
 pub fn new<T, E>(
-    future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-    handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
+    future: Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
+    handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
 ) -> RusotoFuture<T, E> {
     RusotoFuture {
         state: Some(RusotoFutureState::SignAndDispatch { future, handler }),
@@ -266,10 +266,10 @@ impl<T, E> Future for RusotoFuture<T, E> {
 
 enum RusotoFutureState<T, E> {
     SignAndDispatch {
-        future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-        handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
+        future: Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
+        handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
     },
-    RunningResponseHandler(Box<Future<Item = T, Error = RusotoError<E>> + Send>),
+    RunningResponseHandler(Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>),
 }
 
 impl<T: Send + 'static, E: Send + 'static> From<RusotoResult<T, E>> for RusotoFuture<T, E> {
